@@ -3,10 +3,17 @@ an "x" indicates that there is no limit on that end of a time range.
 
 
 James C.
-Sunday 6-x
-Monday 2-3
-Tuesday x-2, 3:30-x
-Wednesday 8-x
-Thursday x-2, 3:30-x
-Friday 2-5, 7:30-x
-Saturday x-x
+    Sunday      6-x
+    Monday      2-3
+    Tuesday     x-2, 3:30-x
+    Wednesday   8-x
+    Thursday    x-2, 3:30-x
+    Friday      2-5, 7:30-x
+    Saturday    x-x
+Konrad L.
+    Sunday      1-x
+    Monday      1-3, 6-x
+    Tuesday     5-x
+    Wednesday   1-3, 3:45-x
+    Thursday    11-2, 5-x
+    Friday      1-x

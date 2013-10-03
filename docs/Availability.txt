@@ -17,3 +17,11 @@ Konrad L.
     Wednesday   1-3, 3:45-x
     Thursday    11-2, 5-x
     Friday      1-x
+Karl P.
+    Sunday	x-x
+    Monday	12-1, 2-x
+    Tuesday	11-12:30, 2-x
+    Wednesday	12-1, 2-x
+    Thursday    11-12:30, 2-5
+    Friday      11-12, 2-x
+    Saturday	x-x

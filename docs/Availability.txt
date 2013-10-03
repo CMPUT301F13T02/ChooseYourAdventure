@@ -24,3 +24,11 @@ James M.
     Friday 3-x
     Saturday x-x
     I would rather not work Sundays
+Karl P.
+    Sunday	x-x
+    Monday	12-1, 2-x
+    Tuesday	11-12:30, 2-x
+    Wednesday	12-1, 2-x
+    Thursday    11-12:30, 2-5
+    Friday      11-12, 2-x
+    Saturday	x-x

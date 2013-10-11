@@ -1,18 +1,45 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
+import java.io.Reader;
+
 public class Comment {
 
-    private User poster;
-    
+    private Reader poster;
+	/**
+	 * @uml.property  name="pageCommented"
+	 * @uml.associationEnd  inverse="comments:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page"
+	 */
+	private Page pageCommented;
+	
     public Comment() {
     	
     }
-    
-    public User getPoster() {
-    	return poster;
-    }
+
+	/**
+	 * @uml.property  name="reader"
+	 * @uml.associationEnd  aggregation="shared" inverse="comments:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Reader"
+	 */
+	private Reader reader;
+
+	/**
+	 * Getter of the property <tt>reader</tt>
+	 * @return  Returns the reader.
+	 * @uml.property  name="reader"
+	 */
+	public Reader getReader() {
+		return reader;
+	}
+
+	/**
+	 * Setter of the property <tt>reader</tt>
+	 * @param reader  The reader to set.
+	 * @uml.property  name="reader"
+	 */
+	public void setReader(Reader reader) {
+		this.reader = reader;
+	}
     
     public boolean equals(Comment comment) {
-    	return poster.equals(comment.getPoster());
+    	return poster.equals(comment.getReader());
     }
 }

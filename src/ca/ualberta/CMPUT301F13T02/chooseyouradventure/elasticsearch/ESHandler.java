@@ -18,15 +18,15 @@ import com.google.gson.reflect.TypeToken;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Handler;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Segment;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.SegmentGsonMarshal;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Tile;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TileGsonMarshal;
 
 public class ESHandler implements Handler{
 
 	public static final String serviceURL = "http://cmput301.softwareprocess.es:8080/cmput301f13t02/";
 	public static final HttpClient client = new DefaultHttpClient();
-	private Gson gson = new GsonBuilder().registerTypeAdapter(Segment.class, new SegmentGsonMarshal()).create();
+	private Gson gson = new GsonBuilder().registerTypeAdapter(Tile.class, new TileGsonMarshal()).create();
 	
 	@Override
 	public void updateStory(Story story) {

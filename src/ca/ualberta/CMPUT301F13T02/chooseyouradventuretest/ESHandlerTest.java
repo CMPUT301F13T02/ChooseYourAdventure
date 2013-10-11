@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextSegment;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
 public class ESHandlerTest {
@@ -22,8 +22,8 @@ public class ESHandlerTest {
 
 		Page page1 = new Page();
 		page1.setId(1);
-		page1.addSegment(new TextSegment("test1"));
-		page1.addSegment(new TextSegment("test2"));
+		page1.addTile(new TextTile("test1"));
+		page1.addTile(new TextTile("test2"));
 		
 		//Add a page
 		ESHandler esHandler = new ESHandler();

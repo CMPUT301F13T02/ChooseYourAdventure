@@ -1,10 +1,10 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
-public class TextSegment extends Segment{
+public class TextTile extends Tile{
     private String text;
     private final String type = "text";
     
-    public TextSegment(String text) {
+    public TextTile(String text) {
     	this.text = text;
     }
     
@@ -12,9 +12,9 @@ public class TextSegment extends Segment{
     	return text;
     }
     
-    public boolean equals(Segment segment) {
-    	if (segment instanceof TextSegment)
-	    	return text.equals(((TextSegment)segment).getText());
+    public boolean equals(Tile tile) {
+    	if (tile instanceof TextTile)
+	    	return text.equals(((TextTile)tile).getText());
     	else
     		return false;
     }

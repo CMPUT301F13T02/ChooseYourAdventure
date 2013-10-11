@@ -10,26 +10,26 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-public class SegmentGsonMarshal implements JsonSerializer<Segment>, JsonDeserializer<Segment>{
+public class TileGsonMarshal implements JsonSerializer<Tile>, JsonDeserializer<Tile>{
 
 	@Override
-	public JsonElement serialize(Segment segment, Type type,
+	public JsonElement serialize(Tile tile, Type type,
 			JsonSerializationContext context) {
-		return context.serialize(segment, segment.getClass());
+		return context.serialize(tile, tile.getClass());
 	}
 
 	@Override
-	public Segment deserialize(JsonElement json, Type type,
+	public Tile deserialize(JsonElement json, Type type,
 			JsonDeserializationContext context) throws JsonParseException {
 		JsonObject jsonObject = json.getAsJsonObject();
 		
-		String segmentType = jsonObject.getAsJsonPrimitive("type").getAsString();
+		String tileType = jsonObject.getAsJsonPrimitive("type").getAsString();
 		
-		if (segmentType.equals("text")) {
+		if (tileType.equals("text")) {
 			String text = jsonObject.getAsJsonPrimitive("text").getAsString();
-			return new TextSegment(text);
+			return new TextTile(text);
 		}
 		
-		throw new JsonParseException("Segment missing type");
+		throw new JsonParseException("Tile missing type");
 	}
 }

@@ -1,30 +1,11 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
-import java.util.ArrayList;
-import java.util.Collection;
+public interface Handler {
 
-public class Handler {
-
-	private ArrayList<Story> stories;
-	
-	public Handler() {
-		
-	}
-	
-	public void updateStory(Story aStory) {
-		
-	}
-	
-	public void deleteStory(Story aStory) {
-		
-	}
-	
-	public void addStory(Story newStory) {
-		
-	}
-	
-	public void updatePage(Page aPage) {
-		
-	}
-
+	public void updateStory(Story story);
+	public void deleteStory(Story story);
+	public void addStory(Story story);
+	public void updatePage(Page page);
+	public void addPage(Page page);
+	public Page getPage(int id);
 }

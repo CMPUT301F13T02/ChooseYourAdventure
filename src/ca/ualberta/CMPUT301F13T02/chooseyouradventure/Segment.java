@@ -1,5 +1,6 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
-public class Segment {
-
+public abstract class Segment {
+	abstract String getType();
+	abstract boolean equals(Segment segment);
 }

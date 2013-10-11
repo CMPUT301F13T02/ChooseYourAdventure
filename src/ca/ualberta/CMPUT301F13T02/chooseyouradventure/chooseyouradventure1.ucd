@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="chooseyouradventure1" size="1185,632" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure" metadata="uml2-1.0" initialized="true" tag="1000" key="32303037303533312D313030302043686F6F7365596F7572416476656E747572652F6A626D6F6F7265">
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.14/@sourceConnections.0" name="Comment" location="99,345" size="114,85" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Comment" runTimeClassModel="poster,Comment()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="91,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="poster" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Comment#poster"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="79,18">
+      <children xsi:type="editmodel:MethodEditModel" name="Comment" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Comment#Comment()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Comment@comments+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Page@page" source="//@children.0" target="//@children.2" targetEnd="//@children.0/@sourceConnections.0/@children.0" label="//@children.0/@sourceConnections.0/@children.1" sourceEnd="//@children.0/@sourceConnections.0/@children.2" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" name="page" location="0,42" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Comment@comments+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Page@page|ca.ualberta.CMPUT301F13T02.chooseyouradventure/Page#page" multiplicityLabel="//@children.0/@sourceConnections.0/@children.0/@children.1" roleLabel="//@children.0/@sourceConnections.0/@children.0/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" + page" location="465,367" size="38,13" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="485,394" size="18,13" anchorKind="LastPart"/>
+      </children>
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="comments" location="114,42" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Comment@comments+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Page@page|ca.ualberta.CMPUT301F13T02.chooseyouradventure/Comment#comments" attachSource="true" multiplicityLabel="//@children.0/@sourceConnections.0/@children.2/@children.1" roleLabel="//@children.0/@sourceConnections.0/@children.2/@children.0" aggregationKind="Composition" navigable="true" orderingKind="1">
+        <children xsi:type="editmodel:LabelEditModel" name=" - comments" location="220,367" size="63,13" anchorKind="FirstPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="*" location="220,394" size="5,13" anchorKind="FirstPart"/>
+      </children>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.5/@sourceConnections.0" name="EditStoryActivity" location="720,148" size="158,67" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/EditStoryActivity" runTimeClassModel="onCreate(Landroid.os.Bundle;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="75,18">
+      <children xsi:type="editmodel:MethodEditModel" name="onCreate" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/EditStoryActivity#onCreate(Landroid.os.Bundle;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.0 //@children.9/@sourceConnections.0" name="Page" location="510,345" size="128,121" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Page" runTimeClassModel="addComment(Lca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;),Page(),addSegment(Lca.ualberta.CMPUT301F13T02.chooseyouradventure.Tile;),deleteSegment(Lca.ualberta.CMPUT301F13T02.chooseyouradventure.Tile;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="105,72">
+      <children xsi:type="editmodel:MethodEditModel" name="Page" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Page#Page()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addComment" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Page#addComment(Lca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addSegment" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Page#addSegment(Lca.ualberta.CMPUT301F13T02.chooseyouradventure.Tile;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="deleteSegment" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Page#deleteSegment(Lca.ualberta.CMPUT301F13T02.chooseyouradventure.Tile;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Page@pages+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Story@story" source="//@children.2" target="//@children.3" targetEnd="//@children.2/@sourceConnections.0/@children.2" label="//@children.2/@sourceConnections.0/@children.0" sourceEnd="//@children.2/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="pages" location="71,0" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Page@pages+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Story@story|ca.ualberta.CMPUT301F13T02.chooseyouradventure/Page#pages" attachSource="true" multiplicityLabel="//@children.2/@sourceConnections.0/@children.1/@children.2" roleLabel="//@children.2/@sourceConnections.0/@children.1/@children.0" orderingLabel="//@children.2/@sourceConnections.0/@children.1/@children.1" aggregationKind="Composition" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - pages" location="588,312" size="39,13" anchorKind="FirstPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="{order}" location="536,325" size="38,13" anchorKind="FirstPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="588,325" size="18,13" anchorKind="FirstPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="story" location="56,121" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Page@pages+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Story@story|ca.ualberta.CMPUT301F13T02.chooseyouradventure/Story#story" multiplicityLabel="//@children.2/@sourceConnections.0/@children.2/@children.1" roleLabel="//@children.2/@sourceConnections.0/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" + story" location="588,233" size="39,13" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="556,233" size="18,13" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.2/@sourceConnections.0 //@children.14/@sourceConnections.1" name="Story" location="525,105" size="115,121" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Story" runTimeClassModel="Story(),reader,deletePage(Lca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;),addPage(Lca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="92,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="reader" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Reader@reader+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Story@story|ca.ualberta.CMPUT301F13T02.chooseyouradventure/Reader#reader"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="85,54">
+      <children xsi:type="editmodel:MethodEditModel" name="Story" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Story#Story()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addPage" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Story#addPage(Lca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="deletePage" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Story#deletePage(Lca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Story@stories+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Handler@handler" source="//@children.3" target="//@children.7" targetEnd="//@children.3/@sourceConnections.0/@children.2" label="//@children.3/@sourceConnections.0/@children.0" sourceEnd="//@children.3/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="stories" location="0,41" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Story@stories+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Handler@handler|ca.ualberta.CMPUT301F13T02.chooseyouradventure/Story#stories" attachSource="true" multiplicityLabel="//@children.3/@sourceConnections.0/@children.1/@children.1" roleLabel="//@children.3/@sourceConnections.0/@children.1/@children.0" aggregationKind="Aggregration" navigable="true" orderingKind="1">
+        <children xsi:type="editmodel:LabelEditModel" name=" - stories" location="475,126" size="43,13" anchorKind="FirstPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="*" location="513,153" size="5,13" anchorKind="FirstPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="handler" location="135,116" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Story@stories+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Handler@handler|ca.ualberta.CMPUT301F13T02.chooseyouradventure/Handler#handler"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.5/@sourceConnections.1" name="ViewPageActivity" location="717,372" size="160,67" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/ViewPageActivity" runTimeClassModel="onCreate(Landroid.os.Bundle;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="75,18">
+      <children xsi:type="editmodel:MethodEditModel" name="onCreate" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/ViewPageActivity#onCreate(Landroid.os.Bundle;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ViewStoriesActivity" location="710,257" size="174,67" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/ViewStoriesActivity" runTimeClassModel="onCreateOptionsMenu(Landroid.view.Menu;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="140,18">
+      <children xsi:type="editmodel:MethodEditModel" name="onCreateOptionsMenu" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/ViewStoriesActivity#onCreateOptionsMenu(Landroid.view.Menu;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/ViewStoriesActivity->ca.ualberta.CMPUT301F13T02.chooseyouradventure/EditStoryActivity" source="//@children.5" target="//@children.1" targetEnd="//@children.5/@sourceConnections.0/@children.1" label="//@children.5/@sourceConnections.0/@children.2" sourceEnd="//@children.5/@sourceConnections.0/@children.0" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="88,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="78,67"/>
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/ViewStoriesActivity->ca.ualberta.CMPUT301F13T02.chooseyouradventure/ViewPageActivity" source="//@children.5" target="//@children.4" targetEnd="//@children.5/@sourceConnections.1/@children.1" label="//@children.5/@sourceConnections.1/@children.2" sourceEnd="//@children.5/@sourceConnections.1/@children.0" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="87,67" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="80,0"/>
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="DBHandler" location="15,225" size="115,29" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/DBHandler" runTimeClassModel="">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Handler&lt;-ca.ualberta.CMPUT301F13T02.chooseyouradventure/DBHandler" source="//@children.6" target="//@children.8/@sourceConnections.0" targetEnd="//@children.6/@sourceConnections.0/@children.1" sourceEnd="//@children.6/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="57,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="-1,0" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.8/@sourceConnections.0 //@children.3/@sourceConnections.0" name="Handler" location="221,30" size="135,157" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Handler" runTimeClassModel="deleteStory(Lca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;),Handler(),stories,addStory(Lca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;),updateStory(Lca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;),updatePage(Lca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="112,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="stories" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Story@stories+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Handler@handler|ca.ualberta.CMPUT301F13T02.chooseyouradventure/Story#stories"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="90,90">
+      <children xsi:type="editmodel:MethodEditModel" name="Handler" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Handler#Handler()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addStory" location="8,81" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Handler#addStory(Lca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="deleteStory" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Handler#deleteStory(Lca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="updatePage" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Handler#updatePage(Lca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="updateStory" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Handler#updateStory(Lca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="WebHandler" location="169,225" size="126,29" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/WebHandler" runTimeClassModel="">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" targetConnections="//@children.6/@sourceConnections.0" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Handler&lt;-ca.ualberta.CMPUT301F13T02.chooseyouradventure/WebHandler" source="//@children.8" target="//@children.7" targetEnd="//@children.8/@sourceConnections.0/@children.1" sourceEnd="//@children.8/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="62,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="57,157" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.10/@sourceConnections.0" name="Tile" location="255,435" size="118,85" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Tile" runTimeClassModel="getEditView(),getReadView()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="95,36">
+      <children xsi:type="editmodel:MethodEditModel" name="getEditView" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Tile#getEditView()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getReadView" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Tile#getReadView()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Page@page+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Tile@segments" source="//@children.9" target="//@children.2" targetEnd="//@children.9/@sourceConnections.0/@children.2" label="//@children.9/@sourceConnections.0/@children.0" sourceEnd="//@children.9/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="segments" location="117,48" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Page@page+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Tile@segments|ca.ualberta.CMPUT301F13T02.chooseyouradventure/Tile#segments" attachSource="true" multiplicityLabel="//@children.9/@sourceConnections.0/@children.1/@children.1" roleLabel="//@children.9/@sourceConnections.0/@children.1/@children.0" aggregationKind="Composition" navigable="true" orderingKind="1">
+        <children xsi:type="editmodel:LabelEditModel" name=" + segments" location="380,490" size="62,13" anchorKind="FirstPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="*" location="380,463" size="5,13" anchorKind="FirstPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="page" location="0,92" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Page@page+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Tile@segments|ca.ualberta.CMPUT301F13T02.chooseyouradventure/Page#page" multiplicityLabel="//@children.9/@sourceConnections.0/@children.2/@children.1" roleLabel="//@children.9/@sourceConnections.0/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - page" location="469,417" size="34,13" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="485,444" size="18,13" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="TextTile" location="330,583" size="94,29" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/TextTile" runTimeClassModel="">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" targetConnections="//@children.11/@sourceConnections.0 //@children.13/@sourceConnections.0 //@children.12/@sourceConnections.0" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Tile&lt;-ca.ualberta.CMPUT301F13T02.chooseyouradventure/TextTile" source="//@children.10" target="//@children.9" targetEnd="//@children.10/@sourceConnections.0/@children.1" sourceEnd="//@children.10/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="47,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="59,85" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="VideoTile" location="190,583" size="104,29" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/VideoTile" runTimeClassModel="">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Tile&lt;-ca.ualberta.CMPUT301F13T02.chooseyouradventure/VideoTile" source="//@children.11" target="//@children.10/@sourceConnections.0" targetEnd="//@children.11/@sourceConnections.0/@children.1" sourceEnd="//@children.11/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="51,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="13,9"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="PhotoTile" location="450,583" size="106,29" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/PhotoTile" runTimeClassModel="">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Tile&lt;-ca.ualberta.CMPUT301F13T02.chooseyouradventure/PhotoTile" source="//@children.12" target="//@children.10/@sourceConnections.0" targetEnd="//@children.12/@sourceConnections.0/@children.1" sourceEnd="//@children.12/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="52,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,17"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="AudioTile" location="65,583" size="105,29" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/AudioTile" runTimeClassModel="">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Tile&lt;-ca.ualberta.CMPUT301F13T02.chooseyouradventure/AudioTile" source="//@children.13" target="//@children.10/@sourceConnections.0" targetEnd="//@children.13/@sourceConnections.0/@children.1" sourceEnd="//@children.13/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="52,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,22"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Reader" location="355,257" size="90,29" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Reader" runTimeClassModel="">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Reader@reader+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Comment@comments" source="//@children.14" target="//@children.0" targetEnd="//@children.14/@sourceConnections.0/@children.2" label="//@children.14/@sourceConnections.0/@children.0" sourceEnd="//@children.14/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="reader" location="9,29" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Reader@reader+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Comment@comments|ca.ualberta.CMPUT301F13T02.chooseyouradventure/Reader#reader" attachSource="true" multiplicityLabel="//@children.14/@sourceConnections.0/@children.1/@children.1" roleLabel="//@children.14/@sourceConnections.0/@children.1/@children.0" aggregationKind="Aggregration" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - reader" location="371,293" size="42,13" anchorKind="FirstPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="339,293" size="18,13" anchorKind="FirstPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="comments" location="59,0" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Reader@reader+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Comment@comments|ca.ualberta.CMPUT301F13T02.chooseyouradventure/Comment#comments"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Reader@reader+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Story@story" source="//@children.14" target="//@children.3" targetEnd="//@children.14/@sourceConnections.1/@children.0" label="//@children.14/@sourceConnections.1/@children.1" sourceEnd="//@children.14/@sourceConnections.1/@children.2" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" name="story" location="0,111" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Reader@reader+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Story@story|ca.ualberta.CMPUT301F13T02.chooseyouradventure/Story#story"/>
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="reader" location="80,0" id="ca.ualberta.CMPUT301F13T02.chooseyouradventure/Reader@reader+ca.ualberta.CMPUT301F13T02.chooseyouradventure/Story@story|ca.ualberta.CMPUT301F13T02.chooseyouradventure/Reader#reader" attachSource="true" multiplicityLabel="//@children.14/@sourceConnections.1/@children.2/@children.1" roleLabel="//@children.14/@sourceConnections.1/@children.2/@children.0" aggregationKind="Aggregration" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - reader" location="386,237" size="42,13" anchorKind="FirstPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="442,237" size="18,13" anchorKind="FirstPart"/>
+      </children>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:LabelObjectEditModel" name="*" location="173,324" size="5,13" fontInfo="Sans-8-0"/>
+  <children xsi:type="editmodel:LabelObjectEditModel" name="*" location="510,195" size="5,13" fontInfo="Sans-8-0"/>
+  <children xsi:type="editmodel:LabelObjectEditModel" name="*" location="368,120" size="5,13" fontInfo="Sans-8-0"/>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" level="-1" showScope="InPackage" properties="wireOptions=3;Product=eUML2"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="15,15" gridOrigin="0,0" rulerUnit="pixel" gridVisibility="false">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showPopupBars="true" showConnectionHandles="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" showDependencyStereotype="true" showInterfaceStereotype="true" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+</editmodel:ClassDiagramEditModel>

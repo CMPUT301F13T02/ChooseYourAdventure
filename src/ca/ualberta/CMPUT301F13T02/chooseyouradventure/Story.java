@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class Story {
 	
-	/**
+	/** 
 	 * @uml.property name="pages"
-	 * @uml.associationEnd multiplicity="(0-1)" ordering="true" aggregation="composite" inverse="story:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page"
+	 * @uml.associationEnd aggregation="composite" inverse="story:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page"
 	 */
-    private ArrayList<Page> pages;
+    private Page pages;
     private Reader reader;
     
     public Story() {
@@ -22,5 +22,11 @@ public class Story {
     public void deletePage(Page aPage) {
     	
     }
+
+	/**
+	 * @uml.property  name="reader"
+	 * @uml.associationEnd  aggregation="shared" inverse="story:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Reader"
+	 */
+	private Reader reader1;
 
 }

@@ -2,7 +2,7 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import android.view.View;
 
-public class Tile {
+public abstract class Tile {
 
 	/** 
 	 * @uml.property name="page"
@@ -17,5 +17,7 @@ public class Tile {
 	public View getReadView() {
 		return null;	
 	}
-
+	
+	abstract String getType();
+	abstract boolean equals(Tile tile);
 }

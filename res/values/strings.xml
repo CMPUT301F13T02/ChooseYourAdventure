@@ -3,6 +3,12 @@
 
     <string name="app_name">ChooseYourAdventure</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
-
+    
+	<string name="title_view_page_activity">Viewing Story</string>
+	<string name="title_view_stories_activity">Choose a Story</string>
+	<string name="title_edit_stories_activity">Story Tree</string>
+	<string name="search">Search</string>
+	<string name="delete">Delete</string>
+	<string name="add">Add New</string>
+	<string name="edit">Enter Edit Mode</string>
 </resources>

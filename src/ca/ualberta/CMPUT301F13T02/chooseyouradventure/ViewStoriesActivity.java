@@ -2,7 +2,9 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
+import android.view.View;
 
 /**
  * @uml.dependency   supplier="ca.ualberta.CMPUT301F13T02.chooseyouradventure.EditStoryActivity"
@@ -23,6 +25,16 @@ public class ViewStoriesActivity extends Activity {
         getMenuInflater().inflate(R.menu.view_stories, menu);
         return true;
     }
+    
+    public void jumpEdit(View view) {
+		Intent intent = new Intent(this, EditStoryActivity.class);
+		startActivity(intent);
+	}
+    
+    public void jumpPage(View view) {
+		Intent intent = new Intent(this, ViewPageActivity.class);
+		startActivity(intent);
+	}
 
 
 

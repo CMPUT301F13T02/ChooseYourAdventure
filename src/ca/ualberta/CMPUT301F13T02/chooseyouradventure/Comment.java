@@ -5,8 +5,15 @@ import java.io.Reader;
 public class Comment {
 
     private Reader poster;
-	public Comment() {
-    	
+<<<<<<< HEAD
+	/**
+	 * @uml.property  name="pageCommented"
+	 * @uml.associationEnd  inverse="comments:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page"
+	 */
+    private Page pageCommented;
+	
+    public Comment() {
+	
     }
 
 	/**

@@ -1,8 +1,11 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
+import java.io.Reader;
+
 public class Comment {
 
     private Reader poster;
+<<<<<<< HEAD
 	/**
 	 * @uml.property  name="pageCommented"
 	 * @uml.associationEnd  inverse="comments:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page"
@@ -10,7 +13,7 @@ public class Comment {
     private Page pageCommented;
 	
     public Comment() {
-    	
+	
     }
 
 	/**
@@ -36,5 +39,31 @@ public class Comment {
 	public void setReader(Reader reader) {
 		this.reader = reader;
 	}
+
+	/**
+	 * @uml.property  name="page"
+	 * @uml.associationEnd  inverse="comments:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page"
+	 */
+	private Page page;
+	/**
+	 * Getter of the property <tt>page</tt>
+	 * @return  Returns the page.
+	 * @uml.property  name="page"
+	 */
+	public Page getPage() {
+		return page;
+	}
+
+	/**
+	 * Setter of the property <tt>page</tt>
+	 * @param page  The page to set.
+	 * @uml.property  name="page"
+	 */
+	public void setPage(Page page) {
+		this.page = page;
+	}
     
+    public boolean equals(Comment comment) {
+    	return poster.equals(comment.getReader());
+    }
 }

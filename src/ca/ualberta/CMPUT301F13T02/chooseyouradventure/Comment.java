@@ -7,7 +7,7 @@ public class Comment {
 	 * @uml.property  name="pageCommented"
 	 * @uml.associationEnd  inverse="comments:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page"
 	 */
-	private Page pageCommented;
+    private Page pageCommented;
 	
     public Comment() {
     	

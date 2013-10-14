@@ -1,13 +1,22 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 public class ViewPageActivity extends Activity {
     
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.view_page_activity);
+    }
+	
+	public void jumpEdit(View view) {
+		Intent intent = new Intent(this, EditStoryActivity.class);
+		startActivity(intent);
 	}
 	
 }

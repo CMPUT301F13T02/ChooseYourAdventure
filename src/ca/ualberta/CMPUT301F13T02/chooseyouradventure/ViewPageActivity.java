@@ -10,4 +10,17 @@ public class ViewPageActivity extends Activity {
 		
 	}
 	
+	@Override
+	public void onResume() {
+		MyApplication app = (MyApplication) getApplication();
+		displayPage(app);
+	}
+	
+	private void displayPage(MyApplication app) {
+		Page page = app.getPage();
+		
+		for (Tile tile : page.getTilesList()) {
+			
+		}
+	}
 }

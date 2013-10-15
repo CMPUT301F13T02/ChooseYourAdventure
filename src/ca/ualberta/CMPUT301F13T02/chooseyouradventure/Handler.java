@@ -1,41 +1,11 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
-import java.util.ArrayList;
-import java.util.Collection;
+public interface Handler {
 
-public class Handler {
-
-	private ArrayList<Story> stories;
-	
-	/**
-	 * uml.property name="stories"
-	 * uml.associationEnd inverse="story:
-	 */
-	
-	public Handler() {
-		
-	}
-	
-	public void updateStory(Story aStory) {
-		
-	}
-	
-	public void deleteStory(Story aStory) {
-		
-	}
-	
-	public void addStory(Story newStory) {
-		
-	}
-	
-	public void updatePage(Page aPage) {
-		
-	}
-
-	/**
-	 * @uml.property  name="stories"
-	 * @uml.associationEnd  multiplicity="(0 -1)" ordering="true" aggregation="shared" inverse="handler:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story"
-	 */
-	private ArrayList stories1;
-
+	public void updateStory(Story story);
+	public void deleteStory(Story story);
+	public void addStory(Story story);
+	public void updatePage(Page page);
+	public void addPage(Page page);
+	public Page getPage(int id);
 }

@@ -5,7 +5,6 @@ import java.io.Reader;
 public class Comment {
 
     private Reader poster;
-<<<<<<< HEAD
 	/**
 	 * @uml.property  name="pageCommented"
 	 * @uml.associationEnd  inverse="comments:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page"

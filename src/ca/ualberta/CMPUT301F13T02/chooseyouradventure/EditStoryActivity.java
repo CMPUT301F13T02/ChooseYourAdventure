@@ -6,8 +6,9 @@ import android.os.Bundle;
 public class EditStoryActivity extends Activity {
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		
-	}
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.edit_stories_activity);
+    }
 
 }

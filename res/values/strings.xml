@@ -15,4 +15,8 @@
     <string name="cache">Cache</string>
     <string name="upload">Upload</string>
     <string name="cancel">Cancel</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="search_stories">Search</string>
+    <string name="add_new">Add New</string>
+
 </resources>

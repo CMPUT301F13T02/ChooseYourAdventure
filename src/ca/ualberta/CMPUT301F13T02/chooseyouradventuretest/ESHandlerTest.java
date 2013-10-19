@@ -8,6 +8,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Decision;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
@@ -22,7 +23,6 @@ public class ESHandlerTest {
 	public void addPageTest() {
 
 		Page page1 = new Page();
-		page1.setId(1);
 		page1.addTile(new TextTile("test1"));
 		page1.addTile(new TextTile("test2"));
 		
@@ -45,18 +45,18 @@ public class ESHandlerTest {
 
 		//Create  2 pages
 		Page page1 = new Page();
-		page1.setId(1);
 		page1.addTile(new TextTile("test1"));
 		page1.addTile(new TextTile("test2"));
 		
 		Page page2 = new Page();
-		page2.setId(2);
 		page2.addTile(new TextTile("test3"));
 		page2.addTile(new TextTile("test4"));
+		page2.addDecision(new Decision("Go second", page2));
+		page2.addDecision(new Decision("Go first", page1));
 		
 		//Create story
 		Story story1 = new Story();
-		story1.setId("test");
+		story1.setId("testUpdate");
 		story1.addPage(page1);
 		story1.addPage(page2);
 		
@@ -64,8 +64,9 @@ public class ESHandlerTest {
 		ESHandler esHandler = new ESHandler();
 		esHandler.updateStory(story1);
 		
+		
 		//Get same story
-		Story story2 = esHandler.getStory("test");
+		Story story2 = esHandler.getStory("testUpdate");
 		
 		//Compare
 		assertTrue(story1.equals(story2));
@@ -79,12 +80,10 @@ public class ESHandlerTest {
 
 		//Create 2 pages
 		Page page1 = new Page();
-		page1.setId(1);
 		page1.addTile(new TextTile("test1"));
 		page1.addTile(new TextTile("test2"));
 		
 		Page page2 = new Page();
-		page2.setId(2);
 		page2.addTile(new TextTile("test3"));
 		page2.addTile(new TextTile("test4"));
 		

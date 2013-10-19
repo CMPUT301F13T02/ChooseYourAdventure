@@ -5,11 +5,11 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
  */
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.UUID;
 
 public class Page {
 	
-	public int id;
+	public UUID id;
 	/**
 	 * @uml.property  name="comments"
 	 * @uml.associationEnd  multiplicity="(0 -1)" ordering="true" aggregation="composite" inverse="pageCommented:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment"
@@ -25,12 +25,18 @@ public class Page {
 	 * @uml.associationEnd  inverse="pages:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story"
 	 */
 	private Story story;
+	private ArrayList<Decision> decisions = new ArrayList<Decision>();
 	
 	public Page() {
+		id = UUID.randomUUID();
 	}
 	
 	public void addTile(Tile tile) {
 		tiles.add(tile);
+	}
+	
+	public void addDecision(Decision decision) {
+		decisions.add(decision);
 	}
 	
 	public void deleteSegment(Tile tile) {
@@ -63,7 +69,7 @@ public class Page {
 		}
 		
 		//Check that the id's are the same
-		if (id != page.id)
+		if (!id.equals(page.id))
 			return false;
 		
 		return true;
@@ -73,15 +79,15 @@ public class Page {
 		return "" + id + comments + tiles;
 	}
 	
-	public void setId(int id) {
-		this.id = id;
-	}
-	
 	public ArrayList<Comment> getComments() {
 		return comments;
 	}
 	
 	public ArrayList<Tile> getTiles() {
 		return tiles;
+	}
+	
+	public UUID getId() {
+		return id;
 	}
 }

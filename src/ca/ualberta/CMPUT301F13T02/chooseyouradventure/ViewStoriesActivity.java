@@ -94,10 +94,7 @@ public class ViewStoriesActivity extends Activity {
 		        return onLongListItemClick(v,pos,listNum);
 		    }
 		});
-
-
-		
-		
+	
 	}
     
     public void jumpEdit(View view) {
@@ -113,12 +110,7 @@ public class ViewStoriesActivity extends Activity {
     protected void onListItemClick(View v, int pos, long id) {
 	    jumpPage(v);
 	}
-    
-    
-
-    
-    
-   
+ 
 	public void storyMenu(final View v){
 			final String[] titles = {"Edit","Upload","Cache","Delete","Cancel"};
 			
@@ -190,13 +182,8 @@ public class ViewStoriesActivity extends Activity {
     	//upload.addPage(newPage);
     	
     	intent.putExtra("newStory", newStory); 
+    	intent.putExtra("newPage", newPage); 
     	startActivity(intent);
     }
-	
 
-
-	
-
-
-    
 }

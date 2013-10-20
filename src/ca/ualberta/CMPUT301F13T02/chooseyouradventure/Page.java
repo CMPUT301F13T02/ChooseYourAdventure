@@ -7,7 +7,10 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Page {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Page implements Parcelable {
 	
 	public UUID id;
 	/**
@@ -97,5 +100,17 @@ public class Page {
 
 	public void setStory(Story story) {
 		this.story = story;
+	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+		
 	}
 }

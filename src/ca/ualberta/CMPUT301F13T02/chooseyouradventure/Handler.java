@@ -8,4 +8,6 @@ public interface Handler {
 	public void updatePage(Page page);
 	public void addPage(Page page);
 	public Page getPage(int id);
+	public Story getStory(String id);
+	public void addComment(Story story, Page page, Comment comment);
 }

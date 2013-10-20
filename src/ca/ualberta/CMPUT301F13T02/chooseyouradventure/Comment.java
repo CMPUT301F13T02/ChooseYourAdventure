@@ -11,8 +11,10 @@ public class Comment {
 	 */
     private Page pageCommented;
 	
-    public Comment() {
-	
+    private String text;
+
+	public Comment(String text) {
+		this.text = text;
     }
 
 	/**
@@ -52,6 +54,10 @@ public class Comment {
 	public Page getPage() {
 		return page;
 	}
+	
+	public String getText() {
+		return text;
+	}
 
 	/**
 	 * Setter of the property <tt>page</tt>
@@ -63,6 +69,7 @@ public class Comment {
 	}
     
     public boolean equals(Comment comment) {
-    	return poster.equals(comment.getReader());
+    	//return poster.equals(comment.getReader());
+    	return text.equals(comment.getText());
     }
 }

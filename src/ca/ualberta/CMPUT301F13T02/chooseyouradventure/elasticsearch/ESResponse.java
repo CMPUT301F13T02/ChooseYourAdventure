@@ -15,6 +15,9 @@ public class ESResponse<T> {
     T _source;
     double max_score;
 
+    public String getId() {
+    	return _id;
+    }
     public T getSource() {
         return _source;
     }

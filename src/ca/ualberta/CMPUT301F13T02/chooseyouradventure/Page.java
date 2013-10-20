@@ -90,4 +90,12 @@ public class Page {
 	public UUID getId() {
 		return id;
 	}
+
+	public Story getStory() {
+		return story;
+	}
+
+	public void setStory(Story story) {
+		this.story = story;
+	}
 }

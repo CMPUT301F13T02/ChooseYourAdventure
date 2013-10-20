@@ -11,16 +11,23 @@ import java.util.ArrayList;
 
 
 
-import android.os.Bundle;
 
+
+
+
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
+import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 /**
@@ -30,13 +37,20 @@ import android.widget.ListView;
 public class ViewStoriesActivity extends Activity {
 	private ListView mainPage;
 	private String[] listText;
+	private Button createNew;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_stories_activity);
         mainPage = (ListView) findViewById(R.id.mainView);
-        
+        createNew = (Button) findViewById(R.id.createButton);
+        createNew.setOnClickListener(new OnClickListener() {
+            
+            public void onClick(View v) {
+                createStory();
+            }
+        });
     }
 
 
@@ -136,8 +150,48 @@ public class ViewStoriesActivity extends Activity {
     	storyMenu(v);
         return true;
     }
+    
+    private void createStory(){
+    	
+    	
+    	
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	builder.setTitle("Create New");
+    	final Page newPage = new Page();
+    	final Story newStory = new Story();
+    	final EditText alertEdit = new EditText(this);
+    	builder.setView(alertEdit);
+    	builder.setMessage("Enter the title of your story")
+    	.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            	String storyTitle = alertEdit.getText().toString();
+            	jumpEditNew(storyTitle, newPage, newStory);
+            	
+            	
+            }
+        })
+        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                
+            }
+        });
+        builder.show();
+    }
 
-
+    private void jumpEditNew(String storyTitle, Page newPage, Story newStory){
+    	Intent intent = new Intent(this, EditStoryActivity.class);
+    	newStory.setTitle(storyTitle);
+    	newStory.addPage(newPage);
+    	newPage.setStory(newStory);
+    	ESHandler upload = new ESHandler();
+    	
+    	//These need to have the id system implemented to work properly.
+    	//upload.addStory(newStory);
+    	//upload.addPage(newPage);
+    	
+    	intent.putExtra("newStory", newStory); 
+    	startActivity(intent);
+    }
 	
 
 

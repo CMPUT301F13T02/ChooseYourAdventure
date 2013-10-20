@@ -19,11 +19,13 @@ public class ViewPageActivity extends Activity {
 		startActivity(intent);
 	}
 	
+	/*
 	@Override
 	public void onResume() {
 		//MyApplication app = (MyApplication) getApplication();
 		//displayPage(app);
 	}
+	*/
 	
 	//private void displayPage(MyApplication app) {
 		//Page page = app.getPage();

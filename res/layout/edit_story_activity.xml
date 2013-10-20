@@ -6,30 +6,22 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".ViewStoriesActivity" >
+    tools:context=".EditStoryActivity" >
 
     <Button
-        android:id="@+id/searchButton"
+        android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:text="@string/search_stories" />
+        android:text="@string/delete" />
 
     <Button
-        android:id="@+id/addNewButton"
+        android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="@string/add_new" />
-
-    <ListView
-        android:id="@+id/mainMenuStoryList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/searchButton"
-        android:layout_alignLeft="@+id/searchButton" >
-    </ListView>
+        android:text="@string/add" />
 
 </RelativeLayout>

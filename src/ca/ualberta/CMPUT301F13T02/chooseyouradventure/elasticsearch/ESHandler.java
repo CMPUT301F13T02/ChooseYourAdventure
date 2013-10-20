@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Handler;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
@@ -140,5 +141,31 @@ public class ESHandler implements Handler{
 		
 		return esResponse.getSource();
 	}
-    
+	/**
+	 * Updates the passed page of passed story by adding passed comment
+	 */
+	@Override
+	public void addComment(Story story, Page page, Comment comment) {
+		ESHttpPost post = new ESHttpPost("story/" + story.getId() + "/_update");
+
+		try {
+			post.post(
+			"{" +
+			    "\"script\" : \"foreach (page : ctx._source.pages) { " +
+				                   "if (page.id == id) { " +
+					                   "page.comments.add(comment)" +
+					                "}" +
+						  		"}\"," +
+			    "\"params\" : {" +
+							  	"\"id\": \"" + page.getId() + "\"," + 
+						      	"\"comment\": {" +
+						      		"\"text\": \"" + comment.getText() + "\"" +
+						    	"}" +	
+							 "}" +
+			"}");
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -8,6 +8,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Decision;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
@@ -36,6 +37,20 @@ public class ESHandlerTest {
 		//Check they are the same
 		assertTrue(page1.equals(page2));
 	}
+	
+	/**
+	 * Tests adding a comment to a page
+	 */
+	@Test
+	public void addCommentTest() {
+		
+		//Get a page
+		ESHandler esHandler = new ESHandler();
+		Story story = esHandler.getStory("testUpdate");
+		
+		//Add a comment to a page
+		esHandler.addComment(story, story.getPages().get(0), new Comment("TEST COMMENT"));
+	}
 
 	/**
 	 * Tests the updateStory function
@@ -47,6 +62,7 @@ public class ESHandlerTest {
 		Page page1 = new Page();
 		page1.addTile(new TextTile("test1"));
 		page1.addTile(new TextTile("test2"));
+		page1.addComment(new Comment("LOLz I CN HAZ CHEEZBUERGR?"));
 		
 		Page page2 = new Page();
 		page2.addTile(new TextTile("test3"));

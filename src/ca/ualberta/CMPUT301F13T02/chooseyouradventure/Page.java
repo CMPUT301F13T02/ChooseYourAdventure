@@ -44,7 +44,7 @@ public class Page {
 	}
 	
 	public void addComment(Comment comment) {
-	
+		comments.add(comment);
 	}
 	/**
 	 * Compares this page for deep equality with another page

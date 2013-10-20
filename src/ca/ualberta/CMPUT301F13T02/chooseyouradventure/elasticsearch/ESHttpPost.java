@@ -15,6 +15,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.HandlerException;
+
 public class ESHttpPost extends HttpPost {
 
 	/**
@@ -28,8 +30,9 @@ public class ESHttpPost extends HttpPost {
 	/**
 	 * Post data to ES
 	 * @throws IOException
+	 * @throws HandlerException 
 	 */
-	public String post(String data) throws IOException {
+	public String post(String data) throws IOException, HandlerException {
 
 		/* This method with inspiration from https://github.com/rayzhangcl/ESDemo */
 		
@@ -58,6 +61,9 @@ public class ESHttpPost extends HttpPost {
 		String status = response.getStatusLine().toString();
 		
 		System.out.println(status);
+
+		if (response.getStatusLine().getStatusCode() != 200 && response.getStatusLine().getStatusCode() != 201)
+			throw new HandlerException("ESHttpGet " + getURI() + " returned " + status);
 		
 		HttpEntity entity = response.getEntity();
 		BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));

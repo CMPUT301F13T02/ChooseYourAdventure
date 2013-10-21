@@ -8,7 +8,7 @@ public class EditStoryActivity extends Activity {
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_stories_activity);
+        setContentView(R.layout.edit_story_activity);
     }
 
 }

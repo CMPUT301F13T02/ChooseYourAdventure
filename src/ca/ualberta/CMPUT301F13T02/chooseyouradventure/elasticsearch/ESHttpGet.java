@@ -13,6 +13,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.HandlerException;
+
 public class ESHttpGet extends HttpGet {
 
 	/**
@@ -27,8 +29,9 @@ public class ESHttpGet extends HttpGet {
 	 * Get data from ES
 	 * @throws IllegalStateException
 	 * @throws IOException
+	 * @throws HandlerException 
 	 */
-	public String get() throws IllegalStateException, IOException {
+	public String get() throws IllegalStateException, IOException, HandlerException {
 		
 		/* This method with inspiration from https://github.com/rayzhangcl/ESDemo */
 		
@@ -46,6 +49,9 @@ public class ESHttpGet extends HttpGet {
 		
 		String status = response.getStatusLine().toString();
 		System.out.println(status);
+		
+		if (response.getStatusLine().getStatusCode() != 200)
+			throw new HandlerException("ESHttpGet " + getURI() + " returned " + status);
 
 		HttpEntity entity = response.getEntity();
 		BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));

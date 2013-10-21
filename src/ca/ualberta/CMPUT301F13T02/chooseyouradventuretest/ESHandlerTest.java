@@ -48,32 +48,6 @@ public class ESHandlerTest {
 	}
 	
 	/**
-	 * Tests adding a comment to a page
-	 */
-	@Test
-	public void addCommentTest() {
-		
-		try {
-			//Get a page
-			ESHandler esHandler = new ESHandler();
-			Story story1 = esHandler.getStory("testUpdate");
-			
-			//Add a comment to a page
-			Comment comment = new Comment("TEST COMMENT");
-			esHandler.addComment(story1, story1.getPages().get(0), comment);
-			
-			//Retrieve the story, get newest comment and compare for equality
-			Story story2 = esHandler.getStory("testUpdate");
-			ArrayList<Comment> comments =  story2.getPages().get(0).getComments();
-			assertTrue(comments.get(comments.size() - 1).equals(comment));
-		}
-		catch(HandlerException e) {
-			e.printStackTrace();
-			fail();
-		}
-	}
-
-	/**
 	 * Tests the updateStory function
 	 */
 	@Test
@@ -116,6 +90,32 @@ public class ESHandlerTest {
 	}
 	
 	/**
+	 * Tests adding a comment to a page
+	 */
+	@Test
+	public void addCommentTest() {
+		
+		try {
+			//Get a page
+			ESHandler esHandler = new ESHandler();
+			Story story1 = esHandler.getStory("testUpdate");
+			
+			//Add a comment to a page
+			Comment comment = new Comment("TEST COMMENT");
+			esHandler.addComment(story1, story1.getPages().get(0), comment);
+			
+			//Retrieve the story, get newest comment and compare for equality
+			Story story2 = esHandler.getStory("testUpdate");
+			ArrayList<Comment> comments =  story2.getPages().get(0).getComments();
+			assertTrue(comments.get(comments.size() - 1).equals(comment));
+		}
+		catch(HandlerException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	/**
 	 * Tests the updateStory function
 	 */
 	@Test
@@ -145,6 +145,21 @@ public class ESHandlerTest {
 
 			//Compare
 			assertTrue(story1.equals(story2));
+		}
+		catch (HandlerException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	/**
+	 * Test the getAllStories method
+	 */
+	@Test
+	public void getAllStoriesTest() {
+		ESHandler handler = new ESHandler();
+		try {
+			handler.getAllStories();
 		}
 		catch (HandlerException e) {
 			e.printStackTrace();

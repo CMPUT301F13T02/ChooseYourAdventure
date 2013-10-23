@@ -15,4 +15,9 @@ public class Decision {
 	public UUID getPageID() {
 		return pageID;
 	}
+	
+	// Need access to text for use in DecisionAdapter
+	public String getText() {
+		return text;
+	}
 }

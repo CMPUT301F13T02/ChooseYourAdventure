@@ -8,6 +8,7 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -174,5 +175,32 @@ public class ESHandler implements Handler{
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+    /**
+     * Get all stories
+     */
+	@Override
+    public ArrayList<Story> getAllStories() throws HandlerException {
+		ESHttpGet get = new ESHttpGet("story/_search");
+
+		String response = null;
+		try {
+			response = get.get();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		ArrayList<Story> stories = new ArrayList<Story>();
+
+		/* For each hit, add it to the list */
+		Type esSearchResponseType = new TypeToken<ESSearchResponse<Story>>(){}.getType();
+		ESSearchResponse<Story> esResponse = gson.fromJson(response, esSearchResponseType);
+		for (ESResponse<Story> s : esResponse.getHits()) {
+			stories.add(s.getSource());
+		}
+		
+		return stories;
 	}
 }

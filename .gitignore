@@ -10,8 +10,10 @@
 
 # generated files
 bin/
-gen/
 
 # Local configuration file (sdk path, etc)
 local.properties
+
+# OSX non-sense
+.DS_STORE
 

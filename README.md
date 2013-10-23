@@ -15,3 +15,15 @@ This project attempts to reinvent that experience with a system where users can:
 - browse available stories to explore.
 - add-on to existing stories.
 - cache some of the stories to read offline.
+
+3rd Party Libraries
+===================
+
+- Google GSon
+- Apache HttpCore
+
+Acknowledgements
+================
+
+https://github.com/rayzhangcl/ESDemo
+

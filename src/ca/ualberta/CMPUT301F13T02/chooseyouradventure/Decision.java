@@ -46,6 +46,8 @@ public class Decision {
 		return pageID;
 	}
 	
+
+	// Need access to text for use in DecisionAdapter
 	public String getText() {
 		return text;
 	}

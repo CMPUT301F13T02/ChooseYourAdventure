@@ -11,7 +11,8 @@
 # generated files
 bin/
 
-# Local configuration file (sdk path, etc)
+
+# LOCAL configuration file (sdk path, etc)
 local.properties
 
 # OSX non-sense

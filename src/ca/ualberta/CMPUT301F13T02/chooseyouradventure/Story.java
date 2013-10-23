@@ -33,10 +33,7 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-public class Story implements Parcelable{
+public class Story {//implements Parcelable{
 	
 	/** 
 	 * @uml.property name="pages"

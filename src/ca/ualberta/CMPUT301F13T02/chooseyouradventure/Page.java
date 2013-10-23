@@ -123,14 +123,6 @@ public class Page implements Parcelable {
 		return id;
 	}
 
-	public Story getStory() {
-		return story;
-	}
-
-	public void setStory(Story story) {
-		this.story = story;
-	}
-
 	@Override
 	public int describeContents() {
 		// TODO Auto-generated method stub

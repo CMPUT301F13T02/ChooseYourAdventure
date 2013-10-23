@@ -150,7 +150,7 @@ public class ViewStoriesActivity extends Activity {
     
     public void jumpPage(View view, int pos) {
     	Intent intent = new Intent(this, ViewPageActivity.class);
-    	ESHandler handler = new ESHandler();
+    	//ESHandler handler = new ESHandler();
     	/*
     	Story[] storyIndex = tempStoryList.toArray(new Story[tempStoryList.size()]);
     	String grabID = storyIndex[pos].getId();
@@ -169,19 +169,23 @@ public class ViewStoriesActivity extends Activity {
      * @param newStory
      */
     private void jumpEditNew(String storyTitle, Page newPage, Story newStory){
-    	Intent intent = new Intent(this, EditStoryActivity.class);
+    	//Intent intent = new Intent(this, EditStoryActivity.class);
     	newStory.setTitle(storyTitle);
     	newStory.addPage(newPage);
-    	newPage.setStory(newStory);
     	ESHandler upload = new ESHandler();
     	
     	
-    	upload.addStory(newStory);
-    	upload.addPage(newPage);
+    	try {
+	    	upload.addStory(newStory);
+	    	upload.addPage(newPage);
+    	}
+    	catch(HandlerException e) {
+    		e.printStackTrace();	
+    	}
     	
-    	intent.putExtra("newStory", newStory); 
-    	intent.putExtra("newPage", newPage); 
-    	startActivity(intent);
+    	//intent.putExtra("newStory", newStory); 
+    	//intent.putExtra("newPage", newPage); 
+    	//startActivity(intent);
     }
     
     

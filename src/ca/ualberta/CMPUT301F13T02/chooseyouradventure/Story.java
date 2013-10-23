@@ -43,7 +43,6 @@ public class Story implements Parcelable{
 	 * @uml.associationEnd aggregation="composite" inverse="story:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page"
 	 */
     private ArrayList<Page> pages = new ArrayList<Page>();
-    private Reader reader;
     private String id;
     private String title;
     /**
@@ -100,22 +99,4 @@ public class Story implements Parcelable{
 		
 		return true;
 	}
-
-	/**
-	 * @uml.property  name="reader"
-	 * @uml.associationEnd  aggregation="shared" inverse="story:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Reader"
-	 */
-	private Reader reader1;
-	@Override
-	public int describeContents() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel arg0, int arg1) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

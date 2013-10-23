@@ -65,3 +65,5 @@ public class ViewPageActivity extends Activity {
 		//}
 	//}
 }
+
+

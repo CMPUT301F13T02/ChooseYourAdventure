@@ -8,6 +8,7 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -18,6 +19,7 @@ import com.google.gson.reflect.TypeToken;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Handler;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.HandlerException;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Tile;
@@ -31,9 +33,10 @@ public class ESHandler implements Handler{
 	
 	/**
 	 * Updates passed story
+	 * @throws HandlerException 
 	 */
 	@Override
-	public void updateStory(Story story) {
+	public void updateStory(Story story) throws HandlerException {
 		ESHttpPost post = new ESHttpPost("story/" + story.getId());
 
 		try {
@@ -52,9 +55,10 @@ public class ESHandler implements Handler{
 
 	/**
 	 * Adds the passed story, sets its ID
+	 * @throws HandlerException 
 	 */
 	@Override
-	public void addStory(Story story) {
+	public void addStory(Story story) throws HandlerException {
 		ESHttpPost post = new ESHttpPost("story/");
 
 		String response = null;
@@ -75,9 +79,10 @@ public class ESHandler implements Handler{
 	
 	/**
 	 * Retrieves the story with passed ID
+	 * @throws HandlerException 
 	 */
 	@Override
-	public Story getStory(String id) {
+	public Story getStory(String id) throws HandlerException {
 		ESHttpGet get = new ESHttpGet("story/" + id);
 		
 		String response = null;
@@ -104,9 +109,10 @@ public class ESHandler implements Handler{
 
 	/**
 	 * Adds the passed page to the system
+	 * @throws HandlerException 
 	 */
 	@Override
-	public void addPage(Page page) {
+	public void addPage(Page page) throws HandlerException {
 		
 		ESHttpPost post = new ESHttpPost("page/1");
 
@@ -120,9 +126,10 @@ public class ESHandler implements Handler{
 
 	/**
 	 * Retrieves the page at passed id
+	 * @throws HandlerException 
 	 */
 	@Override
-	public Page getPage(int id) {
+	public Page getPage(int id) throws HandlerException {
 		ESHttpGet get = new ESHttpGet("page/" + id);
 		
 		String response = null;
@@ -143,9 +150,10 @@ public class ESHandler implements Handler{
 	}
 	/**
 	 * Updates the passed page of passed story by adding passed comment
+	 * @throws HandlerException 
 	 */
 	@Override
-	public void addComment(Story story, Page page, Comment comment) {
+	public void addComment(Story story, Page page, Comment comment) throws HandlerException {
 		ESHttpPost post = new ESHttpPost("story/" + story.getId() + "/_update");
 
 		try {
@@ -167,5 +175,32 @@ public class ESHandler implements Handler{
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+    /**
+     * Get all stories
+     */
+	@Override
+    public ArrayList<Story> getAllStories() throws HandlerException {
+		ESHttpGet get = new ESHttpGet("story/_search");
+
+		String response = null;
+		try {
+			response = get.get();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		ArrayList<Story> stories = new ArrayList<Story>();
+
+		/* For each hit, add it to the list */
+		Type esSearchResponseType = new TypeToken<ESSearchResponse<Story>>(){}.getType();
+		ESSearchResponse<Story> esResponse = gson.fromJson(response, esSearchResponseType);
+		for (ESResponse<Story> s : esResponse.getHits()) {
+			stories.add(s.getSource());
+		}
+		
+		return stories;
 	}
 }

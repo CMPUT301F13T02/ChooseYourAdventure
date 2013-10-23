@@ -9,7 +9,6 @@ public class Story {
 	 * @uml.associationEnd aggregation="composite" inverse="story:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page"
 	 */
     private ArrayList<Page> pages = new ArrayList<Page>();
-    private Reader reader;
     private String id;
     
     public Story() {
@@ -52,11 +51,4 @@ public class Story {
 		
 		return true;
 	}
-
-	/**
-	 * @uml.property  name="reader"
-	 * @uml.associationEnd  aggregation="shared" inverse="story:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Reader"
-	 */
-	private Reader reader1;
-
 }

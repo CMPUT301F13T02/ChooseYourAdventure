@@ -15,4 +15,8 @@ public class Decision {
 	public UUID getPageID() {
 		return pageID;
 	}
+	
+	public String getText() {
+		return text;
+	}
 }

@@ -24,7 +24,6 @@ public class Page {
 	 * @uml.property  name="story"
 	 * @uml.associationEnd  inverse="pages:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story"
 	 */
-	private Story story;
 	private ArrayList<Decision> decisions = new ArrayList<Decision>();
 	
 	public Page() {

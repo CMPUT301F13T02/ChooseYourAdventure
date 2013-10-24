@@ -33,8 +33,11 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 
 import java.util.ArrayList;
+
+
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -58,7 +61,7 @@ public class ViewStoriesActivity extends Activity {
 	private Story[] tempListText;
 	private Button createNew;
 	ArrayList<String> storyList = new ArrayList<String>();
-	ArrayList<Story> tempStoryList = new ArrayList<Story>();
+	ArrayList<Story> tempStoryList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,16 +96,27 @@ public class ViewStoriesActivity extends Activity {
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();	
-		
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy); 
 		/**
 		 * Temporary Initializer to test ListViews
 		 */
-		Story tempStory = new Story();
-		tempStory.setTitle("Magical Giraffe Mamba");
 		
+		tempStoryList = new ArrayList<Story>();
+		Story filler = new Story();
+		filler.setTitle("TEST - DO NOT CLICK");
+		tempStoryList.add(filler);
 		
+		/*
+		ESHandler grabStory = new ESHandler();
+		try {
+			tempStoryList = grabStory.getAllStories();
+		} catch (HandlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
 		
-		tempStoryList.add(tempStory);
 		int counter = 0;
 		tempListText = tempStoryList.toArray(new Story[tempStoryList.size()]);
 		do{
@@ -122,7 +136,12 @@ public class ViewStoriesActivity extends Activity {
 		mainPage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 		    @Override
 		    public void onItemClick(AdapterView<?> av, View v, int pos, long listNum) {
-		        onListItemClick(v,pos,listNum);
+		        try {
+					onListItemClick(v,pos,listNum);
+				} catch (HandlerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		    }
 		});
 
@@ -134,7 +153,7 @@ public class ViewStoriesActivity extends Activity {
 		});
 	
 	}
-	protected void onListItemClick(View v, int pos, long id) {
+	protected void onListItemClick(View v, int pos, long id) throws HandlerException {
 	    jumpPage(v, pos);
 	}
 	
@@ -148,17 +167,18 @@ public class ViewStoriesActivity extends Activity {
 		startActivity(intent);
 	}
     
-    public void jumpPage(View view, int pos) {
+    public void jumpPage(View view, int pos) throws HandlerException {
     	Intent intent = new Intent(this, ViewPageActivity.class);
-    	//ESHandler handler = new ESHandler();
-    	/*
+    	ESHandler handler = new ESHandler();
+    	
     	Story[] storyIndex = tempStoryList.toArray(new Story[tempStoryList.size()]);
     	String grabID = storyIndex[pos].getId();
     	Story grabbedStory = handler.getStory(grabID);
     	intent.putExtra("currentStory", grabbedStory); 
-    	Page firstPage = thisTheoreticallyReturnsAStory.getMeFirstPage();
+    	String firstPageID = grabbedStory.getFirstpage().toString();
+    	Page firstPage = handler.getPage(firstPageID);
     	intent.putExtra("currentPage", firstPage); 
-		*/
+		
 		startActivity(intent);
 	}
     /**
@@ -169,7 +189,7 @@ public class ViewStoriesActivity extends Activity {
      * @param newStory
      */
     private void jumpEditNew(String storyTitle, Page newPage, Story newStory){
-    	//Intent intent = new Intent(this, EditStoryActivity.class);
+    	Intent intent = new Intent(this, EditStoryActivity.class);
     	newStory.setTitle(storyTitle);
     	newStory.addPage(newPage);
     	ESHandler upload = new ESHandler();
@@ -182,9 +202,9 @@ public class ViewStoriesActivity extends Activity {
     		e.printStackTrace();	
     	}
     	
-    	//intent.putExtra("newStory", newStory); 
-    	//intent.putExtra("newPage", newPage); 
-    	//startActivity(intent);
+    	intent.putExtra("newStory", newStory); 
+    	intent.putExtra("newPage", newPage); 
+    	startActivity(intent);
     }
     
     

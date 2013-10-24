@@ -59,14 +59,15 @@ public class ESHandlerTest {
 		Page page1 = new Page();
 		page1.addTile(new TextTile("test1"));
 		page1.addTile(new TextTile("test2"));
-		
+		String page1Id = page1.getIdString();
 		try {
 			//Add a page
 			ESHandler esHandler = new ESHandler();
 			esHandler.addPage(page1);
 			
+			
 			//Retrieve same page
-			Page page2 = esHandler.getPage(1);
+			Page page2 = esHandler.getPage(page1Id);
 			
 			//Check they are the same
 			assertTrue(page1.equals(page2));

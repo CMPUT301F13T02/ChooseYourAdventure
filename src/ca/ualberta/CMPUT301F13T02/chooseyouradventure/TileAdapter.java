@@ -9,12 +9,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class ViewPageAdapter extends BaseAdapter {
+public class TileAdapter extends BaseAdapter {
 	
 	private ArrayList<Tile> tiles;
 	private Context context;
 
-	public ViewPageAdapter(ArrayList<Tile> tilesList, Context ctx) {
+	public TileAdapter(ArrayList<Tile> tilesList, Context ctx) {
 		
 		tiles = tilesList;
 		context = ctx;

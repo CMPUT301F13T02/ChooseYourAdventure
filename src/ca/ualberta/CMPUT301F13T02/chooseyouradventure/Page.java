@@ -40,7 +40,7 @@ import java.util.UUID;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Page implements Parcelable {
+public class Page {//implements Parcelable {
 	
 	public UUID id;
 	/**
@@ -61,6 +61,9 @@ public class Page implements Parcelable {
 	
 	public Page() {
 		id = UUID.randomUUID();
+		tiles = new ArrayList<Tile>();
+		decisions = new ArrayList<Decision>();
+		comments = new ArrayList<Comment>();
 	}
 	
 	public void addTile(Tile tile) {
@@ -118,11 +121,15 @@ public class Page implements Parcelable {
 	public ArrayList<Tile> getTiles() {
 		return tiles;
 	}
+
+	public ArrayList<Decision> getDecisions() {
+		return decisions;
+	}
 	
 	public UUID getId() {
 		return id;
 	}
-
+/*
 	@Override
 	public int describeContents() {
 		// TODO Auto-generated method stub
@@ -134,4 +141,5 @@ public class Page implements Parcelable {
 		// TODO Auto-generated method stub
 		
 	}
+	*/
 }

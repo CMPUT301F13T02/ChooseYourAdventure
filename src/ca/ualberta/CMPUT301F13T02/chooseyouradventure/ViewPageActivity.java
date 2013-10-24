@@ -31,39 +31,128 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ListView;
 
 public class ViewPageActivity extends Activity {
+	
+	private Page page;
+	private ArrayList<Tile> tiles;
+	private ArrayList<Decision> decisions;
+	private ArrayList<Comment> comments;
+	
+	private TileAdapter tilesAdapter;
+	private DecisionAdapter decisionsAdapter;
+	private CommentsAdapter commentsAdapter;
     
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_page_activity);
     }
-	
-	public void jumpEdit(View view) {
-		Intent intent = new Intent(this, EditStoryActivity.class);
-		startActivity(intent);
-	}
-	
-	/*
+
 	@Override
 	public void onResume() {
-		//MyApplication app = (MyApplication) getApplication();
-		//displayPage(app);
+        super.onResume();
+        /**
+         * Pull all the information we need from the page.
+         */
+        getPage();
+        tiles = page.getTiles();
+        decisions = page.getDecisions();
+        comments = page.getComments();
+        
+        displayPage();
 	}
-	*/
 	
-	//private void displayPage(MyApplication app) {
-		//Page page = app.getPage();
-		//
-		//for (Tile tile : page.getTilesList()) {
-		//	
-		//}
-	//}
+	/**
+	 * Create an options menu.
+	 */
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        makeMenu(menu);
+        return true;
+    }
+	
+	/**
+	 * Callback for clicking an item in the menu.
+	 */
+    public boolean onOptionsItemSelected(MenuItem item) 
+    {
+    	return menuItemClicked(item);
+    }
+	
+    /**
+     * Puts button for changing to edit mode in the action bar.
+     * @param menu
+     */
+	public void makeMenu(Menu menu) {
+		MenuItem editPage = menu.add(0, 0, 0, "Edit");
+		editPage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+	}
+	
+	/**
+	 * Handles what to do when an item of the action bar is pressed.
+	 * @param item
+	 * @return
+	 */
+	private boolean menuItemClicked(MenuItem item) {
+		switch (item.getItemId()) {
+		case 0:
+			break;
+		}
+		return true;
+	}
+	
+	/**
+	 * Pulls page from the intent object.
+	 */
+	private void getPage() {
+		Intent intent = getIntent();
+		
+		// TODO TAKE THIS OUT when pages are actually passed in intent
+		page = createFakePage();
+		
+		//page = (Page) intent.getParcelableExtra("currentPage");
+	}
+	
+	/**
+	 * Puts each list in an adapter that will display it properly and hands
+	 * the adapter to the proper ListView.
+	 */
+	private void displayPage() {
+		// First ListView. Used for the tiles.
+		tilesAdapter = new TileAdapter(tiles, this);
+		ListView tilesView = (ListView) findViewById(R.id.tilesView);
+		tilesView.setAdapter(tilesAdapter);
+		
+		// Second ListView. Used for the Decisions.
+		decisionsAdapter = new DecisionAdapter(decisions, this);
+		ListView decisionsView = (ListView) findViewById(R.id.decisionsView);
+		decisionsView.setAdapter(decisionsAdapter);
+		
+		// Third ListView. Used for the Comments.
+		commentsAdapter = new CommentsAdapter(comments, this);
+		ListView commentsView = (ListView) findViewById(R.id.commentsView);
+		commentsView.setAdapter(commentsAdapter);
+	}
+
+	private Page createFakePage() {
+		Page newPage = new Page();
+		TextTile newTile = new TextTile("This is my experiment TextTile");
+		newPage.addTile(newTile);
+		Comment newComment = new Comment("This is my experiment Comment");
+		newPage.addComment(newComment);
+		return newPage;
+	}
+	
 }
 
 

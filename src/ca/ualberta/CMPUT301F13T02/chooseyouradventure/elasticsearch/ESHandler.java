@@ -159,7 +159,7 @@ public class ESHandler implements Handler{
 	 * @throws HandlerException 
 	 */
 	@Override
-	public Page getPage(int id) throws HandlerException {
+	public Page getPage(String id) throws HandlerException {
 		ESHttpGet get = new ESHttpGet("page/" + id);
 		
 		String response = null;

@@ -31,9 +31,18 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.UUID;
 
-public class Story {//implements Parcelable{
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Story implements Parcelable{
 	
 	/** 
 	 * @uml.property name="pages"
@@ -42,6 +51,32 @@ public class Story {//implements Parcelable{
     private ArrayList<Page> pages = new ArrayList<Page>();
     private String id;
     private String title;
+    private UUID firstpage;
+    
+    private Gson gson = new GsonBuilder().registerTypeAdapter(Tile.class, new TileGsonMarshal()).create();
+    public static final Parcelable.Creator<Story> CREATOR = new Creator<Story>() {
+
+		
+	    public Story createFromParcel(Parcel source) {
+	        return new Story(source);
+	    }
+  
+	    public Story[] newArray(int size) {
+	        return new Story[size];
+	    }
+	};
+	
+	public Story(Parcel parcel) {
+		String pageRetrieve = parcel.readString();
+		Type responseType = new TypeToken<Story>(){}.getType();
+		pages = gson.fromJson(pageRetrieve, responseType);
+		id = parcel.readString();
+		title = parcel.readString();
+		String tempfirstpage = parcel.readString();
+		firstpage = UUID.fromString(tempfirstpage);
+	}
+    
+  
     /**
 	 * @return the title
 	 */
@@ -95,5 +130,31 @@ public class Story {//implements Parcelable{
 		}
 		
 		return true;
+	}
+
+	public UUID getFirstpage() {
+		return firstpage;
+	}
+
+	public void setFirstpage(UUID firstpage) {
+		this.firstpage = firstpage;
+	}
+	
+	@Override
+	public void writeToParcel(Parcel parcel, int flags) {
+		String pagesFormatted = gson.toJson(pages);
+		parcel.writeString(pagesFormatted);
+		parcel.writeString(id);
+		parcel.writeString(title);
+		parcel.writeString(firstpage.toString());
+		
+		
+	}
+
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

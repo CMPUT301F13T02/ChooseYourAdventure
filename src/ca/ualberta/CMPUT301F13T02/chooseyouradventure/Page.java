@@ -34,13 +34,18 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
  * A page represents a physical page of a story. 
  */
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.UUID;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Page {//implements Parcelable {
+public class Page implements Parcelable {
 	
 	public UUID id;
 	/**
@@ -58,6 +63,43 @@ public class Page {//implements Parcelable {
 	 * @uml.associationEnd  inverse="pages:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story"
 	 */
 	private ArrayList<Decision> decisions = new ArrayList<Decision>();
+	
+	private Gson gson = new GsonBuilder().registerTypeAdapter(Tile.class, new TileGsonMarshal()).create();
+    public static final Parcelable.Creator<Story> CREATOR = new Creator<Story>() {
+
+		
+	    public Story createFromParcel(Parcel source) {
+	        return new Story(source);
+	    }
+  
+	    public Story[] newArray(int size) {
+	        return new Story[size];
+	    }
+	};
+	
+	public Page(Parcel parcel) {
+		String tempId = parcel.readString();
+		id = UUID.fromString(tempId);
+		
+		String commentRetrieve = parcel.readString();
+		String tileRetrieve = parcel.readString();
+		String decisionRetrieve = parcel.readString();
+		
+		Type responseType = new TypeToken<Story>(){}.getType();
+		
+		comments = gson.fromJson(commentRetrieve, responseType);
+		tiles = gson.fromJson(tileRetrieve, responseType);
+		decisions = gson.fromJson(decisionRetrieve, responseType);
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
 	
 	public Page() {
 		id = UUID.randomUUID();
@@ -129,17 +171,29 @@ public class Page {//implements Parcelable {
 	public UUID getId() {
 		return id;
 	}
-/*
+	
+	public String getIdString(){
+		return id.toString();
+	}
+	@Override
+	public void writeToParcel(Parcel parcel, int flags) {
+		String commentsFormatted = gson.toJson(comments);
+		String tilesFormatted = gson.toJson(tiles);
+		String decisionsFormatted = gson.toJson(decisions);
+		
+		parcel.writeString(id.toString());
+		parcel.writeString(commentsFormatted);
+		parcel.writeString(tilesFormatted);
+		parcel.writeString(decisionsFormatted);
+		
+		
+		
+	}
+
+
 	@Override
 	public int describeContents() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
-		
-	}
-	*/
 }

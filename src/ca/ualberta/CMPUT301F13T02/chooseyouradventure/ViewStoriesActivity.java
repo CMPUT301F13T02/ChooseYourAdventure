@@ -174,7 +174,6 @@ public class ViewStoriesActivity extends Activity {
     	newStory.addPage(newPage);
     	ESHandler upload = new ESHandler();
     	
-    	
     	try {
 	    	upload.addStory(newStory);
 	    	upload.addPage(newPage);
@@ -252,7 +251,5 @@ public class ViewStoriesActivity extends Activity {
         });
         builder.show();
     }
-
-    
 
 }

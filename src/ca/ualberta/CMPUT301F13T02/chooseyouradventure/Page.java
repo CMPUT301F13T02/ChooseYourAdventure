@@ -43,20 +43,8 @@ import android.os.Parcelable;
 public class Page {//implements Parcelable {
 	
 	public UUID id;
-	/**
-	 * @uml.property  name="comments"
-	 * @uml.associationEnd  multiplicity="(0 -1)" ordering="true" aggregation="composite" inverse="pageCommented:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment"
-	 */
 	private ArrayList<Comment> comments = new ArrayList<Comment>();
-	/**
-	 * @uml.property   name="segments"
-	 * @uml.associationEnd   multiplicity="(0 -1)" ordering="true" aggregation="composite" inverse="page:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Tile"
-	 */
 	private ArrayList<Tile> tiles = new ArrayList<Tile>();
-	/**
-	 * @uml.property  name="story"
-	 * @uml.associationEnd  inverse="pages:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story"
-	 */
 	private ArrayList<Decision> decisions = new ArrayList<Decision>();
 	
 	public Page() {

@@ -36,17 +36,20 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 
 public class ViewPageActivity extends Activity {
-	
-	private Page page;
-	private ArrayList<Tile> tiles;
-	private ArrayList<Decision> decisions;
+
 	private ArrayList<Comment> comments;
 	
+    private ControllerApp app;
+    
 	private TileAdapter tilesAdapter;
 	private DecisionAdapter decisionsAdapter;
 	private CommentsAdapter commentsAdapter;
@@ -55,6 +58,7 @@ public class ViewPageActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_page_activity);
+        app = (ControllerApp) this.getApplication();
     }
 
 	@Override
@@ -63,12 +67,10 @@ public class ViewPageActivity extends Activity {
         /**
          * Pull all the information we need from the page.
          */
-        getPage();
-        tiles = page.getTiles();
-        decisions = page.getDecisions();
-        comments = page.getComments();
+        Page page = getPage();
         
-        displayPage();
+        displayPage(page);
+        
 	}
 	
 	/**
@@ -114,27 +116,29 @@ public class ViewPageActivity extends Activity {
 	/**
 	 * Pulls page from the intent object.
 	 */
-	private void getPage() {
-		Intent intent = getIntent();
+	private Page getPage() {
 		
-		// TODO TAKE THIS OUT when pages are actually passed in intent
-		page = createFakePage();
+		// TODO TAKE THIS OUT when pages are actually in application
+		Page page = app.createFakePage();
+		comments = page.getComments();
+		// Page page = app.getPage();
 		
-		//page = (Page) intent.getParcelableExtra("currentPage");
+		return page;
+
 	}
 	
 	/**
 	 * Puts each list in an adapter that will display it properly and hands
 	 * the adapter to the proper ListView.
 	 */
-	private void displayPage() {
+	private void displayPage(Page page) {
 		// First ListView. Used for the tiles.
-		tilesAdapter = new TileAdapter(tiles, this);
+		tilesAdapter = new TileAdapter(page.getTiles(), this);
 		ListView tilesView = (ListView) findViewById(R.id.tilesView);
 		tilesView.setAdapter(tilesAdapter);
 		
 		// Second ListView. Used for the Decisions.
-		decisionsAdapter = new DecisionAdapter(decisions, this);
+		decisionsAdapter = new DecisionAdapter(page.getDecisions(), this);
 		ListView decisionsView = (ListView) findViewById(R.id.decisionsView);
 		decisionsView.setAdapter(decisionsAdapter);
 		
@@ -142,15 +146,6 @@ public class ViewPageActivity extends Activity {
 		commentsAdapter = new CommentsAdapter(comments, this);
 		ListView commentsView = (ListView) findViewById(R.id.commentsView);
 		commentsView.setAdapter(commentsAdapter);
-	}
-
-	private Page createFakePage() {
-		Page newPage = new Page();
-		TextTile newTile = new TextTile("This is my experiment TextTile");
-		newPage.addTile(newTile);
-		Comment newComment = new Comment("This is my experiment Comment");
-		newPage.addComment(newComment);
-		return newPage;
 	}
 	
 }

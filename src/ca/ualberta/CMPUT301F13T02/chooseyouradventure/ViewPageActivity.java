@@ -34,19 +34,26 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class ViewPageActivity extends Activity {
-
-	private ArrayList<Comment> comments;
 	
     private ControllerApp app;
     
@@ -59,17 +66,29 @@ public class ViewPageActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_page_activity);
         app = (ControllerApp) this.getApplication();
+        
     }
 
 	@Override
 	public void onResume() {
         super.onResume();
+        
         /**
          * Pull all the information we need from the page.
          */
         Page page = getPage();
         
         displayPage(page);
+		
+		//commentsAdapter.notifyDataSetChanged();
+        
+        Button addComment = (Button) findViewById(R.id.addComment);
+        addComment.setOnClickListener(new OnClickListener() {
+        	@Override
+        	public void onClick(View view) {
+        		onAddComment(view);
+        	}
+        });
         
 	}
 	
@@ -120,7 +139,7 @@ public class ViewPageActivity extends Activity {
 		
 		// TODO TAKE THIS OUT when pages are actually in application
 		Page page = app.createFakePage();
-		comments = page.getComments();
+
 		// Page page = app.getPage();
 		
 		return page;
@@ -132,7 +151,7 @@ public class ViewPageActivity extends Activity {
 	 * the adapter to the proper ListView.
 	 */
 	private void displayPage(Page page) {
-		// First ListView. Used for the tiles.
+		/* First ListView. Used for the tiles.
 		tilesAdapter = new TileAdapter(page.getTiles(), this);
 		ListView tilesView = (ListView) findViewById(R.id.tilesView);
 		tilesView.setAdapter(tilesAdapter);
@@ -140,12 +159,63 @@ public class ViewPageActivity extends Activity {
 		// Second ListView. Used for the Decisions.
 		decisionsAdapter = new DecisionAdapter(page.getDecisions(), this);
 		ListView decisionsView = (ListView) findViewById(R.id.decisionsView);
-		decisionsView.setAdapter(decisionsAdapter);
+		decisionsView.setAdapter(decisionsAdapter);*/
 		
 		// Third ListView. Used for the Comments.
-		commentsAdapter = new CommentsAdapter(comments, this);
-		ListView commentsView = (ListView) findViewById(R.id.commentsView);
-		commentsView.setAdapter(commentsAdapter);
+		ArrayList<Comment> comments = page.getComments();
+		for (int i = 0; i < comments.size(); i++) {
+			addCommentView(i, comments.get(i));
+		}
+
+	}
+	
+	private void onAddComment(View view) {
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	builder.setTitle("What to Say");
+    	final EditText alertEdit = new EditText(this);
+    	builder.setView(alertEdit);
+    	builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            	onSaveComment(alertEdit.getText().toString());
+            	
+            }
+        })
+        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                
+            }
+        });
+        builder.show();
+	}
+	
+	private void onSaveComment(String text) {
+
+		String poster = Secure.getString(
+				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+		Comment comment = new Comment(text, poster);
+		app.addComment(comment);
+		addCommentView(app.getPage().getComments().size() - 1, comment);
+	}
+	
+	public void addCommentView(int i, Comment comment) {
+		LinearLayout layout = (LinearLayout) findViewById(R.id.commentsLayout);
+		LayoutParams lparams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		TextView tv = new TextView(this);
+		tv.setId(i);
+		tv.setLayoutParams(lparams);
+		tv.setText(comment.getText());
+	    layout.addView(tv);
+		
+	    tv.setOnClickListener(new OnClickListener() {
+	    	@Override
+	    	public void onClick(View v) {
+	    		commentClicked(v);
+	    	}
+	    });
+	}
+	
+	private void commentClicked(View view) {
+		Log.d("commentClicked", "comment" + String.valueOf(view.getId()));
 	}
 	
 }

@@ -43,19 +43,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         android:layout_height="wrap_content"
         android:orientation="vertical" >
         
-        <ListView
-            android:id="@+id/tilesView"
-            android:isScrollContainer="false"
+        <LinearLayout
+            android:id="@+id/tilesLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-        </ListView>
+            android:layout_height="wrap_content" 
+            android:orientation="vertical">
+        </LinearLayout>
         
-        <ListView
-            android:id="@+id/decisionsView"
-            android:isScrollContainer="false"
+        <LinearLayout
+            android:id="@+id/decisionsLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-        </ListView>
+            android:layout_height="wrap_content" 
+            android:orientation="vertical">
+        </LinearLayout>
         
         <TextView
             android:id="@+id/commentTitle"
@@ -65,12 +65,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             android:textSize="22sp" >
         </TextView>
         
-        <ListView
-            android:id="@+id/commentsView"
-            android:isScrollContainer="false"
+        <LinearLayout
+            android:id="@+id/commentsLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-        </ListView>
+            android:layout_height="wrap_content" 
+            android:orientation="vertical">
+        </LinearLayout>
         
         <Button
             android:id="@+id/addComment"

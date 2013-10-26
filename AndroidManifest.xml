@@ -43,7 +43,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme" 
+        android:name="ca.ualberta.CMPUT301F13T02.chooseyouradventure.ControllerApp">
         <activity
             android:name="ca.ualberta.CMPUT301F13T02.chooseyouradventure.ViewStoriesActivity"
             android:label="@string/title_view_stories_activity" >

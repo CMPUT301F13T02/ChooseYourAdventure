@@ -47,5 +47,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="hello_world">Hello world!</string>
     <string name="search_stories">Search</string>
     <string name="add_new">Add New</string>
+    <string name="comment_title">Comments</string>
+    <string name="add_comment_button">Add Comment</string>
 
 </resources>

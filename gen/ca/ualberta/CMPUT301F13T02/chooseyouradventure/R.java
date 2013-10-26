@@ -24,15 +24,17 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int TextTiletextView=0x7f080005;
-        public static final int action_settings=0x7f080008;
+        public static final int TextTiletextView=0x7f080007;
+        public static final int action_settings=0x7f08000a;
         public static final int button1=0x7f080002;
         public static final int button2=0x7f080003;
         public static final int commentsTextView=0x7f080000;
-        public static final int createButton=0x7f080006;
+        public static final int commentsView=0x7f080006;
+        public static final int createButton=0x7f080008;
         public static final int decisionTextView=0x7f080001;
-        public static final int mainView=0x7f080007;
-        public static final int scrollView1=0x7f080004;
+        public static final int decisionsView=0x7f080005;
+        public static final int mainView=0x7f080009;
+        public static final int tilesView=0x7f080004;
     }
     public static final class layout {
         public static final int comments_adapter_layout=0x7f030000;
@@ -48,7 +50,6 @@ public final class R {
     }
     public static final class string {
         public static final int action_settings=0x7f050001;
-
         public static final int add=0x7f050007;
         public static final int add_new=0x7f05000f;
         public static final int app_name=0x7f050000;

@@ -57,12 +57,27 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             android:layout_height="wrap_content" >
         </ListView>
         
+        <TextView
+            android:id="@+id/commentTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" 
+            android:text="@string/comment_title" 
+            android:textSize="22sp" >
+        </TextView>
+        
         <ListView
             android:id="@+id/commentsView"
             android:isScrollContainer="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
         </ListView>
+        
+        <Button
+            android:id="@+id/addComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_comment_button" >
+        </Button>
         
     </LinearLayout>
 

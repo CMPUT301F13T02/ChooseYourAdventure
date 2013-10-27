@@ -30,29 +30,25 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
-public class Comment {
+import java.util.UUID;
 
-	private String poster;
+public class Decision {
+
 	private String text;
-
-	public Comment(String text) {
+	private UUID pageID;
+	
+	public Decision(String text, Page page) {
 		this.text = text;
+		this.pageID = page.getId();
 	}
 	
-	public Comment(String text, String poster) {
-		this.text = text;
-		this.poster = poster;
+	public UUID getPageID() {
+		return pageID;
 	}
+	
 
+	// Need access to text for use in DecisionAdapter
 	public String getText() {
 		return text;
-	}
-	
-	public String getPoster() {
-		return poster;
-	}
-	
-	public boolean equals(Comment comment) {
-		return text.equals(comment.getText());
 	}
 }

@@ -32,8 +32,9 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 
 import java.util.ArrayList;
+import java.util.UUID;
 
-public class Story {//implements Parcelable{
+public class Story {
 	
 	/** 
 	 * @uml.property name="pages"
@@ -41,7 +42,28 @@ public class Story {//implements Parcelable{
 	 */
     private ArrayList<Page> pages = new ArrayList<Page>();
     private String id;
-    private String title;
+    private UUID firstpage;
+    
+	/**
+	 * @return the firstpage
+	 */
+	public UUID getFirstpage()
+	{
+	
+		return firstpage;
+	}
+
+	
+	/**
+	 * @param firstpage the firstpage to set
+	 */
+	public void setFirstpage(UUID firstpage)
+	{
+	
+		this.firstpage = firstpage;
+	}
+
+	private String title;
     /**
 	 * @return the title
 	 */

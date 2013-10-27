@@ -54,10 +54,9 @@ import android.widget.ListView;
  */
 public class ViewStoriesActivity extends Activity {
 	private ListView mainPage;
-	private String[] listText;
 	private Story[] tempListText;
 	private Button createNew;
-	ArrayList<String> storyList = new ArrayList<String>();
+	ArrayList<String> listText = new ArrayList<String>();
 	ArrayList<Story> tempStoryList = new ArrayList<Story>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,50 +70,25 @@ public class ViewStoriesActivity extends Activity {
                 createStory();
             }
         });
-    }
-
-
-  
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.view_stories, menu);
-        return true;
-    }
-    
-    
-	
-	
-	
-	/**
-	 * Setting up the ListView for use
-	 */
-	@Override
-	protected void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();	
-		
-		/**
+        /**
 		 * Temporary Initializer to test ListViews
 		 */
+        
 		Story tempStory = new Story();
 		tempStory.setTitle("Magical Giraffe Mamba");
-		
-		
-		
 		tempStoryList.add(tempStory);
+		
+       
+		
 		int counter = 0;
 		tempListText = tempStoryList.toArray(new Story[tempStoryList.size()]);
 		do{
-			storyList.add(tempListText[counter].getTitle());
+			listText.add(tempListText[counter].getTitle());
 			counter++;
 		} while (counter < tempStoryList.size());
-		listText = storyList.toArray(new String[storyList.size()]);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				R.layout.list_item_base, listText);
 		mainPage.setAdapter(adapter);
-		
-		
 		/**
 		 * Activity to restructure Click and longClick listeners to work in a list view
 		 *  directly based on http://android.konreu.com/developer-how-to/click-long-press-event-listeners-list-activity/
@@ -132,11 +106,31 @@ public class ViewStoriesActivity extends Activity {
 		        return onLongListItemClick(v,pos,listNum);
 		    }
 		});
+    }
+
+
+  
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.view_stories, menu);
+        return true;
+    }
+    
+    
 	
-	}
+	
+	
+	
 	protected void onListItemClick(View v, int pos, long id) {
 	    jumpPage(v, pos);
 	}
+	
+	protected boolean onLongListItemClick(View v, int pos, long id) { 
+    	storyMenu(v);
+        return true;
+    }
+    
 	
 	/**
 	 * "jump" functions are just the shorthand for functions that switch between activities
@@ -149,16 +143,7 @@ public class ViewStoriesActivity extends Activity {
 	}
     
     public void jumpPage(View view, int pos) {
-    	Intent intent = new Intent(this, ViewPageActivity.class);
-    	//ESHandler handler = new ESHandler();
-    	/*
-    	Story[] storyIndex = tempStoryList.toArray(new Story[tempStoryList.size()]);
-    	String grabID = storyIndex[pos].getId();
-    	Story grabbedStory = handler.getStory(grabID);
-    	intent.putExtra("currentStory", grabbedStory); 
-    	Page firstPage = thisTheoreticallyReturnsAStory.getMeFirstPage();
-    	intent.putExtra("currentPage", firstPage); 
-		*/
+    	Intent intent = new Intent(this, ViewPageActivity.class);	
 		startActivity(intent);
 	}
     /**
@@ -167,24 +152,32 @@ public class ViewStoriesActivity extends Activity {
      * @param storyTitle
      * @param newPage
      * @param newStory
+     * @throws HandlerException 
      */
-    private void jumpEditNew(String storyTitle, Page newPage, Story newStory){
-    	//Intent intent = new Intent(this, EditStoryActivity.class);
+    private void jumpEditNew(String storyTitle, Page newPage, Story newStory) throws HandlerException{
+    	Intent intent = new Intent(this, EditStoryActivity.class);
     	newStory.setTitle(storyTitle);
     	newStory.addPage(newPage);
-    	ESHandler upload = new ESHandler();
     	
-    	try {
-	    	upload.addStory(newStory);
-	    	upload.addPage(newPage);
-    	}
-    	catch(HandlerException e) {
-    		e.printStackTrace();	
-    	}
+
+    
+	    try
+		{	
+	    	ESHandler upload = new ESHandler();
+			upload.addStory(newStory);
+			upload.addPage(newPage);
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
+	    
+	    startActivity(intent);
+	    
     	
-    	//intent.putExtra("newStory", newStory); 
-    	//intent.putExtra("newPage", newPage); 
-    	//startActivity(intent);
+    	
+    	
     }
     
     
@@ -219,10 +212,6 @@ public class ViewStoriesActivity extends Activity {
         }
 
 
-    protected boolean onLongListItemClick(View v, int pos, long id) { 
-    	storyMenu(v);
-        return true;
-    }
     
     /**
      * A pop up menu for creating a new story. it Simply asks for a title and then builds some framework before passing off to the Edit Story mode.
@@ -239,7 +228,14 @@ public class ViewStoriesActivity extends Activity {
     	.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	String storyTitle = alertEdit.getText().toString();
-            	jumpEditNew(storyTitle, newPage, newStory);
+            	try
+				{
+					jumpEditNew(storyTitle, newPage, newStory);
+				} catch (HandlerException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             	
             	
             }
@@ -251,5 +247,7 @@ public class ViewStoriesActivity extends Activity {
         });
         builder.show();
     }
+
+    
 
 }

@@ -89,8 +89,7 @@ public class EditStoryActivity extends Activity {
         controller = (ControllerApp) getApplication();
 		currentStory = controller.getStory();
 		updateLists();
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy); 
+		
 		
 		
 		

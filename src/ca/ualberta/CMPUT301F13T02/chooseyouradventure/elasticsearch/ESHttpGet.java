@@ -43,6 +43,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 
+import android.os.StrictMode;
+
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.HandlerException;
 
 public class ESHttpGet extends HttpGet {
@@ -53,6 +55,9 @@ public class ESHttpGet extends HttpGet {
 	public ESHttpGet(String url) {
 		super(ESHandler.serviceURL + url);
 		addHeader("Accept", "application/json");
+		/* This allows the implementation of ESHandler to work */
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
 	}
 	
 	/**

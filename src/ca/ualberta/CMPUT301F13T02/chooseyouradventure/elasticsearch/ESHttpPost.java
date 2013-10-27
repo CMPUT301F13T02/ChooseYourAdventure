@@ -45,6 +45,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 
+import android.os.StrictMode;
+
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.HandlerException;
 
 public class ESHttpPost extends HttpPost {
@@ -55,6 +57,9 @@ public class ESHttpPost extends HttpPost {
 	public ESHttpPost(String url) {
 		super(ESHandler.serviceURL + url);
 		setHeader("Accept", "application/json");
+		/* This allows the implementation of ESHandler to work */
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
 	}
 	
 	/**

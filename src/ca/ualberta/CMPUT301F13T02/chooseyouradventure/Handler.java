@@ -43,5 +43,4 @@ public interface Handler {
 	public Page getPage(String id) throws HandlerException;
 	public Story getStory(String id) throws HandlerException;
 	public ArrayList<Story> getAllStories() throws HandlerException;
-	
 }

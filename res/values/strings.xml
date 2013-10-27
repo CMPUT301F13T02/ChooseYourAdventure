@@ -40,6 +40,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="delete">Delete</string>
     <string name="add">Add New</string>
     <string name="story_options">Advanced Story Options</string>
+    <string name="page_options">Page Options</string>
     <string name="edit">Enter Edit Mode</string>
     <string name="cache">Cache</string>
     <string name="upload">Upload</string>
@@ -47,5 +48,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="hello_world">Hello world!</string>
     <string name="search_stories">Search</string>
     <string name="add_new">Add New</string>
+    <string name="comment_title">Comments</string>
+    <string name="add_comment_button">Add Comment</string>
 
 </resources>

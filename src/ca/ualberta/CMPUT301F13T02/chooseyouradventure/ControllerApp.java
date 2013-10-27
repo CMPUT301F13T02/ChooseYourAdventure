@@ -30,29 +30,53 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
-public class Comment {
+import java.util.ArrayList;
 
-	private String poster;
-	private String text;
+import android.app.Application;
 
-	public Comment(String text) {
-		this.text = text;
+public class ControllerApp extends Application{
+
+	private Story currentStory;
+	private Page currentPage;
+	private ArrayList<Story> stories;
+	
+	@Override
+	public void onCreate() {
+		super.onCreate();
 	}
 	
-	public Comment(String text, String poster) {
-		this.text = text;
-		this.poster = poster;
-	}
-
-	public String getText() {
-		return text;
+	public void setStory(Story story) {
+		this.currentStory = story;
 	}
 	
-	public String getPoster() {
-		return poster;
+	public void setPage(Page page) {
+		this.currentPage = page;
 	}
 	
-	public boolean equals(Comment comment) {
-		return text.equals(comment.getText());
+	public Page getPage() {
+		return currentPage;
 	}
+	
+	public void setPage(ArrayList<Story> stories) {
+		this.stories = stories;
+	}
+	
+	public Page createFakePage() {
+		Page newPage = new Page();
+		TextTile newTile = new TextTile("This is my experiment TextTile");
+		newPage.addTile(newTile);
+		Comment newComment = new Comment("This is my experiment Comment");
+		newPage.addComment(newComment);
+		currentPage = newPage;
+		return newPage;
+	}
+	
+	public void addComment(Comment comment) {
+		currentPage.addComment(comment);
+	}
+	
+	public Story getStory() {
+		return currentStory;
+	}
+	
 }

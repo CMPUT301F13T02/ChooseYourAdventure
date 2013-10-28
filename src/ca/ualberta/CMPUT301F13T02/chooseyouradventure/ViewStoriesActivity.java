@@ -33,8 +33,10 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 
 import java.util.ArrayList;
+
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -58,6 +60,8 @@ public class ViewStoriesActivity extends Activity {
 	private Button createNew;
 	ArrayList<String> listText = new ArrayList<String>();
 	ArrayList<Story> tempStoryList = new ArrayList<Story>();
+	private ControllerApp controller; 
+	private ESHandler eshandler = new ESHandler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,19 +77,30 @@ public class ViewStoriesActivity extends Activity {
         /**
 		 * Temporary Initializer to test ListViews
 		 */
-        
+        /*
 		Story tempStory = new Story();
 		tempStory.setTitle("Magical Giraffe Mamba");
 		tempStoryList.add(tempStory);
+		*/
+        /*
 		
-       
+		try {
+			tempStoryList = eshandler.getAllStories();
+		} catch (HandlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
 		
 		int counter = 0;
 		tempListText = tempStoryList.toArray(new Story[tempStoryList.size()]);
-		do{
-			listText.add(tempListText[counter].getTitle());
-			counter++;
-		} while (counter < tempStoryList.size());
+		if(tempListText.length != 0)
+		{
+			do{
+				listText.add(tempListText[counter].getTitle());
+				counter++;
+			} while (counter < tempStoryList.size());
+		}
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				R.layout.list_item_base, listText);
 		mainPage.setAdapter(adapter);
@@ -96,7 +111,12 @@ public class ViewStoriesActivity extends Activity {
 		mainPage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 		    @Override
 		    public void onItemClick(AdapterView<?> av, View v, int pos, long listNum) {
-		        onListItemClick(v,pos,listNum);
+		        try {
+					onListItemClick(v,pos,listNum);
+				} catch (HandlerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		    }
 		});
 
@@ -106,6 +126,8 @@ public class ViewStoriesActivity extends Activity {
 		        return onLongListItemClick(v,pos,listNum);
 		    }
 		});
+		
+        controller = (ControllerApp) getApplication();
     }
 
 
@@ -122,12 +144,13 @@ public class ViewStoriesActivity extends Activity {
 	
 	
 	
-	protected void onListItemClick(View v, int pos, long id) {
+	protected void onListItemClick(View v, int pos, long id) throws HandlerException {
+		
 	    jumpPage(v, pos);
 	}
 	
 	protected boolean onLongListItemClick(View v, int pos, long id) { 
-    	storyMenu(v);
+    	storyMenu(v, pos);
         return true;
     }
     
@@ -142,7 +165,12 @@ public class ViewStoriesActivity extends Activity {
 		startActivity(intent);
 	}
     
-    public void jumpPage(View view, int pos) {
+    public void jumpPage(View view, int pos) throws HandlerException {
+    	Story story = tempListText[pos];
+		controller.setStory(story);
+		String FP = story.getFirstpage().toString();
+		Page storyFP = eshandler.getPage(FP);
+		controller.setPage(storyFP);
     	Intent intent = new Intent(this, ViewPageActivity.class);	
 		startActivity(intent);
 	}
@@ -157,22 +185,23 @@ public class ViewStoriesActivity extends Activity {
     private void jumpEditNew(String storyTitle, Page newPage, Story newStory) throws HandlerException{
     	Intent intent = new Intent(this, EditStoryActivity.class);
     	newStory.setTitle(storyTitle);
+    	newPage.setTitle("First Page");
     	newStory.addPage(newPage);
-    	
+    	newStory.setFirstpage(newPage.getId());
 
     
 	    try
 		{	
-	    	ESHandler upload = new ESHandler();
-			upload.addStory(newStory);
-			upload.addPage(newPage);
+	    	
+			eshandler.addStory(newStory);
+			eshandler.addPage(newPage);
 		} catch (Exception e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	    
-	    
+	    controller.setStory(newStory);
 	    startActivity(intent);
 	    
     	
@@ -185,15 +214,17 @@ public class ViewStoriesActivity extends Activity {
      * The options menu displayed when the user longClicks a story
      * @param v
      */
-	public void storyMenu(final View v){
-			final String[] titles = {"Edit","Upload","Cache","Delete","Cancel"};
-			
+	public void storyMenu(final View v, int pos){
+			final String[] titles = {"Edit","{Placeholder} Upload","{Placeholder} Cache","Delete","Cancel"};
+			final Story story = tempListText[pos];
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.story_options);
             builder.setItems(titles, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int item) {
                 	switch(item){
                 	case(0):
+                		
+        				controller.setStory(story);
                 		jumpEdit(v);
                 		break;
                 	case(1):
@@ -203,7 +234,7 @@ public class ViewStoriesActivity extends Activity {
                 		
                 		break;
                 	case(3):
-                		
+                		eshandler.deleteStory(null);
                 		break;
                 	}
                         

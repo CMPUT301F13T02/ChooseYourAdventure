@@ -30,10 +30,6 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch;
 
-/*
- * Wraps all HTTP get requests from Elastic Search
- */
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -47,10 +43,16 @@ import android.os.StrictMode;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.HandlerException;
 
+/**
+ * Wraps all HTTP get requests to Elastic Search
+ */
+
 public class ESHttpGet extends HttpGet {
 
 	/**
-	 * Create an Elastic Search get
+	 * Create an Elastic Search get request
+	 * 
+	 * @param url The URL of the request
 	 */
 	public ESHttpGet(String url) {
 		super(ESHandler.serviceURL + url);
@@ -61,10 +63,11 @@ public class ESHttpGet extends HttpGet {
 	}
 	
 	/**
-	 * Get data from ES
+	 * Get data from Elastic Search
 	 * @throws IllegalStateException
 	 * @throws IOException
 	 * @throws HandlerException 
+	 * @return A String of Elastic Search's response
 	 */
 	public String get() throws IllegalStateException, IOException, HandlerException {
 		

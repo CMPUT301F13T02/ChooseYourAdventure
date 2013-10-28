@@ -30,18 +30,37 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
+/**
+ * Represents a text type tile
+ */
 public class TextTile extends Tile{
     private String text;
     private final String type = "text";
     
+    /**
+     * Constructor
+     * 
+     * @param text The text to display in this tile
+     */
     public TextTile(String text) {
     	this.text = text;
     }
     
+    /**
+     * Returns this tile's text
+     * 
+     * @return This tile's text
+     */
     public String getText() {
     	return text;
     }
     
+    /**
+     * Tests the equality of this tile and the passed tile
+     * 
+     * @param tile The tile to compare against
+     * @return Whether or not the two tiles are considered equal
+     */
     public boolean equals(Tile tile) {
     	if (tile instanceof TextTile)
 	    	return text.equals(((TextTile)tile).getText());

@@ -30,7 +30,6 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
-
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -43,6 +42,22 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+
+/**
+ * The Activity in the application that is responsible for viewing and editing
+ * a page within a story.  <br />
+ * <br />
+ * In this activity a reader can:
+ * <ol>
+ *     <li> Read the page </li>
+ *     <li> Follow decisions at the bottom </li>
+ *     <li> Comment on the page </li>
+ * </ol>
+ * In this activity an author can: 
+ * <ol>
+ *     <li> Edit the tiles on this page (add, edit, reorder, delete) </li>
+ * </ol>
+ */
 
 public class ViewPageActivity extends Activity {
 
@@ -61,6 +76,9 @@ public class ViewPageActivity extends Activity {
         app = (ControllerApp) this.getApplication();
     }
 
+	/**
+	 * Called when the Activity resumes
+	 */
 	@Override
 	public void onResume() {
         super.onResume();
@@ -75,6 +93,9 @@ public class ViewPageActivity extends Activity {
 	
 	/**
 	 * Create an options menu.
+	 * 
+	 * @param menu The menu to create
+	 * @return Success
 	 */
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -85,6 +106,9 @@ public class ViewPageActivity extends Activity {
 	
 	/**
 	 * Callback for clicking an item in the menu.
+	 * 
+	 * @param item The item that was clicked
+	 * @return Success
 	 */
     public boolean onOptionsItemSelected(MenuItem item) 
     {
@@ -93,7 +117,7 @@ public class ViewPageActivity extends Activity {
 	
     /**
      * Puts button for changing to edit mode in the action bar.
-     * @param menu
+     * @param menu The Menu to make
      */
 	public void makeMenu(Menu menu) {
 		MenuItem editPage = menu.add(0, 0, 0, "Edit");
@@ -102,7 +126,7 @@ public class ViewPageActivity extends Activity {
 	
 	/**
 	 * Handles what to do when an item of the action bar is pressed.
-	 * @param item
+	 * @param item The clicked item
 	 * @return
 	 */
 	private boolean menuItemClicked(MenuItem item) {

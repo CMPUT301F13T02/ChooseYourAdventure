@@ -30,6 +30,9 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
+/**
+ * Represents a Tile capable of displaying and playing a video
+ */
 public class VideoTile extends Tile{
 
 	@Override

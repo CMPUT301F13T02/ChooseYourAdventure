@@ -49,9 +49,21 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 /**
- * @uml.dependency   supplier="ca.ualberta.CMPUT301F13T02.chooseyouradventure.EditStoryActivity"
- * @uml.dependency   supplier="ca.ualberta.CMPUT301F13T02.chooseyouradventure.ViewPageActivity"
+ * The main activity of the application. Displays a list of stories to read. <br />
+ * <br />
+ * In this activity a reader can:
+ * <ol>
+ *     <li> Click a story to begin reading at the first page </li>  
+ *     <li> Long click a story to cache it to local storage </li>
+ *     <li> Search for stories </li>
+ * </ol>
+ * In this activity an author can: 
+ * <ol>
+ *     <li> Add a new story </li>
+ *     <li> Long click a story to edit the story </li>
+ * </ol>
  */
+
 public class ViewStoriesActivity extends Activity {
 	private ListView mainPage;
 	private Story[] tempListText;
@@ -109,10 +121,14 @@ public class ViewStoriesActivity extends Activity {
     }
 
 
-  
+    /**
+     * Inflate the options menu; this adds items to the action bar if it is present 
+     * 
+     *  @param menu The menu to inflate
+     *  @retun Success
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.view_stories, menu);
         return true;
     }
@@ -133,8 +149,8 @@ public class ViewStoriesActivity extends Activity {
     
 	
 	/**
-	 * "jump" functions are just the shorthand for functions that switch between activities
-	 * @param view
+	 * Opens EditStoryActivity
+	 * @param view Unused
 	 */
     
     public void jumpEdit(View view) {
@@ -142,10 +158,17 @@ public class ViewStoriesActivity extends Activity {
 		startActivity(intent);
 	}
     
+    /**
+     * Opens ViewPageActivity
+     * 
+     * @param view Unused
+     * @param pos Unused
+     */
     public void jumpPage(View view, int pos) {
     	Intent intent = new Intent(this, ViewPageActivity.class);	
 		startActivity(intent);
 	}
+    
     /**
      * This function is for jumping to a new page after creating a new story, 
      * so it has to initialize some objects you wouldn't want to initialize insid ethe click listener
@@ -183,7 +206,7 @@ public class ViewStoriesActivity extends Activity {
     
     /**
      * The options menu displayed when the user longClicks a story
-     * @param v
+     * @param v The view of the longClicked story
      */
 	public void storyMenu(final View v){
 			final String[] titles = {"Edit","Upload","Cache","Delete","Cancel"};

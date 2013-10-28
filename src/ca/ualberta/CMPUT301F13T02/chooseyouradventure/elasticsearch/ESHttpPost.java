@@ -30,10 +30,6 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch;
 
-/*
- * Wraps all HTTP Post request to the Elastic Search service
- */
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -49,10 +45,16 @@ import android.os.StrictMode;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.HandlerException;
 
+/**
+ * Wraps all HTTP Post requests to the Elastic Search service
+ */
+
 public class ESHttpPost extends HttpPost {
 
 	/**
-	 * Create Elastic Search post
+	 * Create an Elastic Search post
+	 * 
+	 * @param url The URL of the request
 	 */
 	public ESHttpPost(String url) {
 		super(ESHandler.serviceURL + url);
@@ -66,6 +68,8 @@ public class ESHttpPost extends HttpPost {
 	 * Post data to ES
 	 * @throws IOException
 	 * @throws HandlerException 
+	 * @param data The data to post
+	 * @return A String representation of Elastic Search's response
 	 */
 	public String post(String data) throws IOException, HandlerException {
 

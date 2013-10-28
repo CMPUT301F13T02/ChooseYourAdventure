@@ -29,15 +29,24 @@
 */
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
-
+/**
+ * A Photo tile for use in the stories
+ */
 public class PhotoTile extends Tile{
-
+	/**
+	 * Get the type
+	 * @return The type
+	 */
 	@Override
 	String getType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	/**
+	 * Check if two tiles are equal
+	 * @param tile What to test equality with
+	 * @return The equality truth
+	 */
 	@Override
 	boolean equals(Tile tile) {
 		// TODO Auto-generated method stub

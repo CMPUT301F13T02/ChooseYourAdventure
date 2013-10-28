@@ -65,6 +65,10 @@ public class Page {
 	
 		this.title = title;
 	}
+	
+	public void setId(UUID id) {
+		this.id = id;
+	}
 
 	public Page() {
 		id = UUID.randomUUID();

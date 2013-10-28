@@ -117,6 +117,19 @@ public class Page {//implements Parcelable {
 	public UUID getId() {
 		return id;
 	}
+	
+	/**
+	 * Update tile at position i in tiles to the passed tile.
+	 * @param tile
+	 * @param i
+	 */
+	public void updateTile(Object content, int i) {
+		tiles.get(i).setContent(content);
+	}
+	
+	public void updateDecision(String text, Page page, int decisionNumber) {
+		decisions.get(decisionNumber).updateDecision(text, page);
+	}
 /*
 	@Override
 	public int describeContents() {

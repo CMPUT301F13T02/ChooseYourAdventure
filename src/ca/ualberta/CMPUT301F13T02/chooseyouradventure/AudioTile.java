@@ -32,6 +32,8 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 public class AudioTile extends Tile{
 
+	private Object audio;
+	
 	@Override
 	String getType() {
 		// TODO Auto-generated method stub
@@ -42,6 +44,15 @@ public class AudioTile extends Tile{
 	boolean equals(Tile segment) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	@Override
+	public void setContent(Object content) {
+		audio = content;
+	}
+	
+	public Object getAudio() {
+		return audio;
 	}
 
 }

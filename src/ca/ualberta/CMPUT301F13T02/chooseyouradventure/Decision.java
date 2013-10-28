@@ -51,4 +51,9 @@ public class Decision {
 	public String getText() {
 		return text;
 	}
+	
+	public void updateDecision(String text, Page page) {
+		this.text = text;
+		this.pageID = page.getId();
+	}
 }

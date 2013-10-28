@@ -44,4 +44,5 @@ public abstract class Tile {
 	
 	abstract String getType();
 	abstract boolean equals(Tile tile);
+	abstract void setContent(Object content);
 }

@@ -52,4 +52,10 @@ public class TextTile extends Tile{
 	String getType() {
 		return type;
 	}
+	
+	@Override
+	public void setContent(Object content) {
+		String text = (String) content;
+		this.text = text;
+	}
 }

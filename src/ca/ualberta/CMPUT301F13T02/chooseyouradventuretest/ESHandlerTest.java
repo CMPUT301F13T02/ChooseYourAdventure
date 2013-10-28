@@ -30,10 +30,6 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventuretest;
 
-/*
- * Tests various functions of the ESHandler class
- */ 
-
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -48,6 +44,9 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
+/**
+ * Tests various functions of the ESHandler class
+ */ 
 public class ESHandlerTest {
 
 	/**

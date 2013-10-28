@@ -29,7 +29,9 @@
 */
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
-
+/**
+ * Creates an Audio Tile for use in stories
+ */
 public class AudioTile extends Tile{
 
 	@Override
@@ -37,7 +39,10 @@ public class AudioTile extends Tile{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	/**
+	 * This tests for equality with another tile
+	 * @param The tile to check equality with
+	 */
 	@Override
 	boolean equals(Tile segment) {
 		// TODO Auto-generated method stub

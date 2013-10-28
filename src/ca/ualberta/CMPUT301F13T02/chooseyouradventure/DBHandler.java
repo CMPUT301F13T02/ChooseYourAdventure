@@ -29,7 +29,9 @@
 */
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
-
+/**
+ * This is the Database Handler for the local copies of stories
+ */
 /* Comment out for now. File caching to be implemented in Part 4.
 public class DBHandler  implements Handler{
 

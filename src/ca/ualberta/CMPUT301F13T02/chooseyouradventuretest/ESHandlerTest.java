@@ -42,13 +42,14 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.HandlerException;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
 /**
  * Tests various functions of the ESHandler class
  */ 
 public class ESHandlerTest {
 
+	private ESTestHandler esHandler = new ESTestHandler();
+	
 	/**
 	 * Tests the addPage function
 	 */
@@ -60,8 +61,6 @@ public class ESHandlerTest {
 		page1.addTile(new TextTile("test2"));
 		
 		try {
-			//Add a page
-			ESHandler esHandler = new ESHandler();
 			esHandler.addPage(page1);
 			
 			//Retrieve same page
@@ -101,8 +100,6 @@ public class ESHandlerTest {
 			story1.addPage(page1);
 			story1.addPage(page2);
 			
-			//Update story
-			ESHandler esHandler = new ESHandler();
 			esHandler.updateStory(story1);
 			
 		
@@ -125,8 +122,6 @@ public class ESHandlerTest {
 	public void addCommentTest() {
 		
 		try {
-			//Get a page
-			ESHandler esHandler = new ESHandler();
 			Story story1 = esHandler.getStory("testUpdate");
 			
 			//Add a comment to a page
@@ -165,8 +160,6 @@ public class ESHandlerTest {
 			story1.addPage(page1);
 			story1.addPage(page2);
 
-			//Add story
-			ESHandler esHandler = new ESHandler();
 			esHandler.addStory(story1);
 
 			//Get same story
@@ -186,9 +179,8 @@ public class ESHandlerTest {
 	 */
 	@Test
 	public void getAllStoriesTest() {
-		ESHandler handler = new ESHandler();
 		try {
-			handler.getAllStories();
+			esHandler.getAllStories();
 		}
 		catch (HandlerException e) {
 			e.printStackTrace();

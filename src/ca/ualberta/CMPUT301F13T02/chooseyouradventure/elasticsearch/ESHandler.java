@@ -61,13 +61,17 @@ public class ESHandler implements Handler{
 	public static final HttpClient client = new DefaultHttpClient();
 	private Gson gson = new GsonBuilder().registerTypeAdapter(Tile.class, new TileGsonMarshal()).create();
 	
+	protected String getStoryPath() {
+		return "story/";
+	}
 	/**
 	 * Updates passed story
 	 * @throws HandlerException 
 	 */
 	@Override
 	public void updateStory(Story story) throws HandlerException {
-		ESHttpPost post = new ESHttpPost("story/" + story.getId());
+		System.err.println(getStoryPath());
+		ESHttpPost post = new ESHttpPost(getStoryPath() + story.getId());
 
 		try {
 			post.post(gson.toJson(story));
@@ -89,7 +93,7 @@ public class ESHandler implements Handler{
 	 */
 	@Override
 	public void addStory(Story story) throws HandlerException {
-		ESHttpPost post = new ESHttpPost("story/");
+		ESHttpPost post = new ESHttpPost(getStoryPath());
 
 		String response = null;
 		try {
@@ -113,7 +117,7 @@ public class ESHandler implements Handler{
 	 */
 	@Override
 	public Story getStory(String id) throws HandlerException {
-		ESHttpGet get = new ESHttpGet("story/" + id);
+		ESHttpGet get = new ESHttpGet(getStoryPath() + id);
 		
 		String response = null;
 		try {
@@ -184,7 +188,7 @@ public class ESHandler implements Handler{
 	 */
 	@Override
 	public void addComment(Story story, Page page, Comment comment) throws HandlerException {
-		ESHttpPost post = new ESHttpPost("story/" + story.getId() + "/_update");
+		ESHttpPost post = new ESHttpPost(getStoryPath() + story.getId() + "/_update");
 
 		try {
 			post.post(
@@ -212,7 +216,7 @@ public class ESHandler implements Handler{
      */
 	@Override
     public ArrayList<Story> getAllStories() throws HandlerException {
-		ESHttpGet get = new ESHttpGet("story/_search");
+		ESHttpGet get = new ESHttpGet(getStoryPath() + "_search");
 
 		String response = null;
 		try {

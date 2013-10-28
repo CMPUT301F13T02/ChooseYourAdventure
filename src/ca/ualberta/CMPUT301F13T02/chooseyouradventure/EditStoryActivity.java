@@ -33,12 +33,12 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 import java.util.ArrayList;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -57,7 +57,7 @@ public class EditStoryActivity extends Activity {
 	private ArrayList<Page> tempPageList = new ArrayList<Page>();
 	private ArrayAdapter<String> adapter;
 	private ESHandler eshandler = new ESHandler();
-	
+	private ControllerApp controller;
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,13 +86,8 @@ public class EditStoryActivity extends Activity {
             }
         });
         
-        Story tempStory = new Story();
-		tempStory.setTitle("Magical Giraffe Mamba II");
-		Page tempPage = new Page();
-		tempPage.setTitle("Page ");
-		tempStory.addPage(tempPage);
-		
-		currentStory = tempStory;
+        controller = (ControllerApp) getApplication();
+		currentStory = controller.getStory();
 		updateLists();
 		
 		
@@ -110,16 +105,11 @@ public class EditStoryActivity extends Activity {
 		    }
 		});
 
-		treePage.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-		    @Override
-		    public boolean onItemLongClick(AdapterView<?> av, View v, int pos, long listNum) {
-		        return onLongListItemClick(v,pos,listNum);
-		    }
-		});
+		
 		adapter = new ArrayAdapter<String>(this,
 				R.layout.list_item_base, listText);
 		treePage.setAdapter(adapter);
-        
+		
     }
 	
 	@Override
@@ -131,16 +121,17 @@ public class EditStoryActivity extends Activity {
 		
 	}
 	
-	protected boolean onLongListItemClick(View v, int pos, long id) { 
-    	pageOptions(v, pos);
-        return true;
-    }
+	
 	
 	protected void onListItemClick(View v, int pos, long id) {
-	    jumpPage(v, pos);
+		pageOptions(v, pos);
 	}
 	
-	public void jumpPage(View view, int pos) {
+	public void jumpPage(View view, int pos) throws HandlerException {
+		
+		String FP = currentStory.getFirstpage().toString();
+		Page storyFP = eshandler.getPage(FP);
+		controller.setPage(storyFP);
     	Intent intent = new Intent(this, ViewPageActivity.class);
     	startActivity(intent);
 	}
@@ -153,13 +144,14 @@ public class EditStoryActivity extends Activity {
     	currentStory.addPage(newPage);
     	eshandler.updateStory(currentStory);
     	updateLists();
-    	
+    	adapter.notifyDataSetChanged();
     	
     }
 	
 	private void deleteCurrentStory(){
 		
 		eshandler.deleteStory(currentStory);
+		
 		finish();
 	}
 	
@@ -168,38 +160,48 @@ public class EditStoryActivity extends Activity {
 		listText.clear();
 		int counter = 0;
 		tempListText = tempPageList.toArray(new Page[tempPageList.size()]);
-		do{
-			listText.add(tempListText[counter].getTitle());
-			counter++;
-		} while (counter < tempPageList.size());
+		if (tempListText.length != 0){
+			do{
+				listText.add(tempListText[counter].getTitle());
+				counter++;
+			} while (counter < tempPageList.size());
+		}
+		
 		
 
 	}
 	public void pageOptions(final View v, final int pos){
-		final String[] titles = {"Edit","Delete","Cancel"};
-		
+		final String[] titles = {"Goto/Edit","Delete","Cancel"};
+		final Page currentPage = tempListText[pos];
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.page_options);
         builder.setItems(titles, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
             	switch(item){
             	case(0):
-            		jumpPage(v, pos);
+            		try {
+						jumpPage(v, pos);
+					} catch (HandlerException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
             		break;
             	case(1):
 					try
-					{
-						currentStory.deletePage(null);
+					{	
+	
+						tempPageList.remove(currentPage);
+						updateLists();
+						currentStory.deletePage(currentPage);
 						eshandler.updateStory(currentStory);
+						adapter.notifyDataSetChanged();
 					} catch (HandlerException e)
 					{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
             		break;
-            	case(2):
-            		
-            		break;            	
+            	          	
             	}
                     
                 }});

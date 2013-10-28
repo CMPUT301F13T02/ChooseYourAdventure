@@ -77,4 +77,8 @@ public class ControllerApp extends Application{
 		currentPage.addComment(comment);
 	}
 	
+	public Story getStory() {
+		return currentStory;
+	}
+	
 }

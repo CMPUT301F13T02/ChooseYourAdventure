@@ -40,7 +40,7 @@ public interface Handler {
 	public void updatePage(Page page);
 	public void addComment(Story story, Page page, Comment comment) throws HandlerException;
 	public void addPage(Page page) throws HandlerException;
-	public Page getPage(int id) throws HandlerException;
+	public Page getPage(String id) throws HandlerException;
 	public Story getStory(String id) throws HandlerException;
 	public ArrayList<Story> getAllStories() throws HandlerException;
 }

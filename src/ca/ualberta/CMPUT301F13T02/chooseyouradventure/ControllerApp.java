@@ -31,10 +31,12 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
-
 import android.app.Application;
 import android.os.StrictMode;
 
+/**
+ * This is the Controller for MVC
+ */
 public class ControllerApp extends Application{
 
 	private Story currentStory;
@@ -46,37 +48,87 @@ public class ControllerApp extends Application{
 		super.onCreate();
 		
 	}
-	
+	/**
+	 * This sets the current story
+	 * @param A Story
+	 */
 	public void setStory(Story story) {
 		this.currentStory = story;
 	}
-	
+
+	/**
+	 * This sets the current Page
+	 * @param A Page
+	 */
 	public void setPage(Page page) {
 		this.currentPage = page;
 	}
-	
+	/**
+	 * This gets the current page
+	 * @return The current Page
+	 */
 	public Page getPage() {
 		return currentPage;
 	}
 	
-	public void setPage(ArrayList<Story> stories) {
+	public void setStories(ArrayList<Story> stories) {
 		this.stories = stories;
 	}
 	
+	public ArrayList<Story> getStories() {
+		return this.stories;
+	}
+	
+	public Story createFakeStory() {
+		Page page2 = createFakePage();
+		Page page1 = createFakePageWithDecision(page2);
+		
+		Story story = new Story();
+		
+		story.addPage(page1);
+		story.addPage(page2);
+		
+		return story;
+	}
+	
+	/**
+	 * This creates a fake page
+	 * @return A Fake page
+	 * @deprecated This will not be used in the final project
+	 */
 	public Page createFakePage() {
 		Page newPage = new Page();
-		TextTile newTile = new TextTile("This is my experiment TextTile");
+		TextTile newTile = new TextTile("This is a text tile for next page");
 		newPage.addTile(newTile);
-		Comment newComment = new Comment("This is my experiment Comment");
+		Comment newComment = new Comment("This is a comment on next page");
 		newPage.addComment(newComment);
 		currentPage = newPage;
 		return newPage;
 	}
 	
+	public Page createFakePageWithDecision(Page toPage) {
+		Page newPage = new Page();
+		TextTile newTile = new TextTile("This is my experiment TextTile");
+		newPage.addTile(newTile);
+		Decision decision = new Decision("Go to second page", toPage);
+		newPage.addDecision(decision);
+		Comment newComment = new Comment("This is my experiment Comment");
+		newPage.addComment(newComment);
+		currentPage = newPage;
+		return newPage;
+	}
+	/**
+	 * This adds a comment to the current page
+	 * @param A comment to add
+	 */
 	public void addComment(Comment comment) {
 		currentPage.addComment(comment);
 	}
-	
+
+	/**
+	 * This gets the current Story
+	 * @return The current Story
+	 */
 	public Story getStory() {
 		return currentStory;
 	}

@@ -30,12 +30,13 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
-
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * This is the structure of a story 
+ */
 public class Story {
-	
 	/** 
 	 * @uml.property name="pages"
 	 * @uml.associationEnd aggregation="composite" inverse="story:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page"
@@ -43,79 +44,99 @@ public class Story {
     private ArrayList<Page> pages = new ArrayList<Page>();
     private String id;
     private UUID firstpage;
-    
 	/**
 	 * @return the firstpage
 	 */
-	public UUID getFirstpage()
+	public Page getFirstpage()
 	{
-	
-		return firstpage;
-	}
+		Page fp = new Page();
+		Page[] pagesList = pages.toArray(new Page[pages.size()]);
+		for(int i = 0; i < pages.size(); i++){
+			if (firstpage.equals(pagesList[i].getId()))
+			{
+				fp = pagesList[i];
+			}
+		}
+		return fp;
 
-	
+	}
 	/**
 	 * @param firstpage the firstpage to set
 	 */
 	public void setFirstpage(UUID firstpage)
 	{
-	
 		this.firstpage = firstpage;
 	}
-
 	private String title;
     /**
+     * This gets the title of the story
 	 * @return the title
 	 */
 	public String getTitle() {
 		return title;
 	}
-
 	/**
+	 * This sets the title of the story
 	 * @param title the title to set
 	 */
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
+	/**
+	 * This is the main constructor for Story
+	 */
 	public Story() {
     	
     }
-    
+    /**
+     * This gets the pages of a story
+     * @return The pages
+     */
     public ArrayList<Page> getPages() {
     	return pages;
     }
-    
+    /**
+     * This adds a page to a story
+     * @param newPage A new page
+     */
     public void addPage(Page newPage) {
     	pages.add(newPage);
     }
-    
+    /**
+     * This deletes a page from a story
+     * @param aPage What to delete
+     */
     public void deletePage(Page aPage) {
     	
     }
-    
+    /**
+     * This sets the ID of the story
+     * @param id
+     */
     public void setId(String id) {
     	this.id = id;
     }
-    
+    /**
+     * This gets the ID of the story
+     * @return
+     */
     public String getId() {
     	return id;
     }
-    
 	/**
 	 * Compares this story for deep equality with another story
+	 * @param The story to test equality with
+	 * @return The equality Truth value
 	 */
 	public boolean equals(Story story) {
 
 		if (pages.size() != story.getPages().size())
 			return false;
-
 		//Check that all comments are the same
 		for (int i = 0; i < pages.size(); i++) {
 			if (!pages.get(i).equals(story.getPages().get(i))) 
 				return false;
 		}
-		
 		return true;
 	}
 }

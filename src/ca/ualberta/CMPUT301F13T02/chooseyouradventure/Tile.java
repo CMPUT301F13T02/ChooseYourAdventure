@@ -28,20 +28,35 @@
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import android.view.View;
 
+/**
+ * Abstract tile class
+ */
 public abstract class Tile {
 
+	/**
+	 * Gets the View that will be used to visualize this tile while editing
+	 * 
+	 * @return A View object to visualize this tile while editing
+	 */
 	public View getEditView() {
 		return null;
 	}
 	
+	/**
+	 * Gets the View that will be used to visualize this tile while reading
+	 * 
+	 * @return A View object to visualize this tile while reading
+	 */
 	public View getReadView() {
 		return null;	
 	}
 	
 	abstract String getType();
 	abstract boolean equals(Tile tile);
+	abstract void setContent(Object content);
 }

@@ -27,49 +27,36 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+package ca.ualberta.CMPUT301F13T02.chooseyouradventuretest;
 
-package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.util.UUID;
-/**
- * This is the structure for the Decisions in stories
- *
- */
-public class Decision {
-	private String text;
-	private UUID pageID;
+import org.junit.Test;
+
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.PhotoTile;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.VideoTile;
+
+public class TextTileTest {
+
 	/**
-	 * This sets the link for the decision
-	 * @param The text of the decision and it's corresponding page
+	 * This method tests the equality of TextTiles
 	 */
-	public Decision(String text, Page page) {
-		this.text = text;
-		this.pageID = page.getId();
+	@Test
+	public void equalsTest() {
+		TextTile tile1 = new TextTile("New1");
+		TextTile tile2 = new TextTile("New2");
+		
+		assertFalse(tile1.equals(tile2));
+		
+		tile2 = new TextTile("New1");
+		
+		assertTrue(tile1.equals(tile2));
+		//These next tests make sure text inequals to picture or video
+		assertFalse(tile1.equals(new PhotoTile()));
+		
+		assertFalse(tile1.equals(new VideoTile()));
 	}
-	
-	public Decision() {
-		this.text = "New Decision";
-		this.pageID = null;
-	}
-	
-	/**
-	 * This gets the current Page ID
-	 * @return The current PageID
-	 */
-	public UUID getPageID() {
-		return pageID;
-	}
-	/**
-	 * This gets the current text of the decision
-	 * @return The text of the decision
-	 */
-	// Need access to text for use in DecisionAdapter
-	public String getText() {
-		return text;
-	}
-	
-	public void updateDecision(String text, Page page) {
-		this.text = text;
-		this.pageID = page.getId();
-	}
+
 }

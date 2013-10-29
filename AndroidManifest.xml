@@ -66,6 +66,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             android:label="@string/title_edit_story_activity" >
            
         </activity>
+        <uses-library android:name="android.test.runner" />
     </application>
+    <instrumentation android:name="android.test.InstrumentationTestRunner"
+    android:targetPackage="your.package"
+    android:label="your tests label" />
 
 </manifest>

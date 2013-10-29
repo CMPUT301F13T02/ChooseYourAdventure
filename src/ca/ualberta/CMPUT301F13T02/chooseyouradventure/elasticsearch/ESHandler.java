@@ -30,10 +30,6 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch;
 
-/*
- * Handles all interactions with the Elastic Search web DB. 
- */
-
 /* The file with inspiration from https://github.com/rayzhangcl/ESDemo */
 
 import java.io.IOException;
@@ -55,19 +51,28 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Tile;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TileGsonMarshal;
 
+/**
+ * Handles all interactions with the Elastic Search web DB. 
+ */
 public class ESHandler implements Handler{
 
 	public static final String serviceURL = "http://cmput301.softwareprocess.es:8080/cmput301f13t02/";
 	public static final HttpClient client = new DefaultHttpClient();
 	private Gson gson = new GsonBuilder().registerTypeAdapter(Tile.class, new TileGsonMarshal()).create();
 	
+	protected String getStoryPath() {
+		return "story/";
+	}
 	/**
 	 * Updates passed story
+	 * 
+	 * @param story The story to update
 	 * @throws HandlerException 
 	 */
 	@Override
 	public void updateStory(Story story) throws HandlerException {
-		ESHttpPost post = new ESHttpPost("story/" + story.getId());
+		System.err.println(getStoryPath());
+		ESHttpPost post = new ESHttpPost(getStoryPath() + story.getId());
 
 		try {
 			post.post(gson.toJson(story));
@@ -77,6 +82,11 @@ public class ESHandler implements Handler{
 		}	
 	}
 
+	/**
+	 * Deletes the passed story in the DB
+	 * 
+	 * @param story The story to delete
+	 */
 	@Override
 	public void deleteStory(Story story) {
 		// TODO Auto-generated method stub
@@ -86,10 +96,11 @@ public class ESHandler implements Handler{
 	/**
 	 * Adds the passed story, sets its ID
 	 * @throws HandlerException 
+	 * @param story The story to add
 	 */
 	@Override
 	public void addStory(Story story) throws HandlerException {
-		ESHttpPost post = new ESHttpPost("story/");
+		ESHttpPost post = new ESHttpPost(getStoryPath());
 
 		String response = null;
 		try {
@@ -109,11 +120,13 @@ public class ESHandler implements Handler{
 	
 	/**
 	 * Retrieves the story with passed ID
-	 * @throws HandlerException 
+	 * @throws HandlerException
+	 * @param id The ID of the story to retrieve
+	 * @return The story with the passed ID 
 	 */
 	@Override
 	public Story getStory(String id) throws HandlerException {
-		ESHttpGet get = new ESHttpGet("story/" + id);
+		ESHttpGet get = new ESHttpGet(getStoryPath() + id);
 		
 		String response = null;
 		try {
@@ -132,6 +145,11 @@ public class ESHandler implements Handler{
 		return esResponse.getSource();	
 	}
 
+	/**
+	 * Update the passed page
+	 * 
+	 * @param page The page to update
+	 */
 	@Override
 	public void updatePage(Page page) {
 
@@ -140,6 +158,7 @@ public class ESHandler implements Handler{
 	/**
 	 * Adds the passed page to the system
 	 * @throws HandlerException 
+	 * @param The page to add
 	 */
 	@Override
 	public void addPage(Page page) throws HandlerException {
@@ -155,8 +174,10 @@ public class ESHandler implements Handler{
 	}
 
 	/**
-	 * Retrieves the page at passed id
-	 * @throws HandlerException 
+	 * Retrieves the page at passed ID
+	 * @throws HandlerException
+	 * @param id The ID of the page to retrieve
+	 * @return The page with the passed ID 
 	 */
 	@Override
 	public Page getPage(String id) throws HandlerException {
@@ -178,13 +199,17 @@ public class ESHandler implements Handler{
 		
 		return esResponse.getSource();
 	}
+	
 	/**
 	 * Updates the passed page of passed story by adding passed comment
+	 * @param story The story the page is in
+	 * @param page The page the comment is in
+	 * @param comment The comment to add
 	 * @throws HandlerException 
 	 */
 	@Override
 	public void addComment(Story story, Page page, Comment comment) throws HandlerException {
-		ESHttpPost post = new ESHttpPost("story/" + story.getId() + "/_update");
+		ESHttpPost post = new ESHttpPost(getStoryPath() + story.getId() + "/_update");
 
 		try {
 			post.post(
@@ -209,10 +234,12 @@ public class ESHandler implements Handler{
 	
     /**
      * Get all stories
+     * 
+     * @return An ArrayList containing all stories in the DB
      */
 	@Override
     public ArrayList<Story> getAllStories() throws HandlerException {
-		ESHttpGet get = new ESHttpGet("story/_search");
+		ESHttpGet get = new ESHttpGet(getStoryPath() + "_search");
 
 		String response = null;
 		try {

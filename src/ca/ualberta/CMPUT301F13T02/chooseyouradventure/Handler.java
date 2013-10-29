@@ -31,7 +31,9 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
-
+/**
+ * This is the interface which will be used throughout the project
+ */
 public interface Handler {
 
 	public void updateStory(Story story) throws HandlerException;

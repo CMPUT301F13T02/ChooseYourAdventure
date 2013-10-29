@@ -33,6 +33,7 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.os.Bundle;
@@ -51,9 +52,21 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 /**
- * @uml.dependency   supplier="ca.ualberta.CMPUT301F13T02.chooseyouradventure.EditStoryActivity"
- * @uml.dependency   supplier="ca.ualberta.CMPUT301F13T02.chooseyouradventure.ViewPageActivity"
+ * The main activity of the application. Displays a list of stories to read. <br />
+ * <br />
+ * In this activity a reader can:
+ * <ol>
+ *     <li> Click a story to begin reading at the first page </li>  
+ *     <li> Long click a story to cache it to local storage </li>
+ *     <li> Search for stories </li>
+ * </ol>
+ * In this activity an author can: 
+ * <ol>
+ *     <li> Add a new story </li>
+ *     <li> Long click a story to edit the story </li>
+ * </ol>
  */
+
 public class ViewStoriesActivity extends Activity {
 	private ListView mainPage;
 	private Story[] tempListText;
@@ -62,6 +75,8 @@ public class ViewStoriesActivity extends Activity {
 	ArrayList<Story> tempStoryList = new ArrayList<Story>();
 	private ControllerApp controller; 
 	private ESHandler eshandler = new ESHandler();
+	
+	ArrayAdapter<String> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,8 +97,8 @@ public class ViewStoriesActivity extends Activity {
 		tempStory.setTitle("Magical Giraffe Mamba");
 		tempStoryList.add(tempStory);
 		*/
-        /*
-		
+        
+		/*
 		try {
 			tempStoryList = eshandler.getAllStories();
 		} catch (HandlerException e) {
@@ -101,7 +116,7 @@ public class ViewStoriesActivity extends Activity {
 				counter++;
 			} while (counter < tempStoryList.size());
 		}
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+		adapter = new ArrayAdapter<String>(this,
 				R.layout.list_item_base, listText);
 		mainPage.setAdapter(adapter);
 		/**
@@ -131,10 +146,14 @@ public class ViewStoriesActivity extends Activity {
     }
 
 
-  
+    /**
+     * Inflate the options menu; this adds items to the action bar if it is present 
+     * 
+     *  @param menu The menu to inflate
+     *  @retun Success
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.view_stories, menu);
         return true;
     }
@@ -156,8 +175,8 @@ public class ViewStoriesActivity extends Activity {
     
 	
 	/**
-	 * "jump" functions are just the shorthand for functions that switch between activities
-	 * @param view
+	 * Opens EditStoryActivity
+	 * @param view Unused
 	 */
     
     public void jumpEdit(View view) {
@@ -165,15 +184,28 @@ public class ViewStoriesActivity extends Activity {
 		startActivity(intent);
 	}
     
+    /**
+     * Opens ViewPageActivity
+     * 
+     * @throws HandlerException
+     * @param view Unused
+     * @param pos The position of the story to open
+     */
     public void jumpPage(View view, int pos) throws HandlerException {
     	Story story = tempListText[pos];
 		controller.setStory(story);
-		String FP = story.getFirstpage().toString();
-		Page storyFP = eshandler.getPage(FP);
-		controller.setPage(storyFP);
-    	Intent intent = new Intent(this, ViewPageActivity.class);	
+		Page firstPage = story.getFirstpage();
+		
+		Intent intent = new Intent(this, ViewPageActivity.class);
+		
+		controller.setPage(firstPage);
+		
 		startActivity(intent);
+		//Can't do this. Get page directly from Story -- Konrad
+		//Page storyFP = eshandler.getPage(FP);
+		//controller.setPage(storyFP);
 	}
+    
     /**
      * This function is for jumping to a new page after creating a new story, 
      * so it has to initialize some objects you wouldn't want to initialize insid ethe click listener
@@ -212,7 +244,7 @@ public class ViewStoriesActivity extends Activity {
     
     /**
      * The options menu displayed when the user longClicks a story
-     * @param v
+     * @param v The view of the longClicked story
      */
 	public void storyMenu(final View v, int pos){
 			final String[] titles = {"Edit","{Placeholder} Upload","{Placeholder} Cache","Delete","Cancel"};
@@ -234,7 +266,8 @@ public class ViewStoriesActivity extends Activity {
                 		
                 		break;
                 	case(3):
-                		eshandler.deleteStory(null);
+                		eshandler.deleteStory(story);
+                		adapter.notifyDataSetChanged();
                 		break;
                 	}
                         

@@ -50,12 +50,26 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             android:orientation="vertical">
         </LinearLayout>
         
+        <Button
+            android:id="@+id/addTile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_tile_button" >
+        </Button>
+        
         <LinearLayout
             android:id="@+id/decisionsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" 
             android:orientation="vertical">
         </LinearLayout>
+        
+        <Button
+            android:id="@+id/addDecision"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_decision_button" >
+        </Button>
         
         <TextView
             android:id="@+id/commentTitle"

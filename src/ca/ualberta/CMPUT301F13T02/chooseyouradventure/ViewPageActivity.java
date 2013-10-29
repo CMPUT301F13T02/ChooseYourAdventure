@@ -36,27 +36,28 @@ import java.util.UUID;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 public class ViewPageActivity extends Activity {
+	
+	private LinearLayout tilesLayout;
+	private LinearLayout decisionsLayout;
+	private LinearLayout commentsLayout;
 	
     private ControllerApp app;
     private Menu menu;
@@ -67,6 +68,10 @@ public class ViewPageActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_page_activity);
         app = (ControllerApp) this.getApplication();
+        
+        tilesLayout = (LinearLayout) findViewById(R.id.tilesLayout);
+        decisionsLayout = (LinearLayout) findViewById(R.id.decisionsLayout);
+        commentsLayout = (LinearLayout) findViewById(R.id.commentsLayout);
         
         //For until actual stories are being passed to the app
 		Story story = app.createFakeStory();
@@ -84,7 +89,26 @@ public class ViewPageActivity extends Activity {
         displayPage();
 		
 		//commentsAdapter.notifyDataSetChanged();
-        
+		Button addTileButton = (Button) findViewById(R.id.addTile);
+		addTileButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				TextTile tile = new TextTile();
+				app.getPage().addTile(tile);
+				addEditableTile(app.getPage().getTiles().size() - 1, tile);
+			}
+		});
+		
+		Button addDecisionButton = (Button) findViewById(R.id.addDecision);
+		addDecisionButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Decision decision = new Decision();
+				app.getPage().addDecision(decision);
+				addEditableDecision(app.getPage().getDecisions().size() - 1, decision);
+			}
+		});
+		
         Button addComment = (Button) findViewById(R.id.addComment);
         addComment.setOnClickListener(new OnClickListener() {
         	@Override
@@ -159,10 +183,15 @@ public class ViewPageActivity extends Activity {
 		return true;
 	}
 	
+	/**
+	 * Displays a page in normal viewing mode
+	 */
 	private void displayPage() {
-		LinearLayout tilesLayout = (LinearLayout) findViewById(R.id.tilesLayout);
-		LinearLayout decisionsLayout = (LinearLayout) findViewById(R.id.decisionsLayout);
-		LinearLayout commentsLayout = (LinearLayout) findViewById(R.id.commentsLayout);
+		Button addTileButton = (Button) findViewById(R.id.addTile);
+		Button addDecisionButton = (Button) findViewById(R.id.addDecision);
+		
+		addTileButton.setVisibility(View.GONE);
+		addDecisionButton.setVisibility(View.GONE);
 		
 		tilesLayout.removeAllViews();
 		decisionsLayout.removeAllViews();
@@ -172,29 +201,31 @@ public class ViewPageActivity extends Activity {
 		
 		ArrayList<Tile> tiles = page.getTiles();
 		for (int i = 0; i < tiles.size(); i++) {
-			addTileView(i, tiles.get(i), tilesLayout);
+			addTile(i, tiles.get(i));
 		}
 		
 		ArrayList<Decision> decisions = page.getDecisions();
 		for (int i = 0; i < decisions.size(); i++) {
-			addDecisionView(i, decisions.get(i), decisionsLayout);
+			addDecision(i, decisions.get(i));
 		}
 		
 		// Third ListView. Used for the Comments. Maybe don't show while editing
 		ArrayList<Comment> comments = page.getComments();
 		for (int i = 0; i < comments.size(); i++) {
-			addCommentView(comments.get(i), commentsLayout);
+			addComment(comments.get(i));
 		}
 	}
 	
 	/**
-	 * Puts each list in an adapter that will display it properly and hands
-	 * the adapter to the proper ListView.
+	 * Displays a page in editing mode, so tiles and decisions can be updated
+	 * and new decisions and tiles can be added.
 	 */
 	private void displayEditablePage() {		
-		LinearLayout tilesLayout = (LinearLayout) findViewById(R.id.tilesLayout);
-		LinearLayout decisionsLayout = (LinearLayout) findViewById(R.id.decisionsLayout);
-		LinearLayout commentsLayout = (LinearLayout) findViewById(R.id.commentsLayout);
+		Button addTileButton = (Button) findViewById(R.id.addTile);
+		Button addDecisionButton = (Button) findViewById(R.id.addDecision);
+		
+		addTileButton.setVisibility(View.VISIBLE);
+		addDecisionButton.setVisibility(View.VISIBLE);
 		
 		tilesLayout.removeAllViews();
 		decisionsLayout.removeAllViews();
@@ -204,28 +235,35 @@ public class ViewPageActivity extends Activity {
 		
 		ArrayList<Tile> tiles = page.getTiles();
 		for (int i = 0; i < tiles.size(); i++) {
-			addEditableTileView(i, tiles.get(i), tilesLayout);
+			addEditableTile(i, tiles.get(i));
 		}
 		
 		ArrayList<Decision> decisions = page.getDecisions();
 		for (int i = 0; i < decisions.size(); i++) {
-			addEditableDecisionView(i, decisions.get(i), decisionsLayout);
+			addEditableDecision(i, decisions.get(i));
 		}
 		
 		// Third ListView. Used for the Comments. Maybe don't show while editing
 		ArrayList<Comment> comments = page.getComments();
 		for (int i = 0; i < comments.size(); i++) {
-			addCommentView(comments.get(i), commentsLayout);
+			addComment(comments.get(i));
 		}
 
 	}
 
-	private void addDecisionView(int i, Decision decision, LinearLayout layout) {
-		LayoutParams lparams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+	/**
+	 * Adds a decision to the layout in viewing mode so its onClick listener
+	 * sends you to the next page. 
+	 * @param i
+	 * @param decision
+	 */
+	private void addDecision(int i, Decision decision) {
+		LayoutParams lparams = new LayoutParams(LayoutParams.MATCH_PARENT,
+				                                LayoutParams.WRAP_CONTENT);
 		TextView view = new TextView(this);
 		view.setLayoutParams(lparams);
 		view.setText(decision.getText());
-		layout.addView(view, i);
+		decisionsLayout.addView(view, i);
 	
 		view.setOnClickListener(new OnClickListener() {
 			@Override
@@ -233,25 +271,79 @@ public class ViewPageActivity extends Activity {
 				decisionClicked(v);
 			}
 		});
+		
 	}
 	
-	private void addEditableDecisionView(int i, Decision decision, LinearLayout layout) {
-		LayoutParams lparams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+	/**
+	 * Adds a decision to the layout in editing mode so its onClick listener
+	 * brings up an editing dialog for the decision.
+	 * @param i
+	 * @param decision
+	 */
+	private void addEditableDecision(int i, Decision decision) {
+		LayoutParams lparams = new LayoutParams(LayoutParams.MATCH_PARENT,
+				                                LayoutParams.WRAP_CONTENT);
 		TextView view = new TextView(this);
 		view.setLayoutParams(lparams);
 		view.setText(decision.getText());
-		layout.addView(view, i);
+		decisionsLayout.addView(view, i);
 	
 		view.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				editDecisionClicked(v);
+				onEditDecision(v);
+			}
+		});
+		
+		view.setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				decisionMenu(v);
+				return true;
 			}
 		});
 	}
 	
+	/**
+	 * Brings up a menu with options of what to do to the decision.
+	 * @param view
+	 */
+	public void decisionMenu(final View view){
+		final String[] titles = {"Edit","Delete"};
+		
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.story_options);
+        builder.setItems(titles, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+            	switch(item){
+            	case(0):
+            		onEditDecision(view);
+            		break;
+            	case(1):
+            		deleteDecision(view);
+            		break;
+            	}
+            }
+        });
+        builder.show();
+    }
+	
+	/**
+	 * Removes the decision view and the decision in the model.
+	 * @param view
+	 */
+	private void deleteDecision(View view) {
+		int whichDecision = decisionsLayout.indexOfChild(view);
+		
+        app.getPage().getDecisions().remove(whichDecision);
+        decisionsLayout.removeView(view);
+	}
+	
+	/**
+	 * Changes the view so that the next page is showing.
+	 * @param view
+	 */
 	private void decisionClicked(View view) {
-		LinearLayout decisionsLayout = (LinearLayout) findViewById(R.id.decisionsLayout);
 		int whichDecision = decisionsLayout.indexOfChild(view);
 		Decision decision = app.getPage().getDecisions().get(whichDecision);
 		
@@ -269,7 +361,11 @@ public class ViewPageActivity extends Activity {
 		this.onResume();
 	}
 	
-	private void editDecisionClicked(View view) {
+	/**
+	 * Brings up a dialog for editing the decision clicked.
+	 * @param view
+	 */
+	private void onEditDecision(View view) {
 		LinearLayout decisionsLayout = (LinearLayout) findViewById(R.id.decisionsLayout);
 		int whichDecision = decisionsLayout.indexOfChild(view);
 		Decision decision = app.getPage().getDecisions().get(whichDecision);
@@ -290,6 +386,7 @@ public class ViewPageActivity extends Activity {
     	builder.setTitle("Set text and next page");
     	
     	final LinearLayout layout = new LinearLayout(this);
+    	layout.setOrientation(LinearLayout.VERTICAL);
     	
     	final EditText alertEdit = new EditText(this);
     	alertEdit.setText(decision.getText());
@@ -318,6 +415,13 @@ public class ViewPageActivity extends Activity {
         builder.show();
 	}
 	
+	/**
+	 * Called when a user clicks done on a decision editing dialog. Saves the
+	 * changes to the model and makes the necessary changes to the view.
+	 * @param text
+	 * @param position
+	 * @param view
+	 */
 	private void onDoneDecision(String text, int position, View view) {
 		ControllerApp app = (ControllerApp) getApplication();
 		ArrayList<Page> pages = app.getStory().getPages();
@@ -328,6 +432,12 @@ public class ViewPageActivity extends Activity {
 		textView.setText(text);
 	}
 	
+	/**
+	 * Returns a list of strings for each page to be displayed in the Spinner
+	 * for editing a decision.
+	 * @param pages
+	 * @return A list of Strings, one representing each page in the story
+	 */
 	private ArrayList<String> getPageStrings(ArrayList<Page> pages) {
 		ArrayList<String> pageNames = new ArrayList<String>();
 		for (int i = 0; i < pages.size(); i++) {
@@ -337,7 +447,7 @@ public class ViewPageActivity extends Activity {
 	}
 	
 	/**
-	 * called when the add comment button is clicked. It creates a dialog that
+	 * Called when the add comment button is clicked. It creates a dialog that
 	 * allows the user to input text and then save the comment.
 	 * @param view
 	 */
@@ -371,22 +481,20 @@ public class ViewPageActivity extends Activity {
 				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 		Comment comment = new Comment(text, poster);
 		
-		LinearLayout layout = (LinearLayout) findViewById(R.id.commentsLayout);
-		
 		app.addComment(comment);
-		addCommentView(comment, layout);
+		addComment(comment);
 	}
 	
 	/**
 	 * Called to display a new comment at position i.
 	 * @param comment
 	 */
-	public void addCommentView(Comment comment, LinearLayout layout) {
+	public void addComment(Comment comment) {
 		LayoutParams lparams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		TextView view = new TextView(this);
 		view.setLayoutParams(lparams);
 		view.setText(comment.getText());
-	    layout.addView(view);
+	    commentsLayout.addView(view);
 	}
 	
 	/**
@@ -394,14 +502,14 @@ public class ViewPageActivity extends Activity {
 	 * @param i
 	 * @param tile
 	 */
-	public void addTileView(int i, Tile tile, LinearLayout layout) {
+	public void addTile(int i, Tile tile) {
 		if (tile.getType() == "text") {
 			TextTile textTile = (TextTile) tile;
 			LayoutParams lparams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 			TextView view = new TextView(this);
 			view.setLayoutParams(lparams);
 			view.setText(textTile.getText());
-			layout.addView(view, i);
+			tilesLayout.addView(view, i);
 		} else {
 			Log.d("no such tile", "no tile of type " + tile.getType());
 		}
@@ -412,19 +520,27 @@ public class ViewPageActivity extends Activity {
 	 * @param i
 	 * @param tile
 	 */
-	public void addEditableTileView(int i, Tile tile, LinearLayout layout) {
+	public void addEditableTile(int i, Tile tile) {
 		if (tile.getType() == "text") {
 			TextTile textTile = (TextTile) tile;
 			LayoutParams lparams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 			TextView view = new TextView(this);
 			view.setLayoutParams(lparams);
 			view.setText(textTile.getText());
-			layout.addView(view, i);
+			tilesLayout.addView(view, i);
 		
 			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					tileClicked(v);
+					onEditTile(v);
+				}
+			});
+			
+			view.setOnLongClickListener(new OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+					tileMenu(v);
+					return true;
 				}
 			});
 		} else {
@@ -432,7 +548,46 @@ public class ViewPageActivity extends Activity {
 		}
 	}
 	
-	private void tileClicked(View view) {
+	/**
+	 * Brings up a menu with options of what to do to the decision.
+	 * @param view
+	 */
+	public void tileMenu(final View view){
+		final String[] titles = {"Edit","Delete"};
+		
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.story_options);
+        builder.setItems(titles, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+            	switch(item){
+            	case(0):
+            		onEditTile(view);
+            		break;
+            	case(1):
+            		deleteTile(view);
+            		break;
+            	}
+            }
+        });
+        builder.show();
+    }
+	
+	/**
+	 * Removes the decision view and the decision in the model.
+	 * @param view
+	 */
+	private void deleteTile(View view) {
+		int whichTile = tilesLayout.indexOfChild(view);
+
+        app.getPage().getTiles().remove(whichTile);
+        tilesLayout.removeView(view);
+	}
+	
+	/**
+	 * Displays a dialog for editing a tile.
+	 * @param view
+	 */
+	private void onEditTile(View view) {
 		final TextView textView = (TextView) view;
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	final EditText alertEdit = new EditText(this);
@@ -452,6 +607,12 @@ public class ViewPageActivity extends Activity {
         builder.show();
 	}
 	
+	/**
+	 * Called when user selects done on a tile editing dialog. Updates the 
+	 * view and the model.
+	 * @param view
+	 * @param text
+	 */
 	private void onDoneTile(View view, String text) {
 		ControllerApp app = (ControllerApp) getApplication();
 		LinearLayout layout = (LinearLayout) findViewById(R.id.tilesLayout);

@@ -42,6 +42,11 @@ public class Decision {
 		this.pageID = page.getId();
 	}
 	
+	public Decision() {
+		this.text = "New Decision";
+		this.pageID = null;
+	}
+	
 	public UUID getPageID() {
 		return pageID;
 	}

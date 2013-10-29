@@ -38,6 +38,10 @@ public class TextTile extends Tile{
     	this.text = text;
     }
     
+    public TextTile() {
+    	this.text = "New TextTile";
+    }
+    
     public String getText() {
     	return text;
     }

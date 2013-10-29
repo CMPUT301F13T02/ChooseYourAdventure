@@ -31,16 +31,7 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
-
-import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class ControllerApp extends Application{
 
@@ -69,8 +60,12 @@ public class ControllerApp extends Application{
 		return currentPage;
 	}
 	
-	public void setPage(ArrayList<Story> stories) {
+	public void setStories(ArrayList<Story> stories) {
 		this.stories = stories;
+	}
+	
+	public ArrayList<Story> getStories() {
+		return this.stories;
 	}
 	
 	public Story createFakeStory() {

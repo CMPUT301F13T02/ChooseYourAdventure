@@ -49,7 +49,6 @@ public class Story {
 	 */
 	public UUID getFirstpage()
 	{
-	
 		return firstpage;
 	}
 

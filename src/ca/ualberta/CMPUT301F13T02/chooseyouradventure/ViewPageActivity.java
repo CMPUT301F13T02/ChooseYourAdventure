@@ -88,12 +88,6 @@ public class ViewPageActivity extends Activity {
         decisionsLayout = (LinearLayout) findViewById(R.id.decisionsLayout);
         commentsLayout = (LinearLayout) findViewById(R.id.commentsLayout);
         
-        //For until actual stories are being passed to the app
-		Story story = app.createFakeStory();
-		app.setStory(story);
-		Page page = story.getPages().get(0);
-		app.setPage(page);
-        
 		this.isEditing = false;
     }
 

@@ -30,24 +30,39 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
+/**
+ * Structure of the Comments that users add to a story
+ */
 public class Comment {
 
 	private String poster;
 	private String text;
-
+	/**
+	 * This is a constructor for a comment with no user
+	 * @param text The comment
+	 */
 	public Comment(String text) {
 		this.text = text;
 	}
-	
+	/**
+	 * This is a constructor for a comment with a user
+	 * @param text The comment
+	 * @param poster Who left the comment
+	 */
 	public Comment(String text, String poster) {
 		this.text = text;
 		this.poster = poster;
 	}
-
+	/**
+	 * 
+	 * @return The text from the comment
+	 */
 	public String getText() {
 		return text;
 	}
-	
+	/**
+	 * @return Who posted the comment
+	 */
 	public String getPoster() {
 		return poster;
 	}

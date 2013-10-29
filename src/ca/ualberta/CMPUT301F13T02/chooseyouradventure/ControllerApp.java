@@ -34,6 +34,9 @@ import java.util.ArrayList;
 import android.app.Application;
 import android.os.StrictMode;
 
+/**
+ * This is the Controller for MVC
+ */
 public class ControllerApp extends Application{
 
 	private Story currentStory;
@@ -45,19 +48,25 @@ public class ControllerApp extends Application{
 		super.onCreate();
 		
 	}
-	
+	/**
+	 * This sets the current story
+	 * @param A Story
+	 */
 	public void setStory(Story story) {
 		this.currentStory = story;
 	}
-	
-	public Story getStory() {
-		return currentStory;
-	}
-	
+
+	/**
+	 * This sets the current Page
+	 * @param A Page
+	 */
 	public void setPage(Page page) {
 		this.currentPage = page;
 	}
-	
+	/**
+	 * This gets the current page
+	 * @return The current Page
+	 */
 	public Page getPage() {
 		return currentPage;
 	}
@@ -82,6 +91,11 @@ public class ControllerApp extends Application{
 		return story;
 	}
 	
+	/**
+	 * This creates a fake page
+	 * @return A Fake page
+	 * @deprecated This will not be used in the final project
+	 */
 	public Page createFakePage() {
 		Page newPage = new Page();
 		TextTile newTile = new TextTile("This is a text tile for next page");
@@ -103,9 +117,20 @@ public class ControllerApp extends Application{
 		currentPage = newPage;
 		return newPage;
 	}
-	
+	/**
+	 * This adds a comment to the current page
+	 * @param A comment to add
+	 */
 	public void addComment(Comment comment) {
 		currentPage.addComment(comment);
+	}
+
+	/**
+	 * This gets the current Story
+	 * @return The current Story
+	 */
+	public Story getStory() {
+		return currentStory;
 	}
 	
 }

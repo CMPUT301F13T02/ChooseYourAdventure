@@ -64,7 +64,7 @@ public class ESHandlerTest {
 			esHandler.addPage(page1);
 			
 			//Retrieve same page
-			Page page2 = esHandler.getPage(1);
+			Page page2 = esHandler.getPage("1");
 			
 			//Check they are the same
 			assertTrue(page1.equals(page2));

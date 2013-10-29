@@ -47,10 +47,17 @@ public class Story {
 	/**
 	 * @return the firstpage
 	 */
-	public UUID getFirstpage()
+	public Page getFirstpage()
 	{
-	
-		return firstpage;
+		Page fp = new Page();
+		Page[] pagesList = pages.toArray(new Page[pages.size()]);
+		for(int i = 0; i < pages.size(); i++){
+			if (firstpage.equals(pagesList[i].getId()))
+			{
+				fp = pagesList[i];
+			}
+		}
+		return fp;
 	}
 
 	

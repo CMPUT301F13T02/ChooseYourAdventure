@@ -74,6 +74,8 @@ public class ViewStoriesActivity extends Activity {
 	ArrayList<Story> tempStoryList = new ArrayList<Story>();
 	private ControllerApp controller; 
 	private ESHandler eshandler = new ESHandler();
+	
+	ArrayAdapter<String> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,8 +96,8 @@ public class ViewStoriesActivity extends Activity {
 		tempStory.setTitle("Magical Giraffe Mamba");
 		tempStoryList.add(tempStory);
 		*/
-        /*
-		
+        
+		/*
 		try {
 			tempStoryList = eshandler.getAllStories();
 		} catch (HandlerException e) {
@@ -113,7 +115,7 @@ public class ViewStoriesActivity extends Activity {
 				counter++;
 			} while (counter < tempStoryList.size());
 		}
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+		adapter = new ArrayAdapter<String>(this,
 				R.layout.list_item_base, listText);
 		mainPage.setAdapter(adapter);
 		/**
@@ -191,11 +193,8 @@ public class ViewStoriesActivity extends Activity {
     public void jumpPage(View view, int pos) throws HandlerException {
     	Story story = tempListText[pos];
 		controller.setStory(story);
-		String FP = story.getFirstpage().toString();
-		
-		//Can't do this. Get page directly from Story -- Konrad
-		//Page storyFP = eshandler.getPage(FP);
-		//controller.setPage(storyFP);
+		Page FP = story.getFirstpage();
+		controller.setPage(FP);
 	}
     
     /**
@@ -258,7 +257,8 @@ public class ViewStoriesActivity extends Activity {
                 		
                 		break;
                 	case(3):
-                		eshandler.deleteStory(null);
+                		eshandler.deleteStory(story);
+                		adapter.notifyDataSetChanged();
                 		break;
                 	}
                         

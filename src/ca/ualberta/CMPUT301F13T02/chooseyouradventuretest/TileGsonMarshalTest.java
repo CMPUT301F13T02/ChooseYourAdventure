@@ -27,95 +27,41 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+package ca.ualberta.CMPUT301F13T02.chooseyouradventuretest;
 
-package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
+import static org.junit.Assert.*;
 
+import java.lang.reflect.Type;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import org.junit.Test;
 
-public class Story {
-	
-	/** 
-	 * @uml.property name="pages"
-	 * @uml.associationEnd aggregation="composite" inverse="story:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page"
-	 */
-    private ArrayList<Page> pages = new ArrayList<Page>();
-    private String id;
-    private UUID firstpage;
-    
-	/**
-	 * @return the firstpage
-	 */
-	public UUID getFirstpage()
-	{
-	
-		return firstpage;
-	}
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Tile;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TileGsonMarshal;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESResponse;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+public class TileGsonMarshalTest {
+
+	private Gson gson = new GsonBuilder().registerTypeAdapter(Tile.class, new TileGsonMarshal()).create();
 	
 	/**
-	 * @param firstpage the firstpage to set
+	 * Tests the serialization of tiles, which TileGsonMarshal is responsible for
 	 */
-	public void setFirstpage(UUID firstpage)
-	{
-	
-		this.firstpage = firstpage;
-	}
-
-	private String title;
-    /**
-	 * @return the title
-	 */
-	public String getTitle() {
-		return title;
-	}
-
-	/**
-	 * @param title the title to set
-	 */
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public Story() {
-    	
-    }
-    
-    public ArrayList<Page> getPages() {
-    	return pages;
-    }
-    
-    public void addPage(Page newPage) {
-    	pages.add(newPage);
-    }
-    
-    public void deletePage(Page aPage) {
-    	
-    }
-    
-    public void setId(String id) {
-    	this.id = id;
-    }
-    
-    public String getId() {
-    	return id;
-    }
-    
-	/**
-	 * Compares this story for deep equality with another story
-	 */
-	public boolean equals(Story story) {
-
-		if (pages.size() != story.getPages().size())
-			return false;
-
-		//Check that all comments are the same
-		for (int i = 0; i < pages.size(); i++) {
-			if (!pages.get(i).equals(story.getPages().get(i))) 
-				return false;
-		}
+	@Test
+	public void serializeTest() {
 		
-		return true;
+		TextTile textTile = new TextTile("hello");
+		Type type = new TypeToken<Tile>(){}.getType();
+		
+		Tile tile = gson.fromJson(gson.toJson(textTile), type);
+		
+		assertTrue(tile instanceof TextTile);
+		assertTrue(textTile.equals(tile));
 	}
+
 }

@@ -1,4 +1,4 @@
-<!-- 
+<!--
 Copyright (c) 2013, TeamCMPUT301F13T02
 All rights reserved.
 
@@ -28,6 +28,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -39,7 +40,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     tools:context=".EditStoryActivity" >
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/deleteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -47,11 +48,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         android:text="@string/delete" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/createButton2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:text="@string/add" />
+
+    <ListView
+        android:id="@+id/treeView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/deleteButton"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" >
+
+    </ListView>
 
 </RelativeLayout>

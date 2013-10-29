@@ -27,95 +27,35 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+package ca.ualberta.CMPUT301F13T02.chooseyouradventuretest;
 
-package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
+import static org.junit.Assert.*;
 
+import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
 
-public class Story {
-	
-	/** 
-	 * @uml.property name="pages"
-	 * @uml.associationEnd aggregation="composite" inverse="story:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page"
-	 */
-    private ArrayList<Page> pages = new ArrayList<Page>();
-    private String id;
-    private UUID firstpage;
-    
+public class CommentTest {
 	/**
-	 * @return the firstpage
-	 */
-	public UUID getFirstpage()
-	{
-	
-		return firstpage;
-	}
-
-	
-	/**
-	 * @param firstpage the firstpage to set
-	 */
-	public void setFirstpage(UUID firstpage)
-	{
-	
-		this.firstpage = firstpage;
-	}
-
-	private String title;
-    /**
-	 * @return the title
-	 */
-	public String getTitle() {
-		return title;
-	}
-
-	/**
-	 * @param title the title to set
-	 */
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public Story() {
-    	
-    }
-    
-    public ArrayList<Page> getPages() {
-    	return pages;
-    }
-    
-    public void addPage(Page newPage) {
-    	pages.add(newPage);
-    }
-    
-    public void deletePage(Page aPage) {
-    	
-    }
-    
-    public void setId(String id) {
-    	this.id = id;
-    }
-    
-    public String getId() {
-    	return id;
-    }
-    
-	/**
-	 * Compares this story for deep equality with another story
-	 */
-	public boolean equals(Story story) {
-
-		if (pages.size() != story.getPages().size())
-			return false;
-
-		//Check that all comments are the same
-		for (int i = 0; i < pages.size(); i++) {
-			if (!pages.get(i).equals(story.getPages().get(i))) 
-				return false;
-		}
+	 *  tests equals method from comment 
+	 **/
+	@Test
+	public void equalsTest() {
+		Comment comment1 = new Comment("Ben commented");
+		Comment comment2 = new Comment("Conrad critiqued");
+		assertFalse(comment1.equals(comment2));
 		
-		return true;
+		comment1 = new Comment("Ben commented", "Ben");
+		comment2 = new Comment("Ben commented", "Konrad");
+		assertFalse(comment1.equals(comment2));
+		
+		comment1 = new Comment("Ben commented", "Ben");
+		comment2 = new Comment("Konrad commented", "Ben");
+		assertFalse(comment1.equals(comment2));
+		
+		comment1 = new Comment("Ben commented", "Ben");
+		comment2 = new Comment("Ben commented", "Ben");
+		assertTrue(comment1.equals(comment2));
 	}
+
 }

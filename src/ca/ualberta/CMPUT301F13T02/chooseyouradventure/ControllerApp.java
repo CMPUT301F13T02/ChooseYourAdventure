@@ -32,6 +32,7 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
 import android.app.Application;
+import android.os.StrictMode;
 
 public class ControllerApp extends Application{
 
@@ -42,6 +43,7 @@ public class ControllerApp extends Application{
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		
 	}
 	
 	public void setStory(Story story) {
@@ -104,6 +106,10 @@ public class ControllerApp extends Application{
 	
 	public void addComment(Comment comment) {
 		currentPage.addComment(comment);
+	}
+	
+	public Story getStory() {
+		return currentStory;
 	}
 	
 }

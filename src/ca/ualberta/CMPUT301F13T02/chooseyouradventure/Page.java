@@ -37,16 +37,39 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 
-public class Page {//implements Parcelable {
+
+public class Page {
 	
 	public UUID id;
 	private ArrayList<Comment> comments = new ArrayList<Comment>();
 	private ArrayList<Tile> tiles = new ArrayList<Tile>();
 	private ArrayList<Decision> decisions = new ArrayList<Decision>();
+	private String title;
 	
+	/**
+	 * @return the title
+	 */
+	public String getTitle()
+	{
+	
+		return title;
+	}
+
+	
+	/**
+	 * @param title the title to set
+	 */
+	public void setTitle(String title)
+	{
+	
+		this.title = title;
+	}
+	
+	public void setId(UUID id) {
+		this.id = id;
+	}
+
 	public Page() {
 		id = UUID.randomUUID();
 		tiles = new ArrayList<Tile>();

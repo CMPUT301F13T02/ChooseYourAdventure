@@ -40,14 +40,34 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+/**
+ * Responsible for serializing and deserializing the abstract Tile class  
+ */
+
 public class TileGsonMarshal implements JsonSerializer<Tile>, JsonDeserializer<Tile>{
 
+	/**
+	 * Serializes a Tile
+	 * 
+	 * @param tile The Tile to serialize
+	 * @param type The Type of the tile to serialize
+	 * @param context The JsonSerializationContext of this serialization
+	 * @return A JsonElement that represents this Tile
+	 */
 	@Override
 	public JsonElement serialize(Tile tile, Type type,
 			JsonSerializationContext context) {
 		return context.serialize(tile, tile.getClass());
 	}
 
+	/**
+	 * Deserializes JSON representing a Tile into the appropriate Tile subclass
+	 * 
+	 * @param json A JsonElement representation of a tile
+	 * @param type Unused
+	 * @param context Unused
+	 * @return A Tile subclass that deserialized from the passed JsonElement
+	 */
 	@Override
 	public Tile deserialize(JsonElement json, Type type,
 			JsonDeserializationContext context) throws JsonParseException {

@@ -27,95 +27,48 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+package ca.ualberta.CMPUT301F13T02.chooseyouradventuretest;
 
-package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-
-import java.util.ArrayList;
 import java.util.UUID;
 
-public class Story {
-	
-	/** 
-	 * @uml.property name="pages"
-	 * @uml.associationEnd aggregation="composite" inverse="story:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page"
-	 */
-    private ArrayList<Page> pages = new ArrayList<Page>();
-    private String id;
-    private UUID firstpage;
-    
-	/**
-	 * @return the firstpage
-	 */
-	public UUID getFirstpage()
-	{
-	
-		return firstpage;
-	}
+import org.junit.Test;
 
-	
-	/**
-	 * @param firstpage the firstpage to set
-	 */
-	public void setFirstpage(UUID firstpage)
-	{
-	
-		this.firstpage = firstpage;
-	}
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
 
-	private String title;
-    /**
-	 * @return the title
-	 */
-	public String getTitle() {
-		return title;
-	}
+public class StoryTest {
 
-	/**
-	 * @param title the title to set
-	 */
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public Story() {
-    	
-    }
-    
-    public ArrayList<Page> getPages() {
-    	return pages;
-    }
-    
-    public void addPage(Page newPage) {
-    	pages.add(newPage);
-    }
-    
-    public void deletePage(Page aPage) {
-    	
-    }
-    
-    public void setId(String id) {
-    	this.id = id;
-    }
-    
-    public String getId() {
-    	return id;
-    }
-    
-	/**
-	 * Compares this story for deep equality with another story
-	 */
-	public boolean equals(Story story) {
-
-		if (pages.size() != story.getPages().size())
-			return false;
-
-		//Check that all comments are the same
-		for (int i = 0; i < pages.size(); i++) {
-			if (!pages.get(i).equals(story.getPages().get(i))) 
-				return false;
-		}
+	@Test
+	public void test() {
+		UUID u1 = UUID.randomUUID();
+		Page p1 = new Page();
+		Story s1 = new Story();
+		Story s2 = new Story();
 		
-		return true;
+		//test setting UUIDs
+		s1.setFirstpage(u1);
+		assertFalse(s1.equals(s2));
+		
+		s2.setFirstpage(u1);
+		assertTrue(s1.equals(s2));
+		
+		//test title
+		s1.setTitle("Ben's story");
+		assertFalse(s1.equals(s2));
+		
+		s2.setTitle("Ben's story");
+		assertTrue(s1.equals(s2));
+		
+		//test setting page
+		s1.addPage(p1);
+		assertFalse(s1.equals(s2));
+		
+		s2.addPage(p1);
+		assertTrue(s1.equals(s2));
+		 
 	}
+
 }

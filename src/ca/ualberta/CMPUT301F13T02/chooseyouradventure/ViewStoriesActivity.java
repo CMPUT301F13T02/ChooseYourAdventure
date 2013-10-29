@@ -75,6 +75,8 @@ public class ViewStoriesActivity extends Activity {
 	ArrayList<Story> tempStoryList = new ArrayList<Story>();
 	private ControllerApp controller; 
 	private ESHandler eshandler = new ESHandler();
+	
+	ArrayAdapter<String> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,8 +97,8 @@ public class ViewStoriesActivity extends Activity {
 		tempStory.setTitle("Magical Giraffe Mamba");
 		tempStoryList.add(tempStory);
 		*/
-        /*
-		
+        
+		/*
 		try {
 			tempStoryList = eshandler.getAllStories();
 		} catch (HandlerException e) {
@@ -114,7 +116,7 @@ public class ViewStoriesActivity extends Activity {
 				counter++;
 			} while (counter < tempStoryList.size());
 		}
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+		adapter = new ArrayAdapter<String>(this,
 				R.layout.list_item_base, listText);
 		mainPage.setAdapter(adapter);
 		/**
@@ -192,18 +194,11 @@ public class ViewStoriesActivity extends Activity {
     public void jumpPage(View view, int pos) throws HandlerException {
     	Story story = tempListText[pos];
 		controller.setStory(story);
-		UUID FPuuid = story.getFirstpage();
-		String FP = FPuuid.toString();
+		Page firstPage = story.getFirstpage();
 		
 		Intent intent = new Intent(this, ViewPageActivity.class);
-		ArrayList<Page> pages = story.getPages();
 		
-		for (Page page : pages) {
-			if (page.getId() == FPuuid) {
-				controller.setPage(page);
-				break;
-			}
-		}
+		controller.setPage(firstPage);
 		
 		startActivity(intent);
 		//Can't do this. Get page directly from Story -- Konrad
@@ -271,7 +266,8 @@ public class ViewStoriesActivity extends Activity {
                 		
                 		break;
                 	case(3):
-                		eshandler.deleteStory(null);
+                		eshandler.deleteStory(story);
+                		adapter.notifyDataSetChanged();
                 		break;
                 	}
                         

@@ -31,6 +31,7 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.app.Activity;
@@ -133,6 +134,7 @@ public class EditStoryActivity extends Activity {
 		Story story = controller.getStory();
 		Page toPage = story.getPages().get(pos);
 		controller.setPage(toPage);
+
     	Intent intent = new Intent(this, ViewPageActivity.class);
     	startActivity(intent);
 	}
@@ -172,37 +174,69 @@ public class EditStoryActivity extends Activity {
 
 	}
 	public void pageOptions(final View v, final int pos){
-		final String[] titles = {"Goto/Edit","Delete","Cancel"};
 		final Page currentPage = tempListText[pos];
+		final Page FP = currentStory.getFirstpage();
+		String[] titlesA = {"Goto/Edit","Cancel"};
+		String[] titlesB = {"Goto/Edit","Assign as First Page","Delete","Cancel"};
+		final String[] titles;
+		if(currentPage == FP){
+			titles = titlesA;
+		}
+		else
+		{
+			titles = titlesB;
+		}
+		
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.page_options);
         builder.setItems(titles, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
-            	switch(item){
-            	case(0):
-            		try {
-						jumpPage(v, pos);
-					} catch (HandlerException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-            		break;
-            	case(1):
-					try
-					{	
-	
-						tempPageList.remove(currentPage);
-						updateLists();
-						currentStory.deletePage(currentPage);
-						eshandler.updateStory(currentStory);
-						adapter.notifyDataSetChanged();
-					} catch (HandlerException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-            		break;
-            	          	
+            	if(currentPage == FP)
+				{
+            		switch(item){
+    	            	case(0):
+    	            		try {
+    							jumpPage(v, pos);
+    						} catch (HandlerException e1) {
+    							// TODO Auto-generated catch block
+    							e1.printStackTrace();
+    						}
+    	            		break;
+            		}
+				}
+            	else
+            	{
+	            	switch(item){
+	            	case(0):
+	            		try {
+							jumpPage(v, pos);
+						} catch (HandlerException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+	            		break;
+	            	case(1):
+	            		UUID newID = currentPage.getId();
+	            		currentStory.setFirstpage(newID);
+	            		break;
+	            	case(2):
+						try
+						{	
+							tempPageList.remove(currentPage);
+							updateLists();
+							currentStory.deletePage(currentPage);
+							eshandler.updateStory(currentStory);
+							adapter.notifyDataSetChanged();
+							
+							break;
+						} catch (HandlerException e)
+						{
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	            		break;
+	            	          	
+	            	}
             	}
                     
                 }});

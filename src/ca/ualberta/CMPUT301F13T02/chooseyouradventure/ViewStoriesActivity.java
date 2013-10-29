@@ -33,11 +33,9 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -218,6 +216,7 @@ public class ViewStoriesActivity extends Activity {
     	Intent intent = new Intent(this, EditStoryActivity.class);
     	newStory.setTitle(storyTitle);
     	newPage.setTitle("First Page");
+    	newPage.setRefNum(1);
     	newStory.addPage(newPage);
     	newStory.setFirstpage(newPage.getId());
 

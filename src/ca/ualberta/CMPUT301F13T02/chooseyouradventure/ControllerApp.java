@@ -32,7 +32,7 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
 import android.app.Application;
-import android.os.StrictMode;
+
 
 /**
  * This is the Controller for MVC

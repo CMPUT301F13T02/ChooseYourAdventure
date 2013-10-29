@@ -39,12 +39,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 /**
  * This is the activity which is launched when a user
@@ -139,8 +139,8 @@ public class EditStoryActivity extends Activity {
 	 */
 	private void createPage() throws HandlerException{
     	Page newPage = new Page();
-    	//temp
-    	newPage.setTitle("NEWPAGE");
+    	newPage.setTitle("NEW PAGE");
+    	newPage.setRefNum(currentStory.getCurrRefNum());
     	currentStory.addPage(newPage);
     	eshandler.updateStory(currentStory);
     	updateLists();
@@ -158,13 +158,19 @@ public class EditStoryActivity extends Activity {
 	 * This updates the lists of pages in a story
 	 */
 	private void updateLists(){
+		Page FP = currentStory.getFirstpage();
 		tempPageList = currentStory.getPages();
 		listText.clear();
 		int counter = 0;
 		tempListText = tempPageList.toArray(new Page[tempPageList.size()]);
 		if (tempListText.length != 0){
 			do{
-				listText.add(tempListText[counter].getTitle());
+				String outList = "";
+				if(tempListText[counter] == FP){
+					outList = "{Start} ";
+				}
+				outList = outList + "(" + tempListText[counter].getRefNum() + ") " + tempListText[counter].getTitle();
+				listText.add(outList);
 				counter++;
 			} while (counter < tempPageList.size());
 		}
@@ -176,8 +182,8 @@ public class EditStoryActivity extends Activity {
 	public void pageOptions(final View v, final int pos){
 		final Page currentPage = tempListText[pos];
 		final Page FP = currentStory.getFirstpage();
-		String[] titlesA = {"Goto/Edit","Cancel"};
-		String[] titlesB = {"Goto/Edit","Assign as First Page","Delete","Cancel"};
+		String[] titlesA = {"Goto/Edit","Rename","Cancel"};
+		String[] titlesB = {"Goto/Edit","Rename","Assign as First Page","Delete","Cancel"};
 		final String[] titles;
 		if(currentPage == FP){
 			titles = titlesA;
@@ -188,58 +194,83 @@ public class EditStoryActivity extends Activity {
 		}
 		
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder titleEditor = new AlertDialog.Builder(this);
+        final EditText alertEdit = new EditText(this);
         builder.setTitle(R.string.page_options);
         builder.setItems(titles, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
-            	if(currentPage == FP)
-				{
-            		switch(item){
-    	            	case(0):
-    	            		try {
-    							jumpPage(v, pos);
-    						} catch (HandlerException e1) {
-    							// TODO Auto-generated catch block
-    							e1.printStackTrace();
-    						}
-    	            		break;
+            	
+            	switch(item){
+            	case(0):
+            		try {
+            			jumpPage(v, pos);
+            		} catch (HandlerException e1) {
+            			// TODO Auto-generated catch block
+            			e1.printStackTrace();
             		}
-				}
-            	else
-            	{
-	            	switch(item){
-	            	case(0):
-	            		try {
-							jumpPage(v, pos);
-						} catch (HandlerException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-	            		break;
-	            	case(1):
-	            		UUID newID = currentPage.getId();
-	            		currentStory.setFirstpage(newID);
-	            		break;
-	            	case(2):
-						try
-						{	
-							tempPageList.remove(currentPage);
-							updateLists();
-							currentStory.deletePage(currentPage);
-							eshandler.updateStory(currentStory);
-							adapter.notifyDataSetChanged();
-							
-							break;
-						} catch (HandlerException e)
-						{
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-	            		break;
-	            	          	
-	            	}
+            	break;
+            	case(1):
+            		
+            		titleEditor.setTitle("Rename Page");
+            		String titleText = currentPage.getTitle();
+            		
+            		alertEdit.setText(titleText);
+            		titleEditor.setView(alertEdit);
+            		titleEditor.setMessage("Enter the title of your story")
+            		.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            			public void onClick(DialogInterface dialog, int id) {
+            				String pageTitle = alertEdit.getText().toString();
+            				try
+            				{
+            					
+            					currentPage.setTitle(pageTitle);
+            					updateLists();
+            					eshandler.updateStory(currentStory);
+                    			adapter.notifyDataSetChanged();
+            					
+            				} catch (HandlerException e)
+            				{
+            					// TODO Auto-generated catch block
+            					e.printStackTrace();
+            				}
+
+
+            			}
+            		})
+            		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            			public void onClick(DialogInterface dialog, int id) {
+
+            			}
+            		});
+            		titleEditor.show();
+            		break;
+            	case(2):
+            		UUID newID = currentPage.getId();
+            		currentStory.setFirstpage(newID);
+            		updateLists();
+            		adapter.notifyDataSetChanged();
+            		break;
+            	case(3):
+            		try
+            		{	
+            			tempPageList.remove(currentPage);
+            			updateLists();
+            			currentStory.deletePage(currentPage);
+            			eshandler.updateStory(currentStory);
+            			adapter.notifyDataSetChanged();
+
+            			break;
+            		} catch (HandlerException e)
+            		{
+            			// TODO Auto-generated catch block
+            			e.printStackTrace();
+            		}
+            		break;
 
             	}
-                }});
+
+            }	
+                });
         builder.show();
     }
 }

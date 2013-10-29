@@ -458,9 +458,15 @@ public class ViewPageActivity extends Activity {
 	 */
 	private ArrayList<String> getPageStrings(ArrayList<Page> pages) {
 		ArrayList<String> pageNames = new ArrayList<String>();
+		/*
 		for (int i = 0; i < pages.size(); i++) {
 			pageNames.add(pages.get(i).getId().toString());
 		}
+		*/
+		for (int i = 0; i < pages.size(); i++) {
+			pageNames.add("(" + pages.get(i).getRefNum() + ") " + pages.get(i).getTitle() + "  [" + pages.get(i).getId().toString() + "]");
+		}
+		
 		return pageNames;
 	}
 	

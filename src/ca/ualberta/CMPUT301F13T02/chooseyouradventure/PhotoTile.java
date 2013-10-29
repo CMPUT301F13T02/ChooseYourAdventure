@@ -32,6 +32,8 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 public class PhotoTile extends Tile{
 
+	private Object photo;
+	
 	@Override
 	String getType() {
 		// TODO Auto-generated method stub
@@ -42,6 +44,15 @@ public class PhotoTile extends Tile{
 	boolean equals(Tile tile) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	@Override
+	public void setContent(Object content) {
+		photo = content;
+	}
+	
+	public Object getPhoto() {
+		return photo;
 	}
     
 }

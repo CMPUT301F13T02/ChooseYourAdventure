@@ -33,6 +33,7 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.os.Bundle;
@@ -191,8 +192,20 @@ public class ViewStoriesActivity extends Activity {
     public void jumpPage(View view, int pos) throws HandlerException {
     	Story story = tempListText[pos];
 		controller.setStory(story);
-		String FP = story.getFirstpage().toString();
+		UUID FPuuid = story.getFirstpage();
+		String FP = FPuuid.toString();
 		
+		Intent intent = new Intent(this, ViewPageActivity.class);
+		ArrayList<Page> pages = story.getPages();
+		
+		for (Page page : pages) {
+			if (page.getId() == FPuuid) {
+				controller.setPage(page);
+				break;
+			}
+		}
+		
+		startActivity(intent);
 		//Can't do this. Get page directly from Story -- Konrad
 		//Page storyFP = eshandler.getPage(FP);
 		//controller.setPage(storyFP);

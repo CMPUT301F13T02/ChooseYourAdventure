@@ -122,16 +122,17 @@ public class EditStoryActivity extends Activity {
 	}
 	
 	
-	
 	protected void onListItemClick(View v, int pos, long id) {
 		pageOptions(v, pos);
 	}
 	
 	public void jumpPage(View view, int pos) throws HandlerException {
-		
+		/*
 		String FP = currentStory.getFirstpage().toString();
-		Page storyFP = eshandler.getPage(FP);
-		controller.setPage(storyFP);
+		Page storyFP = eshandler.getPage(FP);*/
+		Story story = controller.getStory();
+		Page toPage = story.getPages().get(pos);
+		controller.setPage(toPage);
     	Intent intent = new Intent(this, ViewPageActivity.class);
     	startActivity(intent);
 	}

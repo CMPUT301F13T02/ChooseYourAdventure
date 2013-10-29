@@ -46,6 +46,10 @@ public class TextTile extends Tile{
     	this.text = text;
     }
     
+    public TextTile() {
+    	this.text = "New TextTile";
+    }
+    
     /**
      * Returns this tile's text
      * 
@@ -70,5 +74,11 @@ public class TextTile extends Tile{
 
 	String getType() {
 		return type;
+	}
+	
+	@Override
+	public void setContent(Object content) {
+		String text = (String) content;
+		this.text = text;
 	}
 }

@@ -31,7 +31,6 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
-
 import android.app.Application;
 import android.os.StrictMode;
 
@@ -51,6 +50,10 @@ public class ControllerApp extends Application{
 		this.currentStory = story;
 	}
 	
+	public Story getStory() {
+		return currentStory;
+	}
+	
 	public void setPage(Page page) {
 		this.currentPage = page;
 	}
@@ -59,14 +62,42 @@ public class ControllerApp extends Application{
 		return currentPage;
 	}
 	
-	public void setPage(ArrayList<Story> stories) {
+	public void setStories(ArrayList<Story> stories) {
 		this.stories = stories;
+	}
+	
+	public ArrayList<Story> getStories() {
+		return this.stories;
+	}
+	
+	public Story createFakeStory() {
+		Page page2 = createFakePage();
+		Page page1 = createFakePageWithDecision(page2);
+		
+		Story story = new Story();
+		
+		story.addPage(page1);
+		story.addPage(page2);
+		
+		return story;
 	}
 	
 	public Page createFakePage() {
 		Page newPage = new Page();
+		TextTile newTile = new TextTile("This is a text tile for next page");
+		newPage.addTile(newTile);
+		Comment newComment = new Comment("This is a comment on next page");
+		newPage.addComment(newComment);
+		currentPage = newPage;
+		return newPage;
+	}
+	
+	public Page createFakePageWithDecision(Page toPage) {
+		Page newPage = new Page();
 		TextTile newTile = new TextTile("This is my experiment TextTile");
 		newPage.addTile(newTile);
+		Decision decision = new Decision("Go to second page", toPage);
+		newPage.addDecision(decision);
 		Comment newComment = new Comment("This is my experiment Comment");
 		newPage.addComment(newComment);
 		currentPage = newPage;
@@ -75,10 +106,6 @@ public class ControllerApp extends Application{
 	
 	public void addComment(Comment comment) {
 		currentPage.addComment(comment);
-	}
-	
-	public Story getStory() {
-		return currentStory;
 	}
 	
 }

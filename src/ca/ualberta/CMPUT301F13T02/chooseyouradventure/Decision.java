@@ -42,6 +42,11 @@ public class Decision {
 		this.pageID = page.getId();
 	}
 	
+	public Decision() {
+		this.text = "New Decision";
+		this.pageID = null;
+	}
+	
 	public UUID getPageID() {
 		return pageID;
 	}
@@ -50,5 +55,10 @@ public class Decision {
 	// Need access to text for use in DecisionAdapter
 	public String getText() {
 		return text;
+	}
+	
+	public void updateDecision(String text, Page page) {
+		this.text = text;
+		this.pageID = page.getId();
 	}
 }

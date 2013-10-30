@@ -43,6 +43,7 @@ public class Page {
 	private ArrayList<Decision> decisions = new ArrayList<Decision>();
 	private String title;
 	private String pageEnding;
+	private int refNum;
 	/**
 	 * This gets the title of the Page
 	 * @return the title
@@ -214,4 +215,10 @@ public class Page {
 		
 	}
 	*/
+	public int getRefNum() {
+		return refNum;
+	}
+	public void setRefNum(int refNum) {
+		this.refNum = refNum;
+	}
 }

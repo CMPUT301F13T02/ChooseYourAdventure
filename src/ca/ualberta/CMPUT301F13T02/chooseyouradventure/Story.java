@@ -44,6 +44,7 @@ public class Story {
     private ArrayList<Page> pages = new ArrayList<Page>();
     private String id;
     private UUID firstpage;
+    private int currRefNum = 1;
 	/**
 	 * @return the firstpage
 	 */
@@ -101,6 +102,7 @@ public class Story {
      */
     public void addPage(Page newPage) {
     	pages.add(newPage);
+    	currRefNum++;
     }
     /**
      * This deletes a page from a story
@@ -139,4 +141,8 @@ public class Story {
 		}
 		return true;
 	}
+	public int getCurrRefNum() {
+		return currRefNum;
+	}
+	
 }

@@ -51,6 +51,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="comment_title">Comments</string>
     <string name="add_comment_button">+ Add Comment</string>
     <string name="add_tile_button">New Section</string>
-    <string name="add_decision_button">Add a choice</string>
+    <string name="add_decision_button">Add a Choice</string>
 
 </resources>

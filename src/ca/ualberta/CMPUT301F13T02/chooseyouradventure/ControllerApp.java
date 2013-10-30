@@ -32,6 +32,10 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
 import android.app.Application;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8f3676b0086f0f2c07ec50653a9045564453dc4e
 
 /**
  * This is the Controller for MVC

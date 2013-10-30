@@ -67,10 +67,9 @@ import android.widget.ListView;
 
 public class ViewStoriesActivity extends Activity {
 	private ListView mainPage;
-	private Story[] tempListText;
 	private Button createNew;
-	ArrayList<String> listText = new ArrayList<String>();
-	ArrayList<Story> tempStoryList = new ArrayList<Story>();
+	ArrayList<String> storyText = new ArrayList<String>();
+	ArrayList<Story> storyList = new ArrayList<Story>();
 	private ControllerApp controller; 
 	private ESHandler eshandler = new ESHandler();
 	
@@ -87,36 +86,14 @@ public class ViewStoriesActivity extends Activity {
                 createStory();
             }
         });
-        /**
-		 * Temporary Initializer to test ListViews
-		 */
-        /*
-		Story tempStory = new Story();
-		tempStory.setTitle("Magical Giraffe Mamba");
-		tempStoryList.add(tempStory);
-		*/
-        
-		/*
-		try {
-			tempStoryList = eshandler.getAllStories();
-		} catch (HandlerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
+       
 		
-		int counter = 0;
-		tempListText = tempStoryList.toArray(new Story[tempStoryList.size()]);
-		if(tempListText.length != 0)
-		{
-			do{
-				listText.add(tempListText[counter].getTitle());
-				counter++;
-			} while (counter < tempStoryList.size());
-		}
+		
+		updateTitles();
 		adapter = new ArrayAdapter<String>(this,
-				R.layout.list_item_base, listText);
+				R.layout.list_item_base, storyText);
 		mainPage.setAdapter(adapter);
+		
 		/**
 		 * Activity to restructure Click and longClick listeners to work in a list view
 		 *  directly based on http://android.konreu.com/developer-how-to/click-long-press-event-listeners-list-activity/
@@ -142,6 +119,14 @@ public class ViewStoriesActivity extends Activity {
 		
         controller = (ControllerApp) getApplication();
     }
+    
+    @Override
+	public void onStart() {
+        super.onStart();
+        updateTitles();
+        adapter.notifyDataSetChanged();
+    }
+        
 
 
     /**
@@ -161,8 +146,7 @@ public class ViewStoriesActivity extends Activity {
 	
 	
 	
-	protected void onListItemClick(View v, int pos, long id) throws HandlerException {
-		
+	protected void onListItemClick(View v, int pos, long id) throws HandlerException {	
 	    jumpPage(v, pos);
 	}
 	
@@ -190,18 +174,12 @@ public class ViewStoriesActivity extends Activity {
      * @param pos The position of the story to open
      */
     public void jumpPage(View view, int pos) throws HandlerException {
-    	Story story = tempListText[pos];
+    	Story story = storyList.get(pos);
 		controller.setStory(story);
-		Page firstPage = story.getFirstpage();
-		
-		Intent intent = new Intent(this, ViewPageActivity.class);
-		
-		controller.setPage(firstPage);
-		
+		Page firstPage = story.getFirstpage();		
+		Intent intent = new Intent(this, ViewPageActivity.class);	
+		controller.setPage(firstPage);		
 		startActivity(intent);
-		//Can't do this. Get page directly from Story -- Konrad
-		//Page storyFP = eshandler.getPage(FP);
-		//controller.setPage(storyFP);
 	}
     
     /**
@@ -219,11 +197,11 @@ public class ViewStoriesActivity extends Activity {
     	newPage.setRefNum(1);
     	newStory.addPage(newPage);
     	newStory.setFirstpage(newPage.getId());
-
-    
 	    try
 		{	
-	    	
+	    	storyList.add(newStory);
+	    	updateTitles();
+	    	adapter.notifyDataSetChanged();
 			eshandler.addStory(newStory);
 			eshandler.addPage(newPage);
 		} catch (Exception e)
@@ -247,7 +225,7 @@ public class ViewStoriesActivity extends Activity {
      */
 	public void storyMenu(final View v, int pos){
 			final String[] titles = {"Edit","{Placeholder} Upload","{Placeholder} Cache","Delete","Cancel"};
-			final Story story = tempListText[pos];
+			final Story story = storyList.get(pos);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.story_options);
             builder.setItems(titles, new DialogInterface.OnClickListener() {
@@ -309,6 +287,16 @@ public class ViewStoriesActivity extends Activity {
             }
         });
         builder.show();
+    }
+    
+    private void updateTitles(){
+    	storyText.clear();
+    	if(storyList.size() != 0)
+		{
+			for (int i = 0; i < storyList.size(); i++) {
+				storyText.add(storyList.get(i).getTitle());
+			}
+		}
     }
 
     

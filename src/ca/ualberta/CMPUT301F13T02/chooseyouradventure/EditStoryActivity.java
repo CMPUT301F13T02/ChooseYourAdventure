@@ -55,9 +55,8 @@ public class EditStoryActivity extends Activity {
 	private ListView treePage;
 	private Button createNew2;
 	private Button deleteStory;
-	private Page[] tempListText;
-	private ArrayList<String> listText = new ArrayList<String>();
-	private ArrayList<Page> tempPageList = new ArrayList<Page>();
+	private ArrayList<String> pageText = new ArrayList<String>();
+	private ArrayList<Page> pageList = new ArrayList<Page>();
 	private ArrayAdapter<String> adapter;
 	private ESHandler eshandler = new ESHandler();
 	private ControllerApp controller;
@@ -105,14 +104,16 @@ public class EditStoryActivity extends Activity {
 		    }
 		});
 		adapter = new ArrayAdapter<String>(this,
-				R.layout.list_item_base, listText);
+				R.layout.list_item_base, pageText);
 		treePage.setAdapter(adapter);
     }
+	
 	@Override
-	protected void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();	
-	}
+	public void onStart() {
+        super.onStart();
+        updateLists();
+        adapter.notifyDataSetChanged();
+    }
 	
 	protected void onListItemClick(View v, int pos, long id) {
 		pageOptions(v, pos);
@@ -122,14 +123,9 @@ public class EditStoryActivity extends Activity {
 	 * @param input from a Listview
 	 * @throws HandlerException
 	 */
-	public void jumpPage(View view, int pos) throws HandlerException {
-		/*
-		String FP = currentStory.getFirstpage().toString();
-		Page storyFP = eshandler.getPage(FP);*/
-		Story story = controller.getStory();
-		Page toPage = story.getPages().get(pos);
+	public void jumpPage(View view, int pos) throws HandlerException {		
+		Page toPage = currentStory.getPages().get(pos);
 		controller.setPage(toPage);
-
     	Intent intent = new Intent(this, ViewPageActivity.class);
     	startActivity(intent);
 	}
@@ -159,40 +155,37 @@ public class EditStoryActivity extends Activity {
 	 */
 	private void updateLists(){
 		Page FP = currentStory.getFirstpage();
-		tempPageList = currentStory.getPages();
-		listText.clear();
-		int counter = 0;
-		tempListText = tempPageList.toArray(new Page[tempPageList.size()]);
-		if (tempListText.length != 0){
-			do{
+		pageList = currentStory.getPages();
+		pageText.clear();
+		
+		
+		if(pageList.size() != 0)
+		{
+			for (int i = 0; i < pageList.size(); i++) {
 				String outList = "";
-				if(tempListText[counter] == FP){
+				if(pageList.get(i) == FP){
 					outList = "{Start} ";
 				}
-				outList = outList + "(" + tempListText[counter].getRefNum() + ") " + tempListText[counter].getTitle();
-				listText.add(outList);
-				counter++;
-			} while (counter < tempPageList.size());
+				if(pageList.get(i).getDecisions().size() == 0)
+					outList = outList + "{Endpoint} ";
+				outList = outList + "(" + pageList.get(i).getRefNum() + ") " + pageList.get(i).getTitle();
+				pageText.add(outList);
+			}
 		}
+		
 	}
 	/**
 	 * This shows the user a list of options on a story
 	 * @param Input from longclick
 	 */
 	public void pageOptions(final View v, final int pos){
-		final Page currentPage = tempListText[pos];
+		final Page currentPage = pageList.get(pos);
 		final Page FP = currentStory.getFirstpage();
 		String[] titlesA = {"Goto/Edit","Rename","Cancel"};
 		String[] titlesB = {"Goto/Edit","Rename","Assign as First Page","Delete","Cancel"};
 		final String[] titles;
-		if(currentPage == FP){
-			titles = titlesA;
-		}
-		else
-		{
-			titles = titlesB;
-		}
-		
+		if(currentPage == FP){titles = titlesA;}
+		else{titles = titlesB;}
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final AlertDialog.Builder titleEditor = new AlertDialog.Builder(this);
         final EditText alertEdit = new EditText(this);
@@ -253,7 +246,7 @@ public class EditStoryActivity extends Activity {
             	case(3):
             		try
             		{	
-            			tempPageList.remove(currentPage);
+            			pageList.remove(currentPage);
             			updateLists();
             			currentStory.deletePage(currentPage);
             			eshandler.updateStory(currentStory);

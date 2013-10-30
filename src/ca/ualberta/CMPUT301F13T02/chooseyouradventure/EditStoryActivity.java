@@ -59,7 +59,7 @@ public class EditStoryActivity extends Activity {
 	private ArrayList<Page> pageList = new ArrayList<Page>();
 	private ArrayAdapter<String> adapter;
 	private ESHandler eshandler = new ESHandler();
-	private ControllerApp controller;
+	private ControllerApp app;
 	/**
 	 * This binds the buttons the the views to this activity
 	 * and sets the appropriate onclick listeners
@@ -90,8 +90,8 @@ public class EditStoryActivity extends Activity {
               deleteCurrentStory();
             }
         });       
-        controller = (ControllerApp) getApplication();
-		currentStory = controller.getStory();
+        app = (ControllerApp) getApplication();
+		currentStory = app.getStory();
 		updateLists();
 		/**
 		 * Activity to restructure Click and longClick listeners to work in a list view
@@ -125,7 +125,7 @@ public class EditStoryActivity extends Activity {
 	 */
 	public void jumpPage(View view, int pos) throws HandlerException {		
 		Page toPage = currentStory.getPages().get(pos);
-		controller.setPage(toPage);
+		app.setPage(toPage);
     	Intent intent = new Intent(this, ViewPageActivity.class);
     	startActivity(intent);
 	}

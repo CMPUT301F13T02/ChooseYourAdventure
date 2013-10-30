@@ -70,7 +70,7 @@ public class ViewStoriesActivity extends Activity {
 	private Button createNew;
 	ArrayList<String> storyText = new ArrayList<String>();
 	ArrayList<Story> storyList = new ArrayList<Story>();
-	private ControllerApp controller; 
+	private ControllerApp app; 
 	private ESHandler eshandler = new ESHandler();
 	
 	ArrayAdapter<String> adapter;
@@ -117,7 +117,7 @@ public class ViewStoriesActivity extends Activity {
 		    }
 		});
 		
-        controller = (ControllerApp) getApplication();
+        app = (ControllerApp) getApplication();
     }
     
     @Override
@@ -175,10 +175,10 @@ public class ViewStoriesActivity extends Activity {
      */
     public void jumpPage(View view, int pos) throws HandlerException {
     	Story story = storyList.get(pos);
-		controller.setStory(story);
+		app.setStory(story);
 		Page firstPage = story.getFirstpage();		
 		Intent intent = new Intent(this, ViewPageActivity.class);	
-		controller.setPage(firstPage);		
+		app.setPage(firstPage);		
 		startActivity(intent);
 	}
     
@@ -210,7 +210,7 @@ public class ViewStoriesActivity extends Activity {
 			e.printStackTrace();
 		}
 	    
-	    controller.setStory(newStory);
+	    app.setStory(newStory);
 	    startActivity(intent);
 	    
     	
@@ -233,7 +233,7 @@ public class ViewStoriesActivity extends Activity {
                 	switch(item){
                 	case(0):
                 		
-        				controller.setStory(story);
+        				app.setStory(story);
                 		jumpEdit(v);
                 		break;
                 	case(1):

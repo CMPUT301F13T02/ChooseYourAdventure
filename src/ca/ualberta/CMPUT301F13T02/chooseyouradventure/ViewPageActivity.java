@@ -36,7 +36,6 @@ import java.util.UUID;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.util.Log;
@@ -45,7 +44,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -493,7 +491,7 @@ public class ViewPageActivity extends Activity {
 		}
 		*/
 		for (int i = 0; i < pages.size(); i++) {
-			pageNames.add("(" + pages.get(i).getRefNum() + ") " + pages.get(i).getTitle() + "  [" + pages.get(i).getId().toString() + "]");
+			pageNames.add("(" + pages.get(i).getRefNum() + ") " + pages.get(i).getTitle());
 		}
 		
 		return pageNames;
@@ -678,6 +676,7 @@ public class ViewPageActivity extends Activity {
 		TextView textView = (TextView) view;
 		textView.setText(text);
 	}
+
 }
 
 

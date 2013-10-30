@@ -78,7 +78,7 @@ public class Page {
 		tiles = new ArrayList<Tile>();
 		decisions = new ArrayList<Decision>();
 		comments = new ArrayList<Comment>();
-		pageEnding = "How should this page end?";
+		pageEnding = "+ Add an ending to this page";
 	}
 	
 	/**

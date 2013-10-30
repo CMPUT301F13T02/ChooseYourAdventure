@@ -35,7 +35,6 @@ import java.lang.reflect.Type;
 
 import org.junit.Test;
 
-
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Tile;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TileGsonMarshal;

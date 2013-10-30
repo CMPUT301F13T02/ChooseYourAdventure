@@ -198,6 +198,7 @@ public class ViewStoriesActivity extends Activity {
     	newStory.addPage(newPage);
     	newStory.setFirstpage(newPage.getId());
 	    try
+
 		{	
 	    	storyList.add(newStory);
 	    	updateTitles();

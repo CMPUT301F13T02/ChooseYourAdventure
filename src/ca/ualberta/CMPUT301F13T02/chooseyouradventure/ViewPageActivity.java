@@ -36,7 +36,6 @@ import java.util.UUID;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.util.Log;
@@ -45,7 +44,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -89,7 +87,6 @@ public class ViewPageActivity extends Activity {
         decisionsLayout = (LinearLayout) findViewById(R.id.decisionsLayout);
         commentsLayout = (LinearLayout) findViewById(R.id.commentsLayout);
         
-		this.isEditing = false;
     }
 
 	/**
@@ -98,7 +95,7 @@ public class ViewPageActivity extends Activity {
 	@Override
 	public void onResume() {
         super.onResume();
-        
+        this.isEditing = false;
         displayPage();
 		
 		//commentsAdapter.notifyDataSetChanged();
@@ -108,7 +105,7 @@ public class ViewPageActivity extends Activity {
 			public void onClick(View view) {
 				TextTile tile = new TextTile();
 				app.getPage().addTile(tile);
-				addEditableTile(app.getPage().getTiles().size() - 1, tile);
+				addTile(app.getPage().getTiles().size() - 1, tile);
 			}
 		});
 		
@@ -118,11 +115,11 @@ public class ViewPageActivity extends Activity {
 			public void onClick(View view) {
 				Decision decision = new Decision();
 				app.getPage().addDecision(decision);
-				addEditableDecision(app.getPage().getDecisions().size() - 1, decision);
+				addDecision(app.getPage().getDecisions().size() - 1, decision);
 			}
 		});
 		
-        Button addComment = (Button) findViewById(R.id.addComment);
+        TextView addComment = (TextView) findViewById(R.id.addComment);
         addComment.setOnClickListener(new OnClickListener() {
         	@Override
         	public void onClick(View view) {
@@ -130,6 +127,13 @@ public class ViewPageActivity extends Activity {
         	}
         });
         
+        TextView pageEnding = (TextView) findViewById(R.id.pageEnding);
+        pageEnding.setOnClickListener(new OnClickListener() {
+        	@Override
+        	public void onClick(View view) {
+        		onEditPageEnding(view);
+        	}
+        });
 	}
 	
 	/**
@@ -189,11 +193,13 @@ public class ViewPageActivity extends Activity {
 		MenuItem doneButton = menu.findItem(1);
 		switch (item.getItemId()) {
 		case 0:
-			displayEditablePage();
+			this.isEditing = true;
+			displayPage();
 			doneButton.setVisible(true);
 			editButton.setVisible(false);
 			break;
 		case 1:
+			this.isEditing = false;
 			displayPage();
 			doneButton.setVisible(false);
 			editButton.setVisible(true);
@@ -203,20 +209,16 @@ public class ViewPageActivity extends Activity {
 	}
 	
 	/**
-	 * Displays a page in normal viewing mode
+	 * Displays a page
 	 */
 	private void displayPage() {
-		Button addTileButton = (Button) findViewById(R.id.addTile);
-		Button addDecisionButton = (Button) findViewById(R.id.addDecision);
-		
-		addTileButton.setVisibility(View.GONE);
-		addDecisionButton.setVisibility(View.GONE);
-		
-		tilesLayout.removeAllViews();
-		decisionsLayout.removeAllViews();
-		commentsLayout.removeAllViews();
+        
+		setButtonVisibility();
+		clearPage();
 		
 		Page page = app.getPage();
+		
+		displayPageEnding(page);
 		
 		ArrayList<Tile> tiles = page.getTiles();
 		for (int i = 0; i < tiles.size(); i++) {
@@ -236,95 +238,115 @@ public class ViewPageActivity extends Activity {
 	}
 	
 	/**
-	 * Displays a page in editing mode, so tiles and decisions can be updated
-	 * and new decisions and tiles can be added.
+	 * Adds the pageEnding from the passed page object to the pageEnding
+	 * view of ViewPageActivity.
+	 * @param page
 	 */
-	private void displayEditablePage() {		
-		Button addTileButton = (Button) findViewById(R.id.addTile);
-		Button addDecisionButton = (Button) findViewById(R.id.addDecision);
-		
-		addTileButton.setVisibility(View.VISIBLE);
-		addDecisionButton.setVisibility(View.VISIBLE);
-		
+	public void displayPageEnding(Page page) {
+		TextView pageEnding = (TextView) findViewById(R.id.pageEnding);
+		pageEnding.setText(page.getPageEnding());
+	}
+	
+	/**
+	 * Clears all the layouts on the page.
+	 */
+	private void clearPage() {
 		tilesLayout.removeAllViews();
 		decisionsLayout.removeAllViews();
 		commentsLayout.removeAllViews();
+	}
+	
+	/**
+	 * Handles removing or showing add tile and add decision buttons
+	 */
+	private void setButtonVisibility() {
+		int visibility = 0;
 		
-		Page page = app.getPage();
-		
-		ArrayList<Tile> tiles = page.getTiles();
-		for (int i = 0; i < tiles.size(); i++) {
-			addEditableTile(i, tiles.get(i));
+		if (isEditing) {
+			visibility = View.VISIBLE;
+		} else {
+			visibility = View.GONE;
 		}
 		
-		ArrayList<Decision> decisions = page.getDecisions();
-		for (int i = 0; i < decisions.size(); i++) {
-			addEditableDecision(i, decisions.get(i));
-		}
+		Button addTileButton = (Button) findViewById(R.id.addTile);
+		Button addDecisionButton = (Button) findViewById(R.id.addDecision);
 		
-		// Third ListView. Used for the Comments. Maybe don't show while editing
-		ArrayList<Comment> comments = page.getComments();
-		for (int i = 0; i < comments.size(); i++) {
-			addComment(comments.get(i));
-		}
-
+		addTileButton.setVisibility(visibility);
+		addDecisionButton.setVisibility(visibility);
 	}
 
+	private void onEditPageEnding(View view) {
+		if (isEditing) {
+			final TextView textView = (TextView) view;
+	    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	    	final EditText alertEdit = new EditText(this);
+	    	alertEdit.setText(textView.getText().toString());
+	    	builder.setView(alertEdit);
+	    	builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int id) {
+	            	onDonePageEnding(textView, alertEdit.getText().toString());
+	            }
+	        })
+	        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int id) {
+	                
+	            }
+	        });
+	        builder.show();
+		}
+	}
+
+	
+	private void onDonePageEnding(TextView view, String text) {
+		app.getPage().setPageEnding(text);
+		view.setText(text);
+	}
+	
 	/**
-	 * Adds a decision to the layout in viewing mode so its onClick listener
-	 * sends you to the next page. 
+	 * Adds a decision to the page. If we are in editing mode, give the view a
+	 * onClickListener to allow you to edit the decision. If we are in 
+	 * viewing mode add an onClickListener to go to the next page.
+	 * 
 	 * @param i
 	 * @param decision
 	 */
 	private void addDecision(int i, Decision decision) {
-		LayoutParams lparams = new LayoutParams(LayoutParams.MATCH_PARENT,
-				                                LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.MATCH_PARENT, 
+				LinearLayout.LayoutParams.WRAP_CONTENT
+				);
 		TextView view = new TextView(this);
-		view.setLayoutParams(lparams);
-		view.setText(decision.getText());
-		//I threw these in for easier differentiation. Feel free to scrap it
-		view.setTextColor(Color.BLUE);
-		
-		
-		decisionsLayout.addView(view, i);
-	
-		view.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				decisionClicked(v);
-			}
-		});
-		
-	}
-	
-	/**
-	 * Adds a decision to the layout in editing mode so its onClick listener
-	 * brings up an editing dialog for the decision.
-	 * @param i
-	 * @param decision
-	 */
-	private void addEditableDecision(int i, Decision decision) {
-		LayoutParams lparams = new LayoutParams(LayoutParams.MATCH_PARENT,
-				                                LayoutParams.WRAP_CONTENT);
-		TextView view = new TextView(this);
-		view.setLayoutParams(lparams);
+		lp.setMargins(0, 0, 0, 3);
+		view.setPadding(20, 5, 0, 5);
+		view.setBackgroundColor(0xFFFFFFFF);
+		view.setLayoutParams(lp);
 		view.setText(decision.getText());
 		decisionsLayout.addView(view, i);
-	
-		view.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				onEditDecision(v);
-			}
-		});
 		
-		view.setOnLongClickListener(new OnLongClickListener() {
-			@Override
-			public boolean onLongClick(View v) {
-				decisionMenu(v);
-				return true;
-			}
-		});
+		if (isEditing) {
+			view.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					onEditDecision(v);
+				}
+			});
+			
+			view.setOnLongClickListener(new OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+					decisionMenu(v);
+					return true;
+				}
+			});
+		} else {
+			view.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					decisionClicked(v);
+				}
+			});
+		}
+		
 	}
 	
 	/**
@@ -469,7 +491,7 @@ public class ViewPageActivity extends Activity {
 		}
 		*/
 		for (int i = 0; i < pages.size(); i++) {
-			pageNames.add("(" + pages.get(i).getRefNum() + ") " + pages.get(i).getTitle() + "  [" + pages.get(i).getId().toString() + "]");
+			pageNames.add("(" + pages.get(i).getRefNum() + ") " + pages.get(i).getTitle());
 		}
 		
 		return pageNames;
@@ -519,59 +541,63 @@ public class ViewPageActivity extends Activity {
 	 * @param comment
 	 */
 	public void addComment(Comment comment) {
-		LayoutParams lparams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+		lp.setMargins(0, 0, 0, 5);
 		TextView view = new TextView(this);
-		view.setLayoutParams(lparams);
+		view.setBackgroundColor(0xFFFFFFFF);
+		view.setPadding(10, 5, 10, 5);
+		view.setLayoutParams(lp);
 		view.setText(comment.getText());
 	    commentsLayout.addView(view);
 	}
 	
 	/**
-	 * Called to display a new tile at position i
+	 * Called to display a new tile at position i. If we are in editing mode,
+	 * add a click listener to allow user to edit the tile
 	 * @param i
 	 * @param tile
 	 */
 	public void addTile(int i, Tile tile) {
 		if (tile.getType() == "text") {
 			TextTile textTile = (TextTile) tile;
-			LayoutParams lparams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+					                                LinearLayout.LayoutParams.WRAP_CONTENT);
 			TextView view = new TextView(this);
-			view.setLayoutParams(lparams);
-			view.setText(textTile.getText());
-			tilesLayout.addView(view, i);
-		} else {
-			Log.d("no such tile", "no tile of type " + tile.getType());
-		}
-	}
-	
-	/**
-	 * Called to display a new tile at position i
-	 * @param i
-	 * @param tile
-	 */
-	public void addEditableTile(int i, Tile tile) {
-		if (tile.getType() == "text") {
-			TextTile textTile = (TextTile) tile;
-			LayoutParams lparams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-			TextView view = new TextView(this);
-			view.setLayoutParams(lparams);
-			view.setText(textTile.getText());
-			tilesLayout.addView(view, i);
-		
-			view.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					onEditTile(v);
-				}
-			});
 			
-			view.setOnLongClickListener(new OnLongClickListener() {
-				@Override
-				public boolean onLongClick(View v) {
-					tileMenu(v);
-					return true;
-				}
-			});
+			// Set what the tiles look like
+			view.setPadding(0, 5, 0, 6);
+			if (isEditing) {
+				/* Background to the layout is grey, so adding margins adds 
+				 * separators.
+				 */
+				lp.setMargins(0, 0, 0, 3);
+			} else {
+				view.setPadding(0, 5, 0, 9);
+			}
+			view.setBackgroundColor(0xFFFFFFFF);
+			view.setText(textTile.getText());
+			view.setLayoutParams(lp);
+
+			tilesLayout.addView(view, i);
+			
+			if (isEditing) {
+				view.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						onEditTile(v);
+					}
+				});
+				
+				view.setOnLongClickListener(new OnLongClickListener() {
+					@Override
+					public boolean onLongClick(View v) {
+						tileMenu(v);
+						return true;
+					}
+				});
+			}
 		} else {
 			Log.d("no such tile", "no tile of type " + tile.getType());
 		}
@@ -650,6 +676,7 @@ public class ViewPageActivity extends Activity {
 		TextView textView = (TextView) view;
 		textView.setText(text);
 	}
+
 }
 
 

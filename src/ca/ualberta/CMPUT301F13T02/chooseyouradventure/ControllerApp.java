@@ -32,7 +32,6 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
 import android.app.Application;
-import android.os.StrictMode;
 
 /**
  * This is the Controller for MVC
@@ -106,6 +105,12 @@ public class ControllerApp extends Application{
 		return newPage;
 	}
 	
+	/**
+	 * This creates a fake page with a decision
+	 * @param toPage
+	 * @return A Fake page with a decision
+	 * @deprecated This will not be used in the final project
+	 */
 	public Page createFakePageWithDecision(Page toPage) {
 		Page newPage = new Page();
 		TextTile newTile = new TextTile("This is my experiment TextTile");

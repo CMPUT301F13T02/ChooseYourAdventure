@@ -42,6 +42,7 @@ public class Page {
 	private ArrayList<Tile> tiles = new ArrayList<Tile>();
 	private ArrayList<Decision> decisions = new ArrayList<Decision>();
 	private String title;
+	private String pageEnding;
 	/**
 	 * This gets the title of the Page
 	 * @return the title
@@ -50,6 +51,7 @@ public class Page {
 	{
 		return title;
 	}
+	
 	/**
 	 * This sets a page title
 	 * @param title the title to set
@@ -58,6 +60,7 @@ public class Page {
 	{
 		this.title = title;
 	}
+	
 	/**
 	 * This sets the page ID
 	 * @param UUid
@@ -65,6 +68,7 @@ public class Page {
 	public void setId(UUID id) {
 		this.id = id;
 	}
+	
 	/**
 	 * This is the constructor that binds the arraylists to itself
 	 */
@@ -73,7 +77,9 @@ public class Page {
 		tiles = new ArrayList<Tile>();
 		decisions = new ArrayList<Decision>();
 		comments = new ArrayList<Comment>();
+		pageEnding = "How should this page end?";
 	}
+	
 	/**
 	 * This adds a tile to a page
 	 * @param tile A Text, Video or Audio tile
@@ -81,6 +87,7 @@ public class Page {
 	public void addTile(Tile tile) {
 		tiles.add(tile);
 	}
+	
 	/**
 	 * This adds a new decision to a page
 	 * @param decision The decision to add
@@ -88,6 +95,7 @@ public class Page {
 	public void addDecision(Decision decision) {
 		decisions.add(decision);
 	}
+	
 	/**
 	 * This deletes a Tile (called a segment here for some reason)
 	 * @param tile What tile to delete
@@ -102,6 +110,7 @@ public class Page {
 	public void addComment(Comment comment) {
 		comments.add(comment);
 	}
+	
 	/**
 	 * Compares this page for deep equality with another page
 	 * @param page What we are comparing to
@@ -131,6 +140,7 @@ public class Page {
 		
 		return true;
 	}
+	
 	/**
 	 * This returns the string representation of the page
 	 * @return String Representation of a page
@@ -138,6 +148,7 @@ public class Page {
 	public String toString() {
 		return "" + id + comments + tiles;
 	}
+	
 	/**
 	 * This returns the comments from this page
 	 * @return comments The comments
@@ -145,6 +156,7 @@ public class Page {
 	public ArrayList<Comment> getComments() {
 		return comments;
 	}
+	
 	/**
 	 * This returns the tiles of a page
 	 * @return tiles The tiles
@@ -152,6 +164,7 @@ public class Page {
 	public ArrayList<Tile> getTiles() {
 		return tiles;
 	}
+	
 	/**
 	 * This returns the Decisions from a page
 	 * @return decisions The Decisions
@@ -159,6 +172,7 @@ public class Page {
 	public ArrayList<Decision> getDecisions() {
 		return decisions;
 	}
+	
 	/**
 	 * This returns the UUID of the page
 	 * @return id UUID of the page
@@ -178,6 +192,14 @@ public class Page {
 	
 	public void updateDecision(String text, Page page, int decisionNumber) {
 		decisions.get(decisionNumber).updateDecision(text, page);
+	}
+	
+	public void setPageEnding(String text) {
+		this.pageEnding = text;
+	}
+	
+	public String getPageEnding() {
+		return this.pageEnding;
 	}
 /*
 	@Override

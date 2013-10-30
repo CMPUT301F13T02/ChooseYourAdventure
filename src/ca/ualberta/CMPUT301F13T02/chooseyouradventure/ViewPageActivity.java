@@ -36,6 +36,7 @@ import java.util.UUID;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.util.Log;
@@ -281,6 +282,10 @@ public class ViewPageActivity extends Activity {
 		TextView view = new TextView(this);
 		view.setLayoutParams(lparams);
 		view.setText(decision.getText());
+		//I threw these in for easier differentiation. Feel free to scrap it
+		view.setTextColor(Color.BLUE);
+		
+		
 		decisionsLayout.addView(view, i);
 	
 		view.setOnClickListener(new OnClickListener() {
@@ -458,9 +463,15 @@ public class ViewPageActivity extends Activity {
 	 */
 	private ArrayList<String> getPageStrings(ArrayList<Page> pages) {
 		ArrayList<String> pageNames = new ArrayList<String>();
+		/*
 		for (int i = 0; i < pages.size(); i++) {
 			pageNames.add(pages.get(i).getId().toString());
 		}
+		*/
+		for (int i = 0; i < pages.size(); i++) {
+			pageNames.add("(" + pages.get(i).getRefNum() + ") " + pages.get(i).getTitle() + "  [" + pages.get(i).getId().toString() + "]");
+		}
+		
 		return pageNames;
 	}
 	

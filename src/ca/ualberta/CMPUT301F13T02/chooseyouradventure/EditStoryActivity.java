@@ -134,13 +134,40 @@ public class EditStoryActivity extends Activity {
 	 * @throws HandlerException
 	 */
 	private void createPage() throws HandlerException{
-    	Page newPage = new Page();
-    	newPage.setTitle("NEW PAGE");
-    	newPage.setRefNum(currentStory.getCurrRefNum());
-    	currentStory.addPage(newPage);
-    	eshandler.updateStory(currentStory);
-    	updateLists();
-    	adapter.notifyDataSetChanged();
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	builder.setTitle("Create New");
+    	final Page newPage = new Page();
+    	
+    	final EditText alertEdit = new EditText(this);
+    	builder.setView(alertEdit);
+    	builder.setMessage("Enter the title of your new page")
+    	.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            	String pageTitle = alertEdit.getText().toString();
+            	try
+				{
+            		newPage.setRefNum(currentStory.getCurrRefNum());
+            		newPage.setTitle(pageTitle);
+                	currentStory.addPage(newPage);
+                	eshandler.updateStory(currentStory);
+                	updateLists();
+                	adapter.notifyDataSetChanged();
+				} catch (HandlerException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            	
+            	
+            }
+        })
+        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                
+            }
+        });
+        builder.show();
+    	
     	
     }
 	/**

@@ -204,7 +204,7 @@ public class ViewStoriesActivity extends Activity {
 	    	updateTitles();
 	    	adapter.notifyDataSetChanged();
 			eshandler.addStory(newStory);
-			eshandler.addPage(newPage);
+			
 		} catch (Exception e)
 		{
 			// TODO Auto-generated catch block
@@ -225,7 +225,7 @@ public class ViewStoriesActivity extends Activity {
      * @param v The view of the longClicked story
      */
 	public void storyMenu(final View v, int pos){
-			final String[] titles = {"Edit","{Placeholder} Upload","{Placeholder} Cache","Delete","Cancel"};
+			final String[] titles = {"Edit","{Placeholder} Upload","{Placeholder} Cache","{Placeholder} Delete","Cancel"};
 			final Story story = storyList.get(pos);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.story_options);

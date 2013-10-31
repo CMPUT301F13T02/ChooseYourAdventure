@@ -33,6 +33,8 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -98,7 +100,7 @@ public class ViewPageActivity extends Activity {
         this.isEditing = false;
         displayPage();
 		
-		//commentsAdapter.notifyDataSetChanged();
+	
 		Button addTileButton = (Button) findViewById(R.id.addTile);
 		addTileButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -165,7 +167,18 @@ public class ViewPageActivity extends Activity {
 	 */
     public boolean onOptionsItemSelected(MenuItem item) 
     {
-    	return menuItemClicked(item);
+    	
+		try
+		{
+			return menuItemClicked(item);
+		} catch (HandlerException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+		
+		
     }
 	
     /**
@@ -177,7 +190,7 @@ public class ViewPageActivity extends Activity {
 		{
 			editPage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		}
-		MenuItem savePage = menu.add(0, 1, 1, "Done");
+		MenuItem savePage = menu.add(0, 1, 1, "Save");
 		{
 			savePage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		}
@@ -187,8 +200,9 @@ public class ViewPageActivity extends Activity {
 	 * Handles what to do when an item of the action bar is pressed.
 	 * @param item The clicked item
 	 * @return
+	 * @throws HandlerException 
 	 */
-	private boolean menuItemClicked(MenuItem item) {
+	private boolean menuItemClicked(MenuItem item) throws HandlerException {
 		MenuItem editButton = menu.findItem(0);
 		MenuItem doneButton = menu.findItem(1);
 		switch (item.getItemId()) {
@@ -201,6 +215,18 @@ public class ViewPageActivity extends Activity {
 		case 1:
 			this.isEditing = false;
 			displayPage();
+			
+			ESHandler eshandler = new ESHandler();
+			Story currentStory = app.getStory();
+				try
+				{
+					eshandler.updateStory(currentStory);
+				} catch (Exception e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			doneButton.setVisible(false);
 			editButton.setVisible(true);
 			break;
@@ -485,11 +511,6 @@ public class ViewPageActivity extends Activity {
 	 */
 	private ArrayList<String> getPageStrings(ArrayList<Page> pages) {
 		ArrayList<String> pageNames = new ArrayList<String>();
-		/*
-		for (int i = 0; i < pages.size(); i++) {
-			pageNames.add(pages.get(i).getId().toString());
-		}
-		*/
 		for (int i = 0; i < pages.size(); i++) {
 			pageNames.add("(" + pages.get(i).getRefNum() + ") " + pages.get(i).getTitle());
 		}

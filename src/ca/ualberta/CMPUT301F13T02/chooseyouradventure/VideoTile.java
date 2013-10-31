@@ -35,6 +35,8 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
  */
 public class VideoTile extends Tile{
 
+	private Object video;
+	
 	@Override
 	String getType() {
 		// TODO Auto-generated method stub
@@ -45,6 +47,15 @@ public class VideoTile extends Tile{
 	boolean equals(Tile tile) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	@Override
+	public void setContent(Object content) {
+		video = content;
+	}
+	
+	public Object getVideo() {
+		return video;
 	}
 
 }

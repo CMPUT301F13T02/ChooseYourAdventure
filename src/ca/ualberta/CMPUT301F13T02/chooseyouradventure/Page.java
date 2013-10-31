@@ -30,66 +30,91 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
-/*
- * A page represents a physical page of a story. 
- */
-
 import java.util.ArrayList;
 import java.util.UUID;
 
-
-
+/**
+ * A page represents a physical page of a story. 
+ */
 public class Page {
-	
 	public UUID id;
 	private ArrayList<Comment> comments = new ArrayList<Comment>();
 	private ArrayList<Tile> tiles = new ArrayList<Tile>();
 	private ArrayList<Decision> decisions = new ArrayList<Decision>();
 	private String title;
-	
+	private String pageEnding;
+	private int refNum;
 	/**
+	 * This gets the title of the Page
 	 * @return the title
 	 */
 	public String getTitle()
 	{
-	
 		return title;
 	}
-
 	
 	/**
+	 * This sets a page title
 	 * @param title the title to set
 	 */
 	public void setTitle(String title)
 	{
-	
 		this.title = title;
 	}
-
+	
+	/**
+	 * This sets the page ID
+	 * @param UUid
+	 */
+	public void setId(UUID id) {
+		this.id = id;
+	}
+	
+	/**
+	 * This is the constructor that binds the arraylists to itself
+	 */
 	public Page() {
 		id = UUID.randomUUID();
 		tiles = new ArrayList<Tile>();
 		decisions = new ArrayList<Decision>();
 		comments = new ArrayList<Comment>();
+		pageEnding = "+ Add an ending to this page";
 	}
 	
+	/**
+	 * This adds a tile to a page
+	 * @param tile A Text, Video or Audio tile
+	 */
 	public void addTile(Tile tile) {
 		tiles.add(tile);
 	}
 	
+	/**
+	 * This adds a new decision to a page
+	 * @param decision The decision to add
+	 */
 	public void addDecision(Decision decision) {
 		decisions.add(decision);
 	}
 	
+	/**
+	 * This deletes a Tile (called a segment here for some reason)
+	 * @param tile What tile to delete
+	 */
 	public void deleteSegment(Tile tile) {
 		
 	}
-	
+	/**
+	 * This adds a comment to the apge
+	 * @param comment What comment to add
+	 */
 	public void addComment(Comment comment) {
 		comments.add(comment);
 	}
+	
 	/**
 	 * Compares this page for deep equality with another page
+	 * @param page What we are comparing to
 	 */
 	public boolean equals(Page page) {
 
@@ -117,24 +142,65 @@ public class Page {
 		return true;
 	}
 	
+	/**
+	 * This returns the string representation of the page
+	 * @return String Representation of a page
+	 */
 	public String toString() {
 		return "" + id + comments + tiles;
 	}
 	
+	/**
+	 * This returns the comments from this page
+	 * @return comments The comments
+	 */
 	public ArrayList<Comment> getComments() {
 		return comments;
 	}
 	
+	/**
+	 * This returns the tiles of a page
+	 * @return tiles The tiles
+	 */
 	public ArrayList<Tile> getTiles() {
 		return tiles;
 	}
-
+	
+	/**
+	 * This returns the Decisions from a page
+	 * @return decisions The Decisions
+	 */
 	public ArrayList<Decision> getDecisions() {
 		return decisions;
 	}
 	
+	/**
+	 * This returns the UUID of the page
+	 * @return id UUID of the page
+	 */
 	public UUID getId() {
 		return id;
+	}
+	
+	/**
+	 * Update tile at position i in tiles to the passed tile.
+	 * @param tile
+	 * @param i
+	 */
+	public void updateTile(Object content, int i) {
+		tiles.get(i).setContent(content);
+	}
+	
+	public void updateDecision(String text, Page page, int decisionNumber) {
+		decisions.get(decisionNumber).updateDecision(text, page);
+	}
+	
+	public void setPageEnding(String text) {
+		this.pageEnding = text;
+	}
+	
+	public String getPageEnding() {
+		return this.pageEnding;
 	}
 /*
 	@Override
@@ -149,4 +215,10 @@ public class Page {
 		
 	}
 	*/
+	public int getRefNum() {
+		return refNum;
+	}
+	public void setRefNum(int refNum) {
+		this.refNum = refNum;
+	}
 }

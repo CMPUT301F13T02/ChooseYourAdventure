@@ -27,49 +27,48 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+package ca.ualberta.CMPUT301F13T02.chooseyouradventuretest;
 
-package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.UUID;
-/**
- * This is the structure for the Decisions in stories
- *
- */
-public class Decision {
-	private String text;
-	private UUID pageID;
-	/**
-	 * This sets the link for the decision
-	 * @param The text of the decision and it's corresponding page
-	 */
-	public Decision(String text, Page page) {
-		this.text = text;
-		this.pageID = page.getId();
+
+import org.junit.Test;
+
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
+
+public class StoryTest {
+
+	@Test
+	public void test() {
+		UUID u1 = UUID.randomUUID();
+		Page p1 = new Page();
+		Story s1 = new Story();
+		Story s2 = new Story();
+		
+		//test setting UUIDs
+		s1.setFirstpage(u1);
+		assertFalse(s1.equals(s2));
+		
+		s2.setFirstpage(u1);
+		assertTrue(s1.equals(s2));
+		
+		//test title
+		s1.setTitle("Ben's story");
+		assertFalse(s1.equals(s2));
+		
+		s2.setTitle("Ben's story");
+		assertTrue(s1.equals(s2));
+		
+		//test setting page
+		s1.addPage(p1);
+		assertFalse(s1.equals(s2));
+		
+		s2.addPage(p1);
+		assertTrue(s1.equals(s2));
+		 
 	}
-	
-	public Decision() {
-		this.text = "New Decision";
-		this.pageID = null;
-	}
-	
-	/**
-	 * This gets the current Page ID
-	 * @return The current PageID
-	 */
-	public UUID getPageID() {
-		return pageID;
-	}
-	/**
-	 * This gets the current text of the decision
-	 * @return The text of the decision
-	 */
-	// Need access to text for use in DecisionAdapter
-	public String getText() {
-		return text;
-	}
-	
-	public void updateDecision(String text, Page page) {
-		this.text = text;
-		this.pageID = page.getId();
-	}
+
 }

@@ -36,7 +36,6 @@ import java.util.ArrayList;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -68,12 +67,13 @@ import android.widget.ListView;
 
 public class ViewStoriesActivity extends Activity {
 	private ListView mainPage;
-	private Story[] tempListText;
 	private Button createNew;
-	ArrayList<String> listText = new ArrayList<String>();
-	ArrayList<Story> tempStoryList = new ArrayList<Story>();
-	private ControllerApp controller; 
+	ArrayList<String> storyText = new ArrayList<String>();
+	ArrayList<Story> storyList = new ArrayList<Story>();
+	private ControllerApp app; 
 	private ESHandler eshandler = new ESHandler();
+	
+	ArrayAdapter<String> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,36 +86,14 @@ public class ViewStoriesActivity extends Activity {
                 createStory();
             }
         });
-        /**
-		 * Temporary Initializer to test ListViews
-		 */
-        /*
-		Story tempStory = new Story();
-		tempStory.setTitle("Magical Giraffe Mamba");
-		tempStoryList.add(tempStory);
-		*/
-        /*
+        
 		
-		try {
-			tempStoryList = eshandler.getAllStories();
-		} catch (HandlerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
 		
-		int counter = 0;
-		tempListText = tempStoryList.toArray(new Story[tempStoryList.size()]);
-		if(tempListText.length != 0)
-		{
-			do{
-				listText.add(tempListText[counter].getTitle());
-				counter++;
-			} while (counter < tempStoryList.size());
-		}
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				R.layout.list_item_base, listText);
+		updateTitles();
+		adapter = new ArrayAdapter<String>(this,
+				R.layout.list_item_base, storyText);
 		mainPage.setAdapter(adapter);
+		
 		/**
 		 * Activity to restructure Click and longClick listeners to work in a list view
 		 *  directly based on http://android.konreu.com/developer-how-to/click-long-press-event-listeners-list-activity/
@@ -139,8 +117,16 @@ public class ViewStoriesActivity extends Activity {
 		    }
 		});
 		
-        controller = (ControllerApp) getApplication();
+        app = (ControllerApp) getApplication();
     }
+    
+    @Override
+	public void onStart() {
+        super.onStart();
+        updateTitles();
+        adapter.notifyDataSetChanged();
+    }
+        
 
 
     /**
@@ -160,8 +146,7 @@ public class ViewStoriesActivity extends Activity {
 	
 	
 	
-	protected void onListItemClick(View v, int pos, long id) throws HandlerException {
-		
+	protected void onListItemClick(View v, int pos, long id) throws HandlerException {	
 	    jumpPage(v, pos);
 	}
 	
@@ -181,21 +166,21 @@ public class ViewStoriesActivity extends Activity {
 		startActivity(intent);
 	}
     
-	/**
-	 * Opens ViewPageActivity
-	 * 
-	 * @throws HandlerException
-	 * @param view Unused
-	 * @param pos The position of the Page to open
-	 */
+    /**
+     * Opens ViewPageActivity
+     * 
+     * @throws HandlerException
+     * @param view Unused
+     * @param pos The position of the story to open
+     */
     public void jumpPage(View view, int pos) throws HandlerException {
-    	Story story = tempListText[pos];
-		controller.setStory(story);
-		String FP = story.getFirstpage().toString();
-		// Can't do this -- get the page directly from the Story -- Konrad
-		//Page storyFP = eshandler.getPage(FP);
-		//controller.setPage(storyFP);
-    }
+    	Story story = storyList.get(pos);
+		app.setStory(story);
+		Page firstPage = story.getFirstpage();		
+		Intent intent = new Intent(this, ViewPageActivity.class);	
+		app.setPage(firstPage);		
+		startActivity(intent);
+	}
     
     /**
      * This function is for jumping to a new page after creating a new story, 
@@ -209,13 +194,15 @@ public class ViewStoriesActivity extends Activity {
     	Intent intent = new Intent(this, EditStoryActivity.class);
     	newStory.setTitle(storyTitle);
     	newPage.setTitle("First Page");
+    	newPage.setRefNum(1);
     	newStory.addPage(newPage);
     	newStory.setFirstpage(newPage.getId());
-
-    
 	    try
+
 		{	
-	    	
+	    	storyList.add(newStory);
+	    	updateTitles();
+	    	adapter.notifyDataSetChanged();
 			eshandler.addStory(newStory);
 			eshandler.addPage(newPage);
 		} catch (Exception e)
@@ -224,7 +211,7 @@ public class ViewStoriesActivity extends Activity {
 			e.printStackTrace();
 		}
 	    
-	    controller.setStory(newStory);
+	    app.setStory(newStory);
 	    startActivity(intent);
 	    
     	
@@ -239,7 +226,7 @@ public class ViewStoriesActivity extends Activity {
      */
 	public void storyMenu(final View v, int pos){
 			final String[] titles = {"Edit","{Placeholder} Upload","{Placeholder} Cache","Delete","Cancel"};
-			final Story story = tempListText[pos];
+			final Story story = storyList.get(pos);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.story_options);
             builder.setItems(titles, new DialogInterface.OnClickListener() {
@@ -247,7 +234,7 @@ public class ViewStoriesActivity extends Activity {
                 	switch(item){
                 	case(0):
                 		
-        				controller.setStory(story);
+        				app.setStory(story);
                 		jumpEdit(v);
                 		break;
                 	case(1):
@@ -257,7 +244,8 @@ public class ViewStoriesActivity extends Activity {
                 		
                 		break;
                 	case(3):
-                		eshandler.deleteStory(null);
+                		eshandler.deleteStory(story);
+                		adapter.notifyDataSetChanged();
                 		break;
                 	}
                         
@@ -300,6 +288,24 @@ public class ViewStoriesActivity extends Activity {
             }
         });
         builder.show();
+    }
+    
+    private void updateTitles(){
+    	try
+		{
+			storyList = eshandler.getAllStories();
+		} catch (HandlerException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	storyText.clear();
+    	if(storyList.size() != 0)
+		{
+			for (int i = 0; i < storyList.size(); i++) {
+				storyText.add(storyList.get(i).getTitle());
+			}
+		}
     }
 
     

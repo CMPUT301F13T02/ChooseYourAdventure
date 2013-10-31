@@ -27,49 +27,35 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+package ca.ualberta.CMPUT301F13T02.chooseyouradventuretest;
 
-package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
+import static org.junit.Assert.*;
 
-import java.util.UUID;
-/**
- * This is the structure for the Decisions in stories
- *
- */
-public class Decision {
-	private String text;
-	private UUID pageID;
+import org.junit.Test;
+
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
+
+public class CommentTest {
 	/**
-	 * This sets the link for the decision
-	 * @param The text of the decision and it's corresponding page
-	 */
-	public Decision(String text, Page page) {
-		this.text = text;
-		this.pageID = page.getId();
+	 *  tests equals method from comment 
+	 **/
+	@Test
+	public void equalsTest() {
+		Comment comment1 = new Comment("Ben commented");
+		Comment comment2 = new Comment("Conrad critiqued");
+		assertFalse(comment1.equals(comment2));
+		
+		comment1 = new Comment("Ben commented", "Ben");
+		comment2 = new Comment("Ben commented", "Konrad");
+		assertFalse(comment1.equals(comment2));
+		
+		comment1 = new Comment("Ben commented", "Ben");
+		comment2 = new Comment("Konrad commented", "Ben");
+		assertFalse(comment1.equals(comment2));
+		
+		comment1 = new Comment("Ben commented", "Ben");
+		comment2 = new Comment("Ben commented", "Ben");
+		assertTrue(comment1.equals(comment2));
 	}
-	
-	public Decision() {
-		this.text = "New Decision";
-		this.pageID = null;
-	}
-	
-	/**
-	 * This gets the current Page ID
-	 * @return The current PageID
-	 */
-	public UUID getPageID() {
-		return pageID;
-	}
-	/**
-	 * This gets the current text of the decision
-	 * @return The text of the decision
-	 */
-	// Need access to text for use in DecisionAdapter
-	public String getText() {
-		return text;
-	}
-	
-	public void updateDecision(String text, Page page) {
-		this.text = text;
-		this.pageID = page.getId();
-	}
+
 }

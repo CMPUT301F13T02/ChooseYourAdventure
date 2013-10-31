@@ -27,49 +27,40 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+package ca.ualberta.CMPUT301F13T02.chooseyouradventuretest;
 
-package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
+import static org.junit.Assert.*;
 
-import java.util.UUID;
-/**
- * This is the structure for the Decisions in stories
- *
- */
-public class Decision {
-	private String text;
-	private UUID pageID;
-	/**
-	 * This sets the link for the decision
-	 * @param The text of the decision and it's corresponding page
-	 */
-	public Decision(String text, Page page) {
-		this.text = text;
-		this.pageID = page.getId();
-	}
-	
-	public Decision() {
-		this.text = "New Decision";
-		this.pageID = null;
-	}
+import java.lang.reflect.Type;
+
+import org.junit.Test;
+
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Tile;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TileGsonMarshal;
+
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+public class TileGsonMarshalTest {
+
+	private Gson gson = new GsonBuilder().registerTypeAdapter(Tile.class, new TileGsonMarshal()).create();
 	
 	/**
-	 * This gets the current Page ID
-	 * @return The current PageID
+	 * Tests the serialization of tiles, which TileGsonMarshal is responsible for
 	 */
-	public UUID getPageID() {
-		return pageID;
+	@Test
+	public void serializeTest() {
+		
+		TextTile textTile = new TextTile("hello");
+		Type type = new TypeToken<Tile>(){}.getType();
+		
+		Tile tile = gson.fromJson(gson.toJson(textTile), type);
+		
+		assertTrue(tile instanceof TextTile);
+		assertTrue(textTile.equals(tile));
 	}
-	/**
-	 * This gets the current text of the decision
-	 * @return The text of the decision
-	 */
-	// Need access to text for use in DecisionAdapter
-	public String getText() {
-		return text;
-	}
-	
-	public void updateDecision(String text, Page page) {
-		this.text = text;
-		this.pageID = page.getId();
-	}
+
 }

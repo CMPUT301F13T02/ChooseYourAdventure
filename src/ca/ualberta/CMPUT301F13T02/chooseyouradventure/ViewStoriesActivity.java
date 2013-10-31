@@ -184,7 +184,7 @@ public class ViewStoriesActivity extends Activity {
     
     /**
      * This function is for jumping to a new page after creating a new story, 
-     * so it has to initialize some objects you wouldn't want to initialize insid ethe click listener
+     * so it has to initialize some objects you wouldn't want to initialize inside the click listener
      * @param storyTitle
      * @param newPage
      * @param newStory

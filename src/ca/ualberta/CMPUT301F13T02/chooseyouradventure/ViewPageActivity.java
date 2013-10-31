@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -176,7 +175,7 @@ public class ViewPageActivity extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return false;
+		return true;
 		
 		
     }
@@ -215,18 +214,6 @@ public class ViewPageActivity extends Activity {
 		case 1:
 			this.isEditing = false;
 			displayPage();
-			
-			ESHandler eshandler = new ESHandler();
-			Story currentStory = app.getStory();
-				try
-				{
-					eshandler.updateStory(currentStory);
-				} catch (Exception e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
 			doneButton.setVisible(false);
 			editButton.setVisible(true);
 			break;
@@ -422,7 +409,7 @@ public class ViewPageActivity extends Activity {
 		ArrayList<Page> pages = app.getStory().getPages();
 		Page toPage = app.getPage();
 		for (int i = 0; i < pages.size(); i++) {
-			if (toPageId == pages.get(i).getId()) {
+			if (toPageId.equals(pages.get(i).getId())) {
 				toPage = pages.get(i);
 				break;
 			}
@@ -445,11 +432,12 @@ public class ViewPageActivity extends Activity {
 		ArrayList<Page> pages = app.getStory().getPages();
 		int toPagePosition = -1;
 		for (int i = 0; i < pages.size(); i++) {
-			if (toPageId == pages.get(i).getId()) {
+			if (toPageId.equals(pages.get(i).getId())) {
 				toPagePosition = i;
 				break;
 			}
 		}
+		
 		
 		final TextView decisionView = (TextView) view;
 		
@@ -555,6 +543,15 @@ public class ViewPageActivity extends Activity {
 		
 		app.addComment(comment);
 		addComment(comment);
+		ESHandler esHandler = new ESHandler();
+		try
+		{
+			esHandler.addComment(app.getStory(), app.getPage(), comment);
+		} catch (HandlerException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**

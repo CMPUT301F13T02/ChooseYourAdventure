@@ -45,6 +45,7 @@ public class Story {
     private String id;
     private UUID firstpage;
     private int currRefNum = 1;
+    private String author;
 	/**
 	 * @return the firstpage
 	 */
@@ -143,6 +144,16 @@ public class Story {
 	}
 	public int getCurrRefNum() {
 		return currRefNum;
+	}
+	public String getAuthor()
+	{
+
+		return author;
+	}
+	public void setAuthor(String author)
+	{
+
+		this.author = author;
 	}
 	
 }

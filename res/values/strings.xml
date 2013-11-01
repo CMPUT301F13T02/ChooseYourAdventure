@@ -40,6 +40,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="delete">Delete</string>
     <string name="add">Add New</string>
     <string name="story_options">Advanced Story Options</string>
+    <string name="story_options_user">[User] Advanced Story Options</string>
+    <string name="story_options_author">[Author] Advanced Story Options</string>
     <string name="page_options">Page Options</string>
     <string name="edit">Enter Edit Mode</string>
     <string name="cache">Cache</string>

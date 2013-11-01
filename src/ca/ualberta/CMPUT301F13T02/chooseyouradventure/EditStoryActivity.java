@@ -236,7 +236,7 @@ public class EditStoryActivity extends Activity {
             		
             		alertEdit.setText(titleText);
             		titleEditor.setView(alertEdit);
-            		titleEditor.setMessage("Enter the title of your story")
+            		titleEditor.setMessage("Enter the title of your page")
             		.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             			public void onClick(DialogInterface dialog, int id) {
             				String pageTitle = alertEdit.getText().toString();

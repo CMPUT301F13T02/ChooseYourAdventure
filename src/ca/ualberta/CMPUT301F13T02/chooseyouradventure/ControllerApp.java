@@ -32,6 +32,7 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
 import android.app.Application;
+import android.provider.Settings.Secure;
 
 /**
  * This is the Controller for MVC
@@ -40,11 +41,13 @@ public class ControllerApp extends Application{
 
 	private Story currentStory;
 	private Page currentPage;
+	private String androidID;
 	private ArrayList<Story> stories;
 	
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		setAndroidID(Secure.getString(getApplicationContext().getContentResolver(),Secure.ANDROID_ID)); 
 		
 	}
 	/**
@@ -92,6 +95,16 @@ public class ControllerApp extends Application{
 	 */
 	public void addComment(Comment comment) {
 		currentPage.addComment(comment);
+	}
+	public String getAndroidID()
+	{
+
+		return androidID;
+	}
+	private void setAndroidID(String androidID)
+	{
+
+		this.androidID = androidID;
 	}
 	
 }

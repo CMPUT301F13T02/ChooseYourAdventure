@@ -206,16 +206,20 @@ public class ViewPageActivity extends Activity {
 		MenuItem doneButton = menu.findItem(1);
 		switch (item.getItemId()) {
 		case 0:
-			this.isEditing = true;
-			displayPage();
-			doneButton.setVisible(true);
-			editButton.setVisible(false);
+			if(app.getStory().getAuthor().equals(app.getAndroidID())){
+				this.isEditing = true;
+				displayPage();
+				doneButton.setVisible(true);
+				editButton.setVisible(false);
+			}
 			break;
 		case 1:
 			this.isEditing = false;
 			displayPage();
 			doneButton.setVisible(false);
 			editButton.setVisible(true);
+			ESHandler esHandler = new ESHandler();
+			esHandler.updateStory(app.getStory());
 			break;
 		}
 		return true;

@@ -49,6 +49,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+
+
 /**
  * The main activity of the application. Displays a list of stories to read. <br />
  * <br />
@@ -72,7 +74,7 @@ public class ViewStoriesActivity extends Activity {
 	ArrayList<Story> storyList = new ArrayList<Story>();
 	private ControllerApp app; 
 	private ESHandler eshandler = new ESHandler();
-	
+	private String aID;
 	ArrayAdapter<String> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +120,7 @@ public class ViewStoriesActivity extends Activity {
 		});
 		
         app = (ControllerApp) getApplication();
+        aID = app.getAndroidID();
     }
     
     @Override
@@ -133,7 +136,7 @@ public class ViewStoriesActivity extends Activity {
      * Inflate the options menu; this adds items to the action bar if it is present 
      * 
      *  @param menu The menu to inflate
-     *  @retun Success
+     *  @return Success
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -197,6 +200,7 @@ public class ViewStoriesActivity extends Activity {
     	newPage.setRefNum(1);
     	newStory.addPage(newPage);
     	newStory.setFirstpage(newPage.getId());
+    	newStory.setAuthor(aID);
 	    try
 
 		{	
@@ -225,31 +229,41 @@ public class ViewStoriesActivity extends Activity {
      * @param v The view of the longClicked story
      */
 	public void storyMenu(final View v, int pos){
-			final String[] titles = {"Edit","{Placeholder} Upload","{Placeholder} Cache","{Placeholder} Delete","Cancel"};
-			final Story story = storyList.get(pos);
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.story_options);
-            builder.setItems(titles, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int item) {
-                	switch(item){
-                	case(0):
-                		
-        				app.setStory(story);
-                		jumpEdit(v);
-                		break;
-                	case(1):
-                		
-                		break;
-                	case(2):
-                		
-                		break;
-                	case(3):
-                		eshandler.deleteStory(story);
-                		adapter.notifyDataSetChanged();
-                		break;
-                	}
-                        
-                    }});
+		final Story story = storyList.get(pos);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		final String[] titles;
+		final String[] titlesA = {"{Placeholder} Cache","Edit","{Placeholder} Upload","Cancel",};
+		final String[] titlesB = {"{Placeholder} Cache","Cancel"};
+		if(story.getAuthor().equals(aID)){
+			titles = titlesA;
+			builder.setTitle(R.string.story_options_author);
+		}
+		else
+		{
+			titles = titlesB;
+			builder.setTitle(R.string.story_options_user);
+		}      
+		builder.setItems(titles, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int item) {
+				switch(item){
+					case(0):
+
+
+						break;
+
+					case(1):
+						if(story.getAuthor().equals(aID)){
+							app.setStory(story);
+							jumpEdit(v);
+						}
+						break;
+					case(2):
+						
+					
+						break;
+				}
+
+			}});
             builder.show();
         }
 

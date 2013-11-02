@@ -41,11 +41,21 @@ public class ControllerApp extends Application{
 	private Story currentStory;
 	private Page currentPage;
 	private ArrayList<Story> stories;
+	private static ControllerApp instance;
 	
 	@Override
 	public void onCreate() {
-		super.onCreate();
-		
+			super.onCreate();
+	}
+	
+	public ControllerApp() {
+		instance = this;
+	}
+	public static ControllerApp getInstance() {
+		if (instance == null) {
+			instance = new ControllerApp();
+		}
+		return instance;
 	}
 	/**
 	 * This sets the current story

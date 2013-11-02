@@ -20,6 +20,8 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 	
 	private ControllerApp app;
 	
+	private Page page;
+	
 
 	public TestViewPageActivity() {
 		super(ViewPageActivity.class);
@@ -29,8 +31,9 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 	
 	protected void setUp() throws Exception{
 		super.setUp();
+		page = new Page();
 		app = app.getInstance();
-		app.setPage(new Page());
+		app.setPage(page);
 		
 		activity = getActivity();
 		
@@ -49,6 +52,39 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 		assertTrue(pageEnding != null);
 		assertTrue(addComment != null);
 		assertTrue(commentsTitle != null);
+	}
+	/*
+	public void testdisplayPage() {
+		activity.runOnUiThread(
+				new Runnable() {
+					public void run() {
+						activity.displayPage();
+					}
+				});
+	}
+	*/
+	
+	public void testAddTile() {
+		activity.runOnUiThread(
+				new Runnable() {
+					public void run() {
+						addTileButton.requestFocus();
+						addTileButton.performClick();
+						int l = page.getTiles().size();
+						assertTrue(l == 1);
+						//assertTrue(l == 5);
+						//assertTrue(1 == 6);
+						
+					}
+				});
+	}
+	
+	public void testAddDecision() {
+		
+	}
+	
+	public void testAddComment() {
+		
 	}
 
 }

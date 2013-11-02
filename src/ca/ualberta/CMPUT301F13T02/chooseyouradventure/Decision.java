@@ -73,4 +73,16 @@ public class Decision {
 		this.text = text;
 		this.pageID = page.getId();
 	}
+	
+	/**
+	 * Compares this Decision with the passed decision for equality
+	 * @param decision The Decision to compare against
+	 * @return Whether or not the two decisions are considered equal
+	 */
+	public boolean equals(Decision decision) {
+		if (!text.equals(decision.getText()) || !pageID.equals(decision.getPageID()))
+				return false;
+
+		return true;
+	}
 }

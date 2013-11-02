@@ -81,12 +81,12 @@ public class PageTest {
 		
 		//testing tile type equality
 		page1.addTile(new PhotoTile());
-		page2.addTile(new VideoTile());
+		page1.addTile(new VideoTile());
 		
 		assertFalse(page1.equals(page2));
 		
-		page1.addTile(new VideoTile());
 		page2.addTile(new PhotoTile());
+		page2.addTile(new VideoTile());
 		
 		assertTrue(page1.equals(page2));
 		

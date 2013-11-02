@@ -204,7 +204,11 @@ public class ViewStoriesActivity extends Activity {
 	    	updateTitles();
 	    	adapter.notifyDataSetChanged();
 			eshandler.addStory(newStory);
+<<<<<<< HEAD
 			
+=======
+			//eshandler.addPage(newPage); //This method is gone -- Konrad -- 11/02
+>>>>>>> 5315fb4a0b7dd7220d13a93651950894fbd2de8b
 		} catch (Exception e)
 		{
 			// TODO Auto-generated catch block

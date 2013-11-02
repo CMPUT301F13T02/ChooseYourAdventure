@@ -67,7 +67,14 @@ public class Comment {
 		return poster;
 	}
 	
+	/**
+	 * Compares the equality of this Comment and the passed Comment
+	 * 
+	 * @param comment The comment to compare against
+	 * @return Whether or not the two comments are considered equal
+	 */
 	public boolean equals(Comment comment) {
-		return text.equals(comment.getText());
+		return text.equals(comment.getText()) &&
+				poster.equals(comment.getPoster());
 	}
 }

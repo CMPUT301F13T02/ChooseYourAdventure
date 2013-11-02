@@ -86,7 +86,7 @@ public class ViewStoriesActivity extends Activity {
                 createStory();
             }
         });
-       
+        
 		
 		
 		updateTitles();
@@ -291,6 +291,14 @@ public class ViewStoriesActivity extends Activity {
     }
     
     private void updateTitles(){
+    	try
+		{
+			storyList = eshandler.getAllStories();
+		} catch (HandlerException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
     	storyText.clear();
     	if(storyList.size() != 0)
 		{

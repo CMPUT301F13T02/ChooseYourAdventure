@@ -204,7 +204,7 @@ public class ViewStoriesActivity extends Activity {
 	    	updateTitles();
 	    	adapter.notifyDataSetChanged();
 			eshandler.addStory(newStory);
-			eshandler.addPage(newPage);
+			//eshandler.addPage(newPage); //This method is gone -- Konrad -- 11/02
 		} catch (Exception e)
 		{
 			// TODO Auto-generated catch block

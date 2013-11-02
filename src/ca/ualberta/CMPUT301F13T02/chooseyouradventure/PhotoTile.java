@@ -52,8 +52,10 @@ public class PhotoTile extends Tile{
 	 */
 	@Override
 	boolean equals(Tile tile) {
-		// TODO Auto-generated method stub
-		return false;
+		if (!(tile instanceof PhotoTile))
+			return false;
+
+		return true;
 	}
 	
 	@Override

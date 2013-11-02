@@ -191,14 +191,31 @@ public class Page {
 		tiles.get(i).setContent(content);
 	}
 	
+	/**
+	 * Update the decision of this page at the passed position with the passed text and page reference
+	 * 
+	 * @param text The text to use in the updated decision
+	 * @param page The page to link in the updated decision
+	 * @param decisionNumber The position of the decision to update
+	 */
 	public void updateDecision(String text, Page page, int decisionNumber) {
 		decisions.get(decisionNumber).updateDecision(text, page);
 	}
 	
+	/**
+	 * Sets the page ending to the passed ID
+	 * 
+	 * @param text The ID to set for the page ending
+	 */
 	public void setPageEnding(String text) {
 		this.pageEnding = text;
 	}
 	
+	/**
+	 * Gets the page ending
+	 * 
+	 * @return The page ending
+	 */
 	public String getPageEnding() {
 		return this.pageEnding;
 	}
@@ -215,9 +232,21 @@ public class Page {
 		
 	}
 	*/
+	
+	/**
+	 * Gets the reference number
+	 * 
+	 * @return The reference number
+	 */
 	public int getRefNum() {
 		return refNum;
 	}
+	
+	/**
+	 * Sets the reference number
+	 * 
+	 * @param refNum The new reference number
+	 */
 	public void setRefNum(int refNum) {
 		this.refNum = refNum;
 	}

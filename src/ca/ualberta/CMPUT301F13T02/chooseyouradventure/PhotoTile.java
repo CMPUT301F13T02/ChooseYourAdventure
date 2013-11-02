@@ -56,11 +56,21 @@ public class PhotoTile extends Tile{
 		return false;
 	}
 	
+	/**
+	 * Sets the content to the passed content
+	 * 
+	 * @param content The content to update this tile to
+	 */
 	@Override
 	public void setContent(Object content) {
 		photo = content;
 	}
 	
+	/**
+	 * Gets this tile's photo
+	 * 
+	 * @return This tile's photo
+	 */
 	public Object getPhoto() {
 		return photo;
 	}

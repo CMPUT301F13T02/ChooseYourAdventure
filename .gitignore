@@ -10,7 +10,7 @@
 
 # generated files
 bin/
-
+ChooseYourAdventureTest/bin
 
 # LOCAL configuration file (sdk path, etc)
 local.properties

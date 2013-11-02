@@ -592,7 +592,7 @@ public class ViewPageActivity extends Activity {
 					}
 				});
 				
-				view.setOnDragListener(new MyDragListener());
+				//view.setOnDragListener(new MyDragListener());
 				
 				view.setOnLongClickListener(new OnLongClickListener() {
 					@Override

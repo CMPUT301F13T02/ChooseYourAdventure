@@ -27,36 +27,33 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package ca.ualberta.CMPUT301F13T02.chooseyouradventuretest;
+package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
-import org.junit.Test;
+import android.test.InstrumentationTestCase;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
 
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.PhotoTile;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.VideoTile;
-
-public class TextTileTest {
+public class CommentTest  extends InstrumentationTestCase {
 
 	/**
-	 * This method tests the equality of TextTiles
-	 */
-	@Test
-	public void equalsTest() {
-		TextTile tile1 = new TextTile("New1");
-		TextTile tile2 = new TextTile("New2");
+	 *  tests equals method from comment 
+	 **/
+	public void testEquals() {
+		Comment comment1 = new Comment("Ben commented", "Ben");
+		Comment comment2 = new Comment("Conrad critiqued", "Konrad");
+		assertFalse(comment1.equals(comment2));
 		
-		assertFalse(tile1.equals(tile2));
+		comment1 = new Comment("Ben commented", "Ben");
+		comment2 = new Comment("Ben commented", "Konrad");
+		assertFalse(comment1.equals(comment2));
 		
-		tile2 = new TextTile("New1");
+		comment1 = new Comment("Ben commented", "Ben");
+		comment2 = new Comment("Konrad commented", "Ben");
+		assertFalse(comment1.equals(comment2));
 		
-		assertTrue(tile1.equals(tile2));
-		//These next tests make sure text inequals to picture or video
-		assertFalse(tile1.equals(new PhotoTile()));
-		
-		assertFalse(tile1.equals(new VideoTile()));
+		comment1 = new Comment("Ben commented", "Ben");
+		comment2 = new Comment("Ben commented", "Ben");
+		assertTrue(comment1.equals(comment2));
 	}
 
 }

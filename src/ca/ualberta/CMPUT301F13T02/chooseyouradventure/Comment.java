@@ -37,13 +37,7 @@ public class Comment {
 
 	private String poster;
 	private String text;
-	/**
-	 * This is a constructor for a comment with no user
-	 * @param text The comment
-	 */
-	public Comment(String text) {
-		this.text = text;
-	}
+	
 	/**
 	 * This is a constructor for a comment with a user
 	 * @param text The comment

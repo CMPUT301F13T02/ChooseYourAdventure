@@ -28,13 +28,13 @@
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package ca.ualberta.CMPUT301F13T02.chooseyouradventuretest;
+package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
-import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
-import org.junit.Test;
+import android.test.InstrumentationTestCase;
+import android.util.Log;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Decision;
@@ -46,22 +46,20 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
 /**
  * Tests various functions of the ESHandler class
  */ 
-public class ESHandlerTest {
-
+public class ESHandlerTest extends InstrumentationTestCase {
 	private ESTestHandler esHandler = new ESTestHandler();
 	
 	/**
 	 * Tests the updateStory function
 	 */
-	@Test
-	public void updateStoryTest() {
+	public void testUpdateStory() {
 
 		try {
 			//Create  2 pages
 			Page page1 = new Page();
 			page1.addTile(new TextTile("test1"));
 			page1.addTile(new TextTile("test2"));
-			page1.addComment(new Comment("LOLz I CN HAZ CHEEZBUERGR?"));
+			page1.addComment(new Comment("LOLz I CN HAZ CHEEZBUERGR?", "Geoff"));
 			
 			Page page2 = new Page();
 			page2.addTile(new TextTile("test3"));
@@ -93,14 +91,14 @@ public class ESHandlerTest {
 	/**
 	 * Tests adding a comment to a page
 	 */
-	@Test
-	public void addCommentTest() {
+	public void testAddComment() {
 		
 		try {
 			Story story1 = esHandler.getStory("testUpdate");
-			
+		
+			System.out.println("hello");
 			//Add a comment to a page
-			Comment comment = new Comment("TEST COMMENT");
+			Comment comment = new Comment("TEST COMMENT", "Geoff");
 			esHandler.addComment(story1, story1.getPages().get(0), comment);
 			
 			//Retrieve the story, get newest comment and compare for equality
@@ -117,8 +115,7 @@ public class ESHandlerTest {
 	/**
 	 * Tests the updateStory function
 	 */
-	@Test
-	public void addStoryTest() {
+	public void testAddStory() {
 
 		try {
 			//Create 2 pages
@@ -152,8 +149,7 @@ public class ESHandlerTest {
 	/**
 	 * Test the getAllStories method
 	 */
-	@Test
-	public void getAllStoriesTest() {
+	public void testGetAllStories() {
 		try {
 			esHandler.getAllStories();
 		}

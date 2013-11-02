@@ -27,40 +27,15 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package ca.ualberta.CMPUT301F13T02.chooseyouradventuretest;
 
-import static org.junit.Assert.*;
+package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
-import java.lang.reflect.Type;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
-import org.junit.Test;
-
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Tile;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TileGsonMarshal;
-
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
-public class TileGsonMarshalTest {
-
-	private Gson gson = new GsonBuilder().registerTypeAdapter(Tile.class, new TileGsonMarshal()).create();
+public class ESTestHandler extends ESHandler {
 	
-	/**
-	 * Tests the serialization of tiles, which TileGsonMarshal is responsible for
-	 */
-	@Test
-	public void serializeTest() {
-		
-		TextTile textTile = new TextTile("hello");
-		Type type = new TypeToken<Tile>(){}.getType();
-		
-		Tile tile = gson.fromJson(gson.toJson(textTile), type);
-		
-		assertTrue(tile instanceof TextTile);
-		assertTrue(textTile.equals(tile));
+	@Override
+	protected String getStoryPath() {
+		return "test/";
 	}
-
 }

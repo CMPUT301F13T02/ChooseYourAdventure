@@ -166,9 +166,7 @@ public class ESHandler implements Handler{
 						  		"}\"," +
 			    "\"params\" : {" +
 							  	"\"id\": \"" + page.getId() + "\"," + 
-						      	"\"comment\": {" +
-						      		"\"text\": \"" + comment.getText() + "\"" +
-						    	"}" +	
+						      	"\"comment\": " + gson.toJson(comment) +
 							 "}" +
 			"}");
 		} 

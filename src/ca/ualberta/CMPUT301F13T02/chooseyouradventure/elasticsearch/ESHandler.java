@@ -255,7 +255,6 @@ public class ESHandler implements Handler{
 		Type esSearchResponseType = new TypeToken<ESSearchResponse<Story>>(){}.getType();
 		ESSearchResponse<Story> esResponse = gson.fromJson(response, esSearchResponseType);
 		for (ESResponse<Story> s : esResponse.getHits()) {
-			System.out.println(s.getSource().getFirstpage().getTitle());
 			stories.add(s.getSource());
 		}
 		

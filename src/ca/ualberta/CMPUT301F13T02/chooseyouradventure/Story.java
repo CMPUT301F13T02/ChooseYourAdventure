@@ -134,6 +134,13 @@ public class Story {
 
 		if (pages.size() != story.getPages().size())
 			return false;
+		
+		if (!title.equals(story.getTitle()))
+			return false;
+		
+		//if (!firstpage.equals(story.getFirstpage()))
+		//	return false;
+		
 		//Check that all comments are the same
 		for (int i = 0; i < pages.size(); i++) {
 			if (!pages.get(i).equals(story.getPages().get(i))) 

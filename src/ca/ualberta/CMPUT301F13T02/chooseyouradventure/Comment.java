@@ -68,6 +68,7 @@ public class Comment {
 	}
 	
 	public boolean equals(Comment comment) {
-		return text.equals(comment.getText());
+		return text.equals(comment.getText()) &&
+				poster.equals(comment.getPoster());
 	}
 }

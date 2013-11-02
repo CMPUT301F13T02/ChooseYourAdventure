@@ -37,10 +37,10 @@ import java.util.UUID;
  * A page represents a physical page of a story. 
  */
 public class Page {
-	public UUID id;
-	private ArrayList<Comment> comments = new ArrayList<Comment>();
-	private ArrayList<Tile> tiles = new ArrayList<Tile>();
-	private ArrayList<Decision> decisions = new ArrayList<Decision>();
+	private UUID id;
+	private ArrayList<Comment> comments;
+	private ArrayList<Tile> tiles;
+	private ArrayList<Decision> decisions;
 	private String title;
 	private String pageEnding;
 	private int refNum;
@@ -78,6 +78,7 @@ public class Page {
 		tiles = new ArrayList<Tile>();
 		decisions = new ArrayList<Decision>();
 		comments = new ArrayList<Comment>();
+		title = new String();
 		pageEnding = "+ Add an ending to this page";
 	}
 	
@@ -120,7 +121,8 @@ public class Page {
 
 		//Fail if different number of comments of segments
 		if (comments.size() != page.getComments().size() ||
-			tiles.size() != page.getTiles().size())
+			tiles.size() != page.getTiles().size() ||
+			decisions.size() != page.getDecisions().size())
 			return false;
 
 		//Check that all comments are the same
@@ -134,6 +136,16 @@ public class Page {
 			if (!tiles.get(i).equals(page.getTiles().get(i))) 
 				return false;
 		}
+		
+		//Check that all decisions are the same
+		for (int i = 0; i < decisions.size(); i++) {
+			if (!decisions.get(i).equals(page.getDecisions().get(i))) 
+				return false;
+		}
+		
+		//Check that the titles are the same
+		if (!title.equals(page.getTitle()))
+				return false;
 		
 		//Check that the id's are the same
 		if (!id.equals(page.id))

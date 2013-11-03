@@ -33,6 +33,8 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
+
 /**
  * This is the structure of a story 
  */
@@ -157,6 +159,16 @@ public class Story {
 	}
 	public void setAuthor(String author) {
 		this.author = author;
+	}
+	
+	public void updateStory(){
+		ESHandler eshandler = new ESHandler();
+		try {
+			eshandler.updateStory(this);
+		} catch (HandlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

@@ -90,7 +90,7 @@ public class ViewStoriesActivity extends Activity {
         app = (ControllerApp) getApplication();
 		try {
 			storyList =  eshandler.getAllStories();
-			storyText = app.updateView(storyList);
+			storyText = app.updateView(storyList, storyText);
 		} catch (HandlerException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -128,14 +128,7 @@ public class ViewStoriesActivity extends Activity {
     @Override
 	public void onStart() {
         super.onStart();
-        try {
-        	storyList =  eshandler.getAllStories();
-			storyText = app.updateView(storyList);
-		} catch (HandlerException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-        adapter.notifyDataSetChanged();
+        refresh();
     }
         
 
@@ -144,7 +137,7 @@ public class ViewStoriesActivity extends Activity {
      * Inflate the options menu; this adds items to the action bar if it is present 
      * 
      *  @param menu The menu to inflate
-     *  @retun Success
+     *  @return Success
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -163,11 +156,7 @@ public class ViewStoriesActivity extends Activity {
     }
     
 	
-	/**
-	 * Opens EditStoryActivity
-	 * @param <T>
-	 * @param view Unused
-	 */
+	
     
     
     
@@ -243,6 +232,7 @@ public class ViewStoriesActivity extends Activity {
             	
 					try {
 						app.initializeNewStory(alertEdit.getText().toString());
+						refresh();
 					} catch (HandlerException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -256,6 +246,18 @@ public class ViewStoriesActivity extends Activity {
             }
         });
         builder.show();
+    }
+    
+    public void refresh(){
+    	try {
+        	storyList = eshandler.getAllStories();
+			storyText = app.updateView(storyList, storyText);
+		} catch (HandlerException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        adapter.notifyDataSetChanged();
+		
     }
     
   

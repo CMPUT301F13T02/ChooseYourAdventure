@@ -31,6 +31,7 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.app.Application;
@@ -48,6 +49,7 @@ public class ControllerApp extends Application{
 	private Story currentStory;
 	private Page currentPage;
 	private ArrayList<Story> stories;
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -113,6 +115,7 @@ public class ControllerApp extends Application{
 	    	final Story newStory = new Story(); 	
 	    	newStory.setTitle(storyTitle);	    	
 	    	Page newPage = initializeNewPage("First Page");
+	    	newStory.addPage(newPage);
 	    	newStory.setFirstpage(newPage.getId());
 	    	newStory.setAuthor(Secure.getString(
 					getBaseContext().getContentResolver(), Secure.ANDROID_ID));
@@ -136,10 +139,11 @@ public class ControllerApp extends Application{
 		return newPage;
 	}
 	
-	protected <T> ArrayList<String> updateView(ArrayList<T> itemList){
+	protected <T> ArrayList<String> updateView(ArrayList<T> itemList, ArrayList<String> infoText){
 		
 		
-		ArrayList<String> infoText = new ArrayList<String>();
+		
+		infoText.clear();
 		if(itemList.size() != 0)
 		{
 			for (int i = 0; i < itemList.size(); i++) {
@@ -167,7 +171,30 @@ public class ControllerApp extends Application{
 		
 			
 		}
+		
 		return infoText;
+	}
+	
+	protected void updateTitle(String pageTitle, Page currentPage){
+		currentPage.setTitle(pageTitle);		
+		currentStory.updateStory();
+	}
+	
+	protected void updateTitle(String pageTitle){
+		Page newPage = initializeNewPage(pageTitle);
+		currentStory.addPage(newPage);
+		currentStory.updateStory();
+	}
+	
+	protected void updateFP(Page currentPage){
+		UUID newID = currentPage.getId();
+		currentStory.setFirstpage(newID);
+		
+	}
+	
+	protected void removePage(Page currentPage){
+		currentStory.deletePage(currentPage);
+		currentStory.updateStory();
 	}
 	
 	

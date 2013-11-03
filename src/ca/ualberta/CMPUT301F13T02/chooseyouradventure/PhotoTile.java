@@ -29,11 +29,19 @@
 */
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
+
+import java.nio.ByteBuffer;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 /**
  * A Photo tile for use in the stories
  */
 public class PhotoTile extends Tile{
 
+	private Bitmap image;
+	private byte[] imageData;
 	private Object photo;
 	
 	/**
@@ -75,6 +83,44 @@ public class PhotoTile extends Tile{
 	 */
 	public Object getPhoto() {
 		return photo;
+	}
+	
+	
+	
+	
+	
+	/**
+	 * @return the image
+	 */
+	public Bitmap getImage() {
+		return image;
+	}
+	/**
+	 * @param image the image to set
+	 */
+	public void setImage(Bitmap image) {
+		this.image = image;	
+		/**
+		 * Conversion method taken from http://stackoverflow.com/questions/10191871/converting-bitmap-to-bytearray-android
+		 * @return
+		 */
+		int bytes = image.getByteCount();
+		ByteBuffer buffer = ByteBuffer.allocate(bytes);
+		image.copyPixelsToBuffer(buffer);
+		imageData = buffer.array();
+	}
+	/**
+	 * @return the imageData
+	 */
+	public byte[] getImageData() {
+		return imageData;
+	}
+	/**
+	 * @param imageData the imageData to set
+	 */
+	public void setImageData(byte[] imageData) {
+		this.imageData = imageData;
+		image = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
 	}
     
 }

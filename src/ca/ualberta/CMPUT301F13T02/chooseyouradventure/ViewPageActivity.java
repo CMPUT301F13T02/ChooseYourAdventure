@@ -33,6 +33,7 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -113,7 +114,7 @@ public class ViewPageActivity extends Activity {
 		addDecisionButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Decision decision = new Decision();
+				Decision decision = new Decision("New Decision",app.getPage());
 				app.getPage().addDecision(decision);
 				addDecision(app.getPage().getDecisions().size() - 1, decision);
 			}
@@ -173,9 +174,15 @@ public class ViewPageActivity extends Activity {
      * @param menu The Menu to make
      */
 	public void makeMenu(Menu menu) {
-		MenuItem editPage = menu.add(0, 0, 0, "Edit");
-		{
-			editPage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		
+		final String myId = Secure.getString(
+				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+		final String storyID = app.getStory().getAuthor();
+		if(myId.equals(storyID)){
+			MenuItem editPage = menu.add(0, 0, 0, "Edit");
+			{
+				editPage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+			}
 		}
 		MenuItem savePage = menu.add(0, 1, 1, "Done");
 		{
@@ -193,16 +200,31 @@ public class ViewPageActivity extends Activity {
 		MenuItem doneButton = menu.findItem(1);
 		switch (item.getItemId()) {
 		case 0:
-			this.isEditing = true;
-			displayPage();
-			doneButton.setVisible(true);
-			editButton.setVisible(false);
+			
+			final String myId = Secure.getString(
+					getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+			final String storyID = app.getStory().getAuthor();
+			if(myId.equals(storyID)){
+				this.isEditing = true;
+				displayPage();
+				doneButton.setVisible(true);
+				editButton.setVisible(false);
+			}
 			break;
 		case 1:
 			this.isEditing = false;
 			displayPage();
 			doneButton.setVisible(false);
 			editButton.setVisible(true);
+			ESHandler esHandler = new ESHandler();
+			
+			try {
+				esHandler.updateStory(app.getStory());
+			} catch (HandlerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			break;
 		}
 		return true;
@@ -396,9 +418,10 @@ public class ViewPageActivity extends Activity {
 		ArrayList<Page> pages = app.getStory().getPages();
 		Page toPage = app.getPage();
 		for (int i = 0; i < pages.size(); i++) {
-			if (toPageId == pages.get(i).getId()) {
+			UUID comparePage = pages.get(i).getId();
+			if (toPageId.equals(comparePage)) {
 				toPage = pages.get(i);
-				break;
+				
 			}
 		}
 		
@@ -419,9 +442,11 @@ public class ViewPageActivity extends Activity {
 		ArrayList<Page> pages = app.getStory().getPages();
 		int toPagePosition = -1;
 		for (int i = 0; i < pages.size(); i++) {
-			if (toPageId == pages.get(i).getId()) {
+			UUID comparePage = pages.get(i).getId();
+			System.out.println("toPageID: " + toPageId + "\ncomparePage: " + comparePage + "\nPage: " + app.getPage() + "\nDecision: " + decision.getPageID() + decision.getText());
+			if (toPageId.equals(comparePage)) {
 				toPagePosition = i;
-				break;
+				
 			}
 		}
 		
@@ -522,7 +547,7 @@ public class ViewPageActivity extends Activity {
 	}
 	
 	/**
-	 * Called when the user choses to save a comment. Tells the controller to 
+	 * Called when the user chooses to save a comment. Tells the controller to 
 	 * add the comment to the model and displays the new comment.
 	 * @param text
 	 */
@@ -534,6 +559,13 @@ public class ViewPageActivity extends Activity {
 		
 		app.addComment(comment);
 		addComment(comment);
+		ESHandler eshandler = new ESHandler();
+		try {
+			eshandler.addComment(app.getStory(), app.getPage(), comment);
+		} catch (HandlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**

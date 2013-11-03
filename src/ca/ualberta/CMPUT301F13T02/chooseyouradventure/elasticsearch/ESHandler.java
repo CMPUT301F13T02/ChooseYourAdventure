@@ -172,9 +172,11 @@ public class ESHandler implements Handler{
 							 "}" +
 			"}");
 		} 
+		
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 	}
 	
     /**

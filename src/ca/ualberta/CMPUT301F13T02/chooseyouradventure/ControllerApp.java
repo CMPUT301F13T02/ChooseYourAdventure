@@ -31,11 +31,19 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
+import java.util.UUID;
+
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.app.Application;
+import android.content.Intent;
+import android.provider.Settings.Secure;
 
 /**
  * This is the Controller for MVC
  */
+
+
+
 public class ControllerApp extends Application{
 
 	private Story currentStory;
@@ -93,5 +101,104 @@ public class ControllerApp extends Application{
 	public void addComment(Comment comment) {
 		currentPage.addComment(comment);
 	}
+	
+	public <T> void jump(Class<T> classItem, Story story, Page page) {
+		setStory(story);
+		setPage(page);
+		Intent intent = new Intent(this, classItem);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
+	}
+	
+	protected void initializeNewStory(String storyTitle) throws HandlerException{
+	    	
+	    	final Story newStory = new Story(); 	
+	    	newStory.setTitle(storyTitle);	    	
+	    	Page newPage = initializeNewPage("First Page");
+	    	newStory.addPage(newPage);
+	    	newStory.setFirstpage(newPage.getId());
+	    	newStory.setAuthor(Secure.getString(
+					getBaseContext().getContentResolver(), Secure.ANDROID_ID));
+		    try
+			{			    	
+		    	ESHandler eshandler = new ESHandler();
+				eshandler.addStory(newStory);
+				
+
+			} catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		    jump(EditStoryActivity.class,newStory, newPage);
+	    }
+	
+	protected Page initializeNewPage(String pageTitle){
+		final Page newPage = new Page();
+		newPage.setTitle(pageTitle);
+		return newPage;
+	}
+	
+	protected <T> ArrayList<String> updateView(ArrayList<T> itemList, ArrayList<String> infoText){
+		
+		
+		
+		infoText.clear();
+		if(itemList.size() != 0)
+		{
+			for (int i = 0; i < itemList.size(); i++) {
+				String outList = "";
+			
+				if(itemList.get(i).getClass().equals(Page.class))
+				{
+					
+					
+					if(itemList.get(i).equals(currentStory.getFirstpage())){
+						outList = "{Start} ";
+					}
+					
+					if(((Page) itemList.get(i)).getDecisions().size() == 0){				
+						outList = outList + "{Endpoint} ";
+					}	
+					outList = outList + "(" + ((Page) itemList.get(i)).getRefNum() + ") " + ((Page) itemList.get(i)).getTitle();
+				}
+				else if(itemList.get(i).getClass().equals(Story.class)){
+				
+					outList = ((Story) itemList.get(i)).getTitle();
+				}
+				infoText.add(outList);
+			}
+		
+			
+		}
+		
+		return infoText;
+	}
+	
+	protected void updateTitle(String pageTitle, Page currentPage){
+		currentPage.setTitle(pageTitle);		
+		currentStory.updateStory();
+	}
+	
+	protected void updateTitle(String pageTitle){
+		Page newPage = initializeNewPage(pageTitle);
+		currentStory.addPage(newPage);
+		currentStory.updateStory();
+	}
+	
+	protected void updateFP(Page currentPage){
+		UUID newID = currentPage.getId();
+		currentStory.setFirstpage(newID);
+		
+	}
+	
+	protected void removePage(Page currentPage){
+		currentStory.deletePage(currentPage);
+		currentStory.updateStory();
+	}
+	
+	
+	
+	
 	
 }

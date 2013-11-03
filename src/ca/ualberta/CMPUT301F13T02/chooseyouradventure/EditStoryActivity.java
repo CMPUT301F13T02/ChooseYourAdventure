@@ -37,7 +37,6 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -92,7 +91,8 @@ public class EditStoryActivity extends Activity {
         });       
         app = (ControllerApp) getApplication();
 		currentStory = app.getStory();
-		updateLists();
+		pageList = currentStory.getPages();
+		pageText = app.updateView(pageList);
 		/**
 		 * Activity to restructure Click and longClick listeners to work in a list view
 		 *  directly based on http://android.konreu.com/developer-how-to/click-long-press-event-listeners-list-activity/
@@ -111,33 +111,27 @@ public class EditStoryActivity extends Activity {
 	@Override
 	public void onStart() {
         super.onStart();
-        updateLists();
+        pageList = currentStory.getPages();
+		pageText = app.updateView(pageList);
         adapter.notifyDataSetChanged();
     }
 	
 	protected void onListItemClick(View v, int pos, long id) {
-		pageOptions(v, pos);
+		pageOptions(pos);
 	}
 	/**
 	 * This moves the user to a different page
 	 * @param input from a Listview
 	 * @throws HandlerException
 	 */
-	public void jumpPage(View view, int pos) throws HandlerException {		
-		Page toPage = currentStory.getPages().get(pos);
-		app.setPage(toPage);
-    	Intent intent = new Intent(this, ViewPageActivity.class);
-    	startActivity(intent);
-	}
+	
 	/**
 	 * This creates a page
 	 * @throws HandlerException
 	 */
 	private void createPage() throws HandlerException{
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle("Create New");
-    	final Page newPage = new Page();
-    	
+    	builder.setTitle("Create New");	
     	final EditText alertEdit = new EditText(this);
     	builder.setView(alertEdit);
     	builder.setMessage("Enter the title of your new page")
@@ -146,11 +140,10 @@ public class EditStoryActivity extends Activity {
             	String pageTitle = alertEdit.getText().toString();
             	try
 				{
-            		newPage.setRefNum(currentStory.getCurrRefNum());
-            		newPage.setTitle(pageTitle);
+            		Page newPage = app.initializeNewPage(pageTitle);
                 	currentStory.addPage(newPage);
                 	eshandler.updateStory(currentStory);
-                	updateLists();
+                	app.updateView(currentStory.getPages());
                 	adapter.notifyDataSetChanged();
 				} catch (HandlerException e)
 				{
@@ -172,41 +165,12 @@ public class EditStoryActivity extends Activity {
     }
 	
 	
-	/**
-	 * This updates the lists of pages in a story
-	 */
-	private void updateLists(){
-		
-		Page FP = currentStory.getFirstpage();
-		pageList = currentStory.getPages();
-		pageText.clear();
-		
-		
-		if(pageList.size() != 0)
-		{
-			for (int i = 0; i < pageList.size(); i++) {
-				
-				String outList = "";
-				
-				if(pageList.get(i).equals(FP)){
-					outList = "{Start} ";
-				}
-				
-				if(pageList.get(i).getDecisions().size() == 0)
-					outList = outList + "{Endpoint} ";
-					
-				outList = outList + "(" + pageList.get(i).getRefNum() + ") " + pageList.get(i).getTitle();
-				pageText.add(outList);
-			}
-			
-		}
-		
-	}
+
 	/**
 	 * This shows the user a list of options on a story
 	 * @param Input from longclick
 	 */
-	public void pageOptions(final View v, final int pos){
+	public void pageOptions(final int pos){
 		final Page currentPage = pageList.get(pos);
 		final Page FP = currentStory.getFirstpage();
 		String[] titlesA = {"Goto/Edit","Rename","Cancel"};
@@ -223,12 +187,7 @@ public class EditStoryActivity extends Activity {
             	
             	switch(item){
             	case(0):
-            		try {
-            			jumpPage(v, pos);
-            		} catch (HandlerException e1) {
-            			// TODO Auto-generated catch block
-            			e1.printStackTrace();
-            		}
+            		app.jump(ViewPageActivity.class,currentStory,currentStory.getPages().get(pos));
             	break;
             	case(1):
             		
@@ -245,7 +204,8 @@ public class EditStoryActivity extends Activity {
             				{
             					
             					currentPage.setTitle(pageTitle);
-            					updateLists();
+            					pageList = currentStory.getPages();
+            					pageText = app.updateView(pageList);
             					eshandler.updateStory(currentStory);
                     			adapter.notifyDataSetChanged();
             					
@@ -268,14 +228,16 @@ public class EditStoryActivity extends Activity {
             	case(2):
             		UUID newID = currentPage.getId();
             		currentStory.setFirstpage(newID);
-            		updateLists();
+            		pageList = currentStory.getPages();
+            		pageText = app.updateView(pageList);
             		adapter.notifyDataSetChanged();
             		break;
             	case(3):
             		try
             		{	
             			pageList.remove(currentPage);
-            			updateLists();
+            			pageList = currentStory.getPages();
+            			pageText = app.updateView(pageList);
             			currentStory.deletePage(currentPage);
             			eshandler.updateStory(currentStory);
             			adapter.notifyDataSetChanged();

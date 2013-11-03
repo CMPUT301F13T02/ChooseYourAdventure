@@ -43,7 +43,7 @@ public class Story {
 	 */
     private ArrayList<Page> pages = new ArrayList<Page>();
     private String id;
-    private UUID firstpage;
+    private UUID firstpage; 
     private int currRefNum = 1;
     private String author;
 	/**
@@ -87,7 +87,7 @@ public class Story {
 	 * This is the main constructor for Story
 	 */
 	public Story() {
-    	
+		this.firstpage = new Page().getId();
     }
     /**
      * This gets the pages of a story
@@ -101,6 +101,7 @@ public class Story {
      * @param newPage A new page
      */
     public void addPage(Page newPage) {
+    	newPage.setRefNum(currRefNum);
     	pages.add(newPage);
     	currRefNum++;
     }

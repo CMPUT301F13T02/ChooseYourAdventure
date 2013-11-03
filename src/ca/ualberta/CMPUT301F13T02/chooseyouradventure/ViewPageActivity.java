@@ -174,9 +174,9 @@ public class ViewPageActivity extends Activity {
      * @param menu The Menu to make
      */
 	public void makeMenu(Menu menu) {
-		String myId = "p";
-		//final String myId = Secure.getString(
-		//		getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+		
+		final String myId = Secure.getString(
+				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 		final String storyID = app.getStory().getAuthor();
 		if(myId.equals(storyID)){
 			MenuItem editPage = menu.add(0, 0, 0, "Edit");
@@ -200,9 +200,9 @@ public class ViewPageActivity extends Activity {
 		MenuItem doneButton = menu.findItem(1);
 		switch (item.getItemId()) {
 		case 0:
-			String myId = "p";
-			//final String myId = Secure.getString(
-			//		getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+			
+			final String myId = Secure.getString(
+					getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 			final String storyID = app.getStory().getAuthor();
 			if(myId.equals(storyID)){
 				this.isEditing = true;

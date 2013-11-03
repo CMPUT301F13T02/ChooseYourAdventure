@@ -45,17 +45,17 @@ public class Story {
     private String id;
     private UUID firstpage;
     private int currRefNum = 1;
+    private String author;
 	/**
 	 * @return the firstpage
 	 */
 	public Page getFirstpage()
 	{
 		Page fp = new Page();
-		Page[] pagesList = pages.toArray(new Page[pages.size()]);
 		for(int i = 0; i < pages.size(); i++){
-			if (firstpage.equals(pagesList[i].getId()))
+			if (firstpage.equals(pages.get(i).getId()))
 			{
-				fp = pagesList[i];
+				fp = pages.get(i);
 			}
 		}
 		return fp;
@@ -150,6 +150,12 @@ public class Story {
 	}
 	public int getCurrRefNum() {
 		return currRefNum;
+	}
+	public String getAuthor() {
+		return author;
+	}
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 	
 }

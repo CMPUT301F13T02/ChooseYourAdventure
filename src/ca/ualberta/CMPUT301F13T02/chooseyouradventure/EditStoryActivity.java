@@ -87,7 +87,7 @@ public class EditStoryActivity extends Activity {
         deleteStory.setOnClickListener(new OnClickListener() {
             
             public void onClick(View v) {
-              deleteCurrentStory();
+              //deleteCurrentStory();
             }
         });       
         app = (ControllerApp) getApplication();
@@ -170,17 +170,13 @@ public class EditStoryActivity extends Activity {
     	
     	
     }
-	/**
-	 * This deletes a story
-	 */
-	private void deleteCurrentStory(){
-		eshandler.deleteStory(currentStory);
-		finish();
-	}
+	
+	
 	/**
 	 * This updates the lists of pages in a story
 	 */
 	private void updateLists(){
+		
 		Page FP = currentStory.getFirstpage();
 		pageList = currentStory.getPages();
 		pageText.clear();
@@ -192,15 +188,17 @@ public class EditStoryActivity extends Activity {
 				
 				String outList = "";
 				
-				if(pageList.get(i) == FP){
+				if(pageList.get(i).equals(FP)){
 					outList = "{Start} ";
 				}
+				
 				if(pageList.get(i).getDecisions().size() == 0)
 					outList = outList + "{Endpoint} ";
 					
 				outList = outList + "(" + pageList.get(i).getRefNum() + ") " + pageList.get(i).getTitle();
 				pageText.add(outList);
 			}
+			
 		}
 		
 	}

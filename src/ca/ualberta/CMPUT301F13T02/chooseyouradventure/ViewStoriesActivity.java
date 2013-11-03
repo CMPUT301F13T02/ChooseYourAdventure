@@ -36,6 +36,7 @@ import java.util.ArrayList;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -197,6 +198,8 @@ public class ViewStoriesActivity extends Activity {
     	newPage.setRefNum(1);
     	newStory.addPage(newPage);
     	newStory.setFirstpage(newPage.getId());
+    	newStory.setAuthor(Secure.getString(
+				getBaseContext().getContentResolver(), Secure.ANDROID_ID));
 	    try
 
 		{	
@@ -226,23 +229,41 @@ public class ViewStoriesActivity extends Activity {
      * @param v The view of the longClicked story
      */
 	public void storyMenu(final View v, int pos){
-			final String[] titles = {"Edit","{Placeholder} Upload","{Placeholder} Cache","{Placeholder} Delete","Cancel"};
 			final Story story = storyList.get(pos);
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.story_options);
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			final String[] titles;
+			final String[] titlesA = {"{Placeholder} Cache","{Placeholder} Upload","Edit","{Placeholder} Delete","Cancel"};
+			final String[] titlesB = {"{Placeholder} Cache","{Placeholder} Upload Copy","Cancel"};
+			final String myId = Secure.getString(
+					getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+			final String storyID = story.getAuthor();
+			if(myId.equals(storyID)){
+				titles = titlesA;
+				builder.setTitle(R.string.story_options_author);
+			}
+			else
+			{
+				titles = titlesB;
+				builder.setTitle(R.string.story_options_user);
+			}
+            
+            
             builder.setItems(titles, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int item) {
                 	switch(item){
                 	case(0):
                 		
-        				app.setStory(story);
-                		jumpEdit(v);
+        				
                 		break;
                 	case(1):
                 		
                 		break;
                 	case(2):
-                		
+                		if(myId.equals(storyID)){
+                			app.setStory(story);
+                    		jumpEdit(v);
+                		}
+                		else{}
                 		break;
                 	case(3):
                 		eshandler.deleteStory(story);

@@ -189,12 +189,15 @@ public class EditStoryActivity extends Activity {
 		if(pageList.size() != 0)
 		{
 			for (int i = 0; i < pageList.size(); i++) {
+				
 				String outList = "";
+				
 				if(pageList.get(i) == FP){
 					outList = "{Start} ";
 				}
 				if(pageList.get(i).getDecisions().size() == 0)
 					outList = outList + "{Endpoint} ";
+					
 				outList = outList + "(" + pageList.get(i).getRefNum() + ") " + pageList.get(i).getTitle();
 				pageText.add(outList);
 			}

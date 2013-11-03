@@ -99,7 +99,7 @@ public class ViewPageActivity extends Activity {
         this.isEditing = false;
         displayPage();
 		
-	
+		//commentsAdapter.notifyDataSetChanged();
 		Button addTileButton = (Button) findViewById(R.id.addTile);
 		addTileButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -166,18 +166,7 @@ public class ViewPageActivity extends Activity {
 	 */
     public boolean onOptionsItemSelected(MenuItem item) 
     {
-    	
-		try
-		{
-			return menuItemClicked(item);
-		} catch (HandlerException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return true;
-		
-		
+    	return menuItemClicked(item);
     }
 	
     /**
@@ -189,7 +178,7 @@ public class ViewPageActivity extends Activity {
 		{
 			editPage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		}
-		MenuItem savePage = menu.add(0, 1, 1, "Save");
+		MenuItem savePage = menu.add(0, 1, 1, "Done");
 		{
 			savePage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		}
@@ -199,9 +188,8 @@ public class ViewPageActivity extends Activity {
 	 * Handles what to do when an item of the action bar is pressed.
 	 * @param item The clicked item
 	 * @return
-	 * @throws HandlerException 
 	 */
-	private boolean menuItemClicked(MenuItem item) throws HandlerException {
+	private boolean menuItemClicked(MenuItem item) {
 		MenuItem editButton = menu.findItem(0);
 		MenuItem doneButton = menu.findItem(1);
 		switch (item.getItemId()) {
@@ -216,6 +204,15 @@ public class ViewPageActivity extends Activity {
 			displayPage();
 			doneButton.setVisible(false);
 			editButton.setVisible(true);
+			ESHandler esHandler = new ESHandler();
+			
+			try {
+				esHandler.updateStory(app.getStory());
+			} catch (HandlerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			break;
 		}
 		return true;
@@ -409,9 +406,10 @@ public class ViewPageActivity extends Activity {
 		ArrayList<Page> pages = app.getStory().getPages();
 		Page toPage = app.getPage();
 		for (int i = 0; i < pages.size(); i++) {
-			if (toPageId.equals(pages.get(i).getId())) {
+			UUID comparePage = pages.get(i).getId();
+			if (toPageId.equals(comparePage)) {
 				toPage = pages.get(i);
-				break;
+				
 			}
 		}
 		
@@ -432,12 +430,12 @@ public class ViewPageActivity extends Activity {
 		ArrayList<Page> pages = app.getStory().getPages();
 		int toPagePosition = -1;
 		for (int i = 0; i < pages.size(); i++) {
-			if (toPageId.equals(pages.get(i).getId())) {
+			UUID comparePage = pages.get(i).getId();
+			if (toPageId.equals(comparePage)) {
 				toPagePosition = i;
-				break;
+				
 			}
 		}
-		
 		
 		final TextView decisionView = (TextView) view;
 		
@@ -499,6 +497,11 @@ public class ViewPageActivity extends Activity {
 	 */
 	private ArrayList<String> getPageStrings(ArrayList<Page> pages) {
 		ArrayList<String> pageNames = new ArrayList<String>();
+		/*
+		for (int i = 0; i < pages.size(); i++) {
+			pageNames.add(pages.get(i).getId().toString());
+		}
+		*/
 		for (int i = 0; i < pages.size(); i++) {
 			pageNames.add("(" + pages.get(i).getRefNum() + ") " + pages.get(i).getTitle());
 		}
@@ -543,15 +546,6 @@ public class ViewPageActivity extends Activity {
 		
 		app.addComment(comment);
 		addComment(comment);
-		ESHandler esHandler = new ESHandler();
-		try
-		{
-			esHandler.addComment(app.getStory(), app.getPage(), comment);
-		} catch (HandlerException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	/**

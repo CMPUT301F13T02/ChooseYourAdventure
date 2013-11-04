@@ -36,11 +36,11 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 public class VideoTile extends Tile{
 
 	private Object video;
+	private final String type = "video";
 	
 	@Override
 	String getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return type;
 	}
 
 	@Override

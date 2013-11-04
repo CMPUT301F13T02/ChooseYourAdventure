@@ -31,13 +31,20 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
+import java.util.UUID;
+
 import android.app.Application;
+import android.provider.Settings.Secure;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
  * This is the Controller for MVC
  */
 public class ControllerApp extends Application{
 
+	private boolean isEditing = false;
+	
 	private Story currentStory;
 	private Page currentPage;
 	private ArrayList<Story> stories;
@@ -69,6 +76,7 @@ public class ControllerApp extends Application{
 	 */
 	public void setPage(Page page) {
 		this.currentPage = page;
+		page.setAllChanged();
 	}
 	/**
 	 * This gets the current page
@@ -78,10 +86,18 @@ public class ControllerApp extends Application{
 		return currentPage;
 	}
 	
+	/**
+	 * Sets the list of stories.
+	 * @param stories
+	 */
 	public void setStories(ArrayList<Story> stories) {
 		this.stories = stories;
 	}
 	
+	/**
+	 * Returns the list of all stories.
+	 * @return the list of all stories.
+	 */
 	public ArrayList<Story> getStories() {
 		return this.stories;
 	}
@@ -90,8 +106,150 @@ public class ControllerApp extends Application{
 	 * This adds a comment to the current page
 	 * @param A comment to add
 	 */
-	public void addComment(Comment comment) {
+	public void addComment(String text) {
+		String poster = Secure.getString(
+				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+		Comment comment = new Comment(text, poster);
 		currentPage.addComment(comment);
+	}
+	
+	/**
+	 * Get whether the page being viewed by the user is in editing mode or not.
+	 * @return If the page is in editing mode.
+	 */
+	public boolean isEditing() {
+		return isEditing;
+	}
+	
+	/**
+	 * Sets whether the user wants to be in viewing mode or editing mode.
+	 * @param editing
+	 */
+	public void setEditing(boolean editing) {
+		isEditing = editing;
+	}
+	
+	/**
+	 * Tells the current story to save itself.
+	 */
+	public void saveStory() {
+		currentStory.save();
+	}
+	
+	/**
+	 * Deletes a tile from the page.
+	 * @param whichTile
+	 */
+	public void deleteTile(int whichTile) {
+		currentPage.removeTile(whichTile);
+	}
+	
+	/**
+	 * Sets the page ending the given string.
+	 * @param text
+	 */
+	public void setEnding(String text) {
+		currentPage.setPageEnding(text);
+	}
+	
+	/**
+	 * Adds a tile to the currentPage.
+	 * @param tile
+	 */
+	public void addTile(Tile tile) {
+		currentPage.addTile(tile);
+	}
+	
+	/**
+	 * Adds a decision to the currentPage.
+	 * @param decision
+	 */
+	public void addDecision(Decision decision) {
+		currentPage.addDecision(decision);
+	}
+	
+	/**
+	 * Updates the tile at position whichTile to show the given string.
+	 * @param text
+	 * @param whichTile
+	 */
+	public void updateTile(String text, int whichTile) {
+		currentPage.updateTile(text, whichTile);
+	}
+	
+	/**
+	 * Deletes the decision at position whichDecision.
+	 * @param whichDecision
+	 */
+	public void deleteDecision(int whichDecision) {
+		currentPage.deleteDecision(whichDecision);
+	}
+	
+	/**
+	 * Sets the currentPage to the page pointed to by the decision selected
+	 * and then the page is refreshed.
+	 * @param whichDecision
+	 */
+	public void followDecision(int whichDecision) {
+        Decision decision = currentPage.getDecisions().get(whichDecision);
+		
+		UUID toPageId = decision.getPageID();
+		ArrayList<Page> pages = currentStory.getPages();
+		Page toPage = currentPage;
+		for (int i = 0; i < pages.size(); i++) {
+			if (toPageId.equals(pages.get(i).getId())) {
+				toPage = pages.get(i);
+				break;
+			}
+		}
+		setPage(toPage);
+	}
+	
+	/**
+	 * Updates the decision at position whichDecision to have the given text
+	 * and to point to the page at position whichPage in the story's list of
+	 * pages.
+	 * @param text
+	 * @param whichPage
+	 * @param whichDecision
+	 */
+	public void updateDecision(String text, int whichPage, int whichDecision) {
+		ArrayList<Page> pages = currentStory.getPages();
+		currentPage.updateDecision(text, pages.get(whichPage), whichDecision);
+	}
+	
+	/**
+	 * Returns a list of strings for each page to be displayed in the Spinner
+	 * for editing a decision.
+	 * @param pages
+	 * @return A list of Strings, one representing each page in the story
+	 */
+	public ArrayList<String> getPageStrings(ArrayList<Page> pages) {
+		ArrayList<String> pageNames = new ArrayList<String>();
+		for (int i = 0; i < pages.size(); i++) {
+			pageNames.add("(" + pages.get(i).getRefNum() + ") " + pages.get(i).getTitle());
+		}
+		
+		return pageNames;
+	}
+	
+	/**
+	 * Sets the view associated with the currentPage to activity.
+	 * @param activity
+	 */
+	public void setPageActivity(ViewPageActivity activity) {
+		currentPage.setActivity(activity);
+	}
+	
+	/**
+	 * Tells currentPage to remove its associated view.
+	 */
+	public void removeActivity() {
+		currentPage.deleteActivity();
+	}
+	
+	public void finishedUpdating() {
+		currentPage.finishedUpdating();
 	}
 	
 }

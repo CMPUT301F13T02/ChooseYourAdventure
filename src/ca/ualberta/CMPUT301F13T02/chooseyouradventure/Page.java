@@ -37,6 +37,14 @@ import java.util.UUID;
  * A page represents a physical page of a story. 
  */
 public class Page {
+	
+	// These variables shouldn't be saved.
+	private ViewPageActivity pageActivity;
+	private boolean tilesChanged;
+	private boolean decisionsChanged;
+	private boolean commentsChanged;
+	private boolean endingChanged;
+	
 	public UUID id;
 	private ArrayList<Comment> comments = new ArrayList<Comment>();
 	private ArrayList<Tile> tiles = new ArrayList<Tile>();
@@ -44,6 +52,7 @@ public class Page {
 	private String title;
 	private String pageEnding;
 	private int refNum;
+	
 	/**
 	 * This gets the title of the Page
 	 * @return the title
@@ -79,6 +88,12 @@ public class Page {
 		decisions = new ArrayList<Decision>();
 		comments = new ArrayList<Comment>();
 		pageEnding = "+ Add an ending to this page";
+		
+		// The page has now been initialized, so everything has changed
+		endingChanged = true;
+		tilesChanged = true;
+		decisionsChanged = true;
+		commentsChanged = true;
 	}
 	
 	/**
@@ -87,6 +102,16 @@ public class Page {
 	 */
 	public void addTile(Tile tile) {
 		tiles.add(tile);
+		setTilesChanged();
+	}
+	
+	/**
+	 * This deletes a Tile.
+	 * @param tile What tile to delete
+	 */
+	public void removeTile(int whichTile) {
+		tiles.remove(whichTile);
+		setTilesChanged();
 	}
 	
 	/**
@@ -95,21 +120,21 @@ public class Page {
 	 */
 	public void addDecision(Decision decision) {
 		decisions.add(decision);
+		setDecisionsChanged();
 	}
 	
-	/**
-	 * This deletes a Tile (called a segment here for some reason)
-	 * @param tile What tile to delete
-	 */
-	public void deleteSegment(Tile tile) {
-		
+	public void deleteDecision(int whichDecision) {
+		decisions.remove(whichDecision);
+		setDecisionsChanged();
 	}
+	
 	/**
 	 * This adds a comment to the apge
 	 * @param comment What comment to add
 	 */
 	public void addComment(Comment comment) {
 		comments.add(comment);
+		setCommentsChanged();
 	}
 	
 	/**
@@ -189,36 +214,166 @@ public class Page {
 	 */
 	public void updateTile(Object content, int i) {
 		tiles.get(i).setContent(content);
+		setTilesChanged();
 	}
 	
+	/**
+	 * Updates a decision to new text and a new page to link to.
+	 * @param text What the decision should show
+	 * @param page The page selecting the decision takes you to
+	 * @param decisionNumber The decision to be updated
+	 */
 	public void updateDecision(String text, Page page, int decisionNumber) {
 		decisions.get(decisionNumber).updateDecision(text, page);
+		setDecisionsChanged();
 	}
 	
+	/**
+	 * Sets the page ending to the desired text.
+	 * @param text
+	 */
 	public void setPageEnding(String text) {
 		this.pageEnding = text;
+		setEndingChanged();
 	}
 	
+	/**
+	 * Get the pageEnding.
+	 * @return The pageEnding
+	 */
 	public String getPageEnding() {
 		return this.pageEnding;
 	}
-/*
-	@Override
-	public int describeContents() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
-		
-	}
-	*/
+	/**
+	 * Gets the pages refNum.
+	 * @return the refNum
+	 */
 	public int getRefNum() {
 		return refNum;
 	}
+	
+	/**
+	 * Sets the page's refNum to the given integer.
+	 * @param refNum 
+	 */
 	public void setRefNum(int refNum) {
 		this.refNum = refNum;
 	}
+	
+	/**
+	 * Calls the update method of the current ViewPageActivity associated with
+	 * this page.
+	 */
+	private void updateActivity() {
+		if (pageActivity != null) {
+			pageActivity.update(this);
+		}
+	}
+	
+	/**
+	 * Sets the tilesChanged mark to true so that the ViewPageActivity will 
+	 * know that the tiles need to be updated, and then tells the 
+	 * ViewPageActivity to update.
+	 */
+	public void setTilesChanged() {
+		tilesChanged = true;
+		updateActivity();
+	}
+	
+	/**
+	 * Get whether the tiles list has changed since the last update. 
+	 * @return Returns whether tiles have changed.
+	 */
+	public boolean haveTilesChanged() {
+		return tilesChanged;
+	}
+	
+	/**
+	 * Sets decisionsChanged to true so that the ViewPageActivity will know
+	 * that the decisions need to be updated, and then tells the 
+	 * ViewPageActivity to update.
+	 */
+	public void setDecisionsChanged() {
+		decisionsChanged = true;
+		updateActivity();
+	}
+	
+	/**
+	 * Get whether the decisions list has changed since the last update/
+	 * @return Returns whether the decisions have changed.
+	 */
+	public boolean haveDecisionsChanged() {
+		return decisionsChanged;
+	}
+	
+	/**
+	 * Sets commentsChanged to true so the ViewPageActivity will know to
+	 * update the comments, and then tells ViewPageActivity to update.
+	 */
+	public void setCommentsChanged() {
+		commentsChanged = true;
+		updateActivity();
+	}
+	
+	/**
+	 * Get whether the comments have changed since the last update.
+	 * @return Whether the comments have changed.
+	 */
+	public boolean haveCommentsChanged() {
+		return commentsChanged;
+	}
+	
+	/**
+	 * Sets endingChanged to true so the ViewPageActivity will know to 
+	 * update the ending, and then tells ViewPageActivity to update.
+	 */
+	public void setEndingChanged() {
+		endingChanged = true;
+		updateActivity();
+	}
+	
+	/**
+	 * Get whether the ending has changed since the last update.
+	 * @return Whether the ending has changed.
+	 */
+	public boolean hasEndingChanged() {
+		return endingChanged;
+	}
+	
+	/**
+	 * Sets all the changed variables to true and then tells ViewPageActivity
+	 * to update. Basically it tells ViewPageActivity to refresh the whole
+	 * view.
+	 */
+	public void setAllChanged() {
+		tilesChanged = true;
+		decisionsChanged = true;
+		commentsChanged = true;
+		endingChanged = true;
+		updateActivity();
+	}
+	
+	/**
+	 * Set the view (the activity) associated with this page.
+	 * @param activity
+	 */
+	public void setActivity(ViewPageActivity activity) {
+		pageActivity = activity;
+	}
+	
+	/**
+	 * Removes the view associated with this page.
+	 */
+	public void deleteActivity() {
+		pageActivity = null;
+	}
+	
+	public void finishedUpdating() {
+		tilesChanged = false;
+		decisionsChanged = false;
+		commentsChanged = false;
+		endingChanged = false;
+	}
+	
 }

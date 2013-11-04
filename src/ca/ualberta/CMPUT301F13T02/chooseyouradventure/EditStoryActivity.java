@@ -220,7 +220,9 @@ public class EditStoryActivity extends Activity {
 	
 	
 	
-	
+	/**
+	 * This rebuilds the ListView by recollecting data from the controller
+	 */
 	public void refresh(){
 		pageList = app.getStory().getPages();
 		pageText = app.updateView(pageList, pageText);

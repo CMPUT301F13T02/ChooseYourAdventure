@@ -161,6 +161,9 @@ public class Story {
 		this.author = author;
 	}
 	
+	/**
+	 * This function updates the stories data in the database
+	 */
 	public void updateStory(){
 		ESHandler eshandler = new ESHandler();
 		try {

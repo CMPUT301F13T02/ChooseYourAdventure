@@ -104,9 +104,7 @@ public class ViewPageActivity extends Activity {
 		addTileButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				TextTile tile = new TextTile();
-				app.getPage().addTile(tile);
-				addTile(app.getPage().getTiles().size() - 1, tile);
+				tileMenu();
 			}
 		});
 		
@@ -708,6 +706,46 @@ public class ViewPageActivity extends Activity {
 		TextView textView = (TextView) view;
 		textView.setText(text);
 	}
+	
+	public void tileMenu(){		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		final AlertDialog.Builder photoSelector = new AlertDialog.Builder(this);
+		final String[] titles = {"TextTile","PhotoTile","{Placeholder} VideoTile","{Placeholder} AudioTile","Cancel"};   
+		final String[] titlesPhoto = {"From File","Take New Photo","Cancel"};
+        builder.setItems(titles, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+            	switch(item){
+            	case(0):
+            		TextTile tile = new TextTile();
+					app.getPage().addTile(tile);
+					addTile(app.getPage().getTiles().size() - 1, tile);   				
+            		break;
+            	case(1):
+            		photoSelector.setItems(titlesPhoto, new DialogInterface.OnClickListener() {
+            			 public void onClick(DialogInterface dialog, int item) {
+            	            	switch(item){
+	            	            	case(0):
+	            	            		 				
+	            	            		break;
+	            	            	case(1):
+	            	            		
+	            	            		break;
+            	            	}
+            	                }});
+            	       	photoSelector.show();
+            		
+            		break;
+            		
+            		
+            	case(2):
+            		break;
+            	case(3):
+            		break;
+            	}
+                    
+                }});
+        builder.show();
+    }
 
 }
 

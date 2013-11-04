@@ -96,6 +96,7 @@ public class PhotoTile extends Tile{
 		return image;
 	}
 	/**
+	 * Sets both the image and imageData parameter via. conversion
 	 * @param image the image to set
 	 */
 	public void setImage(Bitmap image) {
@@ -116,6 +117,7 @@ public class PhotoTile extends Tile{
 		return imageData;
 	}
 	/**
+	 * Sets both the image and imageData parameter via. conversion
 	 * @param imageData the imageData to set
 	 */
 	public void setImageData(byte[] imageData) {

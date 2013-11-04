@@ -110,6 +110,11 @@ public class ControllerApp extends Application{
 		startActivity(intent);
 	}
 	
+	/**
+	 * This function is a generalized class for creating a new story and placing it on the server
+	 * @param storyTitle
+	 * @throws HandlerException
+	 */
 	protected void initializeNewStory(String storyTitle) throws HandlerException{
 	    	
 	    	final Story newStory = new Story(); 	
@@ -133,12 +138,24 @@ public class ControllerApp extends Application{
 		    jump(EditStoryActivity.class,newStory, newPage);
 	    }
 	
+	/**
+	 * Similar to the above function, this method creates a new page object
+	 * @param pageTitle
+	 * @return
+	 */
 	protected Page initializeNewPage(String pageTitle){
 		final Page newPage = new Page();
 		newPage.setTitle(pageTitle);
 		return newPage;
 	}
 	
+	/**
+	 * This method is used for gathering new data from the model, it then returns it to update the listviews. It is generalized to
+	 * work on both listviews for Pages and Stories.
+	 * @param itemList
+	 * @param infoText
+	 * @return
+	 */
 	protected <T> ArrayList<String> updateView(ArrayList<T> itemList, ArrayList<String> infoText){
 		
 		
@@ -175,23 +192,40 @@ public class ControllerApp extends Application{
 		return infoText;
 	}
 	
+	/**
+	 * Updates a Pages title and pushes to the handler
+	 * @param pageTitle
+	 * @param currentPage
+	 */
 	protected void updateTitle(String pageTitle, Page currentPage){
 		currentPage.setTitle(pageTitle);		
 		currentStory.updateStory();
 	}
 	
+	/**
+	 * Similar to the above method, but it creates a new page object with the title
+	 * @param pageTitle
+	 */
 	protected void updateTitle(String pageTitle){
 		Page newPage = initializeNewPage(pageTitle);
 		currentStory.addPage(newPage);
 		currentStory.updateStory();
 	}
 	
+	/**
+	 * Updates the first page of a story and pushes to handler
+	 * @param currentPage
+	 */
 	protected void updateFP(Page currentPage){
 		UUID newID = currentPage.getId();
 		currentStory.setFirstpage(newID);
 		
 	}
 	
+	/**
+	 * Deletes a page.
+	 * @param currentPage
+	 */
 	protected void removePage(Page currentPage){
 		currentStory.deletePage(currentPage);
 		currentStory.updateStory();

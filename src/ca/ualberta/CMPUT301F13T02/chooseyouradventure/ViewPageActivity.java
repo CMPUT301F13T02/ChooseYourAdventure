@@ -35,6 +35,7 @@ import java.util.UUID;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
@@ -42,7 +43,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.DragShadowBuilder;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -374,6 +377,16 @@ public class ViewPageActivity extends Activity {
 						tileMenu(v);
 					}
 				});
+				view.setOnLongClickListener(new OnLongClickListener() {
+					@Override
+					public boolean onLongClick(View v) {
+						ClipData data = ClipData.newPlainText("", "");
+						DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+						v.startDrag(data, shadowBuilder, v, 0);
+						return true;
+					}
+				});
+
 			}
 			
 		} else if (tile.getType() == "photo") {
@@ -639,6 +652,7 @@ public class ViewPageActivity extends Activity {
 	 * Opens a dialog that allows the user to edit the pageEnding.
 	 * @param view
 	 */
+
 	private void onEditPageEnding(View view) {
 		if (app.isEditing()) {
 			TextView textView = (TextView) view;

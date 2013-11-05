@@ -27,35 +27,35 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package ca.ualberta.CMPUT301F13T02.chooseyouradventuretest;
+package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
-import static org.junit.Assert.*;
+import java.lang.reflect.Type;
 
-import org.junit.Test;
+import android.test.InstrumentationTestCase;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Tile;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TileGsonMarshal;
 
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
-public class CommentTest {
+public class TileGsonMarshalTest extends InstrumentationTestCase {
+
+	private Gson gson = new GsonBuilder().registerTypeAdapter(Tile.class, new TileGsonMarshal()).create();
+	
 	/**
-	 *  tests equals method from comment 
-	 **/
-	@Test
-	public void equalsTest() {
-		Comment comment1 = new Comment("Ben commented");
-		Comment comment2 = new Comment("Conrad critiqued");
-		assertFalse(comment1.equals(comment2));
+	 * Tests the serialization of tiles, which TileGsonMarshal is responsible for
+	 */
+	public void testSerialize() {
 		
-		comment1 = new Comment("Ben commented", "Ben");
-		comment2 = new Comment("Ben commented", "Konrad");
-		assertFalse(comment1.equals(comment2));
+		TextTile textTile = new TextTile("hello");
+		Type type = new TypeToken<Tile>(){}.getType();
 		
-		comment1 = new Comment("Ben commented", "Ben");
-		comment2 = new Comment("Konrad commented", "Ben");
-		assertFalse(comment1.equals(comment2));
+		Tile tile = gson.fromJson(gson.toJson(textTile), type);
 		
-		comment1 = new Comment("Ben commented", "Ben");
-		comment2 = new Comment("Ben commented", "Ben");
-		assertTrue(comment1.equals(comment2));
+		assertTrue(tile instanceof TextTile);
+		assertTrue(textTile.equals(tile));
 	}
 
 }

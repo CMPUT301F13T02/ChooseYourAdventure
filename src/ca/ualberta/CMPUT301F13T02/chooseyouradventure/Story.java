@@ -48,6 +48,8 @@ public class Story {
     private UUID firstpage; 
     private int currRefNum = 1;
     private String author;
+	private String title = new String();
+
 	/**
 	 * @return the firstpage
 	 */
@@ -70,7 +72,6 @@ public class Story {
 	{
 		this.firstpage = firstpage;
 	}
-	private String title;
     /**
      * This gets the title of the story
 	 * @return the title

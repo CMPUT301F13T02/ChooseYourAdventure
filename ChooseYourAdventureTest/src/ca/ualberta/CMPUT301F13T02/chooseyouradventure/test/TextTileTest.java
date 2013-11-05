@@ -27,86 +27,32 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package ca.ualberta.CMPUT301F13T02.chooseyouradventuretest;
+package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
-import static org.junit.Assert.*;
-
-import java.util.UUID;
-
-import org.junit.Test;
-
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Decision;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
+import android.test.InstrumentationTestCase;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.PhotoTile;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.VideoTile;
 
-public class PageTest {
+public class TextTileTest extends InstrumentationTestCase {
 
 	/**
-	 * Tests the equals method of Page 
+	 * This method tests the equality of TextTiles
 	 */
-	@Test
-	public void equalsTest() {
-		Page page1 = new Page();
-		Page page2 = new Page();
+	public void testEquals() {
+
+		TextTile tile1 = new TextTile("New1");
+		TextTile tile2 = new TextTile("New2");
 		
-		//testing UUID equality
-		assertFalse(page1.equals(page2));
+		assertFalse(tile1.equals(tile2));
 		
-		UUID id = UUID.randomUUID();
-		page1.setId(id);
-		page2.setId(id);
+		tile2 = new TextTile("New1");
 		
-		assertTrue(page1.equals(page2));
+		assertTrue(tile1.equals(tile2));
+		//These next tests make sure text inequals to picture or video
+		assertFalse(tile1.equals(new PhotoTile()));
 		
-		//testing comment equality
-		page1.addComment(new Comment("hello", "ben"));
-		
-		assertFalse(page1.equals(page2));
-		
-		page2.addComment(new Comment("hello", "ben"));
-		
-		assertTrue(page1.equals(page2));
-		
-		//testing tile equality
-		page1.addTile(new TextTile("text"));
-		
-		assertFalse(page1.equals(page2));
-		
-		page2.addTile(new TextTile("text"));
-		
-		assertTrue(page1.equals(page2));
-		
-		//testing tile type equality
-		page1.addTile(new PhotoTile());
-		page1.addTile(new VideoTile());
-		
-		assertFalse(page1.equals(page2));
-		
-		page2.addTile(new PhotoTile());
-		page2.addTile(new VideoTile());
-		
-		assertTrue(page1.equals(page2));
-		
-		//testing decision equality
-		page1.addDecision(new Decision("text", page1));
-		
-		assertFalse(page1.equals(page2));
-		
-		page2.addDecision(new Decision("text", page1));
-		
-		assertTrue(page1.equals(page2));
-		
-		//testing title equality
-		page1.setTitle("title");
-		page2.setTitle("monkey");
-		
-		assertFalse(page1.equals(page2));
-		
-		page2.setTitle("title");
-		
-		assertTrue(page1.equals(page2));
+		assertFalse(tile1.equals(new VideoTile()));
 	}
+
 }

@@ -63,8 +63,7 @@ public class Comment {
 		
 		Calendar calendar = Calendar.getInstance(); 
 		String dayField = "" + calendar.get(Calendar.DAY_OF_MONTH) + "\\" + calendar.get(Calendar.MONTH) + "\\" + calendar.get(Calendar.YEAR);
-		String timeField = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
-		this.setTimestamp(dayField + " " + timeField);
+		this.setTimestamp(dayField);
 		
 	}
 	/**

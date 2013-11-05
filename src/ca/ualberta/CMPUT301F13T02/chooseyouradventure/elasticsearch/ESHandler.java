@@ -92,6 +92,7 @@ public class ESHandler implements Handler{
 		// TODO Auto-generated method stub
 		
 	}
+	
 
 	/**
 	 * Adds the passed story, sets its ID

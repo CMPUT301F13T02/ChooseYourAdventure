@@ -37,13 +37,15 @@ import java.util.UUID;
  * A page represents a physical page of a story. 
  */
 public class Page {
-	private UUID id;
+	
+	public UUID id;
 	private ArrayList<Comment> comments;
 	private ArrayList<Tile> tiles;
 	private ArrayList<Decision> decisions;
 	private String title;
 	private String pageEnding;
 	private int refNum;
+	
 	/**
 	 * This gets the title of the Page
 	 * @return the title
@@ -91,6 +93,14 @@ public class Page {
 	}
 	
 	/**
+	 * This deletes a Tile.
+	 * @param tile What tile to delete
+	 */
+	public void removeTile(int whichTile) {
+		tiles.remove(whichTile);
+	}
+	
+	/**
 	 * This adds a new decision to a page
 	 * @param decision The decision to add
 	 */
@@ -98,13 +108,10 @@ public class Page {
 		decisions.add(decision);
 	}
 	
-	/**
-	 * This deletes a Tile (called a segment here for some reason)
-	 * @param tile What tile to delete
-	 */
-	public void deleteSegment(Tile tile) {
-		
+	public void deleteDecision(int whichDecision) {
+		decisions.remove(whichDecision);
 	}
+	
 	/**
 	 * This adds a comment to the apge
 	 * @param comment What comment to add
@@ -201,6 +208,7 @@ public class Page {
 	 */
 	public void updateTile(Object content, int i) {
 		tiles.get(i).setContent(content);
+
 	}
 	
 	/**
@@ -215,9 +223,8 @@ public class Page {
 	}
 	
 	/**
-	 * Sets the page ending to the passed ID
-	 * 
-	 * @param text The ID to set for the page ending
+	 * Sets the page ending to the desired text.
+	 * @param text
 	 */
 	public void setPageEnding(String text) {
 		this.pageEnding = text;
@@ -231,20 +238,7 @@ public class Page {
 	public String getPageEnding() {
 		return this.pageEnding;
 	}
-/*
-	@Override
-	public int describeContents() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
-		
-	}
-	*/
-	
 	/**
 	 * Gets the reference number
 	 * 
@@ -255,11 +249,11 @@ public class Page {
 	}
 	
 	/**
-	 * Sets the reference number
-	 * 
-	 * @param refNum The new reference number
+	 * Sets the page's refNum to the given integer.
+	 * @param refNum 
 	 */
 	public void setRefNum(int refNum) {
 		this.refNum = refNum;
 	}
+	
 }

@@ -43,6 +43,7 @@ public class PhotoTile extends Tile{
 	private Bitmap image;
 	private byte[] imageData;
 	private Object photo;
+	private final String type = "photo";
 	
 	/**
 	 * Get the type
@@ -50,8 +51,7 @@ public class PhotoTile extends Tile{
 	 */
 	@Override
 	String getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return type;
 	}
 	/**
 	 * Check if two tiles are equal

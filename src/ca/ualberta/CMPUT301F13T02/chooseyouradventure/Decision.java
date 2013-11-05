@@ -47,9 +47,9 @@ public class Decision {
 		this.pageID = page.getId();
 	}
 	
-	public Decision() {
+	public Decision(Page page) {
 		this.text = "New Decision";
-		this.pageID = null;
+		this.pageID = page.getId();
 	}
 	
 	

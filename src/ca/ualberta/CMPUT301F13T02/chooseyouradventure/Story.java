@@ -174,4 +174,16 @@ public class Story {
 		}
 	}
 	
+	public void save() {
+		ESHandler eshandler = new ESHandler();
+		try
+		{
+			eshandler.updateStory(this);
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }

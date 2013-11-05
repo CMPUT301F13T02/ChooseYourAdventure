@@ -134,14 +134,21 @@ public class ControllerApp extends Application{
 	 * @param A comment to add
 	 */
 	public void addComment(String text) {
-		String poster = Secure.getString(
+		String poster = Secure.getString( 
 				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 		Comment comment = new Comment(text, poster);
 		ESHandler eshandler = new ESHandler();
 		
 		currentPage.addComment(comment);
 		setCommentsChanged();
-		currentStory.updateStory();
+		try
+		{
+			eshandler.addComment(getStory(), getPage(), comment);
+		} catch (HandlerException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 
 	}

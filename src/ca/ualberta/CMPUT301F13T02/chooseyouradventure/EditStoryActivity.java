@@ -171,6 +171,7 @@ public class EditStoryActivity extends Activity {
             	
             	switch(item){
             	case(0):
+            		app.setEditing(true);
             		app.jump(ViewPageActivity.class,app.getStory(),app.getStory().getPages().get(pos));
             	break;
             	case(1):

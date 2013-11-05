@@ -29,36 +29,141 @@
 */
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 /**
  * This is the Database Handler for the local copies of stories
  */
-/* Comment out for now. File caching to be implemented in Part 4.
-public class DBHandler  implements Handler{
-
-	@Override
-	public void updateStory(Story aStory) {
-		// TODO Auto-generated method stub
+public class DBHandler extends SQLiteOpenHelper implements Handler  {
+	static final int dbVersion = 1;	
+	static final String dbName="storyDB";
+	static final String storyTable="Story";
+	static final String colID = "ID";
+	static final String colContents = "contents";
+	private Gson gson = new GsonBuilder().registerTypeAdapter(Tile.class, new TileGsonMarshal()).create();
+	/**
+	 * This is the default constructor for a SQLite Database class
+	 */
+	public DBHandler(Context context) {
+		super(context, dbName, null, dbVersion);
 	}
-
+	/**
+	 * onCreate initializes the database for use. 
+	 */
+	@Override
+	public void onCreate(SQLiteDatabase db) {
+		db.execSQL("CREATE TABLE " + storyTable + " (" +
+				colID + " TEXT PRIMARY KEY, " + 
+				colContents + " TEXT)");	
+	}
+	/**
+	 * onUpgrade defines the functionality if we update the Database
+	 */
+	@Override
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		db.execSQL("DROP TABLE IF EXISTS "+ storyTable);
+		onCreate(db);
+	}
+	/**
+	 * This updates a local copy of a story.
+	 * @param aStory the story to update
+	 */
+	@Override
+	public void updateStory(Story aStory) throws HandlerException{
+		String id = aStory.getId();
+		//Try to turn aStory into a json representable string
+		String story = gson.toJson(aStory);	
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		//This assumes the getId returns a unique identifier
+		values.put(colID, id);
+		values.put(colContents, story);
+		db.insert(storyTable, null, values);
+	}
+	/**
+	 * This deletes a local copy of a story.
+	 *  @param aStory the story to delete
+	 */
 	@Override
 	public void deleteStory(Story aStory) {
-		// TODO Auto-generated method stub
+		SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(storyTable, colID + " = ?",
+        		new String[] { aStory.getId() });
 	}
-
+	/**
+	 * This adds a local copy of a story.
+	 *  @param aStory the story to add
+	 */
 	@Override
-	public void addStory(Story newStory) {
-		// TODO Auto-generated method stub
+	public void addStory(Story newStory) throws HandlerException{
+		String id = newStory.getId();
+		String story = gson.toJson(newStory);	
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		//This assumes the getId returns a unique value
+		values.put(colID, id);
+		values.put(colContents, story);
+		db.insert(storyTable, null, values);
 	}
-
+	/**
+	 * This returns a local copy of a story from the database
+	 *  @param id The ID of the story to retrieve
+	 *  @return The Story requested
+	 */
 	@Override
-	public void updatePage(Page aPage) {
-		// TODO Auto-generated method stub
+	public Story getStory(String id) throws HandlerException{
+		Story story = new Story();
+		//Select * from story where ID = supplied ID
+		String selectQuery = "SELECT  * FROM " + storyTable + 
+								"WHERE " + colID + " = " + id;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        story.setId(cursor.getString(0)); //will the next line make this redundant?
+        story = gson.fromJson(cursor.getString(1), Story.class);
+		return story;
 	}
-
+	/** 
+	 * This updates a story after a user adds a comment. 
+	 * @param story The story where the comment was added
+	 * @param page The page with the comment
+	 * @param comment The comment
+	 * @see updateStory
+	 * For a local copy, updating a story is fine.
+	 */
 	@Override
-	public void addPage(Page page) {
-		// TODO Auto-generated method stub
+	public void addComment(Story story, Page page, Comment comment)
+			throws HandlerException {
+		//Story story1 = this.getStory(story.getId());
+		this.updateStory(story);
 	}
-	
+	/**
+	 * This returns a list of all the stories stored locally
+	 *  @return The list of all local stories.
+	 */
+	@Override
+	public ArrayList<Story> getAllStories() throws HandlerException {
+		ArrayList<Story> storyList = new ArrayList<Story>();
+        // select all stories
+        String selectQuery = "SELECT  * FROM " + storyTable;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to storyList
+        if (cursor.moveToFirst()) {
+        	do {
+        		Story story = new Story();
+        		story.setId(cursor.getString(0));
+        		story = gson.fromJson(cursor.getString(1), Story.class);
+        		storyList.add(story);
+        	} while (cursor.moveToNext());
+        }
+        return storyList;
+	}
 }
-*/

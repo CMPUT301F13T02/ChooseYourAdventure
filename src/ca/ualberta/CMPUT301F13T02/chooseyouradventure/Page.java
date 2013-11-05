@@ -37,13 +37,15 @@ import java.util.UUID;
  * A page represents a physical page of a story. 
  */
 public class Page {
-	public UUID id;
-	private ArrayList<Comment> comments = new ArrayList<Comment>();
-	private ArrayList<Tile> tiles = new ArrayList<Tile>();
-	private ArrayList<Decision> decisions = new ArrayList<Decision>();
+	
+	private UUID id;
+	private ArrayList<Comment> comments;
+	private ArrayList<Tile> tiles;
+	private ArrayList<Decision> decisions;
 	private String title;
 	private String pageEnding;
 	private int refNum;
+	
 	/**
 	 * This gets the title of the Page
 	 * @return the title
@@ -78,6 +80,7 @@ public class Page {
 		tiles = new ArrayList<Tile>();
 		decisions = new ArrayList<Decision>();
 		comments = new ArrayList<Comment>();
+		title = new String();
 		pageEnding = "+ Add an ending to this page";
 	}
 	
@@ -90,6 +93,14 @@ public class Page {
 	}
 	
 	/**
+	 * This deletes a Tile.
+	 * @param tile What tile to delete
+	 */
+	public void removeTile(int whichTile) {
+		tiles.remove(whichTile);
+	}
+	
+	/**
 	 * This adds a new decision to a page
 	 * @param decision The decision to add
 	 */
@@ -97,13 +108,10 @@ public class Page {
 		decisions.add(decision);
 	}
 	
-	/**
-	 * This deletes a Tile (called a segment here for some reason)
-	 * @param tile What tile to delete
-	 */
-	public void deleteSegment(Tile tile) {
-		
+	public void deleteDecision(int whichDecision) {
+		decisions.remove(whichDecision);
 	}
+	
 	/**
 	 * This adds a comment to the apge
 	 * @param comment What comment to add
@@ -120,7 +128,8 @@ public class Page {
 
 		//Fail if different number of comments of segments
 		if (comments.size() != page.getComments().size() ||
-			tiles.size() != page.getTiles().size())
+			tiles.size() != page.getTiles().size() ||
+			decisions.size() != page.getDecisions().size())
 			return false;
 
 		//Check that all comments are the same
@@ -134,6 +143,16 @@ public class Page {
 			if (!tiles.get(i).equals(page.getTiles().get(i))) 
 				return false;
 		}
+		
+		//Check that all decisions are the same
+		for (int i = 0; i < decisions.size(); i++) {
+			if (!decisions.get(i).equals(page.getDecisions().get(i))) 
+				return false;
+		}
+		
+		//Check that the titles are the same
+		if (!title.equals(page.getTitle()))
+				return false;
 		
 		//Check that the id's are the same
 		if (!id.equals(page.id))
@@ -189,36 +208,52 @@ public class Page {
 	 */
 	public void updateTile(Object content, int i) {
 		tiles.get(i).setContent(content);
+
 	}
 	
+	/**
+	 * Update the decision of this page at the passed position with the passed text and page reference
+	 * 
+	 * @param text The text to use in the updated decision
+	 * @param page The page to link in the updated decision
+	 * @param decisionNumber The position of the decision to update
+	 */
 	public void updateDecision(String text, Page page, int decisionNumber) {
 		decisions.get(decisionNumber).updateDecision(text, page);
 	}
 	
+	/**
+	 * Sets the page ending to the desired text.
+	 * @param text
+	 */
 	public void setPageEnding(String text) {
 		this.pageEnding = text;
 	}
 	
+	/**
+	 * Gets the page ending
+	 * 
+	 * @return The page ending
+	 */
 	public String getPageEnding() {
 		return this.pageEnding;
 	}
-/*
-	@Override
-	public int describeContents() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
-		
-	}
-	*/
+	/**
+	 * Gets the reference number
+	 * 
+	 * @return The reference number
+	 */
 	public int getRefNum() {
 		return refNum;
 	}
+	
+	/**
+	 * Sets the page's refNum to the given integer.
+	 * @param refNum 
+	 */
 	public void setRefNum(int refNum) {
 		this.refNum = refNum;
 	}
+	
 }

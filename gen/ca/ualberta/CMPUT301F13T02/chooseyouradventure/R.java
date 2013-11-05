@@ -71,8 +71,8 @@ public final class R {
         public static final int search=0x7f050005;
         public static final int search_stories=0x7f050011;
         public static final int story_options=0x7f050008;
-        public static final int story_options_author=0x7f05000a;
-        public static final int story_options_user=0x7f050009;
+        public static final int story_options_author=0x7f050009;
+        public static final int story_options_user=0x7f05000a;
         public static final int title_edit_story_activity=0x7f050004;
         public static final int title_view_page_activity=0x7f050002;
         public static final int title_view_stories_activity=0x7f050003;

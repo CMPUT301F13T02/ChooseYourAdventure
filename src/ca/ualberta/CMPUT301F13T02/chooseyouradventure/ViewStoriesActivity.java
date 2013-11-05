@@ -36,10 +36,10 @@ import java.util.ArrayList;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,8 +48,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-
-
 
 /**
  * The main activity of the application. Displays a list of stories to read. <br />
@@ -74,7 +72,7 @@ public class ViewStoriesActivity extends Activity {
 	ArrayList<Story> storyList = new ArrayList<Story>();
 	private ControllerApp app; 
 	private ESHandler eshandler = new ESHandler();
-	private String aID;
+	
 	ArrayAdapter<String> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,15 +87,20 @@ public class ViewStoriesActivity extends Activity {
             }
         });
         
-		
-		
-		updateTitles();
+        app = (ControllerApp) getApplication();
+		try {
+			storyList =  eshandler.getAllStories();
+			storyText = app.updateView(storyList, storyText);
+		} catch (HandlerException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		adapter = new ArrayAdapter<String>(this,
 				R.layout.list_item_base, storyText);
 		mainPage.setAdapter(adapter);
 		
 		/**
-		 * Activity to restructure Click and longClick listeners to work in a list view
+		 * method to restructure Click and longClick listeners to work in a list view
 		 *  directly based on http://android.konreu.com/developer-how-to/click-long-press-event-listeners-list-activity/
 		 */
 		mainPage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -119,15 +122,13 @@ public class ViewStoriesActivity extends Activity {
 		    }
 		});
 		
-        app = (ControllerApp) getApplication();
-        aID = app.getAndroidID();
+        
     }
     
     @Override
 	public void onStart() {
         super.onStart();
-        updateTitles();
-        adapter.notifyDataSetChanged();
+        refresh();
     }
         
 
@@ -144,126 +145,72 @@ public class ViewStoriesActivity extends Activity {
         return true;
     }
     
-    
-	
-	
-	
-	
+
 	protected void onListItemClick(View v, int pos, long id) throws HandlerException {	
-	    jumpPage(v, pos);
+	    app.jump(ViewPageActivity.class, storyList.get(pos), storyList.get(pos).getFirstpage());
 	}
 	
 	protected boolean onLongListItemClick(View v, int pos, long id) { 
-    	storyMenu(v, pos);
+    	storyMenu(pos);
         return true;
     }
     
 	
-	/**
-	 * Opens EditStoryActivity
-	 * @param view Unused
-	 */
+	
     
-    public void jumpEdit(View view) {
-		Intent intent = new Intent(this, EditStoryActivity.class);
-		startActivity(intent);
-	}
     
-    /**
-     * Opens ViewPageActivity
-     * 
-     * @throws HandlerException
-     * @param view Unused
-     * @param pos The position of the story to open
-     */
-    public void jumpPage(View view, int pos) throws HandlerException {
-    	Story story = storyList.get(pos);
-		app.setStory(story);
-		Page firstPage = story.getFirstpage();		
-		Intent intent = new Intent(this, ViewPageActivity.class);	
-		app.setPage(firstPage);		
-		startActivity(intent);
-	}
     
-    /**
-     * This function is for jumping to a new page after creating a new story, 
-     * so it has to initialize some objects you wouldn't want to initialize inside the click listener
-     * @param storyTitle
-     * @param newPage
-     * @param newStory
-     * @throws HandlerException 
-     */
-    private void jumpEditNew(String storyTitle, Page newPage, Story newStory) throws HandlerException{
-    	Intent intent = new Intent(this, EditStoryActivity.class);
-    	newStory.setTitle(storyTitle);
-    	newPage.setTitle("First Page");
-    	newPage.setRefNum(1);
-    	newStory.addPage(newPage);
-    	newStory.setFirstpage(newPage.getId());
-    	newStory.setAuthor(aID);
-	    try
-
-		{	
-	    	storyList.add(newStory);
-	    	updateTitles();
-	    	adapter.notifyDataSetChanged();
-			eshandler.addStory(newStory);
-			
-		} catch (Exception e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    
-	    app.setStory(newStory);
-	    startActivity(intent);
-	    
-    	
-    	
-    	
-    }
+   
+    
+  
+  
     
     
     /**
      * The options menu displayed when the user longClicks a story
      * @param v The view of the longClicked story
      */
-	public void storyMenu(final View v, int pos){
-		final Story story = storyList.get(pos);
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		final String[] titles;
-		final String[] titlesA = {"{Placeholder} Cache","Edit","{Placeholder} Upload","Cancel",};
-		final String[] titlesB = {"{Placeholder} Cache","Cancel"};
-		if(story.getAuthor().equals(aID)){
-			titles = titlesA;
-			builder.setTitle(R.string.story_options_author);
-		}
-		else
-		{
-			titles = titlesB;
-			builder.setTitle(R.string.story_options_user);
-		}      
-		builder.setItems(titles, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int item) {
-				switch(item){
-					case(0):
-
-
-						break;
-
-					case(1):
-						if(story.getAuthor().equals(aID)){
-							app.setStory(story);
-							jumpEdit(v);
-						}
-						break;
-					case(2):
-						
-					
-						break;
-				}
-
-			}});
+	public void storyMenu(int pos){
+			final Story story = storyList.get(pos);
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			final String[] titles;
+			final String[] titlesA = {"{Placeholder} Cache","{Placeholder} Upload","Edit","{Placeholder} Delete","Cancel"};
+			final String[] titlesB = {"{Placeholder} Cache","{Placeholder} Upload Copy","Cancel"};
+			final String myId = Secure.getString(
+					getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+			final String storyID = story.getAuthor();
+			if(myId.equals(storyID)){
+				titles = titlesA;
+				builder.setTitle(R.string.story_options_author);
+			}
+			else
+			{
+				titles = titlesB;
+				builder.setTitle(R.string.story_options_user);
+			}
+            
+            
+            builder.setItems(titles, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int item) {
+                	switch(item){
+                	case(0):
+                		
+        				
+                		break;
+                	case(1):
+                		
+                		break;
+                	case(2):
+                		if(myId.equals(storyID)){          			
+                    		app.jump(EditStoryActivity.class, story, null);
+                		}
+                		else{}
+                		break;
+                	case(3):
+                		break;
+                	}
+                        
+                    }});
             builder.show();
         }
 
@@ -276,24 +223,21 @@ public class ViewStoriesActivity extends Activity {
 
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle("Create New");
-    	final Page newPage = new Page();
-    	final Story newStory = new Story();
+    	
     	final EditText alertEdit = new EditText(this);
     	builder.setView(alertEdit);
     	builder.setMessage("Enter the title of your story")
     	.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-            	String storyTitle = alertEdit.getText().toString();
-            	try
-				{
-					jumpEditNew(storyTitle, newPage, newStory);
-				} catch (HandlerException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
             	
-            	
+					try {
+						app.initializeNewStory(alertEdit.getText().toString());
+						refresh();
+					} catch (HandlerException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
             }
         })
         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -304,23 +248,19 @@ public class ViewStoriesActivity extends Activity {
         builder.show();
     }
     
-    private void updateTitles(){
-    	try
-		{
-			storyList = eshandler.getAllStories();
-		} catch (HandlerException e1)
-		{
+    public void refresh(){
+    	try {
+        	storyList = eshandler.getAllStories();
+			storyText = app.updateView(storyList, storyText);
+		} catch (HandlerException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-    	storyText.clear();
-    	if(storyList.size() != 0)
-		{
-			for (int i = 0; i < storyList.size(); i++) {
-				storyText.add(storyList.get(i).getTitle());
-			}
-		}
+        adapter.notifyDataSetChanged();
+		
     }
+    
+  
 
     
 

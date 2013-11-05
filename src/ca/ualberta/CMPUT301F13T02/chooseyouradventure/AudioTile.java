@@ -35,12 +35,18 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 public class AudioTile extends Tile{
 
 	private Object audio;
+	private final String type = "audio";
 	
+	/**
+	 * Returns the type of this Tile
+	 * 
+	 * @return The type of this Tile
+	 */
 	@Override
 	String getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return type;
 	}
+	
 	/**
 	 * This tests for equality with another tile
 	 * @param The tile to check equality with
@@ -51,11 +57,21 @@ public class AudioTile extends Tile{
 		return false;
 	}
 	
+	/**
+	 * Sets the content of this Tile to the passed content
+	 * 
+	 * @param content The content to set for this Tile
+	 */
 	@Override
 	public void setContent(Object content) {
 		audio = content;
 	}
 	
+	/**
+	 * Returns the audio of this Tile
+	 * 
+	 * @return The audio of this Tile
+	 */
 	public Object getAudio() {
 		return audio;
 	}

@@ -146,61 +146,6 @@ public class ESHandler implements Handler{
 	}
 
 	/**
-	 * Update the passed page
-	 * 
-	 * @param page The page to update
-	 */
-	@Override
-	public void updatePage(Page page) {
-
-	}
-
-	/**
-	 * Adds the passed page to the system
-	 * @throws HandlerException 
-	 * @param The page to add
-	 */
-	@Override
-	public void addPage(Page page) throws HandlerException {
-		
-		ESHttpPost post = new ESHttpPost("page/1");
-
-		try {
-			post.post(gson.toJson(page));
-		} 
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Retrieves the page at passed ID
-	 * @throws HandlerException
-	 * @param id The ID of the page to retrieve
-	 * @return The page with the passed ID 
-	 */
-	@Override
-	public Page getPage(String id) throws HandlerException {
-		ESHttpGet get = new ESHttpGet("page/" + id);
-		
-		String response = null;
-		try {
-			response = get.get();
-		}
-		catch (IllegalStateException e) {
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		Type responseType = new TypeToken<ESResponse<Page>>(){}.getType();
-		ESResponse<Page> esResponse = gson.fromJson(response, responseType);
-		
-		return esResponse.getSource();
-	}
-	
-	/**
 	 * Updates the passed page of passed story by adding passed comment
 	 * @param story The story the page is in
 	 * @param page The page the comment is in
@@ -257,7 +202,6 @@ public class ESHandler implements Handler{
 		Type esSearchResponseType = new TypeToken<ESSearchResponse<Story>>(){}.getType();
 		ESSearchResponse<Story> esResponse = gson.fromJson(response, esSearchResponseType);
 		for (ESResponse<Story> s : esResponse.getHits()) {
-			System.out.println(s.getSource().getFirstpage().getTitle());
 			stories.add(s.getSource());
 		}
 		

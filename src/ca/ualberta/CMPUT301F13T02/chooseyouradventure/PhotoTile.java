@@ -29,12 +29,21 @@
 */
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
+
+import java.nio.ByteBuffer;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 /**
  * A Photo tile for use in the stories
  */
 public class PhotoTile extends Tile{
 
+	private Bitmap image;
+	private byte[] imageData;
 	private Object photo;
+	private final String type = "photo";
 	
 	/**
 	 * Get the type
@@ -42,8 +51,7 @@ public class PhotoTile extends Tile{
 	 */
 	@Override
 	String getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return type;
 	}
 	/**
 	 * Check if two tiles are equal
@@ -52,17 +60,69 @@ public class PhotoTile extends Tile{
 	 */
 	@Override
 	boolean equals(Tile tile) {
-		// TODO Auto-generated method stub
-		return false;
+		if (!(tile instanceof PhotoTile))
+			return false;
+
+		return true;
 	}
 	
+	/**
+	 * Sets the content to the passed content
+	 * 
+	 * @param content The content to update this tile to
+	 */
 	@Override
 	public void setContent(Object content) {
 		photo = content;
 	}
 	
+	/**
+	 * Gets this tile's photo
+	 * 
+	 * @return This tile's photo
+	 */
 	public Object getPhoto() {
 		return photo;
+	}
+	
+	
+	
+	
+	
+	/**
+	 * @return the image
+	 */
+	public Bitmap getImage() {
+		return image;
+	}
+	/**
+	 * Sets both the image and imageData parameter via. conversion
+	 * @param image the image to set
+	 */
+	public void setImage(Bitmap image) {
+		this.image = image;	
+		/**
+		 * Conversion method taken from http://stackoverflow.com/questions/10191871/converting-bitmap-to-bytearray-android
+		 * @return
+		 */
+		int bytes = image.getByteCount();
+		ByteBuffer buffer = ByteBuffer.allocate(bytes);
+		image.copyPixelsToBuffer(buffer);
+		imageData = buffer.array();
+	}
+	/**
+	 * @return the imageData
+	 */
+	public byte[] getImageData() {
+		return imageData;
+	}
+	/**
+	 * Sets both the image and imageData parameter via. conversion
+	 * @param imageData the imageData to set
+	 */
+	public void setImageData(byte[] imageData) {
+		this.imageData = imageData;
+		image = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
 	}
     
 }

@@ -45,19 +45,19 @@ public class Story {
 	 */
     private ArrayList<Page> pages = new ArrayList<Page>();
     private String id;
-    private UUID firstpage;
+    private UUID firstpage; 
     private int currRefNum = 1;
+    private String author;
 	/**
 	 * @return the firstpage
 	 */
 	public Page getFirstpage()
 	{
 		Page fp = new Page();
-		Page[] pagesList = pages.toArray(new Page[pages.size()]);
 		for(int i = 0; i < pages.size(); i++){
-			if (firstpage.equals(pagesList[i].getId()))
+			if (firstpage.equals(pages.get(i).getId()))
 			{
-				fp = pagesList[i];
+				fp = pages.get(i);
 			}
 		}
 		return fp;
@@ -89,7 +89,7 @@ public class Story {
 	 * This is the main constructor for Story
 	 */
 	public Story() {
-    	
+		this.firstpage = new Page().getId();
     }
     /**
      * This gets the pages of a story
@@ -103,6 +103,7 @@ public class Story {
      * @param newPage A new page
      */
     public void addPage(Page newPage) {
+    	newPage.setRefNum(currRefNum);
     	pages.add(newPage);
     	currRefNum++;
     }
@@ -136,6 +137,13 @@ public class Story {
 
 		if (pages.size() != story.getPages().size())
 			return false;
+		
+		if (!title.equals(story.getTitle()))
+			return false;
+		
+		//if (!firstpage.equals(story.getFirstpage()))
+		//	return false;
+		
 		//Check that all comments are the same
 		for (int i = 0; i < pages.size(); i++) {
 			if (!pages.get(i).equals(story.getPages().get(i))) 
@@ -145,6 +153,25 @@ public class Story {
 	}
 	public int getCurrRefNum() {
 		return currRefNum;
+	}
+	public String getAuthor() {
+		return author;
+	}
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+	
+	/**
+	 * This function updates the stories data in the database
+	 */
+	public void updateStory(){
+		ESHandler eshandler = new ESHandler();
+		try {
+			eshandler.updateStory(this);
+		} catch (HandlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void save() {

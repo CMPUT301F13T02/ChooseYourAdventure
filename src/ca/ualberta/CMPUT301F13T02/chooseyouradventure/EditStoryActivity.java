@@ -31,13 +31,10 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -51,14 +48,12 @@ import android.widget.ListView;
  * wants to edit a story's pages or tiles. 
  */
 public class EditStoryActivity extends Activity {
-	private Story currentStory;
 	private ListView treePage;
 	private Button createNew2;
 	private Button deleteStory;
 	private ArrayList<String> pageText = new ArrayList<String>();
 	private ArrayList<Page> pageList = new ArrayList<Page>();
 	private ArrayAdapter<String> adapter;
-	private ESHandler eshandler = new ESHandler();
 	private ControllerApp app;
 	/**
 	 * This binds the buttons the the views to this activity
@@ -87,12 +82,13 @@ public class EditStoryActivity extends Activity {
         deleteStory.setOnClickListener(new OnClickListener() {
             
             public void onClick(View v) {
-              deleteCurrentStory();
+              //deleteCurrentStory();
             }
         });       
         app = (ControllerApp) getApplication();
-		currentStory = app.getStory();
-		updateLists();
+        
+		pageList = app.getStory().getPages();
+		pageText = app.updateView(pageList, pageText);
 		/**
 		 * Activity to restructure Click and longClick listeners to work in a list view
 		 *  directly based on http://android.konreu.com/developer-how-to/click-long-press-event-listeners-list-activity/
@@ -111,53 +107,34 @@ public class EditStoryActivity extends Activity {
 	@Override
 	public void onStart() {
         super.onStart();
-        updateLists();
-        adapter.notifyDataSetChanged();
+        refresh();
     }
 	
 	protected void onListItemClick(View v, int pos, long id) {
-		pageOptions(v, pos);
+		pageOptions(pos);
 	}
 	/**
 	 * This moves the user to a different page
 	 * @param input from a Listview
 	 * @throws HandlerException
 	 */
-	public void jumpPage(View view, int pos) throws HandlerException {		
-		Page toPage = currentStory.getPages().get(pos);
-		app.setPage(toPage);
-    	Intent intent = new Intent(this, ViewPageActivity.class);
-    	startActivity(intent);
-	}
+	
 	/**
 	 * This creates a page
 	 * @throws HandlerException
 	 */
 	private void createPage() throws HandlerException{
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle("Create New");
-    	final Page newPage = new Page();
-    	
+    	builder.setTitle("Create New");	
     	final EditText alertEdit = new EditText(this);
     	builder.setView(alertEdit);
     	builder.setMessage("Enter the title of your new page")
     	.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	String pageTitle = alertEdit.getText().toString();
-            	try
-				{
-            		newPage.setRefNum(currentStory.getCurrRefNum());
-            		newPage.setTitle(pageTitle);
-                	currentStory.addPage(newPage);
-                	eshandler.updateStory(currentStory);
-                	updateLists();
-                	adapter.notifyDataSetChanged();
-				} catch (HandlerException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+            	app.updateTitle(pageTitle);
             	
+            	refresh();
             	
             }
         })
@@ -170,44 +147,16 @@ public class EditStoryActivity extends Activity {
     	
     	
     }
-	/**
-	 * This deletes a story
-	 */
-	private void deleteCurrentStory(){
-		eshandler.deleteStory(currentStory);
-		finish();
-	}
-	/**
-	 * This updates the lists of pages in a story
-	 */
-	private void updateLists(){
-		Page FP = currentStory.getFirstpage();
-		pageList = currentStory.getPages();
-		pageText.clear();
-		
-		
-		if(pageList.size() != 0)
-		{
-			for (int i = 0; i < pageList.size(); i++) {
-				String outList = "";
-				if(pageList.get(i) == FP){
-					outList = "{Start} ";
-				}
-				if(pageList.get(i).getDecisions().size() == 0)
-					outList = outList + "{Endpoint} ";
-				outList = outList + "(" + pageList.get(i).getRefNum() + ") " + pageList.get(i).getTitle();
-				pageText.add(outList);
-			}
-		}
-		
-	}
+	
+	
+
 	/**
 	 * This shows the user a list of options on a story
 	 * @param Input from longclick
 	 */
-	public void pageOptions(final View v, final int pos){
+	public void pageOptions(final int pos){
 		final Page currentPage = pageList.get(pos);
-		final Page FP = currentStory.getFirstpage();
+		final Page FP = app.getStory().getFirstpage();
 		String[] titlesA = {"Goto/Edit","Rename","Cancel"};
 		String[] titlesB = {"Goto/Edit","Rename","Assign as First Page","Delete","Cancel"};
 		final String[] titles;
@@ -222,12 +171,7 @@ public class EditStoryActivity extends Activity {
             	
             	switch(item){
             	case(0):
-            		try {
-            			jumpPage(v, pos);
-            		} catch (HandlerException e1) {
-            			// TODO Auto-generated catch block
-            			e1.printStackTrace();
-            		}
+            		app.jump(ViewPageActivity.class,app.getStory(),app.getStory().getPages().get(pos));
             	break;
             	case(1):
             		
@@ -240,20 +184,8 @@ public class EditStoryActivity extends Activity {
             		.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             			public void onClick(DialogInterface dialog, int id) {
             				String pageTitle = alertEdit.getText().toString();
-            				try
-            				{
-            					
-            					currentPage.setTitle(pageTitle);
-            					updateLists();
-            					eshandler.updateStory(currentStory);
-                    			adapter.notifyDataSetChanged();
-            					
-            				} catch (HandlerException e)
-            				{
-            					// TODO Auto-generated catch block
-            					e.printStackTrace();
-            				}
-
+            				app.updateTitle(pageTitle, currentPage);
+            				refresh();
 
             			}
             		})
@@ -265,26 +197,12 @@ public class EditStoryActivity extends Activity {
             		titleEditor.show();
             		break;
             	case(2):
-            		UUID newID = currentPage.getId();
-            		currentStory.setFirstpage(newID);
-            		updateLists();
-            		adapter.notifyDataSetChanged();
+            		app.updateFP(currentPage);
+            		refresh();
             		break;
             	case(3):
-            		try
-            		{	
-            			pageList.remove(currentPage);
-            			updateLists();
-            			currentStory.deletePage(currentPage);
-            			eshandler.updateStory(currentStory);
-            			adapter.notifyDataSetChanged();
-
-            			break;
-            		} catch (HandlerException e)
-            		{
-            			// TODO Auto-generated catch block
-            			e.printStackTrace();
-            		}
+            		app.removePage(currentPage);
+            		refresh();
             		break;
 
             	}
@@ -293,4 +211,26 @@ public class EditStoryActivity extends Activity {
                 });
         builder.show();
     }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * This rebuilds the ListView by recollecting data from the controller
+	 */
+	public void refresh(){
+		pageList = app.getStory().getPages();
+		pageText = app.updateView(pageList, pageText);
+		adapter.notifyDataSetChanged();
+	}
+	
+	
+	
+	
+	
 }

@@ -37,13 +37,25 @@ import android.app.Application;
 import android.provider.Settings.Secure;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
+import android.content.Intent;
 
 /**
  * This is the Controller for MVC
  */
+
+
+
 public class ControllerApp extends Application{
 
 	private boolean isEditing = false;
+	
+	// These variables shouldn't be saved.
+	private ViewPageActivity pageActivity;
+	private boolean tilesChanged;
+	private boolean decisionsChanged;
+	private boolean commentsChanged;
+	private boolean endingChanged;
 	
 	private Story currentStory;
 	private Page currentPage;
@@ -76,7 +88,14 @@ public class ControllerApp extends Application{
 	 */
 	public void setPage(Page page) {
 		this.currentPage = page;
-		page.setAllChanged();
+		
+		// The page has now been initialized, so everything has changed
+		endingChanged = true;
+		tilesChanged = true;
+		decisionsChanged = true;
+		commentsChanged = true;
+		
+		reloadPage();
 	}
 	/**
 	 * This gets the current page
@@ -111,6 +130,14 @@ public class ControllerApp extends Application{
 				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 		Comment comment = new Comment(text, poster);
 		currentPage.addComment(comment);
+		setCommentsChanged();
+		ESHandler eshandler = new ESHandler();
+		try {
+			eshandler.addComment(currentStory, currentPage, comment);
+		} catch (HandlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -142,6 +169,7 @@ public class ControllerApp extends Application{
 	 */
 	public void deleteTile(int whichTile) {
 		currentPage.removeTile(whichTile);
+		setTilesChanged();
 	}
 	
 	/**
@@ -150,6 +178,7 @@ public class ControllerApp extends Application{
 	 */
 	public void setEnding(String text) {
 		currentPage.setPageEnding(text);
+		setEndingChanged();
 	}
 	
 	/**
@@ -158,14 +187,17 @@ public class ControllerApp extends Application{
 	 */
 	public void addTile(Tile tile) {
 		currentPage.addTile(tile);
+		setTilesChanged();
 	}
 	
 	/**
 	 * Adds a decision to the currentPage.
 	 * @param decision
 	 */
-	public void addDecision(Decision decision) {
+	public void addDecision() {
+		Decision decision = new Decision(currentPage);
 		currentPage.addDecision(decision);
+		setDecisionsChanged();
 	}
 	
 	/**
@@ -175,6 +207,7 @@ public class ControllerApp extends Application{
 	 */
 	public void updateTile(String text, int whichTile) {
 		currentPage.updateTile(text, whichTile);
+		setTilesChanged();
 	}
 	
 	/**
@@ -183,6 +216,7 @@ public class ControllerApp extends Application{
 	 */
 	public void deleteDecision(int whichDecision) {
 		currentPage.deleteDecision(whichDecision);
+		setDecisionsChanged();
 	}
 	
 	/**
@@ -216,6 +250,7 @@ public class ControllerApp extends Application{
 	public void updateDecision(String text, int whichPage, int whichDecision) {
 		ArrayList<Page> pages = currentStory.getPages();
 		currentPage.updateDecision(text, pages.get(whichPage), whichDecision);
+		setDecisionsChanged();
 	}
 	
 	/**
@@ -237,19 +272,251 @@ public class ControllerApp extends Application{
 	 * Sets the view associated with the currentPage to activity.
 	 * @param activity
 	 */
-	public void setPageActivity(ViewPageActivity activity) {
-		currentPage.setActivity(activity);
+	public void setActivity(ViewPageActivity activity) {
+		pageActivity = activity;
 	}
 	
 	/**
 	 * Tells currentPage to remove its associated view.
 	 */
 	public void removeActivity() {
-		currentPage.deleteActivity();
+		pageActivity = null;
+	}
+
+	public <T> void jump(Class<T> classItem, Story story, Page page) {
+		setStory(story);
+		setPage(page);
+		Intent intent = new Intent(this, classItem);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
+	}
+	
+	/**
+	 * This function is a generalized class for creating a new story and placing it on the server
+	 * @param storyTitle
+	 * @throws HandlerException
+	 */
+	protected void initializeNewStory(String storyTitle) throws HandlerException{
+	    	
+	    	final Story newStory = new Story(); 	
+	    	newStory.setTitle(storyTitle);	    	
+	    	Page newPage = initializeNewPage("First Page");
+	    	newStory.addPage(newPage);
+	    	newStory.setFirstpage(newPage.getId());
+	    	newStory.setAuthor(Secure.getString(
+					getBaseContext().getContentResolver(), Secure.ANDROID_ID));
+		    try
+			{			    	
+		    	ESHandler eshandler = new ESHandler();
+				eshandler.addStory(newStory);
+				
+
+			} catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		    jump(EditStoryActivity.class,newStory, newPage);
+	    }
+	
+	/**
+	 * Similar to the above function, this method creates a new page object
+	 * @param pageTitle
+	 * @return
+	 */
+	protected Page initializeNewPage(String pageTitle){
+		final Page newPage = new Page();
+		newPage.setTitle(pageTitle);
+		return newPage;
+	}
+	
+	/**
+	 * This method is used for gathering new data from the model, it then returns it to update the listviews. It is generalized to
+	 * work on both listviews for Pages and Stories.
+	 * @param itemList
+	 * @param infoText
+	 * @return
+	 */
+	protected <T> ArrayList<String> updateView(ArrayList<T> itemList, ArrayList<String> infoText){
+		
+		
+		
+		infoText.clear();
+		if(itemList.size() != 0)
+		{
+			for (int i = 0; i < itemList.size(); i++) {
+				String outList = "";
+			
+				if(itemList.get(i).getClass().equals(Page.class))
+				{
+					
+					
+					if(itemList.get(i).equals(currentStory.getFirstpage())){
+						outList = "{Start} ";
+					}
+					
+					if(((Page) itemList.get(i)).getDecisions().size() == 0){				
+						outList = outList + "{Endpoint} ";
+					}	
+					outList = outList + "(" + ((Page) itemList.get(i)).getRefNum() + ") " + ((Page) itemList.get(i)).getTitle();
+				}
+				else if(itemList.get(i).getClass().equals(Story.class)){
+				
+					outList = ((Story) itemList.get(i)).getTitle();
+				}
+				infoText.add(outList);
+			}
+		
+			
+		}
+		
+		return infoText;
+	}
+	
+	/**
+	 * Updates a Pages title and pushes to the handler
+	 * @param pageTitle
+	 * @param currentPage
+	 */
+	protected void updateTitle(String pageTitle, Page currentPage){
+		currentPage.setTitle(pageTitle);		
+		currentStory.updateStory();
+	}
+	
+	/**
+	 * Similar to the above method, but it creates a new page object with the title
+	 * @param pageTitle
+	 */
+	protected void updateTitle(String pageTitle){
+		Page newPage = initializeNewPage(pageTitle);
+		currentStory.addPage(newPage);
+		currentStory.updateStory();
+	}
+	
+	/**
+	 * Updates the first page of a story and pushes to handler
+	 * @param currentPage
+	 */
+	protected void updateFP(Page currentPage){
+		UUID newID = currentPage.getId();
+		currentStory.setFirstpage(newID);
+		
+	}
+	
+	/**
+	 * Deletes a page.
+	 * @param currentPage
+	 */
+	protected void removePage(Page currentPage){
+		currentStory.deletePage(currentPage);
+		currentStory.updateStory();
+	}
+	
+	/**
+	 * Calls the update method of the current ViewPageActivity associated with
+	 * this page.
+	 */
+	private void updateActivity() {
+		if (pageActivity != null) {
+			pageActivity.update(currentPage);
+		}
+	}
+	
+	/**
+	 * Sets the tilesChanged mark to true so that the ViewPageActivity will 
+	 * know that the tiles need to be updated, and then tells the 
+	 * ViewPageActivity to update.
+	 */
+	public void setTilesChanged() {
+		tilesChanged = true;
+		updateActivity();
+	}
+	
+	/**
+	 * Get whether the tiles list has changed since the last update. 
+	 * @return Returns whether tiles have changed.
+	 */
+	public boolean haveTilesChanged() {
+		return tilesChanged;
+	}
+	
+	/**
+	 * Sets decisionsChanged to true so that the ViewPageActivity will know
+	 * that the decisions need to be updated, and then tells the 
+	 * ViewPageActivity to update.
+	 */
+	public void setDecisionsChanged() {
+		decisionsChanged = true;
+		updateActivity();
+	}
+	
+	/**
+	 * Get whether the decisions list has changed since the last update/
+	 * @return Returns whether the decisions have changed.
+	 */
+	public boolean haveDecisionsChanged() {
+		return decisionsChanged;
+	}
+	
+	/**
+	 * Sets commentsChanged to true so the ViewPageActivity will know to
+	 * update the comments, and then tells ViewPageActivity to update.
+	 */
+	public void setCommentsChanged() {
+		commentsChanged = true;
+		updateActivity();
+	}
+	
+	/**
+	 * Get whether the comments have changed since the last update.
+	 * @return Whether the comments have changed.
+	 */
+	public boolean haveCommentsChanged() {
+		return commentsChanged;
+	}
+	
+	/**
+	 * Sets endingChanged to true so the ViewPageActivity will know to 
+	 * update the ending, and then tells ViewPageActivity to update.
+	 */
+	public void setEndingChanged() {
+		endingChanged = true;
+		updateActivity();
+	}
+	
+	/**
+	 * Get whether the ending has changed since the last update.
+	 * @return Whether the ending has changed.
+	 */
+	public boolean hasEndingChanged() {
+		return endingChanged;
+	}
+	
+	/**
+	 * Sets all the changed variables to true and then tells ViewPageActivity
+	 * to update. Basically it tells ViewPageActivity to refresh the whole
+	 * view.
+	 */
+	public void reloadPage() {
+		tilesChanged = true;
+		decisionsChanged = true;
+		commentsChanged = true;
+		endingChanged = true;
+		updateActivity();
+	}
+	
+	/**
+	 * Removes the view associated with this page.
+	 */
+	public void deleteActivity() {
+		pageActivity = null;
 	}
 	
 	public void finishedUpdating() {
-		currentPage.finishedUpdating();
+		tilesChanged = false;
+		decisionsChanged = false;
+		commentsChanged = false;
+		endingChanged = false;
 	}
 	
 }

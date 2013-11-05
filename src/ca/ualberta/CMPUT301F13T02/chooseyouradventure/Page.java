@@ -38,17 +38,10 @@ import java.util.UUID;
  */
 public class Page {
 	
-	// These variables shouldn't be saved.
-	private ViewPageActivity pageActivity;
-	private boolean tilesChanged;
-	private boolean decisionsChanged;
-	private boolean commentsChanged;
-	private boolean endingChanged;
-	
 	public UUID id;
-	private ArrayList<Comment> comments = new ArrayList<Comment>();
-	private ArrayList<Tile> tiles = new ArrayList<Tile>();
-	private ArrayList<Decision> decisions = new ArrayList<Decision>();
+	private ArrayList<Comment> comments;
+	private ArrayList<Tile> tiles;
+	private ArrayList<Decision> decisions;
 	private String title;
 	private String pageEnding;
 	private int refNum;
@@ -87,13 +80,8 @@ public class Page {
 		tiles = new ArrayList<Tile>();
 		decisions = new ArrayList<Decision>();
 		comments = new ArrayList<Comment>();
+		title = new String();
 		pageEnding = "+ Add an ending to this page";
-		
-		// The page has now been initialized, so everything has changed
-		endingChanged = true;
-		tilesChanged = true;
-		decisionsChanged = true;
-		commentsChanged = true;
 	}
 	
 	/**
@@ -102,7 +90,6 @@ public class Page {
 	 */
 	public void addTile(Tile tile) {
 		tiles.add(tile);
-		setTilesChanged();
 	}
 	
 	/**
@@ -111,7 +98,6 @@ public class Page {
 	 */
 	public void removeTile(int whichTile) {
 		tiles.remove(whichTile);
-		setTilesChanged();
 	}
 	
 	/**
@@ -120,12 +106,10 @@ public class Page {
 	 */
 	public void addDecision(Decision decision) {
 		decisions.add(decision);
-		setDecisionsChanged();
 	}
 	
 	public void deleteDecision(int whichDecision) {
 		decisions.remove(whichDecision);
-		setDecisionsChanged();
 	}
 	
 	/**
@@ -134,7 +118,6 @@ public class Page {
 	 */
 	public void addComment(Comment comment) {
 		comments.add(comment);
-		setCommentsChanged();
 	}
 	
 	/**
@@ -145,7 +128,8 @@ public class Page {
 
 		//Fail if different number of comments of segments
 		if (comments.size() != page.getComments().size() ||
-			tiles.size() != page.getTiles().size())
+			tiles.size() != page.getTiles().size() ||
+			decisions.size() != page.getDecisions().size())
 			return false;
 
 		//Check that all comments are the same
@@ -159,6 +143,16 @@ public class Page {
 			if (!tiles.get(i).equals(page.getTiles().get(i))) 
 				return false;
 		}
+		
+		//Check that all decisions are the same
+		for (int i = 0; i < decisions.size(); i++) {
+			if (!decisions.get(i).equals(page.getDecisions().get(i))) 
+				return false;
+		}
+		
+		//Check that the titles are the same
+		if (!title.equals(page.getTitle()))
+				return false;
 		
 		//Check that the id's are the same
 		if (!id.equals(page.id))
@@ -214,18 +208,18 @@ public class Page {
 	 */
 	public void updateTile(Object content, int i) {
 		tiles.get(i).setContent(content);
-		setTilesChanged();
+
 	}
 	
 	/**
-	 * Updates a decision to new text and a new page to link to.
-	 * @param text What the decision should show
-	 * @param page The page selecting the decision takes you to
-	 * @param decisionNumber The decision to be updated
+	 * Update the decision of this page at the passed position with the passed text and page reference
+	 * 
+	 * @param text The text to use in the updated decision
+	 * @param page The page to link in the updated decision
+	 * @param decisionNumber The position of the decision to update
 	 */
 	public void updateDecision(String text, Page page, int decisionNumber) {
 		decisions.get(decisionNumber).updateDecision(text, page);
-		setDecisionsChanged();
 	}
 	
 	/**
@@ -234,20 +228,21 @@ public class Page {
 	 */
 	public void setPageEnding(String text) {
 		this.pageEnding = text;
-		setEndingChanged();
 	}
 	
 	/**
-	 * Get the pageEnding.
-	 * @return The pageEnding
+	 * Gets the page ending
+	 * 
+	 * @return The page ending
 	 */
 	public String getPageEnding() {
 		return this.pageEnding;
 	}
 
 	/**
-	 * Gets the pages refNum.
-	 * @return the refNum
+	 * Gets the reference number
+	 * 
+	 * @return The reference number
 	 */
 	public int getRefNum() {
 		return refNum;
@@ -259,121 +254,6 @@ public class Page {
 	 */
 	public void setRefNum(int refNum) {
 		this.refNum = refNum;
-	}
-	
-	/**
-	 * Calls the update method of the current ViewPageActivity associated with
-	 * this page.
-	 */
-	private void updateActivity() {
-		if (pageActivity != null) {
-			pageActivity.update(this);
-		}
-	}
-	
-	/**
-	 * Sets the tilesChanged mark to true so that the ViewPageActivity will 
-	 * know that the tiles need to be updated, and then tells the 
-	 * ViewPageActivity to update.
-	 */
-	public void setTilesChanged() {
-		tilesChanged = true;
-		updateActivity();
-	}
-	
-	/**
-	 * Get whether the tiles list has changed since the last update. 
-	 * @return Returns whether tiles have changed.
-	 */
-	public boolean haveTilesChanged() {
-		return tilesChanged;
-	}
-	
-	/**
-	 * Sets decisionsChanged to true so that the ViewPageActivity will know
-	 * that the decisions need to be updated, and then tells the 
-	 * ViewPageActivity to update.
-	 */
-	public void setDecisionsChanged() {
-		decisionsChanged = true;
-		updateActivity();
-	}
-	
-	/**
-	 * Get whether the decisions list has changed since the last update/
-	 * @return Returns whether the decisions have changed.
-	 */
-	public boolean haveDecisionsChanged() {
-		return decisionsChanged;
-	}
-	
-	/**
-	 * Sets commentsChanged to true so the ViewPageActivity will know to
-	 * update the comments, and then tells ViewPageActivity to update.
-	 */
-	public void setCommentsChanged() {
-		commentsChanged = true;
-		updateActivity();
-	}
-	
-	/**
-	 * Get whether the comments have changed since the last update.
-	 * @return Whether the comments have changed.
-	 */
-	public boolean haveCommentsChanged() {
-		return commentsChanged;
-	}
-	
-	/**
-	 * Sets endingChanged to true so the ViewPageActivity will know to 
-	 * update the ending, and then tells ViewPageActivity to update.
-	 */
-	public void setEndingChanged() {
-		endingChanged = true;
-		updateActivity();
-	}
-	
-	/**
-	 * Get whether the ending has changed since the last update.
-	 * @return Whether the ending has changed.
-	 */
-	public boolean hasEndingChanged() {
-		return endingChanged;
-	}
-	
-	/**
-	 * Sets all the changed variables to true and then tells ViewPageActivity
-	 * to update. Basically it tells ViewPageActivity to refresh the whole
-	 * view.
-	 */
-	public void setAllChanged() {
-		tilesChanged = true;
-		decisionsChanged = true;
-		commentsChanged = true;
-		endingChanged = true;
-		updateActivity();
-	}
-	
-	/**
-	 * Set the view (the activity) associated with this page.
-	 * @param activity
-	 */
-	public void setActivity(ViewPageActivity activity) {
-		pageActivity = activity;
-	}
-	
-	/**
-	 * Removes the view associated with this page.
-	 */
-	public void deleteActivity() {
-		pageActivity = null;
-	}
-	
-	public void finishedUpdating() {
-		tilesChanged = false;
-		decisionsChanged = false;
-		commentsChanged = false;
-		endingChanged = false;
 	}
 	
 }

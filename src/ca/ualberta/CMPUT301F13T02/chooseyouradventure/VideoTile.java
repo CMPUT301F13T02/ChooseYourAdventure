@@ -45,8 +45,10 @@ public class VideoTile extends Tile{
 
 	@Override
 	boolean equals(Tile tile) {
-		// TODO Auto-generated method stub
-		return false;
+		if (!(tile instanceof VideoTile))
+			return false;
+
+		return true;
 	}
 	
 	@Override

@@ -37,6 +37,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -95,10 +96,9 @@ public class ViewPageActivity extends Activity {
 	@Override
 	public void onResume() {
         super.onResume();
-        app.setPageActivity(this);
+        app.setActivity(this);
         update(app.getPage());
-        setButtonVisibility();
-		
+        
         /* Set up onClick listeners for buttons on screen, even if some aren't
          * shown at the time.
          */
@@ -106,8 +106,8 @@ public class ViewPageActivity extends Activity {
 		addTileButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				TextTile tile = new TextTile();
-				app.addTile(tile);
+				tileMenu();
+
 			}
 		});
 		
@@ -115,8 +115,7 @@ public class ViewPageActivity extends Activity {
 		addDecisionButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Decision decision = new Decision();
-				app.addDecision(decision);
+				app.addDecision();
 			}
 		});
 		
@@ -139,6 +138,7 @@ public class ViewPageActivity extends Activity {
 	
 	@Override
 	public void onPause() {
+		super.onPause();
 		app.removeActivity();
 	}
 	
@@ -160,6 +160,7 @@ public class ViewPageActivity extends Activity {
 			MenuItem doneButton = menu.findItem(1);
 			doneButton.setVisible(false);
 		}
+		setButtonVisibility();
         return true;
     }
 	
@@ -171,13 +172,15 @@ public class ViewPageActivity extends Activity {
 	 */
     public boolean onOptionsItemSelected(MenuItem item) 
     {
-		try {
+
+    	try {
 			return menuItemClicked(item);
 		} catch (HandlerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return false;	
+    	return true;
+
     }
 	
     /**
@@ -185,11 +188,14 @@ public class ViewPageActivity extends Activity {
      * @param menu The Menu to make
      */
 	public void makeMenu(Menu menu) {
+	
+
 		MenuItem editPage = menu.add(0, EDIT_INDEX, EDIT_INDEX, "Edit");
 		{
 			editPage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		}
-		MenuItem savePage = menu.add(0, SAVE_INDEX, SAVE_INDEX, "Save");
+		MenuItem savePage = menu.add(0, SAVE_INDEX, SAVE_INDEX, "Done");
+
 		{
 			savePage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		}
@@ -199,20 +205,27 @@ public class ViewPageActivity extends Activity {
 	 * Handles what to do when an item of the action bar is pressed.
 	 * @param item The clicked item
 	 * @return
-	 * @throws HandlerException 
 	 */
+
 	private boolean menuItemClicked(MenuItem item) throws HandlerException {
 		switch (item.getItemId()) {
 		case 0:
-			app.setEditing(true);
-			update(app.getPage());
-			setButtonVisibility();
+
+			final String myId = Secure.getString(
+					getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+			final String storyID = app.getStory().getAuthor();
+			if(myId.equals(storyID)){
+				app.setEditing(true);
+				app.reloadPage();
+				setButtonVisibility();
+			}
 			break;
 		case 1:
 			app.setEditing(false);
 			app.saveStory();
-			update(app.getPage());
+			app.reloadPage();
 			setButtonVisibility();
+
 			break;
 		}
 		return true;
@@ -225,22 +238,20 @@ public class ViewPageActivity extends Activity {
 	 * @param page The current page
 	 */
 	public void update(Page page) {
-        
-		setButtonVisibility();
 		
-		if (page.haveTilesChanged()) {
+		if (app.haveTilesChanged()) {
 			updateTiles(page);
 		}
 		
-		if (page.haveDecisionsChanged()) {
+		if (app.haveDecisionsChanged()) {
 			updateDecisions(page);
 		}
 		
-		if (page.haveCommentsChanged()) {
+		if (app.haveCommentsChanged()) {
 			updateComments(page);
 		}
 		
-		if (page.hasEndingChanged()) {
+		if (app.hasEndingChanged()) {
 			updateEnding(page);
 		}
 		
@@ -252,25 +263,36 @@ public class ViewPageActivity extends Activity {
 	 * and the in the page.
 	 */
 	private void setButtonVisibility() {
-		MenuItem editButton = menu.findItem(0);
-		MenuItem saveButton = menu.findItem(1);
+		MenuItem editButton = menu.findItem(EDIT_INDEX);
+		MenuItem saveButton = menu.findItem(SAVE_INDEX);
 		Button addTileButton = (Button) findViewById(R.id.addTile);
 		Button addDecisionButton = (Button) findViewById(R.id.addDecision);
 		
-		int visibility = 0;
+		final String myId = Secure.getString(
+				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+		final String storyID = app.getStory().getAuthor();
+		if(myId.equals(storyID)){
 		
-		if (app.isEditing()) {
-			saveButton.setVisible(true);
-			editButton.setVisible(false);
-			visibility = View.VISIBLE;
+			int visibility = 0;
+		
+			if (app.isEditing()) {
+				saveButton.setVisible(true);
+				editButton.setVisible(false);
+				visibility = View.VISIBLE;
+			} else {
+				saveButton.setVisible(false);
+				editButton.setVisible(true);
+				visibility = View.GONE;
+			}
+				
+			addTileButton.setVisibility(visibility);
+			addDecisionButton.setVisibility(visibility);
 		} else {
 			saveButton.setVisible(false);
-			editButton.setVisible(true);
-			visibility = View.GONE;
+			editButton.setVisible(false);
+			addTileButton.setVisibility(View.GONE);
+			addDecisionButton.setVisibility(View.GONE);
 		}
-				
-		addTileButton.setVisibility(visibility);
-		addDecisionButton.setVisibility(visibility);
 	}
 	
 	/**
@@ -335,18 +357,18 @@ public class ViewPageActivity extends Activity {
 	 */
 	public void addTile(int i, Tile tile) {
 		
-		View view = makeTileView();
+		TextView view = makeTileView();
 		
 		if (tile.getType() == "text") {
 			TextTile textTile = (TextTile) tile;
-			TextView textView = (TextView) view;
+			//TextView textView = (TextView) view;
 			
-			textView.setText(textTile.getText());
+			view.setText(textTile.getText());
 
-			tilesLayout.addView(textView, i);
+			tilesLayout.addView(view, i);
 			
 			if (app.isEditing()) {
-				textView.setOnClickListener(new OnClickListener() {
+				view.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						tileMenu(v);
@@ -371,10 +393,10 @@ public class ViewPageActivity extends Activity {
 	 * the layout background which makes a line separating the tile views.
 	 * @return
 	 */
-	private View makeTileView() {
+	private TextView makeTileView() {
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
-		View view = new View(this);
+		TextView view = new TextView(this);
 
 		// Set what the tiles look like
 		view.setPadding(0, 5, 0, 6);
@@ -513,6 +535,7 @@ public class ViewPageActivity extends Activity {
 	private void decisionClicked(View view) {
 		int whichDecision = decisionsLayout.indexOfChild(view);
 		app.followDecision(whichDecision);
+
 	}
 	
 	/**
@@ -520,7 +543,6 @@ public class ViewPageActivity extends Activity {
 	 * @param view
 	 */
 	private void onEditDecision(View view) {
-		LinearLayout decisionsLayout = (LinearLayout) findViewById(R.id.decisionsLayout);
 		int whichDecision = decisionsLayout.indexOfChild(view);
 		Decision decision = app.getPage().getDecisions().get(whichDecision);
 		
@@ -528,8 +550,12 @@ public class ViewPageActivity extends Activity {
 		ArrayList<Page> pages = app.getStory().getPages();
 		int toPagePosition = -1;
 		for (int i = 0; i < pages.size(); i++) {
-			if (toPageId.equals(pages.get(i).getId())) {
+
+			UUID comparePage = pages.get(i).getId();
+			System.out.println("toPageID: " + toPageId + "\ncomparePage: " + comparePage + "\nPage: " + app.getPage() + "\nDecision: " + decision.getPageID() + decision.getText());
+			if (toPageId.equals(comparePage)) {
 				toPagePosition = i;
+				
 			}
 		}
 		
@@ -556,7 +582,7 @@ public class ViewPageActivity extends Activity {
     	builder.setView(layout);
     	builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-        		int decisionNumber = layout.indexOfChild(decisionView);
+        		int decisionNumber = decisionsLayout.indexOfChild(decisionView);
             	app.updateDecision(alertEdit.getText().toString(), 
             			pageSpinner.getSelectedItemPosition(), decisionNumber);
             }
@@ -633,5 +659,45 @@ public class ViewPageActivity extends Activity {
 	        builder.show();
 		}
 	}
+	
+	public void tileMenu(){		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		final AlertDialog.Builder photoSelector = new AlertDialog.Builder(this);
+		final String[] titles = {"TextTile","PhotoTile","{Placeholder} VideoTile","{Placeholder} AudioTile","Cancel"};   
+		final String[] titlesPhoto = {"From File","Take New Photo","Cancel"};
+        builder.setItems(titles, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+            	switch(item){
+            	case(0):
+            		TextTile tile = new TextTile();
+					app.getPage().addTile(tile);
+					addTile(app.getPage().getTiles().size() - 1, tile);   				
+            		break;
+            	case(1):
+            		photoSelector.setItems(titlesPhoto, new DialogInterface.OnClickListener() {
+            			 public void onClick(DialogInterface dialog, int item) {
+            	            	switch(item){
+	            	            	case(0):
+	            	            		 				
+	            	            		break;
+	            	            	case(1):
+	            	            		
+	            	            		break;
+            	            	}
+            	                }});
+            	       	photoSelector.show();
+            		
+            		break;
+            		
+            		
+            	case(2):
+            		break;
+            	case(3):
+            		break;
+            	}
+                    
+                }});
+        builder.show();
+    }
 
 }

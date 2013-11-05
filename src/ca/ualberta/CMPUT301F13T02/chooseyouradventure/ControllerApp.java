@@ -35,8 +35,6 @@ import java.util.UUID;
 
 import android.app.Application;
 import android.provider.Settings.Secure;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.content.Intent;
 
@@ -129,15 +127,13 @@ public class ControllerApp extends Application{
 		String poster = Secure.getString(
 				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 		Comment comment = new Comment(text, poster);
+		ESHandler eshandler = new ESHandler();
+		
 		currentPage.addComment(comment);
 		setCommentsChanged();
-		ESHandler eshandler = new ESHandler();
-		try {
-			eshandler.addComment(currentStory, currentPage, comment);
-		} catch (HandlerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		currentStory.updateStory();
+		
+
 	}
 	
 	/**
@@ -160,7 +156,7 @@ public class ControllerApp extends Application{
 	 * Tells the current story to save itself.
 	 */
 	public void saveStory() {
-		currentStory.save();
+		currentStory.updateStory();
 	}
 	
 	/**
@@ -400,7 +396,7 @@ public class ControllerApp extends Application{
 	protected void updateFP(Page currentPage){
 		UUID newID = currentPage.getId();
 		currentStory.setFirstpage(newID);
-		
+		currentStory.updateStory();
 	}
 	
 	/**

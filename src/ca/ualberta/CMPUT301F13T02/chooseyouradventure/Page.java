@@ -38,7 +38,7 @@ import java.util.UUID;
  */
 public class Page {
 	
-	public UUID id;
+	private UUID id;
 	private ArrayList<Comment> comments;
 	private ArrayList<Tile> tiles;
 	private ArrayList<Decision> decisions;

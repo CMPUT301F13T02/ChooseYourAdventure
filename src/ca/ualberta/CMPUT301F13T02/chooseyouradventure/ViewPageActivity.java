@@ -608,7 +608,7 @@ public class ViewPageActivity extends Activity {
 		view.setBackgroundColor(0xFFFFFFFF);
 		view.setPadding(10, 5, 10, 5);
 		view.setLayoutParams(lp);
-		view.setText(comment.getText());
+		view.setText(comment.getTimestamp() + " - '" + comment.getText() + "'");
 	    commentsLayout.addView(view);
 	}
 	

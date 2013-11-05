@@ -92,6 +92,7 @@ public class ESHandler implements Handler{
 		// TODO Auto-generated method stub
 		
 	}
+	
 
 	/**
 	 * Adds the passed story, sets its ID
@@ -146,38 +147,46 @@ public class ESHandler implements Handler{
 	}
 
 	/**
-	 * Updates the passed page of passed story by adding passed comment
-	 * @param story The story the page is in
-	 * @param page The page the comment is in
-	 * @param comment The comment to add
-	 * @throws HandlerException 
-	 */
-	@Override
-	public void addComment(Story story, Page page, Comment comment) throws HandlerException {
-		ESHttpPost post = new ESHttpPost(getStoryPath() + story.getId() + "/_update");
+     * Updates the passed page of passed story by adding passed comment
+     * @param story The story the page is in
+     * @param page The page the comment is in
+     * @param comment The comment to add
+     * @throws HandlerException 
+     */
+    @Override
+    public void addComment(Story story, Page page, Comment comment) throws HandlerException {
+        ESHttpPost post = new ESHttpPost(getStoryPath() + story.getId() + "/_update");
 
-		try {
-			post.post(
-			"{" +
-			    "\"script\" : \"foreach (page : ctx._source.pages) { " +
-				                   "if (page.id == id) { " +
-					                   "page.comments.add(comment)" +
-					                "}" +
-						  		"}\"," +
-			    "\"params\" : {" +
-							  	"\"id\": \"" + page.getId() + "\"," + 
-						      	"\"comment\": {" +
-						      		"\"text\": \"" + comment.getText() + "\"" +
-						    	"}" +	
-							 "}" +
-			"}");
-		} 
-		
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
+        try {
+            post.post(
+            "{" +
+                "\"script\" : \"foreach (page : ctx._source.pages) { " +
+                                   "if (page.id == id) { " +
+                                       "page.comments.add(comment)" +
+                                    "}" +
+                                  "}\"," +
+                "\"params\" : {" +
+                                  "\"id\": \"" + page.getId() + "\"," + 
+                                  "\"comment\": " + gson.toJson(comment) +
+                             "}" +
+            "}");
+        } 
+        
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("{" +
+                "\"script\" : \"foreach (page : ctx._source.pages) { " +
+                                   "if (page.id == id) { " +
+                                       "page.comments.add(comment)" +
+                                    "}" +
+                                  "}\"," +
+                "\"params\" : {" +
+                                  "\"id\": \"" + page.getId() + "\"," + 
+                                  "\"comment\": " + gson.toJson(comment) +
+                             "}" +
+            "}");
+    }
 	
     /**
      * Get all stories

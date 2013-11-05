@@ -129,17 +129,9 @@ public class ControllerApp extends Application{
 		Comment comment = new Comment(text, poster);
 		ESHandler eshandler = new ESHandler();
 		
-		try
-		{
-			eshandler.getStory(currentStory.getId());
-			currentPage.addComment(comment);
-			setCommentsChanged();
-			eshandler.addComment(currentStory, currentPage, comment);
-		} catch (HandlerException e1)
-		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		currentPage.addComment(comment);
+		setCommentsChanged();
+		currentStory.updateStory();
 		
 
 	}

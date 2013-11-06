@@ -71,7 +71,7 @@ public class ViewStoriesActivity extends Activity {
 	ArrayList<String> storyText = new ArrayList<String>();
 	ArrayList<Story> storyList = new ArrayList<Story>();
 	private ControllerApp app; 
-	private ESHandler eshandler = new ESHandler();
+	private Handler eshandler = new ESHandler();
 	
 	ArrayAdapter<String> adapter;
     @Override
@@ -150,7 +150,7 @@ public class ViewStoriesActivity extends Activity {
 	    app.jump(ViewPageActivity.class, storyList.get(pos), storyList.get(pos).getFirstpage());
 	}
 	
-	protected boolean onLongListItemClick(View v, int pos, long id) { 
+	public boolean onLongListItemClick(View v, int pos, long id) { 
     	storyMenu(pos);
         return true;
     }
@@ -260,8 +260,12 @@ public class ViewStoriesActivity extends Activity {
 		
     }
     
-  
-
-    
-
+    /**
+     * Sets the handler
+     * 
+     * @param handler The handler to use
+     */
+    public void setHandler(Handler handler) {
+    	eshandler = handler;
+    }
 }

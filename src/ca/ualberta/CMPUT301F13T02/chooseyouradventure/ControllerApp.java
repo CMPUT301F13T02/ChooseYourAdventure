@@ -134,14 +134,21 @@ public class ControllerApp extends Application{
 	 * @param A comment to add
 	 */
 	public void addComment(String text) {
-		String poster = Secure.getString(
+		String poster = Secure.getString( 
 				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 		Comment comment = new Comment(text, poster);
 		ESHandler eshandler = new ESHandler();
 		
 		currentPage.addComment(comment);
 		setCommentsChanged();
-		currentStory.updateStory();
+		try
+		{
+			eshandler.addComment(getStory(), getPage(), comment);
+		} catch (HandlerException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 
 	}
@@ -330,7 +337,7 @@ public class ControllerApp extends Application{
 	 * @param pageTitle
 	 * @return
 	 */
-	protected Page initializeNewPage(String pageTitle){
+	public Page initializeNewPage(String pageTitle){
 		final Page newPage = new Page();
 		newPage.setTitle(pageTitle);
 		return newPage;

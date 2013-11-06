@@ -49,6 +49,11 @@ public class Comment {
 	 */
 	public Comment(String text) {
 		this.text = text;
+		
+		Calendar calendar = Calendar.getInstance(); 
+		String dayField = "" + calendar.get(Calendar.DAY_OF_MONTH) + "\\" + calendar.get(Calendar.MONTH) + "\\" + calendar.get(Calendar.YEAR);
+		this.setTimestamp(dayField);
+		
 	}
 
 	/**

@@ -117,6 +117,7 @@ public class ESHandler implements Handler{
 		
 		//Set ID
 		story.setId(esResponse.getId());
+		updateStory(story);
 	}
 	
 	/**

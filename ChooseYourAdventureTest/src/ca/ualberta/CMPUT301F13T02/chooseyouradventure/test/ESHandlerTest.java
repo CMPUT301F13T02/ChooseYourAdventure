@@ -34,7 +34,6 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 import java.util.ArrayList;
 
 import android.test.InstrumentationTestCase;
-import android.util.Log;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Decision;

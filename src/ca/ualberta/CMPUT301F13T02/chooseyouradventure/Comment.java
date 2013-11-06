@@ -30,6 +30,10 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
+import java.util.Calendar;
+
+
+
 /**
  * Structure of the Comments that users add to a story
  */
@@ -37,13 +41,21 @@ public class Comment {
 
 	private String poster;
 	private String text;
+	private String timestamp;
+
 	/**
 	 * This is a constructor for a comment with no user
 	 * @param text The comment
 	 */
 	public Comment(String text) {
 		this.text = text;
+		
+		Calendar calendar = Calendar.getInstance(); 
+		String dayField = "" + calendar.get(Calendar.DAY_OF_MONTH) + "\\" + calendar.get(Calendar.MONTH) + "\\" + calendar.get(Calendar.YEAR);
+		this.setTimestamp(dayField);
+		
 	}
+
 	/**
 	 * This is a constructor for a comment with a user
 	 * @param text The comment
@@ -52,6 +64,12 @@ public class Comment {
 	public Comment(String text, String poster) {
 		this.text = text;
 		this.poster = poster;
+		
+		
+		Calendar calendar = Calendar.getInstance(); 
+		String dayField = "" + calendar.get(Calendar.DAY_OF_MONTH) + "\\" + calendar.get(Calendar.MONTH) + "\\" + calendar.get(Calendar.YEAR);
+		this.setTimestamp(dayField);
+		
 	}
 	/**
 	 * 
@@ -67,7 +85,31 @@ public class Comment {
 		return poster;
 	}
 	
+	/**
+	 * Compares the equality of this Comment and the passed Comment
+	 * 
+	 * @param comment The comment to compare against
+	 * @return Whether or not the two comments are considered equal
+	 */
 	public boolean equals(Comment comment) {
-		return text.equals(comment.getText());
+		return text.equals(comment.getText()) &&
+				poster.equals(comment.getPoster());
 	}
+	/**
+	 * @return the timestamp
+	 */
+	public String getTimestamp()
+	{
+
+		return timestamp;
+	}
+	/**
+	 * @param timestamp the timestamp to set
+	 */
+	public void setTimestamp(String timestamp)
+	{
+
+		this.timestamp = timestamp;
+	}
+	
 }

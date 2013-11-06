@@ -5,10 +5,14 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ControllerApp;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Decision;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
+<<<<<<< HEAD
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.PhotoTile;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Tile;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.VideoTile;
+=======
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
+>>>>>>> 5328ff35b263bd43b8086c2670fafd5c753fc41b
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ViewPageActivity;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
@@ -42,9 +46,15 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 	
 	protected void setUp() throws Exception{
 		super.setUp();
+<<<<<<< HEAD
 		page = new Page();
 		//app = ControllerApp.getInstance();
 		app.setPage(page);
+=======
+		app = app.getInstance();
+		app.initializeNewStory("Test Story"); //This method doesn't exist?  -- Konrad 11/05
+		app.setPage(app.getStory().getFirstpage());
+>>>>>>> 5328ff35b263bd43b8086c2670fafd5c753fc41b
 		
 		activity = getActivity();
 		

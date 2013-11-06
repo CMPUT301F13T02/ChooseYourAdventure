@@ -56,7 +56,7 @@ public abstract class Tile {
 		return null;	
 	}
 	
-	abstract String getType();
+	public abstract String getType();
 	abstract boolean equals(Tile tile);
-	abstract void setContent(Object content);
+	public abstract void setContent(Object content);
 }

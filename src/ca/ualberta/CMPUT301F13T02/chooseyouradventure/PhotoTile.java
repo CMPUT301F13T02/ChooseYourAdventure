@@ -29,6 +29,9 @@
 */
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
+
+import android.graphics.Bitmap;
+
 /**
  * A Photo tile for use in the stories
  */
@@ -41,7 +44,7 @@ public class PhotoTile extends Tile{
 	 * @return The type
 	 */
 	@Override
-	String getType() {
+	public String getType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -63,6 +66,14 @@ public class PhotoTile extends Tile{
 	
 	public Object getPhoto() {
 		return photo;
+	}
+	public void setImage(Bitmap bm) {
+		// TODO Auto-generated method stub
+		
+	}
+	public Bitmap getImage() {
+		// TODO Auto-generated method stub
+		return null;
 	}
     
 }

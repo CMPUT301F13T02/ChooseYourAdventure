@@ -38,7 +38,7 @@ public class VideoTile extends Tile{
 	private Object video;
 	
 	@Override
-	String getType() {
+	public String getType() {
 		// TODO Auto-generated method stub
 		return null;
 	}

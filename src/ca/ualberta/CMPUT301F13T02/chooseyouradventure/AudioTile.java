@@ -37,7 +37,7 @@ public class AudioTile extends Tile{
 	private Object audio;
 	
 	@Override
-	String getType() {
+	public String getType() {
 		// TODO Auto-generated method stub
 		return null;
 	}

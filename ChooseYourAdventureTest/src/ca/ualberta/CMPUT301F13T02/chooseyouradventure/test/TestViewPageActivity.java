@@ -31,7 +31,7 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 	protected void setUp() throws Exception{
 		super.setUp();
 		app = app.getInstance();
-		app.initializeNewStory("Test Story");
+		//app.initializeNewStory("Test Story"); //This method doesn't exist?  -- Konrad 11/05
 		app.setPage(app.getStory().getFirstpage());
 		
 		activity = getActivity();

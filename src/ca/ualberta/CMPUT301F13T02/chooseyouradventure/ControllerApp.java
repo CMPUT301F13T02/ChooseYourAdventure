@@ -337,7 +337,7 @@ public class ControllerApp extends Application{
 	 * @param pageTitle
 	 * @return
 	 */
-	protected Page initializeNewPage(String pageTitle){
+	public Page initializeNewPage(String pageTitle){
 		final Page newPage = new Page();
 		newPage.setTitle(pageTitle);
 		return newPage;

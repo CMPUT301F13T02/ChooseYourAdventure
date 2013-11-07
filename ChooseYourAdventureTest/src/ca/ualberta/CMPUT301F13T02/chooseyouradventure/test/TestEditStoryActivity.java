@@ -31,6 +31,7 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
 import android.test.ActivityInstrumentationTestCase2;
+import com.jayway.android.robotium.solo.Solo;
 import android.widget.Button;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ControllerApp;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.EditStoryActivity;
@@ -68,6 +69,7 @@ public class TestEditStoryActivity extends ActivityInstrumentationTestCase2<Edit
 	
 	public void testStateDestroy() {
 		story = app.getStory();
+		story.getPages().clear();
 		story.addPage(new Page());
 		
 		activity.finish();
@@ -79,10 +81,20 @@ public class TestEditStoryActivity extends ActivityInstrumentationTestCase2<Edit
 	}
 	
 	public void testAddPage() {
-		story = app.getStory();
-		story.getPages().clear();
 		
-		story.addPage(new Page());
+	    Solo solo = new Solo(getInstrumentation(), getActivity());
+	    getInstrumentation().waitForIdleSync();
+	    
+		activity.runOnUiThread(
+				new Runnable() {
+					public void run() {
+						addPageButton.requestFocus();
+						addPageButton.performClick();
+					}
+				});
+		
+	    solo.enterText(0, "New Page");
+	    solo.clickOnButton("Save");
 		int np = story.getPages().size();
 		assertEquals(np, 1);
 		//assertFalse(np == 1);

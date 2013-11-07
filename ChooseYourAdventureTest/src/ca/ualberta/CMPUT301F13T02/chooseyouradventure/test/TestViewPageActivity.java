@@ -31,11 +31,13 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.AudioTile;
+import com.jayway.android.robotium.solo.Solo;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ControllerApp;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Decision;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.PhotoTile;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Tile;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.VideoTile;
@@ -58,6 +60,7 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 	private static final ControllerApp app = ControllerApp.getInstance();
 	
 	private Page page;
+	private Story story;
 	
 	private static int numComments = 1;
 	private static int numTiles = 1;
@@ -72,17 +75,7 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 	
 	protected void setUp() throws Exception{
 		super.setUp();
-		/*
-<<<<<<< HEAD
-		page = new Page();
-		//app = ControllerApp.getInstance();
-		app.setPage(page);
-=======
-		app = app.getInstance();
-		app.initializeNewStory("Test Story"); //This method doesn't exist?  -- Konrad 11/05
-		app.setPage(app.getStory().getFirstpage());
->>>>>>> 5328ff35b263bd43b8086c2670fafd5c753fc41b
-*/
+
 		
 		activity = getActivity();
 		
@@ -95,6 +88,7 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 		
 	}
 	
+	
 	public void testLayout() {
 		assertNotNull(addTileButton);
 		assertNotNull(addDecisionButton);
@@ -104,11 +98,13 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 	}
 	
 	
+	
 	public void testStateDestroy() {
 		page = app.getPage();
 		page.addComment(new Comment("A comment"));
 		page.addTile(new TextTile());
-		page.addDecision(new Decision(page));
+
+		page.addDecision(new Decision("A decision", new Page()));
 		
 		activity.finish();
 		activity = getActivity();
@@ -123,112 +119,133 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 		
 	}
 	
+	
+	
+	
 	public void testAddTextTile() {
-		page = app.getPage();
 		page.getTiles().clear();
-		page.addTile(new TextTile());
-		int t = page.getTiles().size();
-		assertEquals(t, 1);
-		Tile tile = page.getTiles().get(0);
-		assertTrue(tile.getType() == "text");
-	}
-	
-	
-	public void testAddPhotoTile() {
-		page = app.getPage();
-		page.getTiles().clear();
-		page.addTile(new PhotoTile());
-		int t = page.getTiles().size();
-		assertEquals(t, 1);
-		Tile tile = page.getTiles().get(0);
-		assertTrue(tile.getType() == "photo");
-	}
-
-	public void testAddAudioTile() {
-		page = app.getPage();
-		page.getTiles().clear();
-		page.addTile(new AudioTile());
-		int t = page.getTiles().size();
-		assertEquals(t, 1);
-		Tile tile = page.getTiles().get(0);
-		assertTrue(tile.getType() == "audio");
-	}
-	
-	public void testAddVideoTile() {
-		page = app.getPage();
-		page.getTiles().clear();
-		page.addTile(new VideoTile());
-		int t = page.getTiles().size();
-		assertEquals(t, 1);
-		Tile tile = page.getTiles().get(0);
-		assertTrue(tile.getType() == "video");
-	}
-	/*
-	public void testAddTile() {
+		
+	    Solo solo = new Solo(getInstrumentation(), getActivity());
+	    getInstrumentation().waitForIdleSync();
+	    
 		activity.runOnUiThread(
 				new Runnable() {
 					public void run() {
 						addTileButton.requestFocus();
 						addTileButton.performClick();
-						page = app.getPage();
-						ArrayList<Tile> tiles = page.getTiles();
-						int l = tiles.size();
-						//int l = app.getPage().getTiles().size();
-						//page.getTiles().size();
-						assertTrue(l==1);
 					}
 				});
-		ArrayList<Tile> tiles = page.getTiles();
-		Tile t = tiles.get(0);
-		t.setContent("dkjfaklfjs");
+		solo.clickOnText("TextTile");
+		page = app.getPage();
+		int l = page.getTiles().size();
+		assertEquals(l, 1);
+		
 	}
 	
-	public void testAddDecision() {
+	public void testAddVideoTile() {
+		page.getTiles().clear();
+		
+	    Solo solo = new Solo(getInstrumentation(), getActivity());
+	    getInstrumentation().waitForIdleSync();
+	    
 		activity.runOnUiThread(
 				new Runnable() {
 					public void run() {
-						addDecisionButton.requestFocus();
-						addDecisionButton.performClick();
-						//assertNotNull(app);
-						page = app.getPage();
-						ArrayList<Decision> decisions = page.getDecisions();
-						int l = decisions.size();
-						//int l = app.getPage().getTiles().size();
-						//page.getTiles().size();
-						assertTrue("No decisions", l>0);
-						//Log.d("Size of tiles", String.valueOf(l));
-						//assertTrue(false);
-						//assertTrue(l == 6);
-						
+						addTileButton.requestFocus();
+						addTileButton.performClick();
 					}
 				});
+		solo.clickOnText("{Placeholder} VideoTile");
+		page = app.getPage();
+		int l = page.getTiles().size();
+		assertEquals(l, 1);
+		
+	}
+	
+	public void testAddAudioTile() {
+		page.getTiles().clear();
+		
+	    Solo solo = new Solo(getInstrumentation(), getActivity());
+	    getInstrumentation().waitForIdleSync();
+	    
+		activity.runOnUiThread(
+				new Runnable() {
+					public void run() {
+						addTileButton.requestFocus();
+						addTileButton.performClick();
+					}
+				});
+		solo.clickOnText("{Placeholder} AudioTile");
+		page = app.getPage();
+		int l = page.getTiles().size();
+		assertEquals(l, 1);
+		
+	}
+	
+	public void testAddPhotoTile() {
+		page.getTiles().clear();
+		
+	    Solo solo = new Solo(getInstrumentation(), getActivity());
+	    getInstrumentation().waitForIdleSync();
+	    
+		activity.runOnUiThread(
+				new Runnable() {
+					public void run() {
+						addTileButton.requestFocus();
+						addTileButton.performClick();
+					}
+				});
+		solo.clickOnText("PhotoTile");
+		page = app.getPage();
+		int l = page.getTiles().size();
+		assertEquals(l, 1);
+		
 	}
 	
 	
+	
 	public void testAddComment() {
+		
+	    Solo solo = new Solo(getInstrumentation(), getActivity());
+	    getInstrumentation().waitForIdleSync();
+	    
 		activity.runOnUiThread(
 				new Runnable() {
 					public void run() {
 						addComment.requestFocus();
 						addComment.performClick();
-						page = app.getPage();
-						Comment c = new Comment("Hello");
-						page.addComment(c);
-						ArrayList<Comment> comments = page.getComments();
-						int l = comments.size();
-						//int l = app.getPage().getTiles().size();
-						//page.getTiles().size();
-						assertTrue(l>0);
-						//Log.d("Size of tiles", String.valueOf(l));
-						//assertTrue(false);
-						//assertTrue(l == 6);
-						
 					}
 				});
+		
+	    solo.enterText(0, "New Comment");
+	    solo.clickOnButton("Save");
+	    page = app.getPage();
+	    int l = page.getComments().size();
+	    assertEquals(l, 1);
 				
 	}
 	
-	*/
+	
+	
+	
+	public void testAddDecision() {
+		page.getDecisions().clear();
+		
+	    Solo solo = new Solo(getInstrumentation(), getActivity());
+	    getInstrumentation().waitForIdleSync();
+	    
+		activity.runOnUiThread(
+				new Runnable() {
+					public void run() {
+						addDecisionButton.requestFocus();
+						addDecisionButton.performClick();
+					}
+				});
+		page = app.getPage();
+		int l = page.getDecisions().size();
+		assertEquals(l, 1);
+	}
+	
 	
 
 }

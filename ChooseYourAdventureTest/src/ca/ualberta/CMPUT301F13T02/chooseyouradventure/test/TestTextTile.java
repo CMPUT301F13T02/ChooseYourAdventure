@@ -64,6 +64,12 @@ public class TestTextTile extends InstrumentationTestCase {
 		tileContent = tile2.getText();
 		assertEquals(content, tileContent);
 	}
+	
+	public void testGetType() {
+		TextTile tile = new TextTile();
+		assertEquals("text", tile.getType());
+	}
+	
 
 }
 

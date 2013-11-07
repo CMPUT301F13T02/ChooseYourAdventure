@@ -10,7 +10,10 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 /**
- * An Adapter that will be used with list-views to display lists of Tiles
+ * This is the Adapter class for Tiles that allows them to be displayed in list-views. 
+ * 
+ * The TileAdapter aggregates Tiles and is responsible for generating the views
+ * to visualize a tile. 
  */
 
 public class TileAdapter extends BaseAdapter {

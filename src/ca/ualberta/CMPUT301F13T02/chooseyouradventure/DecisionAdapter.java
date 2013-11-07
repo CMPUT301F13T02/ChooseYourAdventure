@@ -8,10 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 /**
- * This is the adapter class for decisions 
- * that allows them to be displayed in listviews
+ * This is the Adapter class for Decisions that allows them to be displayed in list-views. 
+ * 
+ * The DecisionAdapter aggregates Decisions and is responsible for generating the views
+ * to visualize a decision. 
  */
+
 public class DecisionAdapter extends BaseAdapter {
 	private ArrayList<Decision> decisions;
 	private Context context;

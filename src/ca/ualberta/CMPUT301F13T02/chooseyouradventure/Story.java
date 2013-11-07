@@ -36,13 +36,15 @@ import java.util.UUID;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
 /**
- * This is the structure of a story 
+ * This class represents a story -- it is part of the model of the application.
+ * 
+ * A Story is serialized and stored via a Handler implementation which interact
+ * solely with Storys.  
+ * 
+ * TODO Storys should store their handler as an attribute
  */
 public class Story {
-	/** 
-	 * @uml.property name="pages"
-	 * @uml.associationEnd aggregation="composite" inverse="story:ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page"
-	 */
+	
     private ArrayList<Page> pages = new ArrayList<Page>();
     private String id;
     private UUID firstpage; 

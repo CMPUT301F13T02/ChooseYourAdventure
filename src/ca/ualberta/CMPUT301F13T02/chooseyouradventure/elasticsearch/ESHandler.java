@@ -52,8 +52,13 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Tile;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TileGsonMarshal;
 
 /**
- * Handles all interactions with the Elastic Search web DB. 
+ * This class implements the Handler interface which specifies a contract for a class that will
+ * store and retrieve Story objects from some sort of storage.
+ * 
+ * The ESHandler will use Elastic Search to store stories online so that users may interact
+ * with one-another.
  */
+
 public class ESHandler implements Handler{
 
 	public static final String serviceURL = "http://cmput301.softwareprocess.es:8080/cmput301f13t02/";

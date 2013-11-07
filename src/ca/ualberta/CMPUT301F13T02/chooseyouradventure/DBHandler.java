@@ -29,9 +29,7 @@
 */
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import android.content.ContentValues;
@@ -39,8 +37,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
 /**
- * This is the Database Handler for the local copies of stories
+ * This class implements the Handler interface which specifies a contract for a class that will
+ * store and retrieve Story objects from some sort of storage.
+ * 
+ * The DBHandler will use SQLite to store stories so that users may store stories locally (cache stories).
  */
 public class DBHandler extends SQLiteOpenHelper implements Handler  {
 	static final int dbVersion = 1;	

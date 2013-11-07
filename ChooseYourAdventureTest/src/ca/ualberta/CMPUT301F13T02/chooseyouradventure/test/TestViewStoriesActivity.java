@@ -103,7 +103,7 @@ public class TestViewStoriesActivity extends ActivityInstrumentationTestCase2<Vi
 	
 	public void testEdit() {
 
-	    Solo solo = new Solo(getInstrumentation(), getActivity());
+	    Solo solo = new Solo(getInstrumentation(), activity);
 	    getInstrumentation().waitForIdleSync();
 
 		activity.runOnUiThread(new Runnable() {
@@ -132,7 +132,7 @@ public class TestViewStoriesActivity extends ActivityInstrumentationTestCase2<Vi
 	
 	public void testAddNew() {
 
-	    Solo solo = new Solo(getInstrumentation(), getActivity());
+	    Solo solo = new Solo(getInstrumentation(), activity);
 	    getInstrumentation().waitForIdleSync();
 
 		activity.runOnUiThread(new Runnable() {

@@ -1,4 +1,5 @@
 /*
+
 * Copyright (c) 2013, TeamCMPUT301F13T02
 * All rights reserved.
 * 
@@ -27,11 +28,10 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package ca.ualberta.CMPUT301F13T02.chooseyouradventuretest;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import java.util.ArrayList;
-import org.junit.Test;
+
+package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
+
+import android.test.AndroidTestCase;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.DBHandler;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Decision;
@@ -39,12 +39,15 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.HandlerException;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
+
 /* This is the class which enables local storage of stories */
-public class DBHandlerTest {
+
+public class DBHandlerTest extends AndroidTestCase {
+
 	//Test if the DB Handler actually works
 	DBHandler handler = new DBHandler(null);
-	@Test
-	public void updateStoryTest() {
+	
+	public void testUpdateStory() {
 		try {
 			//Create  2 pages
 			Page page1 = new Page();
@@ -74,19 +77,19 @@ public class DBHandlerTest {
 			fail();
 		}
 	}
+
 	/**
 	 * Tests adding a comment to a page
 	 */
-	@Test
-	public void addCommentTest() {
+	public void testAddComment() {
 		//TODO: Implement if a local copy of a comment is not made before
 		//this should get called
 	}
+
 	/**
 	 * Tests the updateStory function
 	 */
-	@Test
-	public void addStoryTest() {
+	public void testAddStory() {
 		try {
 			//Create 2 pages
 			Page page1 = new Page();
@@ -114,11 +117,11 @@ public class DBHandlerTest {
 			fail();
 		}
 	}
+
 	/**
 	 * Test the getAllStories method
 	 */
-	@Test
-	public void getAllStoriesTest() {
+	public void testGetAllStories() {
 		try {
 			handler.getAllStories();
 		}

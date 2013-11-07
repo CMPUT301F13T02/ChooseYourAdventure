@@ -49,6 +49,9 @@ import android.widget.ListView;
  * deleting pages, setting the first page, or deleting the story.
  * 
  * This class is part of the view of the application.
+ * 
+ * TODO Delete functionality not yet hooked up
+ * TODO Help function neeeds to be added
  */
 
 public class EditStoryActivity extends Activity {

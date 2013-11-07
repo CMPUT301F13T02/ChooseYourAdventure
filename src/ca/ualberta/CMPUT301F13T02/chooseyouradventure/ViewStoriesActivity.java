@@ -65,6 +65,10 @@ import android.widget.ListView;
  * </ol>
  * 
  * The ViewStoriesActivity is a view of the application.
+ * 
+ * TODO There is work to be done to make this activity respect a Story's choice of handler
+ * TODO Search needs to be implemented
+ * TODO Help needs to be implemented
  */
 
 public class ViewStoriesActivity extends Activity {

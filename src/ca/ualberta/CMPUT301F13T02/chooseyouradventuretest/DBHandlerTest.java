@@ -27,62 +27,24 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-
 package ca.ualberta.CMPUT301F13T02.chooseyouradventuretest;
-
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import java.util.ArrayList;
-
 import org.junit.Test;
-
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.DBHandler;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Decision;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.HandlerException;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
-
-/**
- * Tests various functions of the ESHandler class
- */ 
-public class ESHandlerTest {
-
-	private ESTestHandler esHandler = new ESTestHandler();
-	
-	/**
-	 * Tests the addPage function
-	 */
-	@Test
-	public void addPageTest() {
-
-		Page page1 = new Page();
-		page1.addTile(new TextTile("test1"));
-		page1.addTile(new TextTile("test2"));
-		
-		try {
-			// TODO reimplement this test. esHandler.getPage accepts strings
-			esHandler.addPage(page1);
-			
-			//Retrieve same page
-			//Page page2 = esHandler.getPage(1);
-
-			
-			//Check they are the same
-			//assertTrue(page1.equals(page2));
-		}
-		catch (HandlerException e) {
-			e.printStackTrace();
-			fail();
-		}
-	}
-	
-	/**
-	 * Tests the updateStory function
-	 */
+/* This is the class which enables local storage of stories */
+public class DBHandlerTest {
+	//Test if the DB Handler actually works
+	DBHandler handler = new DBHandler(null);
 	@Test
 	public void updateStoryTest() {
-
 		try {
 			//Create  2 pages
 			Page page1 = new Page();
@@ -101,13 +63,9 @@ public class ESHandlerTest {
 			story1.setId("testUpdate");
 			story1.addPage(page1);
 			story1.addPage(page2);
-			
-			esHandler.updateStory(story1);
-			
-		
+			handler.updateStory(story1);
 			//Get same story
-			Story story2 = esHandler.getStory("testUpdate");
-		
+			Story story2 = handler.getStory("testUpdate");
 			//Compare
 			assertTrue(story1.equals(story2));
 		}
@@ -116,37 +74,19 @@ public class ESHandlerTest {
 			fail();
 		}
 	}
-	
 	/**
 	 * Tests adding a comment to a page
 	 */
 	@Test
 	public void addCommentTest() {
-		
-		try {
-			Story story1 = esHandler.getStory("testUpdate");
-			
-			//Add a comment to a page
-			Comment comment = new Comment("TEST COMMENT");
-			esHandler.addComment(story1, story1.getPages().get(0), comment);
-			
-			//Retrieve the story, get newest comment and compare for equality
-			Story story2 = esHandler.getStory("testUpdate");
-			ArrayList<Comment> comments =  story2.getPages().get(0).getComments();
-			assertTrue(comments.get(comments.size() - 1).equals(comment));
-		}
-		catch(HandlerException e) {
-			e.printStackTrace();
-			fail();
-		}
+		//TODO: Implement if a local copy of a comment is not made before
+		//this should get called
 	}
-	
 	/**
 	 * Tests the updateStory function
 	 */
 	@Test
 	public void addStoryTest() {
-
 		try {
 			//Create 2 pages
 			Page page1 = new Page();
@@ -156,16 +96,15 @@ public class ESHandlerTest {
 			Page page2 = new Page();
 			page2.addTile(new TextTile("test3"));
 			page2.addTile(new TextTile("test4"));
-
+			
 			//Create story
 			Story story1 = new Story();
 			story1.addPage(page1);
 			story1.addPage(page2);
-
-			esHandler.addStory(story1);
+			handler.addStory(story1);
 
 			//Get same story
-			Story story2 = esHandler.getStory(story1.getId());
+			Story story2 = handler.getStory(story1.getId());
 
 			//Compare
 			assertTrue(story1.equals(story2));
@@ -175,14 +114,13 @@ public class ESHandlerTest {
 			fail();
 		}
 	}
-	
 	/**
 	 * Test the getAllStories method
 	 */
 	@Test
 	public void getAllStoriesTest() {
 		try {
-			esHandler.getAllStories();
+			handler.getAllStories();
 		}
 		catch (HandlerException e) {
 			e.printStackTrace();

@@ -47,7 +47,7 @@ public class TextTile extends Tile{
     }
     
     public TextTile() {
-    	this.text = "New TextTile";
+    	this.text = "New Text Block";
     }
     
     /**
@@ -72,7 +72,7 @@ public class TextTile extends Tile{
     		return false;
     }
 
-	String getType() {
+	public String getType() {
 		return type;
 	}
 	

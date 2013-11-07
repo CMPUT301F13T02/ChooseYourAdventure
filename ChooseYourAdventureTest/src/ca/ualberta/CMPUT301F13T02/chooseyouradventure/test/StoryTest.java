@@ -27,31 +27,31 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package ca.ualberta.CMPUT301F13T02.chooseyouradventuretest;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
 import java.util.UUID;
 
-import org.junit.Test;
+import android.test.InstrumentationTestCase;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
 
-public class StoryTest {
+public class StoryTest extends InstrumentationTestCase {
 
-	@Test
-	public void test() {
+	public void testEquals() {
+
 		UUID u1 = UUID.randomUUID();
 		Page p1 = new Page();
 		Story s1 = new Story();
 		Story s2 = new Story();
 		
-		//test setting UUIDs
+		p1.setId(u1);
+
+		s1.addPage(p1);
 		s1.setFirstpage(u1);
 		assertFalse(s1.equals(s2));
 		
+		s2.addPage(p1);
 		s2.setFirstpage(u1);
 		assertTrue(s1.equals(s2));
 		
@@ -68,7 +68,5 @@ public class StoryTest {
 		
 		s2.addPage(p1);
 		assertTrue(s1.equals(s2));
-		 
 	}
-
 }

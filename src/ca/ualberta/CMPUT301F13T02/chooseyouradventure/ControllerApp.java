@@ -39,10 +39,12 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.content.Intent;
 
 /**
- * This is the Controller for MVC
+ * This class represents the controller for our application. This class stores the state
+ * of the application -- notably the story and page currently being viewed or edited.
+ * 
+ * This class is in typical MVC style responsible for co-ordinating saving of the model
+ * and maintaining coherence between the model and the view.
  */
-
-
 
 public class ControllerApp extends Application{
 

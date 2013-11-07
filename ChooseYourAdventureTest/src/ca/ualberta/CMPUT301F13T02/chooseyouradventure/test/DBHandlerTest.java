@@ -32,6 +32,7 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
 import android.test.AndroidTestCase;
+
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.DBHandler;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Decision;

@@ -34,8 +34,11 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * A page represents a physical page of a story. 
+ * This class represents a physical page of a story -- it is part of the model of the application.
+ * 
+ * Page objects are aggregated by Storys and are serialized and stored through a Handler implementation.
  */
+
 public class Page {
 	
 	private UUID id;

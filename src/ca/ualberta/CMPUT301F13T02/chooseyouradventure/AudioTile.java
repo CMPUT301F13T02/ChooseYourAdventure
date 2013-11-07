@@ -29,9 +29,19 @@
 */
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
+
 /**
- * Creates an Audio Tile for use in stories
+ * An audio Tile for use in stories. AudioTile is a concrete implementation of the abstract
+ * class Tile.
+ * 
+ * AudioTile is a member of this application's model, it is included in the JSON when the story
+ * is serialized and stored via the use of the handlers. An AudioTile will contain audio to be played
+ * in the story.
+ * 
+ * TODO Currently this class is unused. The member "Object audio" will need to be replaced, likely
+ *      with a URL to an embeddable audio clip on the internet.
  */
+
 public class AudioTile extends Tile{
 
 	private Object audio;

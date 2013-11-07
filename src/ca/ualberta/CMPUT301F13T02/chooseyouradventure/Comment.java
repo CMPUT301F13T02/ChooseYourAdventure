@@ -32,10 +32,13 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.Calendar;
 
-
-
 /**
- * Structure of the Comments that users add to a story
+ * This class represents Comments that readers add to a story. It is part of the 
+ * model of the application.
+ * 
+ * Comments are left by users on pages and are therefore aggregated by the Page
+ * class. Comments are serialized with the rest of the story into JSON to be 
+ * stored by a handler. 
  */
 public class Comment {
 

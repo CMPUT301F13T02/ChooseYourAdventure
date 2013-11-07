@@ -33,12 +33,21 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 import android.graphics.Bitmap;
 import java.nio.ByteBuffer;
 
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+
 /**
- * A Photo tile for use in the stories
+ * A photo Tile for use in stories. PhotoTile is a concrete implementation of the abstract
+ * class Tile.
+ * 
+ * PhotoTile is a member of this application's model, it is included in the JSON when the story
+ * is serialized and stored via the use of the handlers. A PhotoTile will contain an image to be displayed
+ * in the story.
+ * 
+ * TODO This class is only partially implemented. The "Object photo" member is a place holder.
+ * TODO This class needs to be designed with serialization in mind, dropping unnecessary duplication of members.
  */
+
 public class PhotoTile extends Tile{
 
 	private Bitmap image;

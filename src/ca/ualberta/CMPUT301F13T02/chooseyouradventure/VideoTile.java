@@ -31,8 +31,17 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 /**
- * Represents a Tile capable of displaying and playing a video
+ * A video Tile for use in stories. VideoTile is a concrete implementation of the abstract
+ * class Tile.
+ * 
+ * VideoTile is a member of this application's model, it is included in the JSON when the story
+ * is serialized and stored via the use of the handlers. A VideoTile will contain a video to be displayed
+ * in the story.
+ * 
+ * TODO This class is mostly unimplemented. The "Object video" member is a place holder.
+ * TODO This class will probably contain the URL of an embeddable video on the Internet
  */
+
 public class VideoTile extends Tile{
 
 	private Object video;

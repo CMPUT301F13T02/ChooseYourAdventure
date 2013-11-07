@@ -34,8 +34,15 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 import android.view.View;
 
 /**
- * Abstract tile class
+ * An abstract tile class that will be implemented to provide text, audio, video, and picture tiles.
+ * 
+ * A tile is the fundemental unit of a page; they are aggregated by Page and displayed vertically in
+ * ViewPageActivity.  
+ * 
+ * Tiles are part of the model of the application and are serialized and stored with a Story by
+ * a Handler implementation
  */
+
 public abstract class Tile {
 
 	/**

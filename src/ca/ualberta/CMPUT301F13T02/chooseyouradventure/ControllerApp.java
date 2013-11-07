@@ -58,7 +58,7 @@ public class ControllerApp extends Application{
 	private Story currentStory;
 	private Page currentPage;
 	private ArrayList<Story> stories;
-	private static ControllerApp instance;
+	private static ControllerApp instance = new ControllerApp();
 	
 	@Override
 	public void onCreate() {

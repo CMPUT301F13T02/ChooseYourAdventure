@@ -42,8 +42,8 @@ public class AudioTile extends Tile{
 	 * 
 	 * @return The type of this Tile
 	 */
-	@Override
-	String getType() {
+
+	public String getType() {
 		return type;
 	}
 	

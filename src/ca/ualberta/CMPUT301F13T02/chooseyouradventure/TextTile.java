@@ -72,7 +72,7 @@ public class TextTile extends Tile{
     		return false;
     }
 
-	String getType() {
+	public String getType() {
 		return type;
 	}
 	

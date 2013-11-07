@@ -30,6 +30,7 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
+import android.graphics.Bitmap;
 import java.nio.ByteBuffer;
 
 import android.graphics.Bitmap;
@@ -49,8 +50,8 @@ public class PhotoTile extends Tile{
 	 * Get the type
 	 * @return The type
 	 */
-	@Override
-	String getType() {
+
+	public String getType() {
 		return type;
 	}
 	/**
@@ -84,10 +85,7 @@ public class PhotoTile extends Tile{
 	public Object getPhoto() {
 		return photo;
 	}
-	
-	
-	
-	
+
 	
 	/**
 	 * @return the image

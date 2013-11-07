@@ -38,8 +38,7 @@ public class VideoTile extends Tile{
 	private Object video;
 	private final String type = "video";
 	
-	@Override
-	String getType() {
+	public String getType() {
 		return type;
 	}
 

@@ -75,25 +75,7 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 	
 	protected void setUp() throws Exception{
 		super.setUp();
-<<<<<<< HEAD
-=======
-		/*
-<<<<<<< HEAD
->>>>>>> 35a1913f262d55c42806dbecccac70a0117501ab
-		page = new Page();
-		story = new Story();
-		story.setId("25");
-		app.setPage(page);
-<<<<<<< HEAD
-		app.setStory(story);
-=======
-=======
-		app = app.getInstance();
-		app.initializeNewStory("Test Story"); //This method doesn't exist?  -- Konrad 11/05
-		app.setPage(app.getStory().getFirstpage());
->>>>>>> 5328ff35b263bd43b8086c2670fafd5c753fc41b
-*/
->>>>>>> 35a1913f262d55c42806dbecccac70a0117501ab
+
 		
 		activity = getActivity();
 		
@@ -117,16 +99,12 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 	
 	
 	
-	
 	public void testStateDestroy() {
 		page = app.getPage();
 		page.addComment(new Comment("A comment"));
 		page.addTile(new TextTile());
-<<<<<<< HEAD
+
 		page.addDecision(new Decision("A decision", new Page()));
-=======
-		page.addDecision(new Decision(page));
->>>>>>> 35a1913f262d55c42806dbecccac70a0117501ab
 		
 		activity.finish();
 		activity = getActivity();
@@ -141,49 +119,6 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 		
 	}
 	
-	
-	/*
-	public void testAddTextTile() {
-		page = app.getPage();
-		page.getTiles().clear();
-		page.addTile(new TextTile());
-		int t = page.getTiles().size();
-		assertEquals(t, 1);
-		Tile tile = page.getTiles().get(0);
-		assertTrue(tile.getType() == "text");
-	}
-	
-	
-	public void testAddPhotoTile() {
-		page = app.getPage();
-		page.getTiles().clear();
-		page.addTile(new PhotoTile());
-		int t = page.getTiles().size();
-		assertEquals(t, 1);
-		Tile tile = page.getTiles().get(0);
-		assertTrue(tile.getType() == "photo");
-	}
-
-	public void testAddAudioTile() {
-		page = app.getPage();
-		page.getTiles().clear();
-		page.addTile(new AudioTile());
-		int t = page.getTiles().size();
-		assertEquals(t, 1);
-		Tile tile = page.getTiles().get(0);
-		assertTrue(tile.getType() == "audio");
-	}
-	
-	public void testAddVideoTile() {
-		page = app.getPage();
-		page.getTiles().clear();
-		page.addTile(new VideoTile());
-		int t = page.getTiles().size();
-		assertEquals(t, 1);
-		Tile tile = page.getTiles().get(0);
-		assertTrue(tile.getType() == "video");
-	}
-	*/
 	
 	
 	
@@ -311,31 +246,6 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 		assertEquals(l, 1);
 	}
 	
-	/*
-	public void testAddComment() {
-		activity.runOnUiThread(
-				new Runnable() {
-					public void run() {
-						addComment.requestFocus();
-						addComment.performClick();
-						page = app.getPage();
-						Comment c = new Comment("Hello");
-						page.addComment(c);
-						ArrayList<Comment> comments = page.getComments();
-						int l = comments.size();
-						//int l = app.getPage().getTiles().size();
-						//page.getTiles().size();
-						assertTrue(l>0);
-						//Log.d("Size of tiles", String.valueOf(l));
-						//assertTrue(false);
-						//assertTrue(l == 6);
-						
-					}
-				});
-				
-	}
-	
-	*/
 	
 
 }

@@ -43,10 +43,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+
 /**
- * This is the activity which is launched when a user
- * wants to edit a story's pages or tiles. 
+ * This Activity allows a story's author to edit a story by adding adding pages,
+ * deleting pages, setting the first page, or deleting the story.
+ * 
+ * This class is part of the view of the application.
  */
+
 public class EditStoryActivity extends Activity {
 	private ListView treePage;
 	private Button createNew2;

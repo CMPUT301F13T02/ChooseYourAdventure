@@ -31,9 +31,14 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
+
 /**
- * This is the interface which will be used throughout the project
+ * This interface represents a uniform interface to the application as to how Storys are stored.
+ * 
+ * This interface is implemented to allow for handlers that store to Elastic Search, local cache,
+ * and testing. This allows a story to be able to be stored without knowing where or how.
  */
+
 public interface Handler {
 
 	public void updateStory(Story story) throws HandlerException;

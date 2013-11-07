@@ -63,6 +63,8 @@ import android.widget.ListView;
  *     <li> Add a new story </li>
  *     <li> Long click a story to edit the story </li>
  * </ol>
+ * 
+ * The ViewStoriesActivity is a view of the application.
  */
 
 public class ViewStoriesActivity extends Activity {

@@ -67,6 +67,8 @@ import android.widget.TextView;
  * <ol>
  *     <li> Edit the tiles on this page (add, edit, reorder, delete) </li>
  * </ol>
+ * 
+ * The ViewPageActivity is a view of the application.
  */
 
 public class ViewPageActivity extends Activity {

@@ -31,8 +31,14 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 /**
- * Represents a text type tile
+ * A text Tile for use in stories. TextTile is a concrete implementation of the abstract
+ * class Tile.
+ * 
+ * TextTile is a member of this application's model, it is included in the JSON when the story
+ * is serialized and stored via the use of the handlers. A TextTile will contain an image to be displayed
+ * in the story.
  */
+
 public class TextTile extends Tile{
     private String text;
     private final String type = "text";

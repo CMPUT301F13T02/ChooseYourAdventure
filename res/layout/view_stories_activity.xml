@@ -58,8 +58,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         android:id="@+id/mainView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button1"
-        android:layout_alignRight="@+id/createButton" >
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/button1">
+
     </ListView>
 
 </RelativeLayout>

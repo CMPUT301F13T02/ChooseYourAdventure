@@ -42,7 +42,7 @@ import java.util.ArrayList;
 public interface Handler {
 
 	public void updateStory(Story story) throws HandlerException;
-	public void deleteStory(Story story);
+	public void deleteStory(Story story) throws HandlerException;
 	public void addStory(Story story) throws HandlerException;
 	public void addComment(Story story, Page page, Comment comment) throws HandlerException;
 	public Story getStory(String id) throws HandlerException;

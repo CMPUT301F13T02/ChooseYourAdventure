@@ -73,7 +73,6 @@ import android.widget.TextView;
  * The ViewPageActivity is a view of the application.
  * 
  * TODO This activity will need to be able to display and edit Audio-, Video-, and Photo- Tiles
- * TODO Help function needs to be added
  */
 
 public class ViewPageActivity extends Activity {

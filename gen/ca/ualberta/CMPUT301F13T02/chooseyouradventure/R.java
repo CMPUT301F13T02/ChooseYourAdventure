@@ -67,6 +67,7 @@ public final class R {
         public static final int delete=0x7f050006;
         public static final int edit=0x7f05000c;
         public static final int edit_page_help=0x7f05001a;
+        public static final int edit_story_help=0x7f05001c;
         public static final int hello_world=0x7f050010;
         public static final int help=0x7f050017;
         public static final int ok=0x7f050018;
@@ -81,6 +82,7 @@ public final class R {
         public static final int title_view_page_activity=0x7f050002;
         public static final int title_view_stories_activity=0x7f050003;
         public static final int upload=0x7f05000e;
+        public static final int view_stories_help=0x7f05001b;
     }
     public static final class style {
         /** 

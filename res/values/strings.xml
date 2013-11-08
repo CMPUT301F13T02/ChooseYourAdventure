@@ -108,5 +108,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	    	Other questions: <a href=\"tel:14035058506\">+1 (403) 505&mdash;8506</a> (24 Hour Help Line)
         ]]> 
     </string>
+    <string name="view_stories_help"> </string>
+    <string name="edit_story_help"> </string>
 
 </resources>

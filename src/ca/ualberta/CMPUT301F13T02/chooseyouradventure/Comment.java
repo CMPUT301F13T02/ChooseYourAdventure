@@ -74,6 +74,7 @@ public class Comment {
 		this.setTimestamp(dayField);
 		
 	}
+
 	/**
 	 * 
 	 * @return The text from the comment
@@ -81,6 +82,7 @@ public class Comment {
 	public String getText() {
 		return text;
 	}
+
 	/**
 	 * @return Who posted the comment
 	 */
@@ -88,6 +90,24 @@ public class Comment {
 		return poster;
 	}
 	
+	/**
+	 * @param timestamp the timestamp to set
+	 */
+	public void setTimestamp(String timestamp)
+	{
+	
+		this.timestamp = timestamp;
+	}
+
+	/**
+	 * @return the timestamp
+	 */
+	public String getTimestamp()
+	{
+	
+		return timestamp;
+	}
+
 	/**
 	 * Compares the equality of this Comment and the passed Comment
 	 * 
@@ -97,22 +117,6 @@ public class Comment {
 	public boolean equals(Comment comment) {
 		return text.equals(comment.getText()) &&
 				poster.equals(comment.getPoster());
-	}
-	/**
-	 * @return the timestamp
-	 */
-	public String getTimestamp()
-	{
-
-		return timestamp;
-	}
-	/**
-	 * @param timestamp the timestamp to set
-	 */
-	public void setTimestamp(String timestamp)
-	{
-
-		this.timestamp = timestamp;
 	}
 	
 }

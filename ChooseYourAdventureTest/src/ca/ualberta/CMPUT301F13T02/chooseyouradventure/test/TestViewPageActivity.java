@@ -92,8 +92,6 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 		assertNotNull(commentsTitle);
 	}
 	
-	
-	
 	public void testStateDestroy() {
 		page = app.getPage();
 		page.addComment(new Comment("A comment"));

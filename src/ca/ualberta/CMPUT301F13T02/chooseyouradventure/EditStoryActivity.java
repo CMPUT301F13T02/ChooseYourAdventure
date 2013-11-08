@@ -66,6 +66,7 @@ public class EditStoryActivity extends Activity {
 	private ArrayAdapter<String> adapter;
 	private ControllerApp app;
 	private static final int HELP_INDEX = 0;
+
 	/**
 	 * This binds the buttons the the views to this activity
 	 * and sets the appropriate onclick listeners
@@ -121,14 +122,63 @@ public class EditStoryActivity extends Activity {
         refresh();
     }
 	
+	/**
+	 * Inflate the options menu; this adds items to the action bar if it is present 
+	 * 
+	 *  @param menu The menu to inflate
+	 *  @return Success
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+	
+		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, "Help");
+		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+	
+	    return true;
+	}
+
+	/**
+	 * Callback for clicking an item in the menu.
+	 * 
+	 * @param item The item that was clicked
+	 * @return Success
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{
+		switch (item.getItemId()) {
+		case HELP_INDEX:
+	
+			ScrollView scrollView = new ScrollView(this);
+			WebView view = new WebView(this);
+	
+	    	view.loadData(getString(R.string.edit_story_help), "text/html", "UTF-8");
+	        
+	        scrollView.addView(view);
+	        scrollView.setPadding(10, 10, 10, 10);
+	        
+	        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	        builder.setTitle(R.string.help);
+	        builder.setPositiveButton(R.string.ok, null);
+	        builder.setView(scrollView);
+	        builder.show();
+	        
+			break;
+		}
+		return true;
+	}
+
+	/**
+	 * Click listener for the list of pages. It simply calls pageOptions
+	 * and passes it the position of the selected page. 
+	 * @param v
+	 * @param pos
+	 * @param id
+	 */
 	protected void onListItemClick(View v, int pos, long id) {
 		pageOptions(pos);
 	}
-	/**
-	 * This moves the user to a different page
-	 * @param input from a Listview
-	 * @throws HandlerException
-	 */
 	
 	/**
 	 * This creates a page
@@ -158,8 +208,6 @@ public class EditStoryActivity extends Activity {
     	
     	
     }
-	
-	
 
 	/**
 	 * This shows the user a list of options on a story
@@ -224,14 +272,6 @@ public class EditStoryActivity extends Activity {
         builder.show();
     }
 	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
 	 * This rebuilds the ListView by recollecting data from the controller
 	 */
@@ -239,52 +279,5 @@ public class EditStoryActivity extends Activity {
 		pageList = app.getStory().getPages();
 		pageText = app.updateView(pageList, pageText);
 		adapter.notifyDataSetChanged();
-	}
-	
-    /**
-     * Inflate the options menu; this adds items to the action bar if it is present 
-     * 
-     *  @param menu The menu to inflate
-     *  @return Success
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-    	super.onCreateOptionsMenu(menu);
-
-		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, "Help");
-		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-        return true;
-    }
-    
-	/**
-	 * Callback for clicking an item in the menu.
-	 * 
-	 * @param item The item that was clicked
-	 * @return Success
-	 */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) 
-    {
-		switch (item.getItemId()) {
-		case HELP_INDEX:
-
-			ScrollView scrollView = new ScrollView(this);
-			WebView view = new WebView(this);
-
-        	view.loadData(getString(R.string.edit_story_help), "text/html", "UTF-8");
-	        
-	        scrollView.addView(view);
-	        scrollView.setPadding(10, 10, 10, 10);
-	        
-	        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	        builder.setTitle(R.string.help);
-	        builder.setPositiveButton(R.string.ok, null);
-	        builder.setView(scrollView);
-	        builder.show();
-	        
-			break;
-		}
-		return true;
-    }	
+	}	
 }

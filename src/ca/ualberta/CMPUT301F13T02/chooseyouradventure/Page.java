@@ -50,14 +50,17 @@ public class Page {
 	private int refNum;
 	
 	/**
-	 * This gets the title of the Page
-	 * @return the title
+	 * This is the constructor that binds the arraylists to itself
 	 */
-	public String getTitle()
-	{
-		return title;
+	public Page() {
+		id = UUID.randomUUID();
+		tiles = new ArrayList<Tile>();
+		decisions = new ArrayList<Decision>();
+		comments = new ArrayList<Comment>();
+		title = new String();
+		pageEnding = "+ Add an ending to this page";
 	}
-	
+
 	/**
 	 * This sets a page title
 	 * @param title the title to set
@@ -65,6 +68,15 @@ public class Page {
 	public void setTitle(String title)
 	{
 		this.title = title;
+	}
+
+	/**
+	 * This gets the title of the Page
+	 * @return the title
+	 */
+	public String getTitle()
+	{
+		return title;
 	}
 	
 	/**
@@ -76,17 +88,53 @@ public class Page {
 	}
 	
 	/**
-	 * This is the constructor that binds the arraylists to itself
+	 * This returns the UUID of the page
+	 * @return id UUID of the page
 	 */
-	public Page() {
-		id = UUID.randomUUID();
-		tiles = new ArrayList<Tile>();
-		decisions = new ArrayList<Decision>();
-		comments = new ArrayList<Comment>();
-		title = new String();
-		pageEnding = "+ Add an ending to this page";
+	public UUID getId() {
+		return id;
 	}
-	
+
+	/**
+	 * Sets the page ending to the desired text.
+	 * @param text
+	 */
+	public void setPageEnding(String text) {
+		this.pageEnding = text;
+	}
+
+	/**
+	 * Gets the page ending
+	 * @return The page ending
+	 */
+	public String getPageEnding() {
+		return this.pageEnding;
+	}
+
+	/**
+	 * Sets the page's refNum to the given integer.
+	 * @param refNum 
+	 */
+	public void setRefNum(int refNum) {
+		this.refNum = refNum;
+	}
+
+	/**
+	 * Gets the reference number
+	 * @return The reference number
+	 */
+	public int getRefNum() {
+		return refNum;
+	}
+
+	/**
+	 * This returns the tiles of a page
+	 * @return tiles The tiles
+	 */
+	public ArrayList<Tile> getTiles() {
+		return tiles;
+	}
+
 	/**
 	 * This adds a tile to a page
 	 * @param tile A Text, Video or Audio tile
@@ -96,6 +144,16 @@ public class Page {
 	}
 	
 	/**
+	 * Update tile at position i in tiles to the passed tile.
+	 * @param tile
+	 * @param i
+	 */
+	public void updateTile(Object content, int i) {
+		tiles.get(i).setContent(content);
+	
+	}
+
+	/**
 	 * This deletes a Tile.
 	 * @param tile What tile to delete
 	 */
@@ -104,6 +162,14 @@ public class Page {
 	}
 	
 	/**
+	 * This returns the Decisions from a page
+	 * @return decisions The Decisions
+	 */
+	public ArrayList<Decision> getDecisions() {
+		return decisions;
+	}
+
+	/**
 	 * This adds a new decision to a page
 	 * @param decision The decision to add
 	 */
@@ -111,10 +177,29 @@ public class Page {
 		decisions.add(decision);
 	}
 	
+	/**
+	 * Update the decision of this page at the passed position with the passed text and page reference
+	 * 
+	 * @param text The text to use in the updated decision
+	 * @param page The page to link in the updated decision
+	 * @param decisionNumber The position of the decision to update
+	 */
+	public void updateDecision(String text, Page page, int decisionNumber) {
+		decisions.get(decisionNumber).updateDecision(text, page);
+	}
+
 	public void deleteDecision(int whichDecision) {
 		decisions.remove(whichDecision);
 	}
 	
+	/**
+	 * This returns the comments from this page
+	 * @return comments The comments
+	 */
+	public ArrayList<Comment> getComments() {
+		return comments;
+	}
+
 	/**
 	 * This adds a comment to the apge
 	 * @param comment What comment to add
@@ -170,93 +255,6 @@ public class Page {
 	 */
 	public String toString() {
 		return "" + id + comments + tiles;
-	}
-	
-	/**
-	 * This returns the comments from this page
-	 * @return comments The comments
-	 */
-	public ArrayList<Comment> getComments() {
-		return comments;
-	}
-	
-	/**
-	 * This returns the tiles of a page
-	 * @return tiles The tiles
-	 */
-	public ArrayList<Tile> getTiles() {
-		return tiles;
-	}
-	
-	/**
-	 * This returns the Decisions from a page
-	 * @return decisions The Decisions
-	 */
-	public ArrayList<Decision> getDecisions() {
-		return decisions;
-	}
-	
-	/**
-	 * This returns the UUID of the page
-	 * @return id UUID of the page
-	 */
-	public UUID getId() {
-		return id;
-	}
-	
-	/**
-	 * Update tile at position i in tiles to the passed tile.
-	 * @param tile
-	 * @param i
-	 */
-	public void updateTile(Object content, int i) {
-		tiles.get(i).setContent(content);
-
-	}
-	
-	/**
-	 * Update the decision of this page at the passed position with the passed text and page reference
-	 * 
-	 * @param text The text to use in the updated decision
-	 * @param page The page to link in the updated decision
-	 * @param decisionNumber The position of the decision to update
-	 */
-	public void updateDecision(String text, Page page, int decisionNumber) {
-		decisions.get(decisionNumber).updateDecision(text, page);
-	}
-	
-	/**
-	 * Sets the page ending to the desired text.
-	 * @param text
-	 */
-	public void setPageEnding(String text) {
-		this.pageEnding = text;
-	}
-	
-	/**
-	 * Gets the page ending
-	 * 
-	 * @return The page ending
-	 */
-	public String getPageEnding() {
-		return this.pageEnding;
-	}
-
-	/**
-	 * Gets the reference number
-	 * 
-	 * @return The reference number
-	 */
-	public int getRefNum() {
-		return refNum;
-	}
-	
-	/**
-	 * Sets the page's refNum to the given integer.
-	 * @param refNum 
-	 */
-	public void setRefNum(int refNum) {
-		this.refNum = refNum;
 	}
 	
 }

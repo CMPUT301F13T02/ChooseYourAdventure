@@ -198,17 +198,6 @@ public class ViewStoriesActivity extends Activity {
         return true;
     }
     
-	
-	
-    
-    
-    
-   
-    
-  
-  
-    
-    
     /**
      * The options menu displayed when the user longClicks a story
      * @param v The view of the longClicked story
@@ -291,6 +280,10 @@ public class ViewStoriesActivity extends Activity {
         builder.show();
     }
     
+    /**
+     * Refreshes the list of stories by getting a new list from elastic search
+     * and displaying it.
+     */
     public void refresh(){
     	try {
         	storyList = eshandler.getAllStories();

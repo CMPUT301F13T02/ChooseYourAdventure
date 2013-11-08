@@ -43,6 +43,13 @@ import java.util.UUID;
 public class Decision {
 	private String text;
 	private UUID pageID;
+
+	public Decision(Page page) {
+		this.text = "New Decision";
+		this.pageID = page.getId();
+	}
+	
+	
 	/**
 	 * This sets the link for the decision
 	 * @param The text of the decision and it's corresponding page
@@ -51,13 +58,7 @@ public class Decision {
 		this.text = text;
 		this.pageID = page.getId();
 	}
-	
-	public Decision(Page page) {
-		this.text = "New Decision";
-		this.pageID = page.getId();
-	}
-	
-	
+
 	/**
 	 * This gets the current Page ID
 	 * @return The current PageID
@@ -65,15 +66,21 @@ public class Decision {
 	public UUID getPageID() {
 		return pageID;
 	}
+
 	/**
 	 * This gets the current text of the decision
 	 * @return The text of the decision
 	 */
-	// Need access to text for use in DecisionAdapter
 	public String getText() {
 		return text;
 	}
 	
+	/**
+	 * Basically a setter for the variables of Decision, however it requires
+	 * that you set both the text and the destination page at the same time.
+	 * @param text
+	 * @param page
+	 */
 	public void updateDecision(String text, Page page) {
 		this.text = text;
 		this.pageID = page.getId();

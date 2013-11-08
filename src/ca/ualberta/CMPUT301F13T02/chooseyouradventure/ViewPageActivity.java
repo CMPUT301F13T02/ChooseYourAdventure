@@ -116,7 +116,7 @@ public class ViewPageActivity extends Activity {
 		addTileButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				tileMenu();
+				addTileMenu();
 
 			}
 		});
@@ -133,7 +133,7 @@ public class ViewPageActivity extends Activity {
         addComment.setOnClickListener(new OnClickListener() {
         	@Override
         	public void onClick(View view) {
-        		onAddComment(view);
+        		onEditComment(view);
         	}
         });
         
@@ -149,7 +149,7 @@ public class ViewPageActivity extends Activity {
 	@Override
 	public void onPause() {
 		super.onPause();
-		app.removeActivity();
+		app.deleteActivity();
 	}
 	
 	/**
@@ -163,16 +163,25 @@ public class ViewPageActivity extends Activity {
 		this.menu = menu;
 		super.onCreateOptionsMenu(menu);
         makeMenu(menu);
-		if (app.isEditing()) {
-			MenuItem editButton = menu.findItem(0);
-			editButton.setVisible(false);
-		} else {
-			MenuItem doneButton = menu.findItem(1);
-			doneButton.setVisible(false);
-		}
-		setButtonVisibility();
+        changeActionBarButtons();
         return true;
     }
+	
+    /**
+     * Puts button for changing to edit mode in the action bar.
+     * @param menu The Menu to make
+     */
+	public void makeMenu(Menu menu) {
+	
+		MenuItem editPage = menu.add(0, EDIT_INDEX, EDIT_INDEX, "Edit");
+		MenuItem savePage = menu.add(0, SAVE_INDEX, SAVE_INDEX, "Done");
+		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, "Help");
+
+		editPage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		savePage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+	}
 	
 	/**
 	 * Callback for clicking an item in the menu.
@@ -193,27 +202,11 @@ public class ViewPageActivity extends Activity {
 
     }
 	
-    /**
-     * Puts button for changing to edit mode in the action bar.
-     * @param menu The Menu to make
-     */
-	public void makeMenu(Menu menu) {
-	
-		MenuItem editPage = menu.add(0, EDIT_INDEX, EDIT_INDEX, "Edit");
-		MenuItem savePage = menu.add(0, SAVE_INDEX, SAVE_INDEX, "Done");
-		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, "Help");
-
-		editPage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		savePage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-	}
-	
 	/**
 	 * Handles what to do when an item of the action bar is pressed.
 	 * @param item The clicked item
 	 * @return
 	 */
-
 	private boolean menuItemClicked(MenuItem item) throws HandlerException {
 		switch (item.getItemId()) {
 		case EDIT_INDEX:
@@ -223,6 +216,7 @@ public class ViewPageActivity extends Activity {
 			if(myId.equals(storyID)){
 				app.setEditing(true);
 				app.reloadPage();
+				changeActionBarButtons();
 				setButtonVisibility();
 			}
 
@@ -233,6 +227,7 @@ public class ViewPageActivity extends Activity {
 			app.setEditing(false);
 			app.saveStory();
 			app.reloadPage();
+			changeActionBarButtons();
 			setButtonVisibility();
 
 			break;
@@ -242,7 +237,7 @@ public class ViewPageActivity extends Activity {
 			ScrollView scrollView = new ScrollView(this);
 			WebView view = new WebView(this);
 
-	        if (app.isEditing())
+	        if (app.getEditing())
 				view.loadData(getString(R.string.edit_page_help), "text/html", "UTF-8");
 	        else
 	        	view.loadData(getString(R.string.read_page_help), "text/html", "UTF-8");
@@ -262,12 +257,87 @@ public class ViewPageActivity extends Activity {
 	} 
 	
 	/**
+	 * Sets which buttons are visible in the action bar.
+	 */
+	public void changeActionBarButtons() {
+		MenuItem editButton = menu.findItem(EDIT_INDEX);
+		MenuItem saveButton = menu.findItem(SAVE_INDEX);
+		
+		final String myId = Secure.getString(
+				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+		final String storyID = app.getStory().getAuthor();
+		if(myId.equals(storyID)){
+			if (app.getEditing()) {
+				saveButton.setVisible(true);
+				editButton.setVisible(false);
+			} else {
+				saveButton.setVisible(false);
+				editButton.setVisible(true);
+			}
+		} else {
+			saveButton.setVisible(false);
+			editButton.setVisible(false);
+		}
+	}
+	
+	/**
+	 * Show the dialog that allows users to pick which type of tile they would 
+	 * like to add.
+	 */
+	public void addTileMenu(){		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		final AlertDialog.Builder photoSelector = 
+				new AlertDialog.Builder(this);
+		final String[] titles = {"Text Tile","Photo Tile",
+				                  "{Placeholder} Video Tile",
+				                  "{Placeholder} Audio Tile","Cancel"};   
+		final String[] titlesPhoto = {"From File","Take New Photo","Cancel"};
+        builder.setItems(titles, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+            	switch(item){
+            	case(0):
+            		TextTile tile = new TextTile();
+					app.getPage().addTile(tile);
+					addTile(app.getPage().getTiles().size() - 1, tile);   				
+            		break;
+            	case(1):
+            		photoSelector.setItems(titlesPhoto, 
+            				new DialogInterface.OnClickListener() {
+            			 public void onClick(DialogInterface dialog, 
+            					              int item) {
+            	            	switch(item){
+	            	            	case(0):
+	            	            		 				
+	            	            		break;
+	            	            	case(1):
+	            	            		
+	            	            		break;
+            	            	}
+            	                }});
+            	       	photoSelector.show();
+            		
+            		break;
+            		
+            		
+            	case(2):
+            		break;
+            	case(3):
+            		break;
+            	}
+                    
+                }});
+        builder.show();
+    }
+	
+	/**
 	 * Updates a page to show any changes that have been made. These
 	 * changes can also include whether the page is in view mode or
 	 * edit mode.
 	 * @param page The current page
 	 */
 	public void update(Page page) {
+		
+		setButtonVisibility();
 		
 		if (app.haveTilesChanged()) {
 			updateTiles(page);
@@ -287,14 +357,12 @@ public class ViewPageActivity extends Activity {
 		
 		app.finishedUpdating();
 	}
-	
+		
 	/**
 	 * Handles removing or showing the proper buttons in both the action bar
 	 * and the in the page.
 	 */
 	private void setButtonVisibility() {
-		MenuItem editButton = menu.findItem(EDIT_INDEX);
-		MenuItem saveButton = menu.findItem(SAVE_INDEX);
 		Button addTileButton = (Button) findViewById(R.id.addTile);
 		Button addDecisionButton = (Button) findViewById(R.id.addDecision);
 		
@@ -305,21 +373,15 @@ public class ViewPageActivity extends Activity {
 		
 			int visibility = 0;
 		
-			if (app.isEditing()) {
-				saveButton.setVisible(true);
-				editButton.setVisible(false);
+			if (app.getEditing()) {
 				visibility = View.VISIBLE;
 			} else {
-				saveButton.setVisible(false);
-				editButton.setVisible(true);
 				visibility = View.GONE;
 			}
 				
 			addTileButton.setVisibility(visibility);
 			addDecisionButton.setVisibility(visibility);
 		} else {
-			saveButton.setVisible(false);
-			editButton.setVisible(false);
 			addTileButton.setVisibility(View.GONE);
 			addDecisionButton.setVisibility(View.GONE);
 		}
@@ -397,11 +459,11 @@ public class ViewPageActivity extends Activity {
 
 			tilesLayout.addView(view, i);
 			
-			if (app.isEditing()) {
+			if (app.getEditing()) {
 				view.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						tileMenu(v);
+						editTileMenu(v);
 					}
 				});
 				view.setOnLongClickListener(new OnLongClickListener() {
@@ -440,7 +502,7 @@ public class ViewPageActivity extends Activity {
 
 		// Set what the tiles look like
 		view.setPadding(0, 5, 0, 6);
-		if (app.isEditing()) {
+		if (app.getEditing()) {
 			/* Background to the layout is grey, so adding margins adds 
 			 * separators.
 			 */
@@ -458,7 +520,7 @@ public class ViewPageActivity extends Activity {
 	 * Brings up a menu with options of what to do to the decision.
 	 * @param view
 	 */
-	public void tileMenu(final View view){
+	public void editTileMenu(final View view){
 		final String[] titles = {"Edit","Delete"};
 		
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -526,7 +588,7 @@ public class ViewPageActivity extends Activity {
 		view.setText(decision.getText());
 		decisionsLayout.addView(view, i);
 		
-		if (app.isEditing()) {
+		if (app.getEditing()) {
 			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -657,7 +719,7 @@ public class ViewPageActivity extends Activity {
 	 * allows the user to input text and then save the comment.
 	 * @param view
 	 */
-	private void onAddComment(View view) {
+	private void onEditComment(View view) {
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle("What to Say");
     	final EditText alertEdit = new EditText(this);
@@ -679,9 +741,8 @@ public class ViewPageActivity extends Activity {
 	 * Opens a dialog that allows the user to edit the pageEnding.
 	 * @param view
 	 */
-
 	private void onEditPageEnding(View view) {
-		if (app.isEditing()) {
+		if (app.getEditing()) {
 			TextView textView = (TextView) view;
 	    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
 	    	final EditText alertEdit = new EditText(this);
@@ -700,45 +761,5 @@ public class ViewPageActivity extends Activity {
 	        builder.show();
 		}
 	}
-	
-	public void tileMenu(){		
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		final AlertDialog.Builder photoSelector = new AlertDialog.Builder(this);
-		final String[] titles = {"TextTile","PhotoTile","{Placeholder} VideoTile","{Placeholder} AudioTile","Cancel"};   
-		final String[] titlesPhoto = {"From File","Take New Photo","Cancel"};
-        builder.setItems(titles, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-            	switch(item){
-            	case(0):
-            		TextTile tile = new TextTile();
-					app.getPage().addTile(tile);
-					addTile(app.getPage().getTiles().size() - 1, tile);   				
-            		break;
-            	case(1):
-            		photoSelector.setItems(titlesPhoto, new DialogInterface.OnClickListener() {
-            			 public void onClick(DialogInterface dialog, int item) {
-            	            	switch(item){
-	            	            	case(0):
-	            	            		 				
-	            	            		break;
-	            	            	case(1):
-	            	            		
-	            	            		break;
-            	            	}
-            	                }});
-            	       	photoSelector.show();
-            		
-            		break;
-            		
-            		
-            	case(2):
-            		break;
-            	case(3):
-            		break;
-            	}
-                    
-                }});
-        builder.show();
-    }
 
 }

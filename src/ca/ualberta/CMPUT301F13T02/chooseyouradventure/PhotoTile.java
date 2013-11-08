@@ -52,17 +52,67 @@ public class PhotoTile extends Tile{
 
 	private Bitmap image;
 	private byte[] imageData;
-	private Object photo;
 	private final String type = "photo";
 	
 	/**
 	 * Get the type
 	 * @return The type
 	 */
-
 	public String getType() {
 		return type;
 	}
+
+	/**
+	 * Sets the content to the passed content
+	 * 
+	 * @param content The content to update this tile to
+	 */
+	@Override
+	public void setContent(Object content) {
+		Bitmap bitmap = (Bitmap) content;
+		image = bitmap;
+	}
+	
+	/**
+	 * Sets both the image and imageData parameter via. conversion
+	 * @param image the image to set
+	 */
+	public void setImage(Bitmap image) {
+		this.image = image;	
+		/**
+		 * Conversion method taken from 
+		 * http://stackoverflow.com/questions/10191871/converting-bitmap-to-bytearray-android
+		 */
+		int bytes = image.getByteCount();
+		ByteBuffer buffer = ByteBuffer.allocate(bytes);
+		image.copyPixelsToBuffer(buffer);
+		imageData = buffer.array();
+	}
+
+	/**
+	 * @return the image
+	 */
+	public Bitmap getImage() {
+		return image;
+	}
+
+	/**
+	 * Sets both the image and imageData parameter via. conversion
+	 * @param imageData the imageData to set
+	 */
+	public void setImageData(byte[] imageData) {
+		this.imageData = imageData;
+		image = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+	}
+
+	/**
+	 * Gets imageData
+	 * @return the imageData
+	 */
+	public byte[] getImageData() {
+		return imageData;
+	}
+
 	/**
 	 * Check if two tiles are equal
 	 * @param tile What to test equality with
@@ -72,64 +122,8 @@ public class PhotoTile extends Tile{
 	boolean equals(Tile tile) {
 		if (!(tile instanceof PhotoTile))
 			return false;
-
+	
 		return true;
-	}
-	
-	/**
-	 * Sets the content to the passed content
-	 * 
-	 * @param content The content to update this tile to
-	 */
-	@Override
-	public void setContent(Object content) {
-		photo = content;
-	}
-	
-	/**
-	 * Gets this tile's photo
-	 * 
-	 * @return This tile's photo
-	 */
-	public Object getPhoto() {
-		return photo;
-	}
-
-	
-	/**
-	 * @return the image
-	 */
-	public Bitmap getImage() {
-		return image;
-	}
-	/**
-	 * Sets both the image and imageData parameter via. conversion
-	 * @param image the image to set
-	 */
-	public void setImage(Bitmap image) {
-		this.image = image;	
-		/**
-		 * Conversion method taken from http://stackoverflow.com/questions/10191871/converting-bitmap-to-bytearray-android
-		 * @return
-		 */
-		int bytes = image.getByteCount();
-		ByteBuffer buffer = ByteBuffer.allocate(bytes);
-		image.copyPixelsToBuffer(buffer);
-		imageData = buffer.array();
-	}
-	/**
-	 * @return the imageData
-	 */
-	public byte[] getImageData() {
-		return imageData;
-	}
-	/**
-	 * Sets both the image and imageData parameter via. conversion
-	 * @param imageData the imageData to set
-	 */
-	public void setImageData(byte[] imageData) {
-		this.imageData = imageData;
-		image = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
 	}
     
 }

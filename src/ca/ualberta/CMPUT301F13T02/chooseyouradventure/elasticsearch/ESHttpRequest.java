@@ -86,11 +86,9 @@ public abstract class ESHttpRequest extends HttpEntityEnclosingRequestBase {
 		try {
 			response = ESHandler.client.execute(this);
 		}
-		catch (ClientProtocolException e) {
+		catch (Exception e) {
 			e.printStackTrace();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
+			throw new HandlerException("Failure to get response");
 		}
 
 		String status = response.getStatusLine().toString();

@@ -441,7 +441,6 @@ public class ControllerApp extends Application{
 			e.printStackTrace();
 		}
 		
-	
 	}
 
 	/**

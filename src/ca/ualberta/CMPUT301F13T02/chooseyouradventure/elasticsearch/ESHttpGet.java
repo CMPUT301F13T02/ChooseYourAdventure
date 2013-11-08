@@ -30,87 +30,26 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-
-import android.os.StrictMode;
-
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.HandlerException;
-
 /**
  * Wraps all HTTP get requests to Elastic Search
  */
 
-public class ESHttpGet extends HttpGet {
+public class ESHttpGet extends ESHttpRequest {
 
 	/**
-	 * Create an Elastic Search get request
+	 * Create an Elastic Search get
 	 * 
 	 * @param url The URL of the request
 	 */
 	public ESHttpGet(String url) {
-		super(ESHandler.serviceURL + url);
-		addHeader("Accept", "application/json");
-		/* This allows the implementation of ESHandler to work */
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-		StrictMode.setThreadPolicy(policy);
+		super(url);
 	}
-	
+
 	/**
-	 * Get data from Elastic Search
-	 * @throws IllegalStateException
-	 * @throws IOException
-	 * @throws HandlerException 
-	 * @return A String of Elastic Search's response
+	 * Returns the type of request this is
 	 */
-	public String get() throws IllegalStateException, IOException, HandlerException {
-		
-		/* This method with inspiration from https://github.com/rayzhangcl/ESDemo */
-		
-		HttpResponse response = null;
-
-		try {
-			response = ESHandler.client.execute(this);
-		} 
-		catch (ClientProtocolException e) {
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		String status = response.getStatusLine().toString();
-		System.out.println(status);
-		
-		if (response.getStatusLine().getStatusCode() != 200)
-			throw new HandlerException("ESHttpGet " + getURI() + " returned " + status);
-
-		HttpEntity entity = response.getEntity();
-		BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
-
-		//Build string from response body
-		String output;
-		StringBuilder sb = new StringBuilder();
-		while ((output = br.readLine()) != null) {
-			sb.append(output);
-		}
-		
-		System.out.println(sb.toString());
-
-		//Close the connection
-		try {
-			entity.consumeContent();
-		} 
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return sb.toString();
+	@Override
+	public String getMethod() {
+		return "GET";
 	}
 }

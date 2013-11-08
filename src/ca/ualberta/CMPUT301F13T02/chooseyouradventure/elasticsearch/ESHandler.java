@@ -80,7 +80,7 @@ public class ESHandler implements Handler{
 		ESHttpPost post = new ESHttpPost(getStoryPath() + story.getId());
 
 		try {
-			post.post(gson.toJson(story));
+			post.execute(gson.toJson(story));
 		} 
 		catch (IOException e) {
 			e.printStackTrace();
@@ -91,11 +91,18 @@ public class ESHandler implements Handler{
 	 * Deletes the passed story in the DB
 	 * 
 	 * @param story The story to delete
+	 * @throws HandlerException 
 	 */
 	@Override
-	public void deleteStory(Story story) {
-		// TODO Auto-generated method stub
-		
+	public void deleteStory(Story story) throws HandlerException {
+		ESHttpDelete delete = new ESHttpDelete(getStoryPath() + story.getId());
+
+		try {
+			delete.execute();
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}	
 	}
 	
 
@@ -110,7 +117,7 @@ public class ESHandler implements Handler{
 
 		String response = null;
 		try {
-			response = post.post(gson.toJson(story));
+			response = post.execute(gson.toJson(story));
 		} 
 		catch (IOException e) {
 			e.printStackTrace();
@@ -137,7 +144,7 @@ public class ESHandler implements Handler{
 		
 		String response = null;
 		try {
-			response = get.get();
+			response = get.execute();
 		}
 		catch (IllegalStateException e) {
 			e.printStackTrace();
@@ -164,7 +171,7 @@ public class ESHandler implements Handler{
 		ESHttpPost post = new ESHttpPost(getStoryPath() + story.getId() + "/_update");
 
 		try {
-			post.post(
+			post.execute(
 			"{" +
 			    "\"script\" : \"foreach (page : ctx._source.pages) { " +
 				                   "if (page.id == id) { " +
@@ -195,7 +202,7 @@ public class ESHandler implements Handler{
 
 		String response = null;
 		try {
-			response = get.get();
+			response = get.execute();
 		}
 		catch (IOException e) {
 			e.printStackTrace();

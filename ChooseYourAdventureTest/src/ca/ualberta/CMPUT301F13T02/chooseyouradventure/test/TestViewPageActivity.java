@@ -30,17 +30,13 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.AudioTile;
 import com.jayway.android.robotium.solo.Solo;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ControllerApp;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Decision;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.PhotoTile;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Tile;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.VideoTile;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ViewPageActivity;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
@@ -80,6 +76,7 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 		story.setId("25");
 		app.setPage(page);
 		app.setStory(story);
+
 		
 		activity = getActivity();
 		

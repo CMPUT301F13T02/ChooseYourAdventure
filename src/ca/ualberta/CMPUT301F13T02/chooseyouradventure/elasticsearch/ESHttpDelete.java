@@ -27,32 +27,29 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
-import android.test.InstrumentationTestCase;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.PhotoTile;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.VideoTile;
+package ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch;
 
-public class TextTileTest extends InstrumentationTestCase {
+/**
+ * Wraps all HTTP delete requests to Elastic Search
+ */
+
+public class ESHttpDelete extends ESHttpRequest {
 
 	/**
-	 * This method tests the equality of TextTiles
+	 * Create an Elastic Search delete
+	 * 
+	 * @param url The URL of the request
 	 */
-	public void testEquals() {
-
-		TextTile tile1 = new TextTile("New1");
-		TextTile tile2 = new TextTile("New2");
-		
-		assertFalse(tile1.equals(tile2));
-		
-		tile2 = new TextTile("New1");
-		
-		assertTrue(tile1.equals(tile2));
-		//These next tests make sure text inequals to picture or video
-		assertFalse(tile1.equals(new PhotoTile()));
-		
-		assertFalse(tile1.equals(new VideoTile()));
+	public ESHttpDelete(String url) {
+		super(url);
 	}
 
+	/**
+	 * Returns the type of request this is
+	 */
+	@Override
+	public String getMethod() {
+		return "DELETE";
+	}
 }

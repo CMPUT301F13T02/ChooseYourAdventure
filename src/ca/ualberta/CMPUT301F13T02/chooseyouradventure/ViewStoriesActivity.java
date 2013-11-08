@@ -41,13 +41,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ScrollView;
 
 /**
  * The main activity of the application. Displays a list of stories to read. <br />
@@ -68,7 +71,6 @@ import android.widget.ListView;
  * 
  * TODO There is work to be done to make this activity respect a Story's choice of handler
  * TODO Search needs to be implemented
- * TODO Help needs to be implemented
  */
 
 public class ViewStoriesActivity extends Activity {
@@ -78,6 +80,7 @@ public class ViewStoriesActivity extends Activity {
 	ArrayList<Story> storyList = new ArrayList<Story>();
 	private ControllerApp app; 
 	private Handler eshandler = new ESHandler();
+	private static final int HELP_INDEX = 0;
 	
 	ArrayAdapter<String> adapter;
     @Override
@@ -147,11 +150,45 @@ public class ViewStoriesActivity extends Activity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.view_stories, menu);
+    	super.onCreateOptionsMenu(menu);
+
+		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, "Help");
+		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
         return true;
     }
-    
 
+	/**
+	 * Callback for clicking an item in the menu.
+	 * 
+	 * @param item The item that was clicked
+	 * @return Success
+	 */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) 
+    {
+		switch (item.getItemId()) {
+		case HELP_INDEX:
+
+			ScrollView scrollView = new ScrollView(this);
+			WebView view = new WebView(this);
+
+        	view.loadData(getString(R.string.view_stories_help), "text/html", "UTF-8");
+	        
+	        scrollView.addView(view);
+	        scrollView.setPadding(10, 10, 10, 10);
+	        
+	        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	        builder.setTitle(R.string.help);
+	        builder.setPositiveButton(R.string.ok, null);
+	        builder.setView(scrollView);
+	        builder.show();
+	        
+			break;
+		}
+		return true;
+    }
+    
 	protected void onListItemClick(View v, int pos, long id) throws HandlerException {	
 	    app.jump(ViewPageActivity.class, storyList.get(pos), storyList.get(pos).getFirstpage());
 	}

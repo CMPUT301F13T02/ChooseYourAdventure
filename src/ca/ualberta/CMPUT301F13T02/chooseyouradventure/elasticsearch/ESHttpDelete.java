@@ -31,17 +31,17 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch;
 
 /**
- * Wraps all HTTP get requests to Elastic Search
+ * Wraps all HTTP delete requests to Elastic Search
  */
 
-public class ESHttpGet extends ESHttpRequest {
+public class ESHttpDelete extends ESHttpRequest {
 
 	/**
-	 * Create an Elastic Search get
+	 * Create an Elastic Search delete
 	 * 
 	 * @param url The URL of the request
 	 */
-	public ESHttpGet(String url) {
+	public ESHttpDelete(String url) {
 		super(url);
 	}
 
@@ -50,6 +50,6 @@ public class ESHttpGet extends ESHttpRequest {
 	 */
 	@Override
 	public String getMethod() {
-		return "GET";
+		return "DELETE";
 	}
 }

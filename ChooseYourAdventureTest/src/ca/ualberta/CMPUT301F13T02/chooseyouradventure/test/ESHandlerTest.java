@@ -157,4 +157,41 @@ public class ESHandlerTest extends InstrumentationTestCase {
 			fail();
 		}
 	}
+	
+	/**
+	 * Test the delete story method
+	 */
+	public void testDeleteStory() {
+		Story story = new Story();
+		
+		//Add a story to ES
+		try {
+			esHandler.addStory(story);
+		}
+		catch (HandlerException e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+		//Delete that story
+		try {
+			esHandler.deleteStory(story);
+		}
+		catch (HandlerException e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+		//Now try to retrieve it from ES
+		try {
+			esHandler.getStory(story.getId());
+		}
+		catch (HandlerException e) {
+			e.printStackTrace();
+			return;
+		}	
+		
+		//Getting here indicates that the story was not deleted
+		fail("Story not deleted");
+	}
 }

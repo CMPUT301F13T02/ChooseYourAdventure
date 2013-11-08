@@ -30,57 +30,102 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 
-import org.apache.http.entity.StringEntity;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+
+import android.os.StrictMode;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.HandlerException;
 
 /**
- * Wraps all HTTP Post requests to the Elastic Search service
+ * Wraps all HTTP requests to the Elastic Search service. This is an abstract
+ * class that is extended by ESHttp- Get, Post, and Delete.
  */
 
-public class ESHttpPost extends ESHttpRequest {
+public abstract class ESHttpRequest extends HttpEntityEnclosingRequestBase {
 
 	/**
-	 * Create an Elastic Search post
+	 * Create an Elastic Search request
 	 * 
 	 * @param url The URL of the request
 	 */
-	public ESHttpPost(String url) {
-		super(url);
+	public ESHttpRequest(String url) {
+		super();
+		try {
+			setURI(new URI(ESHandler.serviceURL + url));
+		}
+		catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		setHeader("Accept", "application/json");
+		/* This allows the implementation of ESHandler to work */
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
 	}
 	
 	/**
-	 * Post data to ES
+	 * Execute a resquest to Elastic Search
 	 * @throws IOException
 	 * @throws HandlerException 
-	 * @param data The data to post
 	 * @return A String representation of Elastic Search's response
 	 */
-	public String execute(String data) throws IOException, HandlerException {
+	public String execute() throws IOException, HandlerException {
 
 		/* This method with inspiration from https://github.com/rayzhangcl/ESDemo */
 		
-		//Set-up passed string to be posted
-		StringEntity stringEntity = null;
+		HttpResponse response = null;
+
 		try {
-			stringEntity = new StringEntity(data);
+			response = ESHandler.client.execute(this);
 		}
-		catch (UnsupportedEncodingException e) {
+		catch (ClientProtocolException e) {
 			e.printStackTrace();
 		}
-		setEntity(stringEntity);
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		String status = response.getStatusLine().toString();
 		
-		return super.execute();
+		System.out.println(status);
+
+		if (response.getStatusLine().getStatusCode() != 200 && response.getStatusLine().getStatusCode() != 201)
+			throw new HandlerException("ESHttpGet " + getURI() + " returned " + status);
+		
+		HttpEntity entity = response.getEntity();
+		BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
+
+		//Build string from response body
+		String output;
+		StringBuilder sb = new StringBuilder();
+		while ((output = br.readLine()) != null) {
+			sb.append(output);
+		}
+		
+		System.out.println(sb.toString());
+
+		//Close connection
+		try {
+			entity.consumeContent();
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return sb.toString();
 	}
 
 	/**
 	 * Returns the type of request this is
 	 */
 	@Override
-	public String getMethod() {
-		return "POST";
-	}
+	public abstract String getMethod();
 }

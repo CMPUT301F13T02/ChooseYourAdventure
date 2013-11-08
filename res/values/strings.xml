@@ -52,7 +52,94 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="add_new">Add New</string>
     <string name="comment_title">Comments</string>
     <string name="add_comment_button">+ Add Comment</string>
-    <string name="add_tile_button">New Section</string>
+    <string name="add_tile_button">New Tile</string>
     <string name="add_decision_button">Add a Choice</string>
+    <string name="help">Help</string>
+    <string name="ok">OK</string>
+    <string name="read_page_help">
+	    <![CDATA[
+	        Welcome to Choose Your Adventure. <br /><br />
+        
+	        In this page of the application you can read a single page of a story. <br /><br />
+	        
+	        At the bottom of the story, you will see an ending followed by a thick grey line. The ending is followed
+	        by a set of decisions, each one followed by a thin grey line. To choose a decision, simply press on it
+	        &mdash; doing so will take you to a new page where you will learn the consequences of your actions. <br /> <br />
+	        
+	        Don&apos;t forget to leave comments if you enjoyed this page! Comments are from the readers of the story
+	        and are found at the bottom of the page under the &ldquo;Comments&rdquo; header. To add a comment press the
+	        &ldquo;+ Add a Comment&rdquo; button. <br /> <br />
+	        
+	        If this is your story, you will see an &ldquo;Edit&rdquo; action on the android bar at the top of the screen.
+	        Press this to enter the edit mode and change what readers will see on this page. <br /> <br />
+	        
+	        Other questions: <a href=\"tel:14035058506\">+1 (403) 505&mdash;8506</a> (24 Hour Help Line)
+        ]]> 
+    </string>
+    <string name="edit_page_help">
+        <![CDATA[
+	        Welcome to Choose Your Adventure. <br /><br />
+        
+	        In this page of the application you can edit a single page of your story. <br /><br />
+	        
+	        A story is composed of &ldquo;tiles&rdquo; which are arranged vertically down the screen. There are four types
+	        of tiles:
+	    	
+	    	<ol>
+	    		<li> Text tiles </li>
+	    		<li> Picture tiles (Coming Soon!)</li>
+	    		<li> Audio tiles (Coming Soon!)</li>
+	    		<li> Video tiles (Coming Soon!)</li>
+	    	</ol>    
+	    	
+	    	To create a new tile, press the &ldquo;New Tile&rdquo; button. This will automatically add a new tile tile to the
+	    	bottom of the page. If instead you would like to edit a tile, simply click on it and choose whether you would like
+	    	to edit its contents, or delete it. <br /> <br />
+	    	
+	    	Every story has an ending, and in a Choose Your Adventure book every page is a potential ending. That is why you are
+	    	asked to put an ending on each page. To do this, click just above the list of decisions, where the default page ending
+	    	reads &ldquo;+ Add an ending to this page&rdquo;. Use this space to give the user a choice to make in the decisions below. <br /> <br />
+	    	
+	    	Once you have asked your readers to make a choice, you should provide them with some possible decisions to make. This happens
+	    	after the tiles and the page ending, below the thick grey line. To add a choice press the button labeled &ldquo;Add a choice&rdquo;
+	    	which will automatically add a new choice just below the others. To edit a choice, simply press on it and you can change what it says,
+	    	as well as what page it links to. <br /><br />
+	    	
+	    	Other questions: <a href=\"tel:14035058506\">+1 (403) 505&mdash;8506</a> (24 Hour Help Line)
+        ]]> 
+    </string>
+    <string name="view_stories_help"> 
+        <![CDATA[
+	        Welcome to Choose Your Adventure. <br /><br />
+        
+	        In this page of the application you can see stories written by yourself and others stored
+	        on the Internet and one your device (coming soon). <br /><br />
+	        
+	        To begin reading a story, simply press on the story you would like to read and you will be transported
+	        to the first page to begin reading. <br /><br />
+	        
+	        For more options for a story, long press on the story and you will be given the option to cache the story
+	        for offline reading (coming soon) and, if you are the story&apos;s author edit or delete (coming soon) the story. <br /><br />
+	        
+	        To search for stories to read press &ldquo;Search&rdquo; or to create a new story of your own press &ldquo;Add New&rdquo;. <br /><br />
+	        
+	        Other questions: <a href=\"tel:14035058506\">+1 (403) 505&mdash;8506</a> (24 Hour Help Line)
+        ]]> 
+    </string>
+    <string name="edit_story_help"> 
+        <![CDATA[
+	        Welcome to Choose Your Adventure. <br /><br />
+        
+	        In this page of the application you can see the pages that make up your story. <br /><br />
+	        
+	        To add a new page, press &ldquo;Add New&rdquo;, or to edit a page press on it in the list. By pressing on a page in
+	        the list you will be provided with a list of important options for the page including renaming it, designating it
+	        as the first page, and deleting it. <br /><br />
+	        
+	        If you would like to delete your entire story, simply press the &ldquo;Delete&rdquo; button. <br /><br />
+	        
+	        Other questions: <a href=\"tel:14035058506\">+1 (403) 505&mdash;8506</a> (24 Hour Help Line)
+        ]]> 
+    </string>
 
 </resources>

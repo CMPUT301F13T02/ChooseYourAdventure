@@ -36,13 +36,17 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ScrollView;
 
 /**
  * This Activity allows a story's author to edit a story by adding adding pages,
@@ -51,7 +55,6 @@ import android.widget.ListView;
  * This class is part of the view of the application.
  * 
  * TODO Delete functionality not yet hooked up
- * TODO Help function neeeds to be added
  */
 
 public class EditStoryActivity extends Activity {
@@ -62,6 +65,7 @@ public class EditStoryActivity extends Activity {
 	private ArrayList<Page> pageList = new ArrayList<Page>();
 	private ArrayAdapter<String> adapter;
 	private ControllerApp app;
+	private static final int HELP_INDEX = 0;
 	/**
 	 * This binds the buttons the the views to this activity
 	 * and sets the appropriate onclick listeners
@@ -237,8 +241,50 @@ public class EditStoryActivity extends Activity {
 		adapter.notifyDataSetChanged();
 	}
 	
-	
-	
-	
-	
+    /**
+     * Inflate the options menu; this adds items to the action bar if it is present 
+     * 
+     *  @param menu The menu to inflate
+     *  @return Success
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	super.onCreateOptionsMenu(menu);
+
+		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, "Help");
+		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+        return true;
+    }
+    
+	/**
+	 * Callback for clicking an item in the menu.
+	 * 
+	 * @param item The item that was clicked
+	 * @return Success
+	 */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) 
+    {
+		switch (item.getItemId()) {
+		case HELP_INDEX:
+
+			ScrollView scrollView = new ScrollView(this);
+			WebView view = new WebView(this);
+
+        	view.loadData(getString(R.string.edit_story_help), "text/html", "UTF-8");
+	        
+	        scrollView.addView(view);
+	        scrollView.setPadding(10, 10, 10, 10);
+	        
+	        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	        builder.setTitle(R.string.help);
+	        builder.setPositiveButton(R.string.ok, null);
+	        builder.setView(scrollView);
+	        builder.show();
+	        
+			break;
+		}
+		return true;
+    }	
 }

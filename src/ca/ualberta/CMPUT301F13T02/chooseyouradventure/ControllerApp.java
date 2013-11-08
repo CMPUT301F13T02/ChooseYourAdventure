@@ -42,8 +42,8 @@ import android.content.Intent;
  * This class represents the controller for our application. This class stores the state
  * of the application -- notably the story and page currently being viewed or edited.
  * 
- * This class is in typical MVC style responsible for co-ordinating saving of the model
- * and maintaining coherence between the model and the view.
+ * This class is a controller and in typical MVC style is responsible for co-ordinating 
+ * saving of the model and maintaining coherence between the model and the view.
  */
 
 public class ControllerApp extends Application{
@@ -70,12 +70,19 @@ public class ControllerApp extends Application{
 	public ControllerApp() {
 		instance = this;
 	}
+	
+	/**
+	 * Allows for accessing the singleton ControllerApp class from outside
+	 * of an activity.
+	 * @return the singleton instance of ControllerApp
+	 */
 	public static ControllerApp getInstance() {
 		if (instance == null) {
 			instance = new ControllerApp();
 		}
 		return instance;
 	}
+	
 	/**
 	 * This sets the current story
 	 * @param A Story
@@ -107,6 +114,19 @@ public class ControllerApp extends Application{
 		
 		reloadPage();
 	}
+
+	/**
+	 * Similar to the above function, this method creates a new page object
+	 * @param pageTitle
+	 * @return
+	 */
+	public Page initializeNewPage(String pageTitle){
+		final Page newPage = new Page();
+		newPage.setTitle(pageTitle);
+		return newPage;
+	}
+
+
 	/**
 	 * This gets the current page
 	 * @return The current Page
@@ -121,189 +141,6 @@ public class ControllerApp extends Application{
 	 */
 	public void setStories(ArrayList<Story> stories) {
 		this.stories = stories;
-	}
-	
-	/**
-	 * Returns the list of all stories.
-	 * @return the list of all stories.
-	 */
-	public ArrayList<Story> getStories() {
-		return this.stories;
-	}
-	
-	/**
-	 * This adds a comment to the current page
-	 * @param A comment to add
-	 */
-	public void addComment(String text) {
-		String poster = Secure.getString( 
-				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
-		Comment comment = new Comment(text, poster);
-		ESHandler eshandler = new ESHandler();
-		
-		currentPage.addComment(comment);
-		setCommentsChanged();
-		try
-		{
-			eshandler.addComment(getStory(), getPage(), comment);
-		} catch (HandlerException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-
-	}
-	
-	/**
-	 * Get whether the page being viewed by the user is in editing mode or not.
-	 * @return If the page is in editing mode.
-	 */
-	public boolean isEditing() {
-		return isEditing;
-	}
-	
-	/**
-	 * Sets whether the user wants to be in viewing mode or editing mode.
-	 * @param editing
-	 */
-	public void setEditing(boolean editing) {
-		isEditing = editing;
-	}
-	
-	/**
-	 * Tells the current story to save itself.
-	 */
-	public void saveStory() {
-		currentStory.updateStory();
-	}
-	
-	/**
-	 * Deletes a tile from the page.
-	 * @param whichTile
-	 */
-	public void deleteTile(int whichTile) {
-		currentPage.removeTile(whichTile);
-		setTilesChanged();
-	}
-	
-	/**
-	 * Sets the page ending the given string.
-	 * @param text
-	 */
-	public void setEnding(String text) {
-		currentPage.setPageEnding(text);
-		setEndingChanged();
-	}
-	
-	/**
-	 * Adds a tile to the currentPage.
-	 * @param tile
-	 */
-	public void addTile(Tile tile) {
-		currentPage.addTile(tile);
-		setTilesChanged();
-	}
-	
-	/**
-	 * Adds a decision to the currentPage.
-	 * @param decision
-	 */
-	public void addDecision() {
-		Decision decision = new Decision(currentPage);
-		currentPage.addDecision(decision);
-		setDecisionsChanged();
-	}
-	
-	/**
-	 * Updates the tile at position whichTile to show the given string.
-	 * @param text
-	 * @param whichTile
-	 */
-	public void updateTile(String text, int whichTile) {
-		currentPage.updateTile(text, whichTile);
-		setTilesChanged();
-	}
-	
-	/**
-	 * Deletes the decision at position whichDecision.
-	 * @param whichDecision
-	 */
-	public void deleteDecision(int whichDecision) {
-		currentPage.deleteDecision(whichDecision);
-		setDecisionsChanged();
-	}
-	
-	/**
-	 * Sets the currentPage to the page pointed to by the decision selected
-	 * and then the page is refreshed.
-	 * @param whichDecision
-	 */
-	public void followDecision(int whichDecision) {
-        Decision decision = currentPage.getDecisions().get(whichDecision);
-		
-		UUID toPageId = decision.getPageID();
-		ArrayList<Page> pages = currentStory.getPages();
-		Page toPage = currentPage;
-		for (int i = 0; i < pages.size(); i++) {
-			if (toPageId.equals(pages.get(i).getId())) {
-				toPage = pages.get(i);
-				break;
-			}
-		}
-		setPage(toPage);
-	}
-	
-	/**
-	 * Updates the decision at position whichDecision to have the given text
-	 * and to point to the page at position whichPage in the story's list of
-	 * pages.
-	 * @param text
-	 * @param whichPage
-	 * @param whichDecision
-	 */
-	public void updateDecision(String text, int whichPage, int whichDecision) {
-		ArrayList<Page> pages = currentStory.getPages();
-		currentPage.updateDecision(text, pages.get(whichPage), whichDecision);
-		setDecisionsChanged();
-	}
-	
-	/**
-	 * Returns a list of strings for each page to be displayed in the Spinner
-	 * for editing a decision.
-	 * @param pages
-	 * @return A list of Strings, one representing each page in the story
-	 */
-	public ArrayList<String> getPageStrings(ArrayList<Page> pages) {
-		ArrayList<String> pageNames = new ArrayList<String>();
-		for (int i = 0; i < pages.size(); i++) {
-			pageNames.add("(" + pages.get(i).getRefNum() + ") " + pages.get(i).getTitle());
-		}
-		
-		return pageNames;
-	}
-	
-	/**
-	 * Sets the view associated with the currentPage to activity.
-	 * @param activity
-	 */
-	public void setActivity(ViewPageActivity activity) {
-		pageActivity = activity;
-	}
-	
-	/**
-	 * Tells currentPage to remove its associated view.
-	 */
-	public void removeActivity() {
-		pageActivity = null;
-	}
-
-	public <T> void jump(Class<T> classItem, Story story, Page page) {
-		setStory(story);
-		setPage(page);
-		Intent intent = new Intent(this, classItem);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(intent);
 	}
 	
 	/**
@@ -325,7 +162,7 @@ public class ControllerApp extends Application{
 		    	ESHandler eshandler = new ESHandler();
 				eshandler.addStory(newStory);
 				
-
+	
 			} catch (Exception e)
 			{
 				// TODO Auto-generated catch block
@@ -333,28 +170,74 @@ public class ControllerApp extends Application{
 			}	
 		    jump(EditStoryActivity.class,newStory, newPage);
 	    }
-	
+
+
 	/**
-	 * Similar to the above function, this method creates a new page object
-	 * @param pageTitle
-	 * @return
+	 * Returns the list of all stories.
+	 * @return the list of all stories.
 	 */
-	public Page initializeNewPage(String pageTitle){
-		final Page newPage = new Page();
-		newPage.setTitle(pageTitle);
-		return newPage;
+	public ArrayList<Story> getStories() {
+		return this.stories;
 	}
 	
 	/**
-	 * This method is used for gathering new data from the model, it then returns it to update the listviews. It is generalized to
-	 * work on both listviews for Pages and Stories.
+	 * Sets whether the user wants to be in viewing mode or editing mode.
+	 * @param editing
+	 */
+	public void setEditing(boolean editing) {
+		isEditing = editing;
+	}
+
+	/**
+	 * Get whether the page being viewed by the user is in editing mode or not.
+	 * @return If the page is in editing mode.
+	 */
+	public boolean getEditing() {
+		return isEditing;
+	}
+
+
+	/**
+	 * Sets the view associated with the currentPage to activity.
+	 * @param activity
+	 */
+	public void setActivity(ViewPageActivity activity) {
+		pageActivity = activity;
+	}
+
+	/**
+	 * Removes the view associated with this page.
+	 */
+	public void deleteActivity() {
+		pageActivity = null;
+	}
+
+	/**
+	 * Returns a list of strings for each page to be displayed in the Spinner
+	 * for editing a decision.
+	 * @param pages
+	 * @return A list of Strings, one representing each page in the story
+	 */
+	public ArrayList<String> getPageStrings(ArrayList<Page> pages) {
+		ArrayList<String> pageNames = new ArrayList<String>();
+		for (int i = 0; i < pages.size(); i++) {
+			pageNames.add("(" + pages.get(i).getRefNum() + ") " + pages.get(i).getTitle());
+		}
+		
+		return pageNames;
+	}
+
+
+	/**
+	 * This method is used for gathering new data from the model, it then 
+	 * returns it to update the listviews. It is generalized to work on both
+	 * listviews for Pages and Stories.
 	 * @param itemList
 	 * @param infoText
 	 * @return
 	 */
-	protected <T> ArrayList<String> updateView(ArrayList<T> itemList, ArrayList<String> infoText){
-		
-		
+	protected <T> ArrayList<String> updateView(ArrayList<T> itemList,
+	                                            ArrayList<String> infoText) {
 		
 		infoText.clear();
 		if(itemList.size() != 0)
@@ -365,29 +248,29 @@ public class ControllerApp extends Application{
 				if(itemList.get(i).getClass().equals(Page.class))
 				{
 					
-					
 					if(itemList.get(i).equals(currentStory.getFirstpage())){
 						outList = "{Start} ";
 					}
 					
 					if(((Page) itemList.get(i)).getDecisions().size() == 0){				
 						outList = outList + "{Endpoint} ";
-					}	
-					outList = outList + "(" + ((Page) itemList.get(i)).getRefNum() + ") " + ((Page) itemList.get(i)).getTitle();
-				}
-				else if(itemList.get(i).getClass().equals(Story.class)){
+					}
+					outList = outList + "(" + 
+					          ((Page) itemList.get(i)).getRefNum() + ") " + 
+							  ((Page) itemList.get(i)).getTitle();
+					
+				} else if(itemList.get(i).getClass().equals(Story.class)) {
 				
 					outList = ((Story) itemList.get(i)).getTitle();
 				}
 				infoText.add(outList);
 			}
 		
-			
 		}
 		
 		return infoText;
 	}
-	
+
 	/**
 	 * Updates a Pages title and pushes to the handler
 	 * @param pageTitle
@@ -397,9 +280,10 @@ public class ControllerApp extends Application{
 		currentPage.setTitle(pageTitle);		
 		currentStory.updateStory();
 	}
-	
+
 	/**
-	 * Similar to the above method, but it creates a new page object with the title
+	 * Similar to the above method, but it creates a new page object with the 
+	 * title.
 	 * @param pageTitle
 	 */
 	protected void updateTitle(String pageTitle){
@@ -407,7 +291,7 @@ public class ControllerApp extends Application{
 		currentStory.addPage(newPage);
 		currentStory.updateStory();
 	}
-	
+
 	/**
 	 * Updates the first page of a story and pushes to handler
 	 * @param currentPage
@@ -417,7 +301,7 @@ public class ControllerApp extends Application{
 		currentStory.setFirstpage(newID);
 		currentStory.updateStory();
 	}
-	
+
 	/**
 	 * Deletes a page.
 	 * @param currentPage
@@ -426,15 +310,154 @@ public class ControllerApp extends Application{
 		currentStory.deletePage(currentPage);
 		currentStory.updateStory();
 	}
-	
+
 	/**
-	 * Calls the update method of the current ViewPageActivity associated with
-	 * this page.
+	 * First sets the currentStory and currentPage to story and page 
+	 * respectively, and then moves to the activity in classItem.
+	 * @param classItem
+	 * @param story
+	 * @param page
 	 */
-	private void updateActivity() {
-		if (pageActivity != null) {
-			pageActivity.update(currentPage);
+	public <T> void jump(Class<T> classItem, Story story, Page page) {
+		setStory(story);
+		setPage(page);
+		Intent intent = new Intent(this, classItem);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
+	}
+
+	/**
+	 * Sets the currentPage to the page pointed to by the decision selected
+	 * and then the page is refreshed.
+	 * @param whichDecision
+	 */
+	public void followDecision(int whichDecision) {
+	    Decision decision = currentPage.getDecisions().get(whichDecision);
+		
+		UUID toPageId = decision.getPageID();
+		ArrayList<Page> pages = currentStory.getPages();
+		Page toPage = currentPage;
+		for (int i = 0; i < pages.size(); i++) {
+			if (toPageId.equals(pages.get(i).getId())) {
+				toPage = pages.get(i);
+				break;
+			}
 		}
+		setPage(toPage);
+	}
+
+	/**
+	 * Sets all the changed variables to true and then tells ViewPageActivity
+	 * to update. Basically it tells ViewPageActivity to refresh the whole
+	 * view.
+	 */
+	public void reloadPage() {
+		tilesChanged = true;
+		decisionsChanged = true;
+		commentsChanged = true;
+		endingChanged = true;
+		updateActivity();
+	}
+
+	/**
+	 * Adds a tile to the currentPage.
+	 * @param tile
+	 */
+	public void addTile(Tile tile) {
+		currentPage.addTile(tile);
+		setTilesChanged();
+	}
+
+	/**
+	 * Updates the tile at position whichTile to show the given string.
+	 * @param text
+	 * @param whichTile
+	 */
+	public void updateTile(String text, int whichTile) {
+		currentPage.updateTile(text, whichTile);
+		setTilesChanged();
+	}
+
+	/**
+	 * Deletes a tile from the page.
+	 * @param whichTile
+	 */
+	public void deleteTile(int whichTile) {
+		currentPage.removeTile(whichTile);
+		setTilesChanged();
+	}
+
+	/**
+	 * Adds a decision to the currentPage.
+	 * @param decision
+	 */
+	public void addDecision() {
+		Decision decision = new Decision(currentPage);
+		currentPage.addDecision(decision);
+		setDecisionsChanged();
+	}
+
+	/**
+	 * Updates the decision at position whichDecision to have the given text
+	 * and to point to the page at position whichPage in the story's list of
+	 * pages.
+	 * @param text
+	 * @param whichPage
+	 * @param whichDecision
+	 */
+	public void updateDecision(String text, int whichPage, int whichDecision) {
+		ArrayList<Page> pages = currentStory.getPages();
+		currentPage.updateDecision(text, pages.get(whichPage), whichDecision);
+		setDecisionsChanged();
+	}
+
+	/**
+	 * Deletes the decision at position whichDecision.
+	 * @param whichDecision
+	 */
+	public void deleteDecision(int whichDecision) {
+		currentPage.deleteDecision(whichDecision);
+		setDecisionsChanged();
+	}
+
+	/**
+	 * This adds a comment to the current page
+	 * @param A comment to add
+	 */
+	public void addComment(String text) {
+		String poster = Secure.getString( 
+				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+		Comment comment = new Comment(text, poster);
+		ESHandler eshandler = new ESHandler();
+		
+		currentPage.addComment(comment);
+		setCommentsChanged();
+		try
+		{
+			eshandler.addComment(getStory(), getPage(), comment);
+		} catch (HandlerException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	
+	}
+
+	/**
+	 * Sets the page ending the given string.
+	 * @param text
+	 */
+	public void setEnding(String text) {
+		currentPage.setPageEnding(text);
+		setEndingChanged();
+	}
+
+	/**
+	 * Tells the current story to save itself.
+	 */
+	public void saveStory() {
+		currentStory.updateStory();
 	}
 	
 	/**
@@ -508,30 +531,24 @@ public class ControllerApp extends Application{
 	}
 	
 	/**
-	 * Sets all the changed variables to true and then tells ViewPageActivity
-	 * to update. Basically it tells ViewPageActivity to refresh the whole
-	 * view.
+	 * Lets the controller know that the view has finished updating by setting
+	 * the *Changed variables back to false.
 	 */
-	public void reloadPage() {
-		tilesChanged = true;
-		decisionsChanged = true;
-		commentsChanged = true;
-		endingChanged = true;
-		updateActivity();
-	}
-	
-	/**
-	 * Removes the view associated with this page.
-	 */
-	public void deleteActivity() {
-		pageActivity = null;
-	}
-	
 	public void finishedUpdating() {
 		tilesChanged = false;
 		decisionsChanged = false;
 		commentsChanged = false;
 		endingChanged = false;
+	}
+
+	/**
+	 * Calls the update method of the current ViewPageActivity associated with
+	 * this page.
+	 */
+	private void updateActivity() {
+		if (pageActivity != null) {
+			pageActivity.update(currentPage);
+		}
 	}
 	
 }

@@ -52,20 +52,20 @@ public class VideoTile extends Tile{
 	}
 
 	@Override
+	public void setContent(Object content) {
+		video = content;
+	}
+
+	public Object getVideo() {
+		return video;
+	}
+
+	@Override
 	boolean equals(Tile tile) {
 		if (!(tile instanceof VideoTile))
 			return false;
 
 		return true;
-	}
-	
-	@Override
-	public void setContent(Object content) {
-		video = content;
-	}
-	
-	public Object getVideo() {
-		return video;
 	}
 
 }

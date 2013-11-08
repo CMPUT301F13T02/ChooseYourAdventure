@@ -62,6 +62,7 @@ public class EditStoryActivity extends Activity {
 	private ArrayList<Page> pageList = new ArrayList<Page>();
 	private ArrayAdapter<String> adapter;
 	private ControllerApp app;
+
 	/**
 	 * This binds the buttons the the views to this activity
 	 * and sets the appropriate onclick listeners
@@ -117,14 +118,16 @@ public class EditStoryActivity extends Activity {
         refresh();
     }
 	
+	/**
+	 * Click listener for the list of pages. It simply calls pageOptions
+	 * and passes it the position of the selected page. 
+	 * @param v
+	 * @param pos
+	 * @param id
+	 */
 	protected void onListItemClick(View v, int pos, long id) {
 		pageOptions(pos);
 	}
-	/**
-	 * This moves the user to a different page
-	 * @param input from a Listview
-	 * @throws HandlerException
-	 */
 	
 	/**
 	 * This creates a page
@@ -154,8 +157,6 @@ public class EditStoryActivity extends Activity {
     	
     	
     }
-	
-	
 
 	/**
 	 * This shows the user a list of options on a story
@@ -220,14 +221,6 @@ public class EditStoryActivity extends Activity {
         builder.show();
     }
 	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
 	 * This rebuilds the ListView by recollecting data from the controller
 	 */
@@ -236,9 +229,5 @@ public class EditStoryActivity extends Activity {
 		pageText = app.updateView(pageList, pageText);
 		adapter.notifyDataSetChanged();
 	}
-	
-	
-	
-	
 	
 }

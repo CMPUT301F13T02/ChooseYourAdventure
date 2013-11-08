@@ -65,7 +65,17 @@ public class TextTile extends Tile{
     	return text;
     }
     
-    /**
+    public String getType() {
+		return type;
+	}
+
+	@Override
+	public void setContent(Object content) {
+		String text = (String) content;
+		this.text = text;
+	}
+
+	/**
      * Tests the equality of this tile and the passed tile
      * 
      * @param tile The tile to compare against
@@ -77,14 +87,4 @@ public class TextTile extends Tile{
     	else
     		return false;
     }
-
-	public String getType() {
-		return type;
-	}
-	
-	@Override
-	public void setContent(Object content) {
-		String text = (String) content;
-		this.text = text;
-	}
 }

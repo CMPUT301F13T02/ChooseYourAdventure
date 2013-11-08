@@ -58,17 +58,7 @@ public class AudioTile extends Tile{
 	}
 	
 	/**
-	 * This tests for equality with another tile
-	 * @param The tile to check equality with
-	 */
-	@Override
-	boolean equals(Tile segment) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	/**
-	 * Sets the content of this Tile to the passed content
+	 * Sets the content of this Tile to content
 	 * 
 	 * @param content The content to set for this Tile
 	 */
@@ -76,7 +66,7 @@ public class AudioTile extends Tile{
 	public void setContent(Object content) {
 		audio = content;
 	}
-	
+
 	/**
 	 * Returns the audio of this Tile
 	 * 
@@ -84,6 +74,16 @@ public class AudioTile extends Tile{
 	 */
 	public Object getAudio() {
 		return audio;
+	}
+
+	/**
+	 * This tests for equality with another tile
+	 * @param The tile to check equality with
+	 */
+	@Override
+	boolean equals(Tile segment) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

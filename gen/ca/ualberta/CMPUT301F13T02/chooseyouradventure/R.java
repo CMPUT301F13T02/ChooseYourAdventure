@@ -66,8 +66,12 @@ public final class R {
         public static final int comment_title=0x7f050013;
         public static final int delete=0x7f050006;
         public static final int edit=0x7f05000c;
+        public static final int edit_page_help=0x7f05001a;
         public static final int hello_world=0x7f050010;
+        public static final int help=0x7f050017;
+        public static final int ok=0x7f050018;
         public static final int page_options=0x7f05000b;
+        public static final int read_page_help=0x7f050019;
         public static final int search=0x7f050005;
         public static final int search_stories=0x7f050011;
         public static final int story_options=0x7f050008;

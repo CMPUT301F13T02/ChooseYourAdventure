@@ -46,10 +46,12 @@ import android.view.View;
 import android.view.View.DragShadowBuilder;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -78,6 +80,7 @@ public class ViewPageActivity extends Activity {
 	
 	private final int EDIT_INDEX = 0;
 	private final int SAVE_INDEX = 1;
+	private final int HELP_INDEX = 2;
 	
 	private LinearLayout tilesLayout;
 	private LinearLayout decisionsLayout;
@@ -197,16 +200,13 @@ public class ViewPageActivity extends Activity {
      */
 	public void makeMenu(Menu menu) {
 	
-
 		MenuItem editPage = menu.add(0, EDIT_INDEX, EDIT_INDEX, "Edit");
-		{
-			editPage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		}
 		MenuItem savePage = menu.add(0, SAVE_INDEX, SAVE_INDEX, "Done");
+		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, "Help");
 
-		{
-			savePage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		}
+		editPage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		savePage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 	}
 	
 	/**
@@ -217,23 +217,46 @@ public class ViewPageActivity extends Activity {
 
 	private boolean menuItemClicked(MenuItem item) throws HandlerException {
 		switch (item.getItemId()) {
-		case 0:
+		case EDIT_INDEX:
 
-			final String myId = Secure.getString(
-					getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+			final String myId = Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 			final String storyID = app.getStory().getAuthor();
 			if(myId.equals(storyID)){
 				app.setEditing(true);
 				app.reloadPage();
 				setButtonVisibility();
 			}
+
 			break;
-		case 1:
+
+		case SAVE_INDEX:
+
 			app.setEditing(false);
 			app.saveStory();
 			app.reloadPage();
 			setButtonVisibility();
 
+			break;
+
+		case HELP_INDEX:
+
+			ScrollView scrollView = new ScrollView(this);
+			WebView view = new WebView(this);
+
+	        if (app.isEditing())
+				view.loadData(getString(R.string.edit_page_help), "text/html", "UTF-8");
+	        else
+	        	view.loadData(getString(R.string.read_page_help), "text/html", "UTF-8");
+	        
+	        scrollView.addView(view);
+	        scrollView.setPadding(10, 10, 10, 10);
+	        
+	        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	        builder.setTitle(R.string.help);
+	        builder.setPositiveButton(R.string.ok, null);
+	        builder.setView(scrollView);
+	        builder.show();
+	        
 			break;
 		}
 		return true;

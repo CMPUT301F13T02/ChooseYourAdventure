@@ -46,6 +46,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /**
  * Tests for the TestViewStoriesActivity
@@ -67,12 +68,12 @@ public class TestViewStoriesActivity extends ActivityInstrumentationTestCase2<Vi
 	
 	protected void setUp() throws Exception{
 		super.setUp();
-		
+
 		// Get UI elements of this activity
 		activity = getActivity();
 		addNewButton = (Button) activity.findViewById(ca.ualberta.CMPUT301F13T02.chooseyouradventure.R.id.createButton);
 		listView = (ListView) activity.findViewById(ca.ualberta.CMPUT301F13T02.chooseyouradventure.R.id.mainView);
-		
+
 		// Set up a test story
 		testPage = new Page();
 		testPage.addTile(new TextTile("TEST TEXT"));
@@ -81,13 +82,14 @@ public class TestViewStoriesActivity extends ActivityInstrumentationTestCase2<Vi
 		testStory.setTitle("Test Story");
 		testStory.addPage(testPage);
 		testStory.setFirstpage(testPage.getId());
-	    testStory.setAuthor(Secure.getString(activity.getBaseContext().getContentResolver(), Secure.ANDROID_ID));
+		testStory.setAuthor(Secure.getString(activity.getBaseContext().getContentResolver(), Secure.ANDROID_ID));
 
-	    //Use the same data for each test
+		//Use the same data for each test
 		activity.setHandler(handler);
 		handler.deleteAllStories();
 		handler.addStory(testStory);
 	}
+
 	
 	
 	public void testLayout() {

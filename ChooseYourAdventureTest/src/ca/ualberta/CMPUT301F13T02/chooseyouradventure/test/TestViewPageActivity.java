@@ -75,7 +75,11 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 	
 	protected void setUp() throws Exception{
 		super.setUp();
-
+		page = new Page();
+		story = new Story();
+		story.setId("25");
+		app.setPage(page);
+		app.setStory(story);
 		
 		activity = getActivity();
 		
@@ -87,7 +91,6 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 		commentsTitle = (TextView) activity.findViewById(ca.ualberta.CMPUT301F13T02.chooseyouradventure.R.id.commentTitle);
 		
 	}
-	
 	
 	public void testLayout() {
 		assertNotNull(addTileButton);

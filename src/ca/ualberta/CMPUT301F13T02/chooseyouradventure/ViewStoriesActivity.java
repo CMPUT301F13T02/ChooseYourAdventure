@@ -34,6 +34,7 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
 
+
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
@@ -98,11 +99,13 @@ public class ViewStoriesActivity extends Activity {
         });
         
         app = (ControllerApp) getApplication();
+        
+        
 		try {
 			
 			storyList =  eshandler.getAllStories();
-			Story sampleStory = sampleGen.getStory();
-			storyList.add(sampleStory);
+			//Story sampleStory = sampleGen.getStory();
+			//storyList.add(sampleStory);
 			storyText = app.updateView(storyList, storyText);
 		} catch (HandlerException e1) {
 			// TODO Auto-generated catch block
@@ -289,10 +292,11 @@ public class ViewStoriesActivity extends Activity {
      * and displaying it.
      */
     public void refresh(){
+    
     	try {
         	storyList = eshandler.getAllStories();
-        	Story sampleStory = sampleGen.getStory();
-			storyList.add(sampleStory);
+        	//Story sampleStory = sampleGen.getStory();
+			//storyList.add(sampleStory);
 			storyText = app.updateView(storyList, storyText);
 		} catch (HandlerException e1) {
 			// TODO Auto-generated catch block

@@ -31,6 +31,7 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import android.graphics.Bitmap;
+
 import java.nio.ByteBuffer;
 
 import android.graphics.BitmapFactory;
@@ -50,7 +51,6 @@ import android.graphics.BitmapFactory;
 
 public class PhotoTile extends Tile{
 
-	private Bitmap image;
 	private byte[] imageData;
 	private final String type = "photo";
 	
@@ -67,18 +67,14 @@ public class PhotoTile extends Tile{
 	 * 
 	 * @param content The content to update this tile to
 	 */
-	@Override
-	public void setContent(Object content) {
-		Bitmap bitmap = (Bitmap) content;
-		image = bitmap;
-	}
+	
 	
 	/**
 	 * Sets both the image and imageData parameter via. conversion
 	 * @param image the image to set
 	 */
-	public void setImage(Bitmap image) {
-		this.image = image;	
+	public void setImageFile(Bitmap image) {
+		
 		/**
 		 * Conversion method taken from 
 		 * http://stackoverflow.com/questions/10191871/converting-bitmap-to-bytearray-android
@@ -93,7 +89,7 @@ public class PhotoTile extends Tile{
 	 * @return the image
 	 */
 	public Bitmap getImage() {
-		return image;
+		return BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
 	}
 
 	/**
@@ -102,7 +98,7 @@ public class PhotoTile extends Tile{
 	 */
 	public void setImageData(byte[] imageData) {
 		this.imageData = imageData;
-		image = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+		
 	}
 
 	/**
@@ -124,6 +120,12 @@ public class PhotoTile extends Tile{
 			return false;
 	
 		return true;
+	}
+
+	@Override
+	public void setContent(Object content) {
+		// TODO Auto-generated method stub
+		
 	}
     
 }

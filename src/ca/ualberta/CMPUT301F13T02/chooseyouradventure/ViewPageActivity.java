@@ -360,7 +360,7 @@ public class ViewPageActivity extends Activity {
 	        	cursor.close();       	
 	        	Bitmap pickedPhoto = BitmapFactory.decodeFile(picturePath);
 	        	PhotoTile newPhoto = new PhotoTile();
-	        	newPhoto.setImage(pickedPhoto);
+	        	newPhoto.setImageFile(pickedPhoto);
 	        	app.addTile(newPhoto);
 	        }
 	     

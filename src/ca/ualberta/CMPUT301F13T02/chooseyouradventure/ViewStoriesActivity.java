@@ -142,8 +142,8 @@ public class ViewStoriesActivity extends Activity {
     }
     
     @Override
-	public void onStart() {
-        super.onStart();
+	public void onResume() {
+        super.onResume();
         refresh();
     }
         

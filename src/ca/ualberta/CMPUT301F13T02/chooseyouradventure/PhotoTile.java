@@ -32,6 +32,7 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import android.graphics.Bitmap;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
 import android.graphics.BitmapFactory;
@@ -50,9 +51,9 @@ import android.graphics.BitmapFactory;
  */
 
 public class PhotoTile extends Tile{
-
-	private byte[] imageData;
 	private final String type = "photo";
+	private byte[] imageData;
+	
 	
 	/**
 	 * Get the type
@@ -74,15 +75,11 @@ public class PhotoTile extends Tile{
 	 * @param image the image to set
 	 */
 	public void setImageFile(Bitmap image) {
+		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+		image.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+		imageData =  outStream.toByteArray();
 		
-		/**
-		 * Conversion method taken from 
-		 * http://stackoverflow.com/questions/10191871/converting-bitmap-to-bytearray-android
-		 */
-		int bytes = image.getByteCount();
-		ByteBuffer buffer = ByteBuffer.allocate(bytes);
-		image.copyPixelsToBuffer(buffer);
-		imageData = buffer.array();
+	
 	}
 
 	/**

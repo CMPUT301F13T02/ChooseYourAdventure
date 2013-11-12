@@ -56,6 +56,7 @@ import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -487,9 +488,10 @@ public class ViewPageActivity extends Activity {
 	 */
 	public void addTile(int i, Tile tile) {
 		
-		TextView view = makeTileView();
+		
 		
 		if (tile.getType() == "text") {
+			TextView view = makeTileView();
 			TextTile textTile = (TextTile) tile;
 			//TextView textView = (TextView) view;
 			
@@ -517,7 +519,12 @@ public class ViewPageActivity extends Activity {
 			}
 			
 		} else if (tile.getType() == "photo") {
-			// TODO Implement for part 4
+			
+			PhotoTile photoTile = (PhotoTile) tile;
+			ImageView imageView = new ImageView(app);
+			imageView.setImageBitmap(photoTile.getImage());
+			tilesLayout.addView(imageView, i);
+	
 		} else if (tile.getType() == "video") {
 			// TODO Implement for part 4
 		} else if (tile.getType() == "audio") {

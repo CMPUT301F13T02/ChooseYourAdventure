@@ -32,6 +32,7 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.lang.reflect.Type;
 
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -81,13 +82,15 @@ public class TileGsonMarshal implements JsonSerializer<Tile>, JsonDeserializer<T
 			return new TextTile(text);
 		}
 		else if (tileType.equals("photo")) {
+			JsonArray image =  jsonObject.getAsJsonArray("imageData");
+			byte[] imageData = new byte[image.size()];
 			
-//			JsonArray image =  jsonObject.getAsJsonArray("imageData");
-//			for(int i = 0; i < image.Count)
-//			byte[] imageData = (byte[]) image;
-//			PhotoTile photo = new PhotoTile();
-//			photo.setImageData(imageData);
-//			return photo;
+			for(int i = 0; i < image.size();i++){
+				imageData[i] = image.get(i).getAsByte();
+			}		
+			PhotoTile photo = new PhotoTile();
+			photo.setImageData(imageData);
+			return photo;
 		}
 		
 		throw new JsonParseException("Tile missing type");

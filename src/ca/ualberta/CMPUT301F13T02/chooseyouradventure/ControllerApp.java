@@ -108,13 +108,10 @@ public class ControllerApp extends Application {
 	public void setPage(Page page) {
 		this.currentPage = page;
 		
-		// The page has now been initialized, so everything has changed
-		endingChanged = true;
 		tilesChanged = true;
 		decisionsChanged = true;
 		commentsChanged = true;
-		
-		reloadPage();
+		endingChanged = true;
 	}
 
 	/**
@@ -348,6 +345,7 @@ public class ControllerApp extends Application {
 			}
 		}
 		setPage(toPage);
+		reloadPage();
 	}
 
 	/**

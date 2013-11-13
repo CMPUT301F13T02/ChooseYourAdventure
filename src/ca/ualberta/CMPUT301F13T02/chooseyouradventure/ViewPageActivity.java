@@ -119,7 +119,7 @@ public class ViewPageActivity extends Activity {
         commentsLayout = (LinearLayout) findViewById(R.id.commentsLayout);
         
         app.setActivity(this);
-        //update(app.getPage());
+        update(app.getPage());
         
         /* Set up onClick listeners for buttons on screen, even if some aren't
          * shown at the time.
@@ -129,7 +129,6 @@ public class ViewPageActivity extends Activity {
 			@Override
 			public void onClick(View view) {
 				addTileMenu();
-
 			}
 		});
 		
@@ -505,12 +504,12 @@ public class ViewPageActivity extends Activity {
 		} else if (tile.getType() == "photo") {
 			
 			View view = makeTileView("photo");
-//			PhotoTile photoTile = (PhotoTile) tile;
-/*			ImageView imageView = (ImageView) view;
+			PhotoTile photoTile = (PhotoTile) tile;
+			ImageView imageView = (ImageView) view;
 			imageView.setImageBitmap(photoTile.getImage());
 			
 			tilesLayout.addView(imageView, i);
-	*/
+
 		} else if (tile.getType() == "video") {
 			// TODO Implement for part 4
 		} else if (tile.getType() == "audio") {

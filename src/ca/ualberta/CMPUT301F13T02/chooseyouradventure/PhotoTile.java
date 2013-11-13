@@ -79,7 +79,6 @@ public class PhotoTile extends Tile{
 		image.compress(Bitmap.CompressFormat.PNG, 100, outStream);
 		imageData =  outStream.toByteArray();
 		
-	
 	}
 
 	/**
@@ -121,8 +120,8 @@ public class PhotoTile extends Tile{
 
 	@Override
 	public void setContent(Object content) {
-		// TODO Auto-generated method stub
-		
+		Bitmap bitmap = (Bitmap) content;
+		setImageFile(bitmap);
 	}
     
 }

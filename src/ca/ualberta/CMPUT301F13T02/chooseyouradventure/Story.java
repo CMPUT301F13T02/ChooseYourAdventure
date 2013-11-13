@@ -41,7 +41,6 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
  * A Story is serialized and stored via a Handler implementation which interact
  * solely with Storys.  
  * 
- * TODO Storys should store their handler as an attribute
  */
 public class Story {
 	
@@ -49,9 +48,12 @@ public class Story {
     private String id;
     private UUID firstpage; 
     private int currRefNum = 1;
+    private int local;
     private String author;
 	private String title = new String();
-
+	private Handler handler;
+	//private Handler defaultHandler = new ESHandler();
+	
 	/**
 	 * This is the main constructor for Story
 	 */
@@ -165,7 +167,6 @@ public class Story {
     public void deletePage(Page aPage) {
     	
     }
-    
     /**
 	 * This function updates the stories data in the database
 	 */
@@ -178,7 +179,29 @@ public class Story {
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * This sets the scope of the storage of a story
+	 * @param state The type of Handler to set our handler to
+	 * @param scope 1 for local 0 for online
+	 */
+	public void setHandler(Handler state, int scope) {
+		handler = state;
+		local = scope;
+	}
+	/**
+	 * This tells if a story is stored locally or online
+	 * @return local 1 if local 0 if online
+	 */
+	public int getLocal() {
+    	return local;
+    }
+	/**
+	 * This gets the scope of the storage of a story
+	 * @return state The type of Handler we are using
+	 */
+	public Handler getHandler() {
+		return handler;
+	}
 	/**
 	 * Compares this story for deep equality with another story
 	 * @param The story to test equality with

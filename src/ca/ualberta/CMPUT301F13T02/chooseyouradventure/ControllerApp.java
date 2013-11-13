@@ -259,7 +259,7 @@ public class ControllerApp extends Application{
 					//If the story has been saved locally, note it
 					if(((Story) itemList.get(i)).getLocal() == 1)
 						outList = "Cached: ";
-					outList = ((Story) itemList.get(i)).getTitle();
+					outList = outList + ((Story) itemList.get(i)).getTitle();
 				}
 				infoText.add(outList);
 			}

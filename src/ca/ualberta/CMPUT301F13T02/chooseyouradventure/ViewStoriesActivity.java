@@ -217,18 +217,15 @@ public class ViewStoriesActivity extends Activity {
 				titles = titlesA;
 				builder.setTitle(R.string.story_options_author);
 			}
-			else
-			{
+			else {
 				titles = titlesB;
 				builder.setTitle(R.string.story_options_user);
 			}
-            
-            
             builder.setItems(titles, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int item) {
                 	switch(item){
-                	case(0):
-                		//set to local handler
+                	case(0): /*
+                		//set to local handler, 1 means it is local
                 		story.setHandler(dbhandler, 1);
                 		try {
 							//story.getHandler().addStory(story);
@@ -236,9 +233,11 @@ public class ViewStoriesActivity extends Activity {
 						} catch (HandlerException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}
+						}*/
                 		break;
-                	case(1):
+                		
+                	case(1): /*
+                		// the 0 passed means it isn't local
                 		story.setHandler(eshandler, 0);
                 		//Author can update the story, user creates a new one.
                 		//This could be refactored to do this step in the story itself
@@ -258,6 +257,7 @@ public class ViewStoriesActivity extends Activity {
 								e.printStackTrace();
 							}
                 		}
+                	 	*/
                 		break;
                 	case(2):
                 		if(myId.equals(storyID)){          			

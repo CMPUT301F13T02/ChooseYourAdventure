@@ -25,19 +25,18 @@ public final class R {
     }
     public static final class id {
         public static final int TextTiletextView=0x7f08000c;
-        public static final int action_settings=0x7f080010;
+        public static final int action_settings=0x7f08000f;
         public static final int addComment=0x7f08000b;
         public static final int addDecision=0x7f080008;
         public static final int addTile=0x7f080005;
-        public static final int button1=0x7f08000d;
         public static final int commentTitle=0x7f080009;
         public static final int commentsLayout=0x7f08000a;
-        public static final int createButton=0x7f08000e;
+        public static final int createButton=0x7f08000d;
         public static final int createButton2=0x7f080002;
         public static final int decisionTextView=0x7f080000;
         public static final int decisionsLayout=0x7f080007;
         public static final int deleteButton=0x7f080001;
-        public static final int mainView=0x7f08000f;
+        public static final int mainView=0x7f08000e;
         public static final int pageEnding=0x7f080006;
         public static final int tilesLayout=0x7f080004;
         public static final int treeView=0x7f080003;

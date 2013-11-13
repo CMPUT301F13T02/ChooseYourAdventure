@@ -238,34 +238,31 @@ public class ControllerApp extends Application{
 	 */
 	protected <T> ArrayList<String> updateView(ArrayList<T> itemList,
 	                                            ArrayList<String> infoText) {
-		
 		infoText.clear();
 		if(itemList.size() != 0)
 		{
 			for (int i = 0; i < itemList.size(); i++) {
 				String outList = "";
-			
 				if(itemList.get(i).getClass().equals(Page.class))
 				{
 					
 					if(itemList.get(i).equals(currentStory.getFirstpage())){
 						outList = "{Start} ";
 					}
-					
 					if(((Page) itemList.get(i)).getDecisions().size() == 0){				
 						outList = outList + "{Endpoint} ";
 					}
 					outList = outList + "(" + 
 					          ((Page) itemList.get(i)).getRefNum() + ") " + 
 							  ((Page) itemList.get(i)).getTitle();
-					
 				} else if(itemList.get(i).getClass().equals(Story.class)) {
-				
-					outList = ((Story) itemList.get(i)).getTitle();
+					//If the story has been saved locally, note it
+					if(((Story) itemList.get(i)).getLocal() == 1)
+						outList = "Cached: ";
+					outList = outList + ((Story) itemList.get(i)).getTitle();
 				}
 				infoText.add(outList);
 			}
-		
 		}
 		
 		return infoText;

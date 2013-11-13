@@ -33,13 +33,13 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 
 import java.util.ArrayList;
+import java.util.UUID;
 
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
-import android.os.Bundle;
-import android.provider.Settings.Secure;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,6 +51,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
 /**
  * The main activity of the application. Displays a list of stories to read. <br />
@@ -80,6 +81,7 @@ public class ViewStoriesActivity extends Activity {
 	ArrayList<Story> storyList = new ArrayList<Story>();
 	private ControllerApp app; 
 	private Handler eshandler = new ESHandler();
+	private Handler dbhandler = new DBHandler(this);
 	private static final int HELP_INDEX = 0;
 	
 	ArrayAdapter<String> adapter;
@@ -206,8 +208,8 @@ public class ViewStoriesActivity extends Activity {
 			final Story story = storyList.get(pos);
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			final String[] titles;
-			final String[] titlesA = {"{Placeholder} Cache","{Placeholder} Upload","Edit","{Placeholder} Delete","Cancel"};
-			final String[] titlesB = {"{Placeholder} Cache","{Placeholder} Upload Copy","Cancel"};
+			final String[] titlesA = {"Cache","Upload","Edit","{Placeholder} Delete","Cancel"};
+			final String[] titlesB = {"Cache","Upload Copy","Cancel"};
 			final String myId = Secure.getString(
 					getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 			final String storyID = story.getAuthor();
@@ -215,22 +217,47 @@ public class ViewStoriesActivity extends Activity {
 				titles = titlesA;
 				builder.setTitle(R.string.story_options_author);
 			}
-			else
-			{
+			else {
 				titles = titlesB;
 				builder.setTitle(R.string.story_options_user);
 			}
-            
-            
             builder.setItems(titles, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int item) {
                 	switch(item){
-                	case(0):
-                		
-        				
+                	case(0): /*
+                		//set to local handler, 1 means it is local
+                		story.setHandler(dbhandler, 1);
+                		try {
+							//story.getHandler().addStory(story);
+                			dbhandler.addStory(story);
+						} catch (HandlerException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}*/
                 		break;
-                	case(1):
                 		
+                	case(1): /*
+                		// the 0 passed means it isn't local
+                		story.setHandler(eshandler, 0);
+                		//Author can update the story, user creates a new one.
+                		//This could be refactored to do this step in the story itself
+                		if(myId.equals(storyID)){
+                			try {
+								//story.getHandler().updateStory(story);
+                				eshandler.updateStory(story);
+							} catch (HandlerException e) {
+								e.printStackTrace();
+							}
+                		} else {
+                			//story.setId(UUID.randomUUID().toString());
+                			story.setAuthor(myId);
+                			try {
+								story.getHandler().addStory(story);
+							} catch (HandlerException e) {
+								e.printStackTrace();
+							}
+                		}
+                	 	*/
                 		break;
                 	case(2):
                 		if(myId.equals(storyID)){          			
@@ -241,7 +268,6 @@ public class ViewStoriesActivity extends Activity {
                 	case(3):
                 		break;
                 	}
-                        
                     }});
             builder.show();
         }

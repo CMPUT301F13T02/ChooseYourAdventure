@@ -34,6 +34,7 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
 
+
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
@@ -79,6 +80,7 @@ public class ViewStoriesActivity extends Activity {
 	ArrayList<String> storyText = new ArrayList<String>();
 	ArrayList<Story> storyList = new ArrayList<Story>();
 	private ControllerApp app; 
+	private SampleGenerator sampleGen = new SampleGenerator();
 	private Handler eshandler = new ESHandler();
 	private static final int HELP_INDEX = 0;
 	
@@ -97,8 +99,13 @@ public class ViewStoriesActivity extends Activity {
         });
         
         app = (ControllerApp) getApplication();
+        
+        
 		try {
+			
 			storyList =  eshandler.getAllStories();
+			//Story sampleStory = sampleGen.getStory();
+			//storyList.add(sampleStory);
 			storyText = app.updateView(storyList, storyText);
 		} catch (HandlerException e1) {
 			// TODO Auto-generated catch block
@@ -135,8 +142,8 @@ public class ViewStoriesActivity extends Activity {
     }
     
     @Override
-	public void onStart() {
-        super.onStart();
+	public void onResume() {
+        super.onResume();
         refresh();
     }
         
@@ -285,8 +292,11 @@ public class ViewStoriesActivity extends Activity {
      * and displaying it.
      */
     public void refresh(){
+    
     	try {
         	storyList = eshandler.getAllStories();
+        	//Story sampleStory = sampleGen.getStory();
+			//storyList.add(sampleStory);
 			storyText = app.updateView(storyList, storyText);
 		} catch (HandlerException e1) {
 			// TODO Auto-generated catch block

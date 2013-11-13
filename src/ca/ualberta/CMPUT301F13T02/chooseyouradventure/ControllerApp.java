@@ -261,7 +261,9 @@ public class ControllerApp extends Application{
 					
 				} else if(itemList.get(i).getClass().equals(Story.class)) {
 				
+					
 					outList = ((Story) itemList.get(i)).getTitle();
+					
 				}
 				infoText.add(outList);
 			}

@@ -49,6 +49,7 @@ public class Page {
 	private String pageEnding;
 	private int refNum;
 	private boolean fightingFrag = false;
+	private int enemyHealth = 0;
 	
 	/**
 	 * This is the constructor that binds the arraylists to itself
@@ -268,6 +269,14 @@ public class Page {
 
 	public void setFightingFrag(boolean fightingFrag) {
 		this.fightingFrag = fightingFrag;
+	}
+
+	public int getEnemyHealth() {
+		return enemyHealth;
+	}
+
+	public void setEnemyHealth(int enemyHealth) {
+		this.enemyHealth = enemyHealth;
 	}
 	
 }

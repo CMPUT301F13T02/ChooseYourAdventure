@@ -49,6 +49,7 @@ public class Counters {
 	private int thresholdValue = 0;
 	private String thresholdType = null;
 	
+	private boolean isEnemyRange = false;
 	
 	public Counters(String treasureStat, String playerHpStat, String enemyHpStat, String enemyHitPercentage, String playerHitPercentage,
 			boolean thresholdSign, int thresholdValue, String thresholdType) {
@@ -103,14 +104,31 @@ public class Counters {
 		
 		this.enemyHpChange = 0;
 		this.playerHpChange = 0;
-		if(randomFlagP <= choiceModifiers.getEnemyHitPercent()){
-			this.playerHpStat = playerHpStat - choiceModifiers.playerHpStat;
-			this.playerHpChange = choiceModifiers.playerHpStat;
+		if(choiceModifiers.playerHpStat > 0){
+			if(randomFlagP <= choiceModifiers.getEnemyHitPercent()){
+				
+				int pChange = rn.nextInt(choiceModifiers.playerHpStat) + 1;
+				this.playerHpChange = pChange;
+				this.playerHpStat = playerHpStat - pChange;			
+				
+			}
 		}
-		if(randomFlagE <= choiceModifiers.getPlayerHitPercent() ){
-			this.enemyHpStat = enemyHpStat - choiceModifiers.enemyHpStat;
-			this.enemyHpChange = choiceModifiers.enemyHpStat;
+		if(choiceModifiers.enemyHpStat > 0){
+			if(randomFlagE <= choiceModifiers.getPlayerHitPercent() ){
+				if(choiceModifiers.isEnemyRange() == true){
+					int eChange = rn.nextInt(choiceModifiers.enemyHpStat) + 1;
+					this.enemyHpChange = eChange;
+					this.enemyHpStat = enemyHpStat - eChange;			
+				}
+				else{
+					this.enemyHpChange = choiceModifiers.enemyHpStat;
+					this.enemyHpStat = enemyHpStat - choiceModifiers.enemyHpStat;
+					
+				}
+			}
 		}
+		
+		
 		
 		
 		
@@ -121,9 +139,35 @@ public class Counters {
 	public void invokeUpdateSimple(Counters choiceModifiers){
 		this.treasureStat = treasureStat - choiceModifiers.treasureStat ;
 		this.treasureChange = choiceModifiers.treasureStat;
-		this.playerHpChange = choiceModifiers.playerHpStat;
-		this.playerHpStat = playerHpStat - choiceModifiers.playerHpStat;
+		if(choiceModifiers.isEnemyRange() == true){
+			Random rn = new Random();
+			int pChange = rn.nextInt(choiceModifiers.playerHpStat) + 1;
+			this.playerHpChange = pChange;
+			this.playerHpStat = playerHpStat - pChange;			
+		}
+		else{
+			this.playerHpChange = choiceModifiers.playerHpStat;
+			this.playerHpStat = playerHpStat - choiceModifiers.playerHpStat;
+			
+		}
 		
+		
+	}
+
+	
+
+	/**
+	 * @return the isEnemyRange
+	 */
+	public boolean isEnemyRange() {
+		return isEnemyRange;
+	}
+
+	/**
+	 * @param isEnemyRange the isEnemyRange to set
+	 */
+	public void setEnemyRange(boolean isEnemyRange) {
+		this.isEnemyRange = isEnemyRange;
 	}
 
 	/**

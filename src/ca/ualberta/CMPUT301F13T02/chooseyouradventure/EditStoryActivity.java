@@ -203,12 +203,16 @@ public class EditStoryActivity extends Activity {
     	final CheckBox check = new CheckBox(this);
     	layout.addView(check);
     	
+    	final EditText alertEdit2 = new EditText(this);
+    	alertEdit2.setText("0");
+    	layout.addView(alertEdit2);
+    	
     	builder.setView(layout);
     	builder.setMessage("Enter the title of your new page")
     	.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	String pageTitle = alertEdit.getText().toString();
-            	app.updateTitle(pageTitle, check.isChecked());
+            	app.updateTitle(pageTitle, check.isChecked(), alertEdit2.getText().toString());
             	
             	refresh();
             	

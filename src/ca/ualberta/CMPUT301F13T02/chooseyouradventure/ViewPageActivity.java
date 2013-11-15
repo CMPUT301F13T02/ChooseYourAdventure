@@ -56,6 +56,7 @@ import android.view.View.OnLongClickListener;
 import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -398,6 +399,7 @@ public class ViewPageActivity extends Activity {
 			app.getStory().setPlayerStats(new Counters("0","100"));
 		}
 		
+		
 		TextView fightingUpdate = new TextView(app);
 		TextView healthView = new TextView(app);
 		TextView treasureView = new TextView(app);
@@ -417,6 +419,10 @@ public class ViewPageActivity extends Activity {
 			enemyView.setTextColor(Color.RED);
 			enemyView.setText("Enemy Health: " + stat.getEnemyHpStat());
 			fightingLayout.addView(enemyView);
+			app.getStory().getPlayerStats().setEnemyRange(true);
+		}
+		else {
+			app.getStory().getPlayerStats().setEnemyRange(false);
 		}
 		
 		String displayChanges = "\n";
@@ -798,6 +804,9 @@ public class ViewPageActivity extends Activity {
     	final EditText alertEnemyHP = new EditText(this);
     	final EditText hitPercentage2 = new EditText(this);
     	
+    	final CheckBox eCheck = new CheckBox(this);
+    	final CheckBox pCheck = new CheckBox(this);
+    	
     	if(app.getStory().isUsesCombat() == true){
     		final TextView tText = new TextView(this);
         	tText.setText("Change in coins? (+/-)");
@@ -810,18 +819,18 @@ public class ViewPageActivity extends Activity {
         	final TextView hpText = new TextView(this);
         	hpText.setText("Damage to player? (+/-)");
         	layout.addView(hpText);
-        	
+
     		
         	alertHP.setText("" + decision.getChoiceModifiers().getPlayerHpStat());
         	layout.addView(alertHP);
         	
+
         	if(app.getPage().isFightingFrag() == true){
         		
         		final TextView percText = new TextView(this);
             	percText.setText("Enemy Hit Percantage (1-100)");
             	layout.addView(percText);
-            	
-            	
+            	           	
             	hitPercentage.setText("" + decision.getChoiceModifiers().getEnemyHitPercent());
             	layout.addView(hitPercentage);
 
@@ -832,6 +841,7 @@ public class ViewPageActivity extends Activity {
             	
             	alertEnemyHP.setText("" + decision.getChoiceModifiers().getEnemyHpStat());
             	layout.addView(alertEnemyHP);   	
+            	
        	
             	final TextView percText2 = new TextView(this);
             	percText2.setText("Player Hit Percantage (1-100)");

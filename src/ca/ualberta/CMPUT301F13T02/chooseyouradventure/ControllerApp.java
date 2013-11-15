@@ -277,6 +277,10 @@ public class ControllerApp extends Application {
 						outList = "{Start} ";
 					}
 					
+					if(((Page) itemList.get(i)).isFightingFrag() == true){
+						outList = outList + "{Fight} ";
+					}
+					
 					if(((Page) itemList.get(i)).getDecisions().size() == 0){				
 						outList = outList + "{Endpoint} ";
 					}
@@ -313,9 +317,12 @@ public class ControllerApp extends Application {
 	 * title.
 	 * @param pageTitle
 	 */
-	protected void updateTitle(String pageTitle, boolean fight){
+	protected void updateTitle(String pageTitle, boolean fight, String health){
 		Page newPage = initializeNewPage(pageTitle);
 		newPage.setFightingFrag(fight);
+		try{
+			newPage.setEnemyHealth(Integer.parseInt(health));
+		} catch(Exception e){}
 		currentStory.addPage(newPage);
 		currentStory.updateStory();
 	}
@@ -346,7 +353,7 @@ public class ControllerApp extends Application {
 	 * @param story
 	 * @param page
 	 */
-	public <T> void jump(Class<T> classItem, Story story, Page page) {
+	public <T> void jump(Class<T> classItem, Story story, Page page) {	
 		setStory(story);
 		setPage(page);
 		Intent intent = new Intent(this, classItem);

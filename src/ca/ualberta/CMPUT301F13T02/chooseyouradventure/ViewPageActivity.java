@@ -734,7 +734,13 @@ public class ViewPageActivity extends Activity {
 		int whichDecision = decisionsLayout.indexOfChild(view);
 		if(app.getStory().isUsesCombat() == true){
 			Decision decision = app.getPage().getDecisions().get(whichDecision);
-			app.getStory().getPlayerStats().invokeUpdate(decision.getChoiceModifiers());
+			if(app.getPage().isFightingFrag() == true){
+				app.getStory().getPlayerStats().invokeUpdateComplex(decision.getChoiceModifiers());
+			}
+			else{
+				app.getStory().getPlayerStats().invokeUpdateSimple(decision.getChoiceModifiers());
+			}
+			
 		}
 		app.followDecision(whichDecision);
 

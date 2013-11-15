@@ -30,6 +30,8 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
+import java.util.Random;
+
 public class Counters {
 	
 	private int treasureStat = 0;
@@ -91,11 +93,28 @@ public class Counters {
 		
 	}
 	
-	public void invokeUpdate(Counters choiceModifiers){
+	public void invokeUpdateComplex(Counters choiceModifiers){
+		Random rn = new Random();
+		int randomFlagP = rn.nextInt(100) + 1;
+		int randomFlagE = rn.nextInt(100) + 1;
 		this.treasureStat = treasureStat - choiceModifiers.treasureStat ;
 		this.treasureChange = choiceModifiers.treasureStat;
-		this.enemyHpStat = enemyHpStat - choiceModifiers.enemyHpStat;
-		this.enemyHpChange = choiceModifiers.enemyHpStat;
+		if(randomFlagP <= choiceModifiers.getEnemyHitPercent()){
+			this.playerHpChange = choiceModifiers.playerHpStat;
+			this.playerHpStat = playerHpStat - choiceModifiers.playerHpStat;
+		}
+		if(randomFlagE <= choiceModifiers.getPlayerHitPercent() ){
+			this.enemyHpStat = enemyHpStat - choiceModifiers.enemyHpStat;
+			this.enemyHpChange = choiceModifiers.enemyHpStat;
+		}
+		
+		
+		
+	}
+	
+	public void invokeUpdateSimple(Counters choiceModifiers){
+		this.treasureStat = treasureStat - choiceModifiers.treasureStat ;
+		this.treasureChange = choiceModifiers.treasureStat;
 		this.playerHpChange = choiceModifiers.playerHpStat;
 		this.playerHpStat = playerHpStat - choiceModifiers.playerHpStat;
 		

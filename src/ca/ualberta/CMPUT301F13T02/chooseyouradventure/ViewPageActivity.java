@@ -41,6 +41,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -94,6 +95,7 @@ public class ViewPageActivity extends Activity {
 	private LinearLayout tilesLayout;
 	private LinearLayout decisionsLayout;
 	private LinearLayout commentsLayout;
+	private LinearLayout fightingLayout;
 	
 	
     private ControllerApp app;
@@ -114,6 +116,7 @@ public class ViewPageActivity extends Activity {
         
         app = (ControllerApp) this.getApplication();
         
+        fightingLayout = (LinearLayout) findViewById(R.id.fightingLayout);
         tilesLayout = (LinearLayout) findViewById(R.id.tilesLayout);
         decisionsLayout = (LinearLayout) findViewById(R.id.decisionsLayout);
         commentsLayout = (LinearLayout) findViewById(R.id.commentsLayout);
@@ -124,6 +127,8 @@ public class ViewPageActivity extends Activity {
         /* Set up onClick listeners for buttons on screen, even if some aren't
          * shown at the time.
          */
+        
+        
 		Button addTileButton = (Button) findViewById(R.id.addTile);
 		addTileButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -363,6 +368,10 @@ public class ViewPageActivity extends Activity {
 		
 		setButtonVisibility();
 		
+		if (app.getStory().isUsesCombat() == true) {
+			updateCounters();
+		}
+		
 		if (app.haveTilesChanged()) {
 			updateTiles(page);
 		}
@@ -381,7 +390,52 @@ public class ViewPageActivity extends Activity {
 		
 		app.finishedUpdating();
 	}
+	
+	private void updateCounters() {
+		fightingLayout.removeAllViews();
 		
+		TextView fightingUpdate = new TextView(app);
+		TextView healthView = new TextView(app);
+		TextView treasureView = new TextView(app);
+		TextView enemyView = new TextView(app);
+		Counters stat = app.getStory().getPlayerStats();
+		
+		
+		healthView.setTextColor(Color.BLUE);
+		healthView.setText("Current Health: " + stat.getPlayerHpStat());
+		fightingLayout.addView(healthView);
+		
+		treasureView.setTextColor(Color.YELLOW);
+		treasureView.setText("Current Treasure: " + stat.getTreasureStat());
+		fightingLayout.addView(treasureView);
+		
+		if(app.getPage().isFightingFrag() == true){
+			enemyView.setTextColor(Color.RED);
+			enemyView.setText("Enemy Health: " + stat.getEnemyHpStat());
+			fightingLayout.addView(enemyView);
+		}
+		
+		String displayChanges = "\n";
+		if(stat.getEnemyHpChange() != 0){
+			displayChanges += "Enemy ";
+			if(stat.getEnemyHpChange() <= 0){displayChanges += "has ";}
+			else{displayChanges += "lost ";}
+			displayChanges += stat.getEnemyHpChange() + " hitpoints";}
+		if(stat.getPlayerHpChange() != 0){
+			displayChanges += "Player ";
+			if(stat.getPlayerHpChange() <= 0){displayChanges += "gained ";}
+			else{displayChanges += "lost ";}
+			displayChanges += stat.getPlayerHpChange() + " hitpoints";}
+		if(stat.getTreasureChange() != 0){
+			displayChanges += "Player ";
+			if(stat.getTreasureChange() <= 0){displayChanges += "gained ";}
+			else{displayChanges += "lost ";}
+			displayChanges += stat.getTreasureChange() + " coins worth of treasure.";}
+		fightingUpdate.setTextColor(Color.GREEN);
+		fightingUpdate.setText(displayChanges);
+		fightingLayout.addView(fightingUpdate);
+	}
+
 	/**
 	 * Handles removing or showing the proper buttons in both the action bar
 	 * and the in the page.
@@ -678,6 +732,10 @@ public class ViewPageActivity extends Activity {
 	 */
 	private void decisionClicked(View view) {
 		int whichDecision = decisionsLayout.indexOfChild(view);
+		if(app.getStory().isUsesCombat() == true){
+			Decision decision = app.getPage().getDecisions().get(whichDecision);
+			app.getStory().getPlayerStats().invokeUpdate(decision.getChoiceModifiers());
+		}
 		app.followDecision(whichDecision);
 
 	}
@@ -723,12 +781,87 @@ public class ViewPageActivity extends Activity {
     	pageSpinner.setSelection(toPagePosition);
     	layout.addView(pageSpinner);
     	
+    	
+    	final EditText alertTreasure = new EditText(this);
+    	final EditText alertHP = new EditText(this);
+    	final EditText hitPercentage = new EditText(this);
+    	final EditText alertEnemyHP = new EditText(this);
+    	final EditText hitPercentage2 = new EditText(this);
+    	
+    	if(app.getStory().isUsesCombat() == true){
+    		final TextView tText = new TextView(this);
+        	tText.setText("Change in coins? (+/-)");
+        	layout.addView(tText);
+        	
+        	
+        	alertTreasure.setText("" + decision.getChoiceModifiers().getTreasureStat());
+        	layout.addView(alertTreasure);
+        	
+        	final TextView hpText = new TextView(this);
+        	hpText.setText("Damage to player? (+/-)");
+        	layout.addView(hpText);
+        	
+    		
+        	alertHP.setText("" + decision.getChoiceModifiers().getPlayerHpStat());
+        	layout.addView(alertHP);
+        	
+        	if(app.getPage().isFightingFrag() == true){
+        		
+        		final TextView percText = new TextView(this);
+            	percText.setText("Enemy Hit Percantage (1-100)");
+            	layout.addView(percText);
+            	
+            	
+            	hitPercentage.setText("" + decision.getChoiceModifiers().getEnemyHitPercent());
+            	layout.addView(hitPercentage);
+
+            	final TextView eText = new TextView(this);
+            	eText.setText("Damage to enemy ? (+/-)");
+            	layout.addView(eText);
+            	
+            	
+            	alertEnemyHP.setText("" + decision.getChoiceModifiers().getEnemyHpStat());
+            	layout.addView(alertEnemyHP);   	
+       	
+            	final TextView percText2 = new TextView(this);
+            	percText2.setText("Player Hit Percantage (1-100)");
+            	layout.addView(percText2);
+            	
+            	
+            	hitPercentage2.setText("" + decision.getChoiceModifiers().getPlayerHitPercent());
+            	layout.addView(hitPercentage2);
+        	}
+    	}
+
     	builder.setView(layout);
     	builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
         		int decisionNumber = decisionsLayout.indexOfChild(decisionView);
+        		if(app.getStory().isUsesCombat() == true){
+        			String treasure = alertTreasure.getText().toString();
+        			String hp = alertHP.getText().toString();
+        			if(app.getPage().isFightingFrag() == true){      				
+        				Counters counter = new Counters(treasure, hp);
+	        			app.updateDecision(alertEdit.getText().toString(), 
+	                			pageSpinner.getSelectedItemPosition(), decisionNumber, counter);
+        			}
+	        		else{
+	        			String ehp = alertEnemyHP.getText().toString();
+	        			String hitP = hitPercentage.getText().toString();
+	        			String hitE = hitPercentage2.getText().toString();
+	        			Counters counter = new Counters(treasure, hp, ehp, hitE, hitP, true, 0 ,null);
+	        			app.updateDecision(alertEdit.getText().toString(), 
+	                			pageSpinner.getSelectedItemPosition(), decisionNumber, counter);
+	        		}
+	        				
+	        		
+        			
+        		}
+        		else{
+        		
             	app.updateDecision(alertEdit.getText().toString(), 
             			pageSpinner.getSelectedItemPosition(), decisionNumber);
+        		}
             }
         })
         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

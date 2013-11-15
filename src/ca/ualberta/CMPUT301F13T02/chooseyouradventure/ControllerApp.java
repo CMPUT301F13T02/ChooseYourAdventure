@@ -169,6 +169,32 @@ public class ControllerApp extends Application {
 			}	
 		    jump(EditStoryActivity.class,newStory, newPage);
 	    }
+	
+	//This should be refactored.
+	public void initializeNewStory(String storyTitle, Counters playerStats) throws HandlerException{
+    	
+    	final Story newStory = new Story(); 
+    	newStory.setUsesCombat(true);
+    	newStory.setPlayerStats(playerStats);
+    	newStory.setTitle(storyTitle);	    	
+    	Page newPage = initializeNewPage("First Page");
+    	newStory.addPage(newPage);
+    	newStory.setFirstpage(newPage.getId());
+    	newStory.setAuthor(Secure.getString(
+				getBaseContext().getContentResolver(), Secure.ANDROID_ID));
+	    try
+		{			    	
+	    	ESHandler eshandler = new ESHandler();
+			eshandler.addStory(newStory);
+			
+
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	    jump(EditStoryActivity.class,newStory, newPage);
+    }
 
 
 	/**
@@ -287,8 +313,9 @@ public class ControllerApp extends Application {
 	 * title.
 	 * @param pageTitle
 	 */
-	protected void updateTitle(String pageTitle){
+	protected void updateTitle(String pageTitle, boolean fight){
 		Page newPage = initializeNewPage(pageTitle);
+		newPage.setFightingFrag(fight);
 		currentStory.addPage(newPage);
 		currentStory.updateStory();
 	}
@@ -410,6 +437,12 @@ public class ControllerApp extends Application {
 	public void updateDecision(String text, int whichPage, int whichDecision) {
 		ArrayList<Page> pages = currentStory.getPages();
 		currentPage.updateDecision(text, pages.get(whichPage), whichDecision);
+		setDecisionsChanged();
+	}
+	
+	public void updateDecision(String text, int whichPage, int whichDecision, Counters counter) {
+		ArrayList<Page> pages = currentStory.getPages();
+		currentPage.updateDecision(text, pages.get(whichPage), whichDecision, counter);
 		setDecisionsChanged();
 	}
 

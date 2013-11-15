@@ -35,6 +35,9 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 import java.util.ArrayList;
 
 
+
+
+
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
@@ -49,9 +52,12 @@ import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 /**
  * The main activity of the application. Displays a list of stories to read. <br />
@@ -263,14 +269,33 @@ public class ViewStoriesActivity extends Activity {
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle("Create New");
     	
+    	final LinearLayout layout = new LinearLayout(this);
+    	layout.setOrientation(LinearLayout.VERTICAL);
+    	
     	final EditText alertEdit = new EditText(this);
-    	builder.setView(alertEdit);
+    	layout.addView(alertEdit);
+    	
+    	final TextView alertText = new TextView(this);
+    	alertText.setText("Use Counters and Combat?");
+    	layout.addView(alertText);
+    	
+    	final CheckBox check = new CheckBox(this);
+    	layout.addView(check);
+        
+    	builder.setView(layout);
     	builder.setMessage("Enter the title of your story")
     	.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	
 					try {
-						app.initializeNewStory(alertEdit.getText().toString());
+						if(check.isChecked() == true){
+							Counters baseCount = new Counters("0", "100");
+							app.initializeNewStory(alertEdit.getText().toString(), baseCount);
+						}
+						else{
+						app.initializeNewStory(alertEdit.getText().toString());}
+						
+						
 						refresh();
 					} catch (HandlerException e) {
 						// TODO Auto-generated catch block

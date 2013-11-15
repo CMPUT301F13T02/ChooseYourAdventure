@@ -43,6 +43,8 @@ import java.util.UUID;
 public class Decision {
 	private String text;
 	private UUID pageID;
+	private Counters choiceModifiers = new Counters();
+	
 
 	public Decision(Page page) {
 		this.text = "New Decision";
@@ -54,6 +56,8 @@ public class Decision {
 	 * This sets the link for the decision
 	 * @param The text of the decision and it's corresponding page
 	 */
+	
+	
 	public Decision(String text, Page page) {
 		this.text = text;
 		this.pageID = page.getId();
@@ -86,6 +90,12 @@ public class Decision {
 		this.pageID = page.getId();
 	}
 	
+	public void updateDecision(String text, Page page, Counters counter) {
+		this.text = text;
+		this.pageID = page.getId();
+		this.choiceModifiers = counter;
+	}
+	
 	/**
 	 * Compares this Decision with the passed decision for equality
 	 * @param decision The Decision to compare against
@@ -96,5 +106,15 @@ public class Decision {
 				return false;
 
 		return true;
+	}
+
+
+	public Counters getChoiceModifiers() {
+		return choiceModifiers;
+	}
+
+
+	public void setChoiceModifiers(Counters choiceModifiers) {
+		this.choiceModifiers = choiceModifiers;
 	}
 }

@@ -44,9 +44,12 @@ import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 /**
  * This Activity allows a story's author to edit a story by adding adding pages,
@@ -187,13 +190,25 @@ public class EditStoryActivity extends Activity {
 	private void createPage() throws HandlerException{
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle("Create New");	
+    	final LinearLayout layout = new LinearLayout(this);
+    	layout.setOrientation(LinearLayout.VERTICAL);
+    	
     	final EditText alertEdit = new EditText(this);
-    	builder.setView(alertEdit);
+    	layout.addView(alertEdit);
+    	
+    	final TextView alertText = new TextView(this);
+    	alertText.setText("Fighting Fragment?");
+    	layout.addView(alertText);
+    	
+    	final CheckBox check = new CheckBox(this);
+    	layout.addView(check);
+    	
+    	builder.setView(layout);
     	builder.setMessage("Enter the title of your new page")
     	.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	String pageTitle = alertEdit.getText().toString();
-            	app.updateTitle(pageTitle);
+            	app.updateTitle(pageTitle, check.isChecked());
             	
             	refresh();
             	

@@ -53,7 +53,14 @@ public class Story {
 	private String title = new String();
 	@SuppressWarnings("unused")
 	private long timeStamp;
+	
+	private boolean usesCombat = false;
+	private Counters playerStats;
 
+	/**
+	 * @return the hpCount
+	 */
+	
 	/**
 	 * This is the main constructor for Story
 	 */
@@ -204,6 +211,22 @@ public class Story {
 				return false;
 		}
 		return true;
+	}
+
+	public boolean isUsesCombat() {
+		return usesCombat;
+	}
+
+	public void setUsesCombat(boolean usesCombat) {
+		this.usesCombat = usesCombat;
+	}
+
+	public Counters getPlayerStats() {
+		return playerStats;
+	}
+
+	public void setPlayerStats(Counters playerStats) {
+		this.playerStats = playerStats;
 	}
 	
 }

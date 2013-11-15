@@ -40,6 +40,8 @@ import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,6 +54,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.SearchView;
 
 /**
  * The main activity of the application. Displays a list of stories to read. <br />
@@ -158,9 +161,18 @@ public class ViewStoriesActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	super.onCreateOptionsMenu(menu);
+    	
+    	getMenuInflater().inflate(R.menu.view_stories, menu);
+    	
+    	SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+    	SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+    	// Assumes current activity is the searchable activity
+    	//searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+    	searchView.setIconifiedByDefault(true);
+    	searchView.setSubmitButtonEnabled(true);
 
-		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, "Help");
-		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		//MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, "Help");
+		//help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
         return true;
     }

@@ -72,7 +72,7 @@ public abstract class ESHttpRequest extends HttpEntityEnclosingRequestBase {
 	}
 	
 	/**
-	 * Execute a resquest to Elastic Search
+	 * Execute a request to Elastic Search
 	 * @throws IOException
 	 * @throws HandlerException 
 	 * @return A String representation of Elastic Search's response

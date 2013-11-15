@@ -33,10 +33,12 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch;
 /* The file with inspiration from https://github.com/rayzhangcl/ESDemo */
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import org.apache.http.client.HttpClient;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.google.gson.Gson;
@@ -218,5 +220,41 @@ public class ESHandler implements Handler{
 		}
 		
 		return stories;
+	}
+	
+	
+	public ArrayList<Story> search(String searchKey) throws HandlerException, UnsupportedEncodingException {
+		/*
+		 * Will want a query involving the searchKey.
+		 * Pass query to elastic search.
+		 * See https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ESClient.java
+		 */
+	
+		ESHttpGet get = new ESHttpGet(getStoryPath() + "_search");
+		String query = "{\"query\" : {\"query_string\" : {\"default_field\" : \"title\",\"query\" : \"" + searchKey + "*" + "\"}}}";
+		StringEntity stringentity = new StringEntity(query);
+		
+		get.setHeader("Accept", "application/json");
+		get.setEntity(stringentity);
+		
+		String response = null;
+		try {
+			response = get.execute();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		ArrayList<Story> stories = new ArrayList<Story>();
+		
+		/* For each hit, add it to the list */
+		Type esSearchResponseType = new TypeToken<ESSearchResponse<Story>>(){}.getType();
+		ESSearchResponse<Story> esResponse = gson.fromJson(response, esSearchResponseType);
+		for (ESResponse<Story> s : esResponse.getHits()) {
+			stories.add(s.getSource());
+		}
+		
+		return stories;
+		
 	}
 }

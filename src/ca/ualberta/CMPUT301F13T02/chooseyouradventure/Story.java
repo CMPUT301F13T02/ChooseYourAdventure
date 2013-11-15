@@ -58,6 +58,11 @@ public class Story {
 	public Story() {
 		this.firstpage = new Page().getId();
 	}
+	
+	// For testing purposes
+	public Story(String title) {
+		this.title = title;
+	}
 
 	/**
 	 * @param firstpage the firstpage to set

@@ -394,6 +394,10 @@ public class ViewPageActivity extends Activity {
 	private void updateCounters() {
 		fightingLayout.removeAllViews();
 		
+		if(app.getStory().getFirstpage().getId().equals(app.getPage().getId())){
+			app.getStory().setPlayerStats(new Counters("0","100"));
+		}
+		
 		TextView fightingUpdate = new TextView(app);
 		TextView healthView = new TextView(app);
 		TextView treasureView = new TextView(app);
@@ -420,12 +424,12 @@ public class ViewPageActivity extends Activity {
 			displayChanges += "Enemy ";
 			if(stat.getEnemyHpChange() <= 0){displayChanges += "has ";}
 			else{displayChanges += "lost ";}
-			displayChanges += stat.getEnemyHpChange() + " hitpoints";}
+			displayChanges += stat.getEnemyHpChange() + " hitpoints\n";}
 		if(stat.getPlayerHpChange() != 0){
 			displayChanges += "Player ";
 			if(stat.getPlayerHpChange() <= 0){displayChanges += "gained ";}
 			else{displayChanges += "lost ";}
-			displayChanges += stat.getPlayerHpChange() + " hitpoints";}
+			displayChanges += stat.getPlayerHpChange() + " hitpoints\n";}
 		if(stat.getTreasureChange() != 0){
 			displayChanges += "Player ";
 			if(stat.getTreasureChange() <= 0){displayChanges += "gained ";}
@@ -846,7 +850,7 @@ public class ViewPageActivity extends Activity {
         		if(app.getStory().isUsesCombat() == true){
         			String treasure = alertTreasure.getText().toString();
         			String hp = alertHP.getText().toString();
-        			if(app.getPage().isFightingFrag() == true){      				
+        			if(app.getPage().isFightingFrag() == false){      				
         				Counters counter = new Counters(treasure, hp);
 	        			app.updateDecision(alertEdit.getText().toString(), 
 	                			pageSpinner.getSelectedItemPosition(), decisionNumber, counter);
@@ -858,10 +862,7 @@ public class ViewPageActivity extends Activity {
 	        			Counters counter = new Counters(treasure, hp, ehp, hitE, hitP, true, 0 ,null);
 	        			app.updateDecision(alertEdit.getText().toString(), 
 	                			pageSpinner.getSelectedItemPosition(), decisionNumber, counter);
-	        		}
-	        				
-	        		
-        			
+	        		}     			
         		}
         		else{
         		

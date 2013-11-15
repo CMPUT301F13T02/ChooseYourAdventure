@@ -99,14 +99,20 @@ public class Counters {
 		int randomFlagE = rn.nextInt(100) + 1;
 		this.treasureStat = treasureStat - choiceModifiers.treasureStat ;
 		this.treasureChange = choiceModifiers.treasureStat;
+		
+		
+		this.enemyHpChange = 0;
+		this.playerHpChange = 0;
 		if(randomFlagP <= choiceModifiers.getEnemyHitPercent()){
-			this.playerHpChange = choiceModifiers.playerHpStat;
 			this.playerHpStat = playerHpStat - choiceModifiers.playerHpStat;
+			this.playerHpChange = choiceModifiers.playerHpStat;
 		}
 		if(randomFlagE <= choiceModifiers.getPlayerHitPercent() ){
 			this.enemyHpStat = enemyHpStat - choiceModifiers.enemyHpStat;
 			this.enemyHpChange = choiceModifiers.enemyHpStat;
 		}
+		
+		
 		
 		
 		

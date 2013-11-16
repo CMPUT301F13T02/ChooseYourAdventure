@@ -10,7 +10,9 @@ import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class SearchableActivity extends ListActivity {
 	
@@ -18,7 +20,7 @@ public class SearchableActivity extends ListActivity {
 	private ArrayList<Story> stories = new ArrayList<Story>();
 	ArrayList<String> titles = new ArrayList<String>();
 	private ControllerApp app;
-	private ArrayAdapter adapter;
+	private ArrayAdapter<String> adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,7 @@ public class SearchableActivity extends ListActivity {
 		adapter = new ArrayAdapter<String>(this, R.layout.list_item_base, titles);
 		setListAdapter(adapter);
 		
+		app = (ControllerApp) getApplication();
 		
 		Intent intent = getIntent();
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -63,6 +66,10 @@ public class SearchableActivity extends ListActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.search_stories, menu);
 		return true;
+	}
+	
+	protected void onListItemClick(ListView l, View v, int pos, long id) {	
+	    app.jump(ViewPageActivity.class, stories.get(pos), stories.get(pos).getFirstpage());
 	}
 
 }

@@ -41,6 +41,8 @@ import android.provider.Settings.Secure;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.Menu;
@@ -80,6 +82,7 @@ import android.widget.SearchView;
 public class ViewStoriesActivity extends Activity {
 	private ListView mainPage;
 	private Button createNew;
+	private Button searchButton;
 	ArrayList<String> storyText = new ArrayList<String>();
 	ArrayList<Story> storyList = new ArrayList<Story>();
 	private ControllerApp app; 
@@ -94,11 +97,20 @@ public class ViewStoriesActivity extends Activity {
         setContentView(R.layout.view_stories_activity);
         mainPage = (ListView) findViewById(R.id.mainView);
         createNew = (Button) findViewById(R.id.createButton);
+        searchButton = (Button) findViewById(R.id.searchButton);
         createNew.setOnClickListener(new OnClickListener() {
-           
             public void onClick(View v) {
                 createStory();
             }
+        });
+        
+        searchButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				onSearchRequested();
+			}
+        	
         });
         
         app = (ControllerApp) getApplication();
@@ -163,16 +175,9 @@ public class ViewStoriesActivity extends Activity {
     	super.onCreateOptionsMenu(menu);
     	
     	getMenuInflater().inflate(R.menu.view_stories, menu);
-    	
-    	SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-    	SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-    	// Assumes current activity is the searchable activity
-    	//searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-    	searchView.setIconifiedByDefault(true);
-    	searchView.setSubmitButtonEnabled(true);
 
-		//MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, "Help");
-		//help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+    	MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, "Help");
+		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
         return true;
     }

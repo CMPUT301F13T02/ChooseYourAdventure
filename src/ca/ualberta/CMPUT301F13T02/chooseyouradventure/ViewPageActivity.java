@@ -31,6 +31,7 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 import android.app.Activity;
@@ -123,6 +124,10 @@ public class ViewPageActivity extends Activity {
         commentsLayout = (LinearLayout) findViewById(R.id.commentsLayout);
         
         app.setActivity(this);
+        
+        
+		
+		
         update(app.getPage());
         
         /* Set up onClick listeners for buttons on screen, even if some aren't
@@ -396,7 +401,15 @@ public class ViewPageActivity extends Activity {
 		fightingLayout.removeAllViews();
 		
 		if(app.getStory().getFirstpage().getId().equals(app.getPage().getId())){
-			app.getStory().setPlayerStats(new Counters("0","100"));
+			Counters counter = new Counters();
+			counter.setBasic("0","100");
+			app.getStory().setPlayerStats(counter);
+			
+			
+			
+		}
+		if(app.isOnEntry() == true){
+			app.getStory().getPlayerStats().setEnemyHpStat(app.getPage().getEnemyHealth());
 		}
 		
 		
@@ -501,10 +514,43 @@ public class ViewPageActivity extends Activity {
 		//For each decision in the page, add it to decisionsLayout
 		ArrayList<Decision> decisions = page.getDecisions();
 		for (int i = 0; i < decisions.size(); i++) {
-			addDecision(i, decisions.get(i));
+			if(page.isFightingFrag() == false){
+				addDecision(i, decisions.get(i));
+			}
+			else if(app.getEditing() == true){
+				addDecision(i, decisions.get(i));
+			}
+			else{			
+				boolean outcome = passThreshold(decisions.get(i));
+				if(outcome == true){
+					addDecision(i, decisions.get(i));
+				}
+			}
+			
 		}
 	}
 	
+	private boolean passThreshold(Decision decision) {
+		int type = decision.getChoiceModifiers().getThresholdType();
+		int sign = decision.getChoiceModifiers().getThresholdSign();
+		int value = decision.getChoiceModifiers().getThresholdValue();
+		Counters counter = app.getStory().getPlayerStats();
+		boolean outcome = false;
+		int[] typeBase = {counter.getPlayerHpStat(),counter.getEnemyHpStat(),counter.getTreasureStat()};
+		switch(sign){
+			case(0):
+				if(typeBase[type] < value){outcome = true;};
+				break;
+			case(1):
+				if(typeBase[type] > value){outcome = true;};
+				break;
+			case(2):
+				if(typeBase[type] == value){outcome = true;};
+				break;
+		}
+		return outcome;
+	}
+
 	/**
 	 * Removes the comments from commentsLayout and repopulates it with the
 	 * current comments.
@@ -716,8 +762,15 @@ public class ViewPageActivity extends Activity {
 	 * @param view
 	 */
 	public void decisionMenu(final View view){
-		final String[] titles = {"Edit","Delete"};
-		
+		final String[] titles;
+		final String[] titlesBasic = {"Edit","Delete","Cancel"};
+		final String[] titlesFight = {"Edit","Delete","Set Conditionals","Cancel"};
+		if(app.getPage().isFightingFrag() == true){
+			titles = titlesFight;
+		}
+		else{
+			titles = titlesBasic;
+		}
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.story_options);
         builder.setItems(titles, new DialogInterface.OnClickListener() {
@@ -730,12 +783,111 @@ public class ViewPageActivity extends Activity {
             	case(1):
             		app.deleteDecision(whichDecision);
             		break;
+            	case(2):
+            		if(app.getPage().isFightingFrag() == true){
+            			onEditConditionals(view);
+            		}
             	}
             }
         });
         builder.show();
     }
 	
+	protected void onEditConditionals(View view) {
+		final int whichDecision = decisionsLayout.indexOfChild(view);
+		final Decision decision = app.getPage().getDecisions().get(whichDecision);
+		
+		UUID toPageId = decision.getPageID();
+		ArrayList<Page> pages = app.getStory().getPages();
+		int toPagePosition = -1;
+		for (int i = 0; i < pages.size(); i++) {
+
+			UUID comparePage = pages.get(i).getId();
+			System.out.println("toPageID: " + toPageId + "\ncomparePage: " + comparePage + "\nPage: " + app.getPage() + "\nDecision: " + decision.getPageID() + decision.getText());
+			if (toPageId.equals(comparePage)) {
+				toPagePosition = i;
+				
+			}
+		}
+		final int outPage = toPagePosition;
+		final TextView decisionView = (TextView) view;
+		
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	builder.setTitle("Set the conditions in which this decision appears");
+    	
+    	final LinearLayout layout = new LinearLayout(this);
+    	layout.setOrientation(LinearLayout.VERTICAL);
+    	
+    	final EditText alertEdit = new EditText(this);
+    	alertEdit.setText(decision.getText());
+    	layout.addView(alertEdit);
+    	
+    	final Spinner pageSpinner = new Spinner(this);
+    	ArrayList<String> pageStrings = app.getPageStrings(pages);
+    	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, 
+    			R.layout.list_item_base, pageStrings);
+    	pageSpinner.setAdapter(pagesAdapter);
+    	pageSpinner.setSelection(toPagePosition);
+    	layout.addView(pageSpinner);
+    	
+    	final Spinner condSpinner = new Spinner(this);	
+    	ArrayList<String> typeString = new ArrayList<String>();
+    	typeString.add("Health");
+    	typeString.add("Enemy Health");
+    	typeString.add("Treasure");
+    	ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(this, 
+    			R.layout.list_item_base,typeString);
+    	condSpinner.setAdapter(typeAdapter);
+    	condSpinner.setSelection(decision.getChoiceModifiers().getThresholdType());
+    	layout.addView(condSpinner);
+    	
+    	final Spinner signSpinner = new Spinner(this);
+    	ArrayList<String> signString = new ArrayList<String>();
+    	signString.add("<");
+    	signString.add(">");
+    	signString.add("=");
+    	ArrayAdapter<String> signAdapter = new ArrayAdapter<String>(this, 
+    			R.layout.list_item_base,signString);
+    	signSpinner.setAdapter(signAdapter);
+    	signSpinner.setSelection(decision.getChoiceModifiers().getThresholdSign());
+    	layout.addView(signSpinner);
+    	
+    	
+    	final EditText conditionValue = new EditText(this);
+    	
+    	
+    	final TextView cText = new TextView(this);
+    	cText.setText("Threshold Level for Activation?");
+    	layout.addView(cText);
+
+
+    	conditionValue.setText("" + decision.getChoiceModifiers().getThresholdValue());
+    	layout.addView(conditionValue);
+        	
+        	
+
+    	builder.setView(layout);
+    	builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+        		
+        					
+        		Counters counter = decision.getChoiceModifiers();
+        		counter.setThresholds(signSpinner.getSelectedItemPosition(), condSpinner.getSelectedItemPosition(), conditionValue.getText().toString());
+        		app.updateDecision(alertEdit.getText().toString(), 
+            			pageSpinner.getSelectedItemPosition(),whichDecision, counter);
+            }
+
+            
+        })
+        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                
+            }
+        });
+        builder.show();
+		
+	}
+
 	/**
 	 * Changes the view so that the next page is showing.
 	 * @param view
@@ -762,7 +914,7 @@ public class ViewPageActivity extends Activity {
 	 */
 	private void onEditDecision(View view) {
 		int whichDecision = decisionsLayout.indexOfChild(view);
-		Decision decision = app.getPage().getDecisions().get(whichDecision);
+		final Decision decision = app.getPage().getDecisions().get(whichDecision);
 		
 		UUID toPageId = decision.getPageID();
 		ArrayList<Page> pages = app.getStory().getPages();
@@ -804,8 +956,7 @@ public class ViewPageActivity extends Activity {
     	final EditText alertEnemyHP = new EditText(this);
     	final EditText hitPercentage2 = new EditText(this);
     	
-    	final CheckBox eCheck = new CheckBox(this);
-    	final CheckBox pCheck = new CheckBox(this);
+    	
     	
     	if(app.getStory().isUsesCombat() == true){
     		final TextView tText = new TextView(this);
@@ -856,12 +1007,13 @@ public class ViewPageActivity extends Activity {
     	builder.setView(layout);
     	builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+            	Counters counter = decision.getChoiceModifiers();
         		int decisionNumber = decisionsLayout.indexOfChild(decisionView);
         		if(app.getStory().isUsesCombat() == true){
         			String treasure = alertTreasure.getText().toString();
         			String hp = alertHP.getText().toString();
         			if(app.getPage().isFightingFrag() == false){      				
-        				Counters counter = new Counters(treasure, hp);
+        				counter.setBasic(treasure, hp);
 	        			app.updateDecision(alertEdit.getText().toString(), 
 	                			pageSpinner.getSelectedItemPosition(), decisionNumber, counter);
         			}
@@ -869,7 +1021,8 @@ public class ViewPageActivity extends Activity {
 	        			String ehp = alertEnemyHP.getText().toString();
 	        			String hitP = hitPercentage.getText().toString();
 	        			String hitE = hitPercentage2.getText().toString();
-	        			Counters counter = new Counters(treasure, hp, ehp, hitE, hitP, true, 0 ,null);
+	        			
+	        			counter.setStats(treasure, hp, ehp, hitE, hitP);
 	        			app.updateDecision(alertEdit.getText().toString(), 
 	                			pageSpinner.getSelectedItemPosition(), decisionNumber, counter);
 	        		}     			
@@ -916,6 +1069,8 @@ public class ViewPageActivity extends Activity {
     	builder.setTitle("What to Say");
     	final EditText alertEdit = new EditText(this);
     	builder.setView(alertEdit);
+    	
+    	
     	builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	app.addComment(alertEdit.getText().toString());

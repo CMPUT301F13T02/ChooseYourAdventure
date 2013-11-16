@@ -45,14 +45,14 @@ public class Counters {
 	private int enemyHitPercent = 100;
 	private int playerHitPercent = 100;
 	
-	boolean thresholdSign = true;
+	private int thresholdSign = 1;
 	private int thresholdValue = 0;
-	private String thresholdType = null;
+	private int thresholdType = 0;
 	
 	private boolean isEnemyRange = false;
 	
-	public Counters(String treasureStat, String playerHpStat, String enemyHpStat, String enemyHitPercentage, String playerHitPercentage,
-			boolean thresholdSign, int thresholdValue, String thresholdType) {
+	public void setStats(String treasureStat, String playerHpStat, String enemyHpStat, String enemyHitPercentage, String playerHitPercentage
+			) {
 		try{
 			this.treasureStat = Integer.parseInt(treasureStat);
 		} catch(Exception e){}
@@ -70,17 +70,21 @@ public class Counters {
 		} catch(Exception e){}
 		
 		
+	}
+	public void setThresholds(int thresholdSign, int thresholdType, String thresholdValue){
 		
-		
+		try{
+			this.thresholdValue = Integer.parseInt(thresholdValue);
+		} catch(Exception e){}
 		
 		
 		this.thresholdSign = thresholdSign;
-		this.thresholdValue = thresholdValue;
+		
 		this.thresholdType = thresholdType;
 		
 	}
 	
-	public Counters(String treasureStat, String playerHpStat) {
+	public void setBasic(String treasureStat, String playerHpStat) {
 		try{
 			this.treasureStat = Integer.parseInt(treasureStat);
 		} catch(Exception e){}
@@ -251,13 +255,13 @@ public class Counters {
 	/**
 	 * @return the thresholdSign
 	 */
-	public boolean isThresholdSign() {
+	public int getThresholdSign() {
 		return thresholdSign;
 	}
 	/**
 	 * @param thresholdSign the thresholdSign to set
 	 */
-	public void setThresholdSign(boolean thresholdSign) {
+	public void setThresholdSign(int thresholdSign) {
 		this.thresholdSign = thresholdSign;
 	}
 	/**
@@ -279,7 +283,7 @@ public class Counters {
 
 
 
-	public String getThresholdType() {
+	public int getThresholdType() {
 		return thresholdType;
 	}
 
@@ -289,7 +293,7 @@ public class Counters {
 
 
 
-	public void setThresholdType(String thresholdType) {
+	public void setThresholdType(int thresholdType) {
 		this.thresholdType = thresholdType;
 	}
 

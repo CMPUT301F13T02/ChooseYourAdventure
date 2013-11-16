@@ -212,8 +212,7 @@ public class EditStoryActivity extends Activity {
     	.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	String pageTitle = alertEdit.getText().toString();
-            	app.updateTitle(pageTitle, check.isChecked(), alertEdit2.getText().toString());
-            	
+            	app.updateTitle(pageTitle, check.isChecked(), alertEdit2.getText().toString());         	
             	refresh();
             	
             }
@@ -251,6 +250,7 @@ public class EditStoryActivity extends Activity {
             	case(0):
             		app.setEditing(true);
             		app.jump(ViewPageActivity.class,app.getStory(),app.getStory().getPages().get(pos));
+            		
             	break;
             	case(1):
             		

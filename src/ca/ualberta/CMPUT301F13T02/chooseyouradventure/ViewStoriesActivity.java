@@ -203,7 +203,9 @@ public class ViewStoriesActivity extends Activity {
     }
     
 	protected void onListItemClick(View v, int pos, long id) throws HandlerException {	
+		
 	    app.jump(ViewPageActivity.class, storyList.get(pos), storyList.get(pos).getFirstpage());
+	    
 	}
 	
 	public boolean onLongListItemClick(View v, int pos, long id) { 
@@ -289,7 +291,8 @@ public class ViewStoriesActivity extends Activity {
             	
 					try {
 						if(check.isChecked() == true){
-							Counters baseCount = new Counters("0", "100");
+							Counters baseCount = new Counters();
+							baseCount.setBasic("0", "100");
 							app.initializeNewStory(alertEdit.getText().toString(), baseCount);
 						}
 						else{

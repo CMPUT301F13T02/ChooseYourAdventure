@@ -59,6 +59,8 @@ public class ControllerApp extends Application {
 	private boolean commentsChanged;
 	private boolean endingChanged;
 	
+	private boolean onEntry;
+	
 	private Story currentStory;
 	private Page currentPage;
 	private ArrayList<Story> stories;
@@ -356,6 +358,7 @@ public class ControllerApp extends Application {
 	public <T> void jump(Class<T> classItem, Story story, Page page) {	
 		setStory(story);
 		setPage(page);
+		setOnEntry(true);
 		Intent intent = new Intent(this, classItem);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
@@ -378,7 +381,12 @@ public class ControllerApp extends Application {
 				break;
 			}
 		}
+		setOnEntry(true);
+		if(currentPage.getId().equals(toPageId) == true){
+			setOnEntry(false);
+		}
 		setPage(toPage);
+		
 		reloadPage();
 	}
 
@@ -452,6 +460,7 @@ public class ControllerApp extends Application {
 		currentPage.updateDecision(text, pages.get(whichPage), whichDecision, counter);
 		setDecisionsChanged();
 	}
+	
 
 	/**
 	 * Deletes the decision at position whichDecision.
@@ -590,6 +599,14 @@ public class ControllerApp extends Application {
 		if (pageActivity != null) {
 			pageActivity.update(currentPage);
 		}
+	}
+
+	public boolean isOnEntry() {
+		return onEntry;
+	}
+
+	public void setOnEntry(boolean onEntry) {
+		this.onEntry = onEntry;
 	}
 	
 }

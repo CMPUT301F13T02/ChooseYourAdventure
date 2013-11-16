@@ -171,9 +171,9 @@ public class Story {
 	 * This function updates the stories data in the database
 	 */
 	public void updateStory(){
-		ESHandler eshandler = new ESHandler();
+		Handler handler = this.getHandler();
 		try {
-			eshandler.updateStory(this);
+			handler.updateStory(this);
 		} catch (HandlerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

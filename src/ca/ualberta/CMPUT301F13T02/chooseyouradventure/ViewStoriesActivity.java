@@ -224,40 +224,34 @@ public class ViewStoriesActivity extends Activity {
             builder.setItems(titles, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int item) {
                 	switch(item){
-                	case(0): /*
+                	case(0):
                 		//set to local handler, 1 means it is local
                 		story.setHandler(dbhandler, 1);
                 		try {
-							//story.getHandler().addStory(story);
-                			dbhandler.addStory(story);
-						} catch (HandlerException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}*/
+                			story.getHandler().addStory(story);
+                		} catch (HandlerException e) {
+                			e.printStackTrace();
+                		}
                 		break;
-                		
-                	case(1): /*
+                	case(1):
                 		// the 0 passed means it isn't local
                 		story.setHandler(eshandler, 0);
                 		//Author can update the story, user creates a new one.
-                		//This could be refactored to do this step in the story itself
                 		if(myId.equals(storyID)){
-                			try {
-								//story.getHandler().updateStory(story);
-                				eshandler.updateStory(story);
-							} catch (HandlerException e) {
-								e.printStackTrace();
-							}
-                		} else {
-                			//story.setId(UUID.randomUUID().toString());
-                			story.setAuthor(myId);
-                			try {
-								story.getHandler().addStory(story);
+                			story.updateStory();
+                		} 
+                		else {
+                			//create a new story because you have to change author ID
+                			Story newStory = story;
+                			newStory.setAuthor(myId);
+                			//set it to be online initially
+                			newStory.setHandler(eshandler, 0);
+							try {
+								newStory.getHandler().addStory(newStory);
 							} catch (HandlerException e) {
 								e.printStackTrace();
 							}
                 		}
-                	 	*/
                 		break;
                 	case(2):
                 		if(myId.equals(storyID)){          			

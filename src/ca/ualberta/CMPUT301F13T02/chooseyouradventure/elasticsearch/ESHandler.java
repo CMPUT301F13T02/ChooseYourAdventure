@@ -222,7 +222,13 @@ public class ESHandler implements Handler{
 		return stories;
 	}
 	
-	
+	/**
+	 * 
+	 * @param searchKey
+	 * @return An ArrayList containing the stories whose titles match or are similar to the search key
+	 * @throws HandlerException
+	 * @throws UnsupportedEncodingException
+	 */
 	public ArrayList<Story> search(String searchKey) throws HandlerException, UnsupportedEncodingException {
 		/*
 		 * Will want a query involving the searchKey.

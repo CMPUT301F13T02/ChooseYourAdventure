@@ -117,7 +117,6 @@ public class ViewStoriesActivity extends Activity {
         
         
 		try {
-			
 			storyList =  eshandler.getAllStories();
 			//Story sampleStory = sampleGen.getStory();
 			//storyList.add(sampleStory);

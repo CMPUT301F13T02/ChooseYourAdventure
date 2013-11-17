@@ -251,7 +251,7 @@ public class EditStoryActivity extends Activity {
 	 * @param Input from longclick
 	 */
 	public void pageOptions(final int pos){
-		final Page currentPage = pageList.get(pos);
+		final Page currentPage = app.getStory().getPages().get(pos);
 		final Page FP = app.getStory().getFirstpage();
 		String[] titlesA = {"Goto/Edit","Page Properties","Cancel"};
 		String[] titlesB = {"Goto/Edit","Page Properties","Assign as First Page","Delete","Cancel"};
@@ -297,14 +297,15 @@ public class EditStoryActivity extends Activity {
           			
             			alertText.setText("Fighting Fragment?");
             			layout.addView(alertText);
+            			check.setChecked(currentPage.isFightingFrag());
             			layout.addView(check);     			
             			alertText2.setText("Health of the Enemy on this Page?");
             			layout.addView(alertText2);
-            			alertEdit2.setText("0");
+            			alertEdit2.setText("" + currentPage.getEnemyHealth());
             			layout.addView(alertEdit2);
             			alertText3.setText("Name of the Enemy on this Page?");
             			layout.addView(alertText3);
-            			alertEdit3.setText("Enemy");
+            			alertEdit3.setText("" + currentPage.getEnemyName());
             			layout.addView(alertEdit3);
             		}
 

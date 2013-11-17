@@ -40,6 +40,7 @@ import android.provider.MediaStore;
 import android.provider.Settings.Secure;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.content.Intent;
+import android.graphics.Bitmap;
 
 /**
  * This class represents the controller for our application. This class stores the state
@@ -59,6 +60,7 @@ public class ControllerApp extends Application {
 	private boolean decisionsChanged;
 	private boolean commentsChanged;
 	private boolean endingChanged;
+	private Object tempSpace;
 	
 	private boolean onEntry;
 	
@@ -66,6 +68,8 @@ public class ControllerApp extends Application {
 	private Page currentPage;
 	private ArrayList<Story> stories;
 	private static ControllerApp instance = new ControllerApp();
+	
+	
 	
 	@Override
 	public void onCreate() {
@@ -489,10 +493,10 @@ public class ControllerApp extends Application {
 	 * This adds a comment to the current page
 	 * @param A comment to add
 	 */
-	public void addComment(String text) {
+	public void addComment(String text, PhotoTile photo) {
 		String poster = Secure.getString( 
 				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
-		Comment comment = new Comment(text, poster);
+		Comment comment = new Comment(text, poster, photo);
 		ESHandler eshandler = new ESHandler();
 		
 		currentPage.addComment(comment);
@@ -621,6 +625,16 @@ public class ControllerApp extends Application {
 
 	public void setOnEntry(boolean onEntry) {
 		this.onEntry = onEntry;
+	}
+
+	public Object getTempSpace() {
+		return tempSpace;
+	}
+
+
+	public void setTempSpace(Object loadObject) {
+		this.tempSpace = loadObject;
+		
 	}
 	
 }

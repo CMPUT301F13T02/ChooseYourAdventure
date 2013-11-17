@@ -89,6 +89,8 @@ public class ViewPageActivity extends Activity {
 	
 	private static final int RESULT_LOAD_IMAGE = 1;
 	private final int TAKE_PHOTO = 2;
+	private final int GRAB_PHOTO = 3;
+	private final int ADD_PHOTO = 4;
 	
 	private final int EDIT_INDEX = 0;
 	private final int SAVE_INDEX = 1;
@@ -155,7 +157,8 @@ public class ViewPageActivity extends Activity {
         addComment.setOnClickListener(new OnClickListener() {
         	@Override
         	public void onClick(View view) {
-        		onEditComment(view);
+        		onCallComment();
+        		
         	}
         });
         
@@ -337,10 +340,7 @@ public class ViewPageActivity extends Activity {
             					              int item) {
             	            	switch(item){
 	            	            	case(0):
-	            	            		Intent i = new Intent(
-	            	            		Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-	            	            				 
-	            	            		startActivityForResult(i, RESULT_LOAD_IMAGE);	
+	            	            		getPhoto();
 	            	            		
 	            	            		
 	            	            		break;
@@ -370,6 +370,17 @@ public class ViewPageActivity extends Activity {
 	 * edit mode.
 	 * @param page The current page
 	 */
+	public void grabPhoto(){
+		Intent i = new Intent(
+        Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, GRAB_PHOTO);
+	}
+	
+	public void getPhoto(){
+		Intent i = new Intent(
+        Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, RESULT_LOAD_IMAGE);
+	}
 	public void update(Page page) {
 		
 		setButtonVisibility();
@@ -699,6 +710,11 @@ public class ViewPageActivity extends Activity {
 	private void takePhoto() {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		startActivityForResult(intent, TAKE_PHOTO);
+	}
+	
+	private void addPhoto() {
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		startActivityForResult(intent, ADD_PHOTO);
 	}
 	
 	/**
@@ -1147,6 +1163,9 @@ public class ViewPageActivity extends Activity {
 	 * @param comment
 	 */
 	public void addComment(Comment comment) {
+		final LinearLayout layout = new LinearLayout(this);
+    	layout.setOrientation(LinearLayout.VERTICAL);
+    	
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -1156,7 +1175,14 @@ public class ViewPageActivity extends Activity {
 		view.setPadding(10, 5, 10, 5);
 		view.setLayoutParams(lp);
 		view.setText(comment.getTimestamp() + " - '" + comment.getText() + "'");
-	    commentsLayout.addView(view);
+		layout.addView(view);
+		
+		if(comment.getAnnotation() != null){
+			ImageView imageView = new ImageView(this);
+			imageView.setImageBitmap(comment.getAnnotation().getImage());
+			layout.addView(imageView);
+		}
+	    commentsLayout.addView(layout);
 	}
 	
 	/**
@@ -1164,16 +1190,62 @@ public class ViewPageActivity extends Activity {
 	 * allows the user to input text and then save the comment.
 	 * @param view
 	 */
-	private void onEditComment(View view) {
+	private void onCallComment(){
+		final String[] titlesPhoto = {"No Image","From File","Take New Photo",};
+		final AlertDialog.Builder photoSelector = 
+				new AlertDialog.Builder(this); 
+		photoSelector.setTitle("Use a photograph in this comment?");
+		photoSelector.setItems(titlesPhoto, 
+				new DialogInterface.OnClickListener() {
+			 public void onClick(DialogInterface dialog, 
+					              int item) {
+	            	switch(item){
+    	            	
+    	            	
+    	            	case(0):
+    	            		onEditComment();
+    	            		break;
+    	            	case(1):
+    	            		grabPhoto();	            		
+    	            		break;
+    	            	case(2):
+    	            		addPhoto();            		
+    	            		break;
+	            	}
+	            	
+	                }
+			 }
+		
+		);
+		photoSelector.show();
+	      
+	}
+	private void onEditComment() {
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle("What to Say");
+    	
+    	final LinearLayout layout = new LinearLayout(this);
+    	layout.setOrientation(LinearLayout.VERTICAL);
+    	
     	final EditText alertEdit = new EditText(this);
-    	builder.setView(alertEdit);
+    	layout.addView(alertEdit);
+    	
+    	final ImageView alertImage = new ImageView(this);
+    	
+    	final PhotoTile photoAdd = (PhotoTile) app.getTempSpace();
+		app.setTempSpace(null);
+		if(photoAdd != null){
+			alertImage.setImageBitmap(photoAdd.getImage());
+		}
+    	layout.addView(alertImage);
     	
     	
+		
+		
+		builder.setView(layout);
     	builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-            	app.addComment(alertEdit.getText().toString());
+            	app.addComment(alertEdit.getText().toString(),photoAdd );
             }
         })
         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -1188,6 +1260,10 @@ public class ViewPageActivity extends Activity {
 	 * Opens a dialog that allows the user to edit the pageEnding.
 	 * @param view
 	 */
+	
+	
+	
+	
 	private void onEditPageEnding(View view) {
 		if (app.getEditing()) {
 			TextView textView = (TextView) view;
@@ -1212,31 +1288,19 @@ public class ViewPageActivity extends Activity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		AlertDialog.Builder successChecker = new AlertDialog.Builder(this);
 		if (resultCode == RESULT_OK && null != data) {
 			switch(requestCode) {
 			case (RESULT_LOAD_IMAGE):
-				Uri selectedImage = data.getData();
-				String[] filePathColumn = { MediaStore.Images.Media.DATA };
-
-				Cursor cursor = getContentResolver().query(selectedImage,
-						filePathColumn, null, null, null);
-				cursor.moveToFirst();
-
-				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-				String picturePath = cursor.getString(columnIndex);
-				cursor.close();       	
-				Bitmap pickedPhoto = BitmapFactory.decodeFile(picturePath);
-				PhotoTile newPhoto = new PhotoTile();
-				newPhoto.setImageFile(pickedPhoto);
-				app.addTile(newPhoto);
+				app.addTile(loadImage(data));
+				break;
+			case (GRAB_PHOTO):
+				app.setTempSpace(loadImage(data));
+			onEditComment();
 				break;
 			case(TAKE_PHOTO):
-				Bundle bundle = data.getExtras();
-				final Bitmap image = (Bitmap) bundle.get("data");
-				AlertDialog.Builder successChecker = new AlertDialog.Builder(this);
-				ImageView pictureTaken = new ImageView(this);
-				pictureTaken.setImageBitmap(image);
-				successChecker.setView(pictureTaken);
+				final Bitmap image = retrievePhoto(data);
+				successChecker.setView(makeViewByPhoto(image));
 				successChecker.setTitle("Are you satisfied with this photo?");
 				successChecker.setPositiveButton("Save", 
 						new DialogInterface.OnClickListener() {
@@ -1253,8 +1317,54 @@ public class ViewPageActivity extends Activity {
 				});
 				successChecker.show();
 				break;
-			}
-		}
+			case(ADD_PHOTO):
+				final Bitmap image2 = retrievePhoto(data);
+				successChecker.setView(makeViewByPhoto(image2));
+				successChecker.setTitle("Are you satisfied with this photo?");
+				successChecker.setPositiveButton("Save", 
+					new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						PhotoTile tile = new PhotoTile();
+						tile.setContent(image2);
+						app.setTempSpace(tile);
+						onEditComment();
+					}
+				})
+				.setNegativeButton("Retake", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						addPhoto();
+					}
+				});
+				successChecker.show();
+				break;
+		}}
+	}
+	
+	public PhotoTile loadImage(Intent data){
+		Uri selectedImage = data.getData();
+		String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+		Cursor cursor = getContentResolver().query(selectedImage,
+				filePathColumn, null, null, null);
+		cursor.moveToFirst();
+
+		int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+		String picturePath = cursor.getString(columnIndex);
+		cursor.close();       	
+		Bitmap pickedPhoto = BitmapFactory.decodeFile(picturePath);
+		PhotoTile newPhoto = new PhotoTile();
+		newPhoto.setImageFile(pickedPhoto);	
+		return newPhoto;
+	}
+	
+	public Bitmap retrievePhoto(Intent data){
+		Bundle bundle = data.getExtras();
+		return  (Bitmap) bundle.get("data");	
+	}
+	public ImageView makeViewByPhoto(Bitmap image){
+		ImageView pictureTaken = new ImageView(this);
+		pictureTaken.setImageBitmap(image);
+		return pictureTaken;
 	}
 	
 }

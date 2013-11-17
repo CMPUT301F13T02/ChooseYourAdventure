@@ -48,10 +48,9 @@ public class Story {
     private String id;
     private UUID firstpage; 
     private int currRefNum = 1;
-    private int local;
     private String author;
 	private String title = new String();
-	private Handler handler;
+	private transient Handler handler;
 	//private Handler defaultHandler = new ESHandler();
 	
 	/**
@@ -59,6 +58,13 @@ public class Story {
 	 */
 	public Story() {
 		this.firstpage = new Page().getId();
+	}
+	/**
+	 * This is a copy constructor to copy a story 
+	 */
+	public Story(Story story) {
+		this.firstpage = new Page().getId();
+		
 	}
 
 	/**
@@ -171,7 +177,6 @@ public class Story {
 	 * This function updates the stories data in the database
 	 */
 	public void updateStory(){
-		Handler handler = this.getHandler();
 		try {
 			handler.updateStory(this);
 		} catch (HandlerException e) {
@@ -182,19 +187,10 @@ public class Story {
 	/**
 	 * This sets the scope of the storage of a story
 	 * @param state The type of Handler to set our handler to
-	 * @param scope 1 for local 0 for online
 	 */
-	public void setHandler(Handler state, int scope) {
+	public void setHandler(Handler state) {
 		handler = state;
-		local = scope;
 	}
-	/**
-	 * This tells if a story is stored locally or online
-	 * @return local 1 if local 0 if online
-	 */
-	public int getLocal() {
-    	return local;
-    }
 	/**
 	 * This gets the scope of the storage of a story
 	 * @return state The type of Handler we are using

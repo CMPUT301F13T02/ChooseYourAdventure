@@ -257,8 +257,9 @@ public class ControllerApp extends Application{
 							  ((Page) itemList.get(i)).getTitle();
 				} else if(itemList.get(i).getClass().equals(Story.class)) {
 					//If the story has been saved locally, note it
-					if(((Story) itemList.get(i)).getLocal() == 1)
+					if(((Story) itemList.get(i)).getHandler() instanceof DBHandler){
 						outList = "Cached: ";
+					}
 					outList = outList + ((Story) itemList.get(i)).getTitle();
 				}
 				infoText.add(outList);
@@ -425,13 +426,12 @@ public class ControllerApp extends Application{
 		String poster = Secure.getString( 
 				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 		Comment comment = new Comment(text, poster);
-		ESHandler eshandler = new ESHandler();
 		
 		currentPage.addComment(comment);
 		setCommentsChanged();
 		try
 		{
-			eshandler.addComment(getStory(), getPage(), comment);
+			currentStory.getHandler().addComment(getStory(), getPage(), comment);
 		} catch (HandlerException e)
 		{
 			// TODO Auto-generated catch block

@@ -224,42 +224,44 @@ public class ViewStoriesActivity extends Activity {
             builder.setItems(titles, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int item) {
                 	switch(item){
-                	case(0):
+                	case(0): //cache
                 		//set to local handler, 1 means it is local
-                		story.setHandler(dbhandler, 1);
+                		story.setHandler(dbhandler);
                 		try {
                 			story.getHandler().addStory(story);
                 		} catch (HandlerException e) {
                 			e.printStackTrace();
                 		}
                 		break;
-                	case(1):
+                	case(1): //upload
                 		// the 0 passed means it isn't local
-                		story.setHandler(eshandler, 0);
+                		story.setHandler(eshandler);
                 		//Author can update the story, user creates a new one.
                 		if(myId.equals(storyID)){
                 			story.updateStory();
                 		} 
                 		else {
                 			//create a new story because you have to change author ID
-                			Story newStory = story;
-                			newStory.setAuthor(myId);
+                			//Story newStory = new Story(story);
+                			//Story newStory = story;
+                			story.setAuthor(myId);
                 			//set it to be online initially
-                			newStory.setHandler(eshandler, 0);
+                			//newStory.setHandler(eshandler, 0);
 							try {
-								newStory.getHandler().addStory(newStory);
+								//newStory.getHandler().addStory(newStory);
+								eshandler.addStory(story);
 							} catch (HandlerException e) {
 								e.printStackTrace();
 							}
                 		}
                 		break;
-                	case(2):
+                	case(2): //edit story
                 		if(myId.equals(storyID)){          			
                     		app.jump(EditStoryActivity.class, story, null);
                 		}
                 		else{}
                 		break;
-                	case(3):
+                	case(3): //delete
                 		break;
                 	}
                     }});
@@ -307,6 +309,7 @@ public class ViewStoriesActivity extends Activity {
     public void refresh(){
     	try {
         	storyList = eshandler.getAllStories();
+        	storyList.addAll(dbhandler.getAllStories());
 			storyText = app.updateView(storyList, storyText);
 		} catch (HandlerException e1) {
 			// TODO Auto-generated catch block

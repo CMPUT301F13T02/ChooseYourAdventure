@@ -130,6 +130,7 @@ public class DBHandler extends SQLiteOpenHelper implements Handler  {
         Cursor cursor = db.rawQuery(selectQuery, null);
         story.setId(cursor.getString(0)); //will the next line make this redundant?
         story = gson.fromJson(cursor.getString(1), Story.class);
+        story.setHandler(this);
 		return story;
 	}
 	/** 
@@ -163,6 +164,7 @@ public class DBHandler extends SQLiteOpenHelper implements Handler  {
         		Story story = new Story();
         		story.setId(cursor.getString(0));
         		story = gson.fromJson(cursor.getString(1), Story.class);
+        		story.setHandler(this);
         		storyList.add(story);
         	} while (cursor.moveToNext());
         }

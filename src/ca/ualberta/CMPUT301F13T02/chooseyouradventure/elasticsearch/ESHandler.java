@@ -200,7 +200,7 @@ public class ESHandler implements Handler{
      */
 	@Override
     public ArrayList<Story> getAllStories() throws HandlerException {
-		ESHttpGet get = new ESHttpGet(getStoryPath() + "_search");
+		ESHttpGet get = new ESHttpGet(getStoryPath() + "_search?sort=timeStamp:desc");
 
 		String response = null;
 		try {

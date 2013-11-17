@@ -51,12 +51,15 @@ public class Story {
     private int currRefNum = 1;
     private String author;
 	private String title = new String();
+	@SuppressWarnings("unused")
+	private long timeStamp;
 
 	/**
 	 * This is the main constructor for Story
 	 */
 	public Story() {
 		this.firstpage = new Page().getId();
+		this.timeStamp = System.currentTimeMillis() / 1000L;
 	}
 	
 	// For testing purposes

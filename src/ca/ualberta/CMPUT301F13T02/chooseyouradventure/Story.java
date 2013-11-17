@@ -53,9 +53,13 @@ public class Story {
 	private String title = new String();
 	@SuppressWarnings("unused")
 	private long timeStamp;
+	private int local;
 	
 	private boolean usesCombat = false;
 	private Counters playerStats;
+	
+	private Handler handler;
+	//private Handler defaultHandler = new ESHandler();
 
 	/**
 	 * @return the hpCount
@@ -180,9 +184,9 @@ public class Story {
 	 * This function updates the stories data in the database
 	 */
 	public void updateStory(){
-		ESHandler eshandler = new ESHandler();
+		Handler handler = this.getHandler();
 		try {
-			eshandler.updateStory(this);
+			handler.updateStory(this);
 		} catch (HandlerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -228,5 +232,29 @@ public class Story {
 	public void setPlayerStats(Counters playerStats) {
 		this.playerStats = playerStats;
 	}
+	
+	/**
+	 +   * This sets the scope of the storage of a story
+	 +   * @param state The type of Handler to set our handler to
+	 +   * @param scope 1 for local 0 for online
+	 +   */
+	 public void setHandler(Handler state, int scope) {
+		 handler = state;
+		 local = scope;
+	 }
+	   /**
+	 +   * This tells if a story is stored locally or online
+	 +   * @return local 1 if local 0 if online
+	 +   */
+	 public int getLocal() {
+		 return local;
+	 }
+	   /**
+	 +   * This gets the scope of the storage of a story
+	 +   * @return state The type of Handler we are using
+	 +   */
+	 public Handler getHandler() {
+		 return handler;
+	 }
 	
 }

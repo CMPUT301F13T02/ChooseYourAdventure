@@ -298,7 +298,10 @@ public class ControllerApp extends Application {
 				} else if(itemList.get(i).getClass().equals(Story.class)) {
 				
 					
-					outList = ((Story) itemList.get(i)).getTitle();
+					//If the story has been saved locally, note it
+					if(((Story) itemList.get(i)).getLocal() == 1)
+						outList = "Cached: ";
+					outList = outList + ((Story) itemList.get(i)).getTitle();
 					
 				}
 				infoText.add(outList);

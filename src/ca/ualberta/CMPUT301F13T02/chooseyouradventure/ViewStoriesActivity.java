@@ -33,8 +33,7 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 
 import java.util.ArrayList;
-
-
+import java.util.UUID;
 
 
 
@@ -88,6 +87,7 @@ public class ViewStoriesActivity extends Activity {
 	private ControllerApp app; 
 	private SampleGenerator sampleGen = new SampleGenerator();
 	private Handler eshandler = new ESHandler();
+	private Handler dbhandler = new DBHandler(this);
 	private static final int HELP_INDEX = 0;
 	
 	ArrayAdapter<String> adapter;
@@ -241,11 +241,34 @@ public class ViewStoriesActivity extends Activity {
                 public void onClick(DialogInterface dialog, int item) {
                 	switch(item){
                 	case(0):
-                		
+                		//set to local handler, 1 means it is local
+                		story.setHandler(dbhandler, 1);
+                		try {
+                			story.getHandler().addStory(story);
+                		} catch (HandlerException e) {
+                			e.printStackTrace();
+                		}
         				
                 		break;
                 	case(1):
-                		
+                		// the 0 passed means it isn't local
+                		story.setHandler(eshandler, 0);
+                		//Author can update the story, user creates a new one.
+                		if(myId.equals(storyID)){
+                			story.updateStory();
+                		} 
+                		else {
+                			//create a new story because you have to change author ID
+                			Story newStory = story;
+                			newStory.setAuthor(myId);
+                			//set it to be online initially
+                			newStory.setHandler(eshandler, 0);
+							try {
+								newStory.getHandler().addStory(newStory);
+							} catch (HandlerException e) {
+								e.printStackTrace();
+							}
+                		}
                 		break;
                 	case(2):
                 		if(myId.equals(storyID)){          			

@@ -50,6 +50,7 @@ public class Page {
 	private int refNum;
 	private boolean fightingFrag = false;
 	private int enemyHealth = 0;
+	private String enemyName = "Enemy";
 	
 	/**
 	 * This is the constructor that binds the arraylists to itself
@@ -277,6 +278,14 @@ public class Page {
 
 	public void setEnemyHealth(int enemyHealth) {
 		this.enemyHealth = enemyHealth;
+	}
+
+	public String getEnemyName() {
+		return enemyName;
+	}
+
+	public void setEnemyName(String enemyName) {
+		this.enemyName = enemyName;
 	}
 
 	

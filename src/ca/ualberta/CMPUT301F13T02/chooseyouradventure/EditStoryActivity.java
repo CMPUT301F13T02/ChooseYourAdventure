@@ -203,16 +203,28 @@ public class EditStoryActivity extends Activity {
     	final CheckBox check = new CheckBox(this);
     	layout.addView(check);
     	
+    	final TextView alertText2 = new TextView(this);
+    	alertText2.setText("Health of the Enemy on this Page?");
+    	layout.addView(alertText2);
+    	
     	final EditText alertEdit2 = new EditText(this);
     	alertEdit2.setText("0");
     	layout.addView(alertEdit2);
+    	
+    	final TextView alertText3 = new TextView(this);
+    	alertText3.setText("Name of the Enemy on this Page?");
+    	layout.addView(alertText3);
+    	
+    	final EditText alertEdit3 = new EditText(this);
+    	alertEdit3.setText("Enemy");
+    	layout.addView(alertEdit3);
     	
     	builder.setView(layout);
     	builder.setMessage("Enter the title of your new page")
     	.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	String pageTitle = alertEdit.getText().toString();
-            	app.updateTitle(pageTitle, check.isChecked(), alertEdit2.getText().toString());         	
+            	app.updateTitle(pageTitle, check.isChecked(), alertEdit2.getText().toString(), alertEdit3.getText().toString());         	
             	refresh();
             	
             }
@@ -259,7 +271,7 @@ public class EditStoryActivity extends Activity {
             		
             		alertEdit.setText(titleText);
             		titleEditor.setView(alertEdit);
-            		titleEditor.setMessage("Enter the title of your story")
+            		titleEditor.setMessage("Enter the title of this page")
             		.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             			public void onClick(DialogInterface dialog, int id) {
             				String pageTitle = alertEdit.getText().toString();

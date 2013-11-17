@@ -319,9 +319,10 @@ public class ControllerApp extends Application {
 	 * title.
 	 * @param pageTitle
 	 */
-	protected void updateTitle(String pageTitle, boolean fight, String health){
+	protected void updateTitle(String pageTitle, boolean fight, String health, String name){
 		Page newPage = initializeNewPage(pageTitle);
 		newPage.setFightingFrag(fight);
+		newPage.setEnemyName(name);
 		try{
 			newPage.setEnemyHealth(Integer.parseInt(health));
 		} catch(Exception e){}

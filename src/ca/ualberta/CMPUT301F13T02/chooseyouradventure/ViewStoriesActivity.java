@@ -110,8 +110,8 @@ public class ViewStoriesActivity extends Activity {
 		try {
 			
 			storyList =  eshandler.getAllStories();
-			//Story sampleStory = sampleGen.getStory();
-			//storyList.add(sampleStory);
+			Story sampleStory = sampleGen.getStory();
+			storyList.add(sampleStory);
 			storyText = app.updateView(storyList, storyText);
 		} catch (HandlerException e1) {
 			// TODO Auto-generated catch block
@@ -221,8 +221,8 @@ public class ViewStoriesActivity extends Activity {
 			final Story story = storyList.get(pos);
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			final String[] titles;
-			final String[] titlesA = {"{Placeholder} Cache","{Placeholder} Upload","Edit","{Placeholder} Delete","Cancel"};
-			final String[] titlesB = {"{Placeholder} Cache","{Placeholder} Upload Copy","Cancel"};
+			final String[] titlesA = {"Cache","Upload","Edit","Delete","Cancel"};
+			final String[] titlesB = {"Cache","Upload Copy","Cancel"};
 			final String myId = Secure.getString(
 					getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 			final String storyID = story.getAuthor();
@@ -323,8 +323,8 @@ public class ViewStoriesActivity extends Activity {
     
     	try {
         	storyList = eshandler.getAllStories();
-        	//Story sampleStory = sampleGen.getStory();
-			//storyList.add(sampleStory);
+        	Story sampleStory = sampleGen.getStory();
+			storyList.add(sampleStory);
 			storyText = app.updateView(storyList, storyText);
 		} catch (HandlerException e1) {
 			// TODO Auto-generated catch block

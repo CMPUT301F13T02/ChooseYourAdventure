@@ -49,7 +49,39 @@ public class Counters {
 	private int thresholdValue = 0;
 	private int thresholdType = 0;
 	
+	private String damageMessage = "";
+	private String treasureMessage = "";
+	private String hitMessage = "";
+	
 	private boolean isEnemyRange = false;
+	
+	public void setMessages(String damage, String treasure, String hit){
+		this.damageMessage = damage;
+		this.hitMessage = hit;
+		this.treasureMessage = treasure;
+	}
+	/**
+	 * @return the damageMessage
+	 */
+	public String getDamageMessage() {
+		return damageMessage;
+	}
+	/**
+	 * @return the treasureMessage
+	 */
+	public String getTreasureMessage() {
+		return treasureMessage;
+	}
+	/**
+	 * @return the hitMessage
+	 */
+	public String getHitMessage() {
+		return hitMessage;
+	}
+
+	
+	
+	
 	
 	public void setStats(String treasureStat, String playerHpStat, String enemyHpStat, String enemyHitPercentage, String playerHitPercentage
 			) {
@@ -105,28 +137,31 @@ public class Counters {
 		this.treasureStat = treasureStat - choiceModifiers.treasureStat ;
 		this.treasureChange = choiceModifiers.treasureStat;
 		
+		this.damageMessage = choiceModifiers.getDamageMessage();
+		this.hitMessage = choiceModifiers.getHitMessage();
+		this.treasureMessage = choiceModifiers.getTreasureMessage();
 		
 		this.enemyHpChange = 0;
 		this.playerHpChange = 0;
 		if(choiceModifiers.playerHpStat > 0){
-			if(randomFlagP <= choiceModifiers.getEnemyHitPercent()){
+			if(randomFlagP <= choiceModifiers.getPlayerHitPercent()){
 				
-				int pChange = rn.nextInt(choiceModifiers.playerHpStat) + 1;
-				this.playerHpChange = pChange;
-				this.playerHpStat = playerHpStat - pChange;			
+				int eChange = rn.nextInt(choiceModifiers.enemyHpStat) + 1;
+				this.enemyHpChange = eChange;
+				this.enemyHpStat = enemyHpStat - eChange;			
 				
 			}
 		}
 		if(choiceModifiers.enemyHpStat > 0){
-			if(randomFlagE <= choiceModifiers.getPlayerHitPercent() ){
-				if(choiceModifiers.isEnemyRange() == true){
-					int eChange = rn.nextInt(choiceModifiers.enemyHpStat) + 1;
-					this.enemyHpChange = eChange;
-					this.enemyHpStat = enemyHpStat - eChange;			
+			if(randomFlagE <= choiceModifiers.getEnemyHitPercent() ){
+				if(isEnemyRange == true){
+					int pChange = rn.nextInt(choiceModifiers.playerHpStat) + 1;
+					this.playerHpChange = pChange;
+					this.playerHpStat = playerHpStat - pChange;			
 				}
 				else{
-					this.enemyHpChange = choiceModifiers.enemyHpStat;
-					this.enemyHpStat = enemyHpStat - choiceModifiers.enemyHpStat;
+					this.playerHpChange = choiceModifiers.playerHpStat;
+					this.playerHpStat = playerHpStat - choiceModifiers.playerHpStat;
 					
 				}
 			}
@@ -312,5 +347,6 @@ public class Counters {
 	public void setPlayerHitPercent(int playerHitPercent) {
 		this.playerHitPercent = playerHitPercent;
 	}
+	
 
 }

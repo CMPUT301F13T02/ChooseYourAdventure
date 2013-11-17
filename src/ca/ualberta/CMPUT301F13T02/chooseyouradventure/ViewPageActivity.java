@@ -1169,7 +1169,7 @@ public class ViewPageActivity extends Activity {
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
-		lp.setMargins(0, 0, 0, 5);
+		lp.setMargins(0, 5, 0, 0);
 		TextView view = new TextView(this);
 		view.setBackgroundColor(0xFFFFFFFF);
 		view.setPadding(10, 5, 10, 5);
@@ -1180,6 +1180,7 @@ public class ViewPageActivity extends Activity {
 		if(comment.getAnnotation() != null){
 			ImageView imageView = new ImageView(this);
 			imageView.setImageBitmap(comment.getAnnotation().getImage());
+			imageView.setBackgroundColor(0xFFFFFFFF);
 			layout.addView(imageView);
 		}
 	    commentsLayout.addView(layout);

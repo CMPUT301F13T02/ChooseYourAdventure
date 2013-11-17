@@ -63,6 +63,15 @@ public class Page {
 		title = new String();
 		pageEnding = "+ Add an ending to this page";
 	}
+	
+	public Page(String enterAnything){
+		id = null;
+		tiles = new ArrayList<Tile>();
+		decisions = new ArrayList<Decision>();
+		comments = new ArrayList<Comment>();
+		title = new String();
+		pageEnding = "+ Add an ending to this page";
+	}
 
 	/**
 	 * This sets a page title

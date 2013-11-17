@@ -31,6 +31,7 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.UUID;
 
 import android.app.Activity;
@@ -249,10 +250,10 @@ public class ControllerApp extends Application {
 		ArrayList<String> pageNames = new ArrayList<String>();
 		for (int i = 0; i < pages.size(); i++) {
 			pageNames.add("(" + pages.get(i).getRefNum() + ") " + pages.get(i).getTitle());
-		}
-		
+		}		
 		return pageNames;
 	}
+	
 
 
 	/**
@@ -376,12 +377,19 @@ public class ControllerApp extends Application {
 		UUID toPageId = decision.getPageID();
 		ArrayList<Page> pages = currentStory.getPages();
 		Page toPage = currentPage;
+		while(toPageId == null){
+			Random rn = new Random();
+			decision = currentPage.getDecisions().get(rn.nextInt(currentPage.getDecisions().size()));
+			toPageId = decision.getPageID();
+		}
 		for (int i = 0; i < pages.size(); i++) {
 			if (toPageId.equals(pages.get(i).getId())) {
 				toPage = pages.get(i);
 				break;
 			}
 		}
+		
+		
 		setOnEntry(true);
 		if(currentPage.getId().equals(toPageId) == true){
 			setOnEntry(false);
@@ -458,7 +466,12 @@ public class ControllerApp extends Application {
 	
 	public void updateDecision(String text, int whichPage, int whichDecision, Counters counter) {
 		ArrayList<Page> pages = currentStory.getPages();
-		currentPage.updateDecision(text, pages.get(whichPage), whichDecision, counter);
+		if(whichPage == pages.size()){
+			currentPage.updateDecision(text, new Page(null), whichDecision, counter);
+		}
+		else{
+			currentPage.updateDecision(text, pages.get(whichPage), whichDecision, counter);
+		}
 		setDecisionsChanged();
 	}
 	

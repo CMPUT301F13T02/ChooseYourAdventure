@@ -237,36 +237,33 @@ public class ControllerApp extends Application {
 	 */
 	protected <T> ArrayList<String> updateView(ArrayList<T> itemList,
 	                                            ArrayList<String> infoText) {
-		
 		infoText.clear();
 		if(itemList.size() != 0)
 		{
 			for (int i = 0; i < itemList.size(); i++) {
 				String outList = "";
-			
 				if(itemList.get(i).getClass().equals(Page.class))
 				{
 					
 					if(itemList.get(i).equals(currentStory.getFirstpage())){
 						outList = "{Start} ";
 					}
-					
 					if(((Page) itemList.get(i)).getDecisions().size() == 0){				
 						outList = outList + "{Endpoint} ";
 					}
 					outList = outList + "(" + 
 					          ((Page) itemList.get(i)).getRefNum() + ") " + 
 							  ((Page) itemList.get(i)).getTitle();
-					
 				} else if(itemList.get(i).getClass().equals(Story.class)) {
-				
 					
-					outList = ((Story) itemList.get(i)).getTitle();
-					
+					//If the story has been saved locally, note it
+					if(((Story) itemList.get(i)).getHandler() instanceof DBHandler){
+						outList = "Cached: ";
+					}
+					outList = outList + ((Story) itemList.get(i)).getTitle();
 				}
 				infoText.add(outList);
 			}
-		
 		}
 		
 		return infoText;
@@ -430,13 +427,12 @@ public class ControllerApp extends Application {
 		String poster = Secure.getString( 
 				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 		Comment comment = new Comment(text, poster);
-		ESHandler eshandler = new ESHandler();
 		
 		currentPage.addComment(comment);
 		setCommentsChanged();
 		try
 		{
-			eshandler.addComment(getStory(), getPage(), comment);
+			currentStory.getHandler().addComment(getStory(), getPage(), comment);
 		} catch (HandlerException e)
 		{
 			// TODO Auto-generated catch block

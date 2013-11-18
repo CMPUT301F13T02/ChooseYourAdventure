@@ -90,7 +90,8 @@ public class DBHandler extends SQLiteOpenHelper implements Handler  {
 		//This assumes the getId returns a unique identifier
 		values.put(colID, id);
 		values.put(colContents, story);
-		db.insert(storyTable, null, values);
+		//db.insert(storyTable, null, values);
+		db.update(storyTable, values, "id = \"" + id + "\"", null);
 	}
 	/**
 	 * This deletes a local copy of a story.

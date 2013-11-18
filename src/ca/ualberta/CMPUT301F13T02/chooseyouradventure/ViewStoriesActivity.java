@@ -237,33 +237,26 @@ public class ViewStoriesActivity extends Activity {
                 	case(0): //cache
                 		//set to local handler, 1 means it is local
                 		story.setHandler(dbhandler);
+	                	story.setAuthor(myId);
                 		try {
                 			story.getHandler().addStory(story);
                 		} catch (HandlerException e) {
                 			e.printStackTrace();
                 		}
+                		refresh();
                 		break;
                 	case(1): //upload
                 		// the 0 passed means it isn't local
                 		story.setHandler(eshandler);
-                		//Author can update the story, user creates a new one.
-                		if(myId.equals(storyID)){
-                			story.updateStory();
-                		} 
-                		else {
-                			//create a new story because you have to change author ID
-                			//Story newStory = new Story(story);
-                			//Story newStory = story;
-                			story.setAuthor(myId);
-                			//set it to be online initially
-                			//newStory.setHandler(eshandler, 0);
-							try {
-								//newStory.getHandler().addStory(newStory);
-								eshandler.addStory(story);
-							} catch (HandlerException e) {
-								e.printStackTrace();
-							}
-                		}
+            			//create a new story because you have to change author ID
+            			story.setAuthor(myId);
+            			//set it to be online initially
+						try {
+							eshandler.addStory(story);
+						} catch (HandlerException e) {
+							e.printStackTrace();
+						}
+						refresh();
                 		break;
                 	case(2): //edit story
                 		if(myId.equals(storyID)){          			

@@ -33,7 +33,9 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import android.app.Activity;
 import android.app.Application;
+import android.provider.MediaStore;
 import android.provider.Settings.Secure;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.content.Intent;
@@ -46,8 +48,8 @@ import android.content.Intent;
  * saving of the model and maintaining coherence between the model and the view.
  */
 
-public class ControllerApp extends Application{
-
+public class ControllerApp extends Application {
+	
 	private boolean isEditing = false;
 	
 	// These variables shouldn't be saved.
@@ -106,13 +108,10 @@ public class ControllerApp extends Application{
 	public void setPage(Page page) {
 		this.currentPage = page;
 		
-		// The page has now been initialized, so everything has changed
-		endingChanged = true;
 		tilesChanged = true;
 		decisionsChanged = true;
 		commentsChanged = true;
-		
-		reloadPage();
+		endingChanged = true;
 	}
 
 	/**
@@ -342,6 +341,7 @@ public class ControllerApp extends Application{
 			}
 		}
 		setPage(toPage);
+		reloadPage();
 	}
 
 	/**
@@ -365,7 +365,7 @@ public class ControllerApp extends Application{
 		currentPage.addTile(tile);
 		setTilesChanged();
 	}
-
+	
 	/**
 	 * Updates the tile at position whichTile to show the given string.
 	 * @param text

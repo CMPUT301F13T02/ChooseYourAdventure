@@ -37,7 +37,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.Settings.Secure;
 import android.util.Log;
 import android.view.Menu;
@@ -50,6 +56,7 @@ import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -77,6 +84,9 @@ import android.widget.TextView;
 
 public class ViewPageActivity extends Activity {
 	
+	private static final int RESULT_LOAD_IMAGE = 1;
+	private final int TAKE_PHOTO = 2;
+	
 	private final int EDIT_INDEX = 0;
 	private final int SAVE_INDEX = 1;
 	private final int HELP_INDEX = 2;
@@ -85,6 +95,7 @@ public class ViewPageActivity extends Activity {
 	private LinearLayout decisionsLayout;
 	private LinearLayout commentsLayout;
 	
+	
     private ControllerApp app;
     private Menu menu;
     
@@ -92,12 +103,6 @@ public class ViewPageActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_page_activity);
-        app = (ControllerApp) this.getApplication();
-        
-        tilesLayout = (LinearLayout) findViewById(R.id.tilesLayout);
-        decisionsLayout = (LinearLayout) findViewById(R.id.decisionsLayout);
-        commentsLayout = (LinearLayout) findViewById(R.id.commentsLayout);
-        
     }
 
 	/**
@@ -106,6 +111,13 @@ public class ViewPageActivity extends Activity {
 	@Override
 	public void onResume() {
         super.onResume();
+        
+        app = (ControllerApp) this.getApplication();
+        
+        tilesLayout = (LinearLayout) findViewById(R.id.tilesLayout);
+        decisionsLayout = (LinearLayout) findViewById(R.id.decisionsLayout);
+        commentsLayout = (LinearLayout) findViewById(R.id.commentsLayout);
+        
         app.setActivity(this);
         update(app.getPage());
         
@@ -117,7 +129,6 @@ public class ViewPageActivity extends Activity {
 			@Override
 			public void onClick(View view) {
 				addTileMenu();
-
 			}
 		});
 		
@@ -163,9 +174,15 @@ public class ViewPageActivity extends Activity {
 		this.menu = menu;
 		super.onCreateOptionsMenu(menu);
         makeMenu(menu);
-        changeActionBarButtons();
         return true;
     }
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		app = (ControllerApp) getApplication();
+		changeActionBarButtons();
+		return true;
+	}
 	
     /**
      * Puts button for changing to edit mode in the action bar.
@@ -265,7 +282,8 @@ public class ViewPageActivity extends Activity {
 		
 		final String myId = Secure.getString(
 				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
-		final String storyID = app.getStory().getAuthor();
+		Story story = app.getStory();
+		final String storyID = story.getAuthor();
 		if(myId.equals(storyID)){
 			if (app.getEditing()) {
 				saveButton.setVisible(true);
@@ -296,6 +314,7 @@ public class ViewPageActivity extends Activity {
             public void onClick(DialogInterface dialog, int item) {
             	switch(item){
             	case(0):
+            		//TODO fix this to be MVC and observer pattern
             		TextTile tile = new TextTile();
 					app.getPage().addTile(tile);
 					addTile(app.getPage().getTiles().size() - 1, tile);   				
@@ -307,10 +326,15 @@ public class ViewPageActivity extends Activity {
             					              int item) {
             	            	switch(item){
 	            	            	case(0):
-	            	            		 				
+	            	            		Intent i = new Intent(
+	            	            		Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+	            	            				 
+	            	            		startActivityForResult(i, RESULT_LOAD_IMAGE);	
+	            	            		
+	            	            		
 	            	            		break;
 	            	            	case(1):
-	            	            		
+	            	            		takePhoto();
 	            	            		break;
             	            	}
             	                }});
@@ -449,13 +473,12 @@ public class ViewPageActivity extends Activity {
 	 */
 	public void addTile(int i, Tile tile) {
 		
-		TextView view = makeTileView();
-		
 		if (tile.getType() == "text") {
+			View view = makeTileView("text");
 			TextTile textTile = (TextTile) tile;
-			//TextView textView = (TextView) view;
+			TextView textView = (TextView) view;
 			
-			view.setText(textTile.getText());
+			textView.setText(textTile.getText());
 
 			tilesLayout.addView(view, i);
 			
@@ -479,7 +502,14 @@ public class ViewPageActivity extends Activity {
 			}
 			
 		} else if (tile.getType() == "photo") {
-			// TODO Implement for part 4
+			
+			View view = makeTileView("photo");
+			PhotoTile photoTile = (PhotoTile) tile;
+			ImageView imageView = (ImageView) view;
+			imageView.setImageBitmap(photoTile.getImage());
+			
+			tilesLayout.addView(imageView, i);
+
 		} else if (tile.getType() == "video") {
 			// TODO Implement for part 4
 		} else if (tile.getType() == "audio") {
@@ -495,11 +525,18 @@ public class ViewPageActivity extends Activity {
 	 * the layout background which makes a line separating the tile views.
 	 * @return
 	 */
-	private TextView makeTileView() {
+	private View makeTileView(String type) {
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
-		TextView view = new TextView(this);
-
+		
+		View view;
+		
+		if (type == "text") {
+			view = new TextView(this);
+		} else {
+			view = new ImageView(this);
+		}
+		
 		// Set what the tiles look like
 		view.setPadding(0, 5, 0, 6);
 		if (app.getEditing()) {
@@ -542,6 +579,11 @@ public class ViewPageActivity extends Activity {
         });
         builder.show();
     }
+	
+	private void takePhoto() {
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		startActivityForResult(intent, TAKE_PHOTO);
+	}
 	
 	/**
 	 * Displays a dialog for editing a tile.
@@ -762,4 +804,52 @@ public class ViewPageActivity extends Activity {
 		}
 	}
 
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK && null != data) {
+			switch(requestCode) {
+			case (RESULT_LOAD_IMAGE):
+				Uri selectedImage = data.getData();
+				String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+				Cursor cursor = getContentResolver().query(selectedImage,
+						filePathColumn, null, null, null);
+				cursor.moveToFirst();
+
+				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+				String picturePath = cursor.getString(columnIndex);
+				cursor.close();       	
+				Bitmap pickedPhoto = BitmapFactory.decodeFile(picturePath);
+				PhotoTile newPhoto = new PhotoTile();
+				newPhoto.setImageFile(pickedPhoto);
+				app.addTile(newPhoto);
+				break;
+			case(TAKE_PHOTO):
+				Bundle bundle = data.getExtras();
+				final Bitmap image = (Bitmap) bundle.get("data");
+				AlertDialog.Builder successChecker = new AlertDialog.Builder(this);
+				ImageView pictureTaken = new ImageView(this);
+				pictureTaken.setImageBitmap(image);
+				successChecker.setView(pictureTaken);
+				successChecker.setTitle("Are you satisfied with this photo?");
+				successChecker.setPositiveButton("Save", 
+						new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						PhotoTile tile = new PhotoTile();
+						tile.setContent(image);
+						app.addTile(tile);
+					}
+				})
+				.setNegativeButton("Retake", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						takePhoto();
+					}
+				});
+				successChecker.show();
+				break;
+			}
+		}
+	}
+	
 }

@@ -51,13 +51,13 @@ public class Story {
     private String author;
 	private String title = new String();
 	private transient Handler handler;
-	//private Handler defaultHandler = new ESHandler();
-	
+	private long timeStamp;
 	/**
 	 * This is the main constructor for Story
 	 */
 	public Story() {
 		this.firstpage = new Page().getId();
+		this.timeStamp = System.currentTimeMillis() / 1000L;
 	}
 	/**
 	 * This is a copy constructor to copy a story 

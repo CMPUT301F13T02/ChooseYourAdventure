@@ -161,12 +161,11 @@ public class ControllerApp extends Application {
 	    	Page newPage = initializeNewPage("First Page");
 	    	newStory.addPage(newPage);
 	    	newStory.setFirstpage(newPage.getId());
-	    	newStory.setAuthor(Secure.getString(
-					getBaseContext().getContentResolver(), Secure.ANDROID_ID));
+	    	newStory.setAuthor(Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID));
+	    	newStory.setHandler(new ESHandler());
 		    try
 			{			    	
-		    	ESHandler eshandler = new ESHandler();
-				eshandler.addStory(newStory);
+		    	newStory.getHandler().addStory(newStory);
 				
 	
 			} catch (Exception e)
@@ -506,7 +505,7 @@ public class ControllerApp extends Application {
 		setCommentsChanged();
 		try
 		{
-			eshandler.addComment(getStory(), getPage(), comment);
+			currentStory.getHandler().addComment(getStory(), getPage(), comment);
 		} catch (HandlerException e)
 		{
 			// TODO Auto-generated catch block

@@ -346,8 +346,7 @@ public class ViewStoriesActivity extends Activity {
     
     	try {
         	storyList = eshandler.getAllStories();
-        	Story sampleStory = sampleGen.getStory();
-			storyList.add(sampleStory);
+        	storyList.addAll(dbhandler.getAllStories());
 			storyText = app.updateView(storyList, storyText);
 		} catch (HandlerException e1) {
 			// TODO Auto-generated catch block

@@ -58,8 +58,7 @@ public class Story {
 	private boolean usesCombat = false;
 	private Counters playerStats;
 	
-	private Handler handler;
-	//private Handler defaultHandler = new ESHandler();
+	private transient Handler handler;
 
 	/**
 	 * @return the hpCount
@@ -72,6 +71,14 @@ public class Story {
 		this.firstpage = new Page().getId();
 		this.timeStamp = System.currentTimeMillis() / 1000L;
 	}
+	
+	/**
+	 +   * This is a copy constructor to copy a story 
+	 +   */
+	 public Story(Story story) {
+		 this.firstpage = new Page().getId();
+	     
+	 }
 
 	/**
 	 * @param firstpage the firstpage to set
@@ -184,7 +191,7 @@ public class Story {
 	 * This function updates the stories data in the database
 	 */
 	public void updateStory(){
-		Handler handler = this.getHandler();
+		
 		try {
 			handler.updateStory(this);
 		} catch (HandlerException e) {
@@ -192,6 +199,21 @@ public class Story {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 +   * This sets the scope of the storage of a story
+	 +   * @param state The type of Handler to set our handler to
+	 +   */
+	 public void setHandler(Handler state) {
+		 handler = state;
+	 }
+	 /**
+	 +   * This gets the scope of the storage of a story
+	 +   * @return state The type of Handler we are using
+	 +   */
+	 public Handler getHandler() {
+		 return handler;
+	 }
 
 	/**
 	 * Compares this story for deep equality with another story
@@ -249,12 +271,6 @@ public class Story {
 	 public int getLocal() {
 		 return local;
 	 }
-	   /**
-	 +   * This gets the scope of the storage of a story
-	 +   * @return state The type of Handler we are using
-	 +   */
-	 public Handler getHandler() {
-		 return handler;
-	 }
+	 
 	
 }

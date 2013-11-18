@@ -83,6 +83,7 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 public class ViewStoriesActivity extends Activity {
 	private ListView mainPage;
 	private Button createNew;
+	private Button refreshButton;
 	ArrayList<String> storyText = new ArrayList<String>();
 	ArrayList<Story> storyList = new ArrayList<Story>();
 	private ControllerApp app; 
@@ -98,10 +99,17 @@ public class ViewStoriesActivity extends Activity {
         setContentView(R.layout.view_stories_activity);
         mainPage = (ListView) findViewById(R.id.mainView);
         createNew = (Button) findViewById(R.id.createButton);
+        refreshButton = (Button) findViewById(R.id.button1);
         createNew.setOnClickListener(new OnClickListener() {
            
             public void onClick(View v) {
                 createStory();
+            }
+        });
+        refreshButton.setOnClickListener(new OnClickListener() {
+            
+            public void onClick(View v) {
+                refresh();
             }
         });
         
@@ -272,6 +280,13 @@ public class ViewStoriesActivity extends Activity {
                 		else{}
                 		break;
                 	case(3): //delete
+                		try {
+							story.getHandler().deleteStory(story);
+						} catch (HandlerException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+                		refresh();
                 		break;
                 	}
                     }});

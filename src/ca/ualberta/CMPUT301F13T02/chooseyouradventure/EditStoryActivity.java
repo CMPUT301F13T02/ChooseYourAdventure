@@ -81,6 +81,7 @@ public class EditStoryActivity extends Activity {
         treePage = (ListView) findViewById(R.id.treeView);
         createNew2 = (Button) findViewById(R.id.createButton2);
         deleteStory = (Button) findViewById(R.id.deleteButton);
+        app = (ControllerApp) getApplication();
         createNew2.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
               try
@@ -97,10 +98,17 @@ public class EditStoryActivity extends Activity {
         deleteStory.setOnClickListener(new OnClickListener() {
             
             public void onClick(View v) {
-              //deleteCurrentStory();
+            	Story story = app.getStory();
+            	try {
+					story.getHandler().deleteStory(story);
+				} catch (HandlerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            	finish();
             }
         });       
-        app = (ControllerApp) getApplication();
+        
         
 		pageList = app.getStory().getPages();
 		pageText = app.updateView(pageList, pageText);
@@ -194,6 +202,7 @@ public class EditStoryActivity extends Activity {
     	layout.setOrientation(LinearLayout.VERTICAL);
     	
     	final EditText alertEdit = new EditText(this);
+    	alertEdit.setText("");
     	layout.addView(alertEdit);
     	
     	final EditText alertEdit3 = new EditText(this);
@@ -230,8 +239,8 @@ public class EditStoryActivity extends Activity {
     	builder.setMessage("Enter the title of your new page")
     	.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-            	String pageTitle = alertEdit.getText().toString();
-            	app.updateTitle(pageTitle, check.isChecked(), alertEdit2.getText().toString(), alertEdit3.getText().toString());         	
+            	
+            	app.updateTitle(alertEdit.getText().toString(), check.isChecked(), alertEdit2.getText().toString(), alertEdit3.getText().toString());         	
             	refresh();
             	
             }

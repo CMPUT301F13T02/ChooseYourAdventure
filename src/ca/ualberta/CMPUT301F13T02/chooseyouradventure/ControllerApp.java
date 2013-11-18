@@ -187,12 +187,11 @@ public class ControllerApp extends Application {
     	Page newPage = initializeNewPage("First Page");
     	newStory.addPage(newPage);
     	newStory.setFirstpage(newPage.getId());
-    	newStory.setAuthor(Secure.getString(
-				getBaseContext().getContentResolver(), Secure.ANDROID_ID));
+    	newStory.setAuthor(Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID));
+    	newStory.setHandler(new ESHandler());
 	    try
 		{			    	
-	    	ESHandler eshandler = new ESHandler();
-			eshandler.addStory(newStory);
+	    	newStory.getHandler().addStory(newStory);
 			
 
 		} catch (Exception e)
@@ -332,6 +331,7 @@ public class ControllerApp extends Application {
 			newPage.setEnemyHealth(Integer.parseInt(health));
 		} catch(Exception e){}
 		currentStory.addPage(newPage);
+		System.out.println("ALL GOOD TO HERE");
 		currentStory.updateStory();
 	}
 

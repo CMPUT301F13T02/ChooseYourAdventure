@@ -53,7 +53,6 @@ public class Story {
 	@SuppressWarnings("unused")
 	private long timeStamp;
 	private transient Handler handler;
-	//private Handler defaultHandler = new ESHandler();
 	
 	/**
 	 * This is the main constructor for Story

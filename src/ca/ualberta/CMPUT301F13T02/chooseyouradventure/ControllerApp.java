@@ -163,6 +163,7 @@ public class ControllerApp extends Application {
 	    	newStory.setFirstpage(newPage.getId());
 	    	newStory.setAuthor(Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID));
 	    	newStory.setHandler(new ESHandler());
+
 		    try
 			{			    	
 		    	newStory.getHandler().addStory(newStory);
@@ -269,43 +270,40 @@ public class ControllerApp extends Application {
 	 */
 	protected <T> ArrayList<String> updateView(ArrayList<T> itemList,
 	                                            ArrayList<String> infoText) {
-		
 		infoText.clear();
 		if(itemList.size() != 0)
 		{
 			for (int i = 0; i < itemList.size(); i++) {
 				String outList = "";
-			
 				if(itemList.get(i).getClass().equals(Page.class))
 				{
 					
 					if(itemList.get(i).equals(currentStory.getFirstpage())){
 						outList = "{Start} ";
 					}
+
 					
 					if(((Page) itemList.get(i)).isFightingFrag() == true){
 						outList = outList + "{Fight} ";
 					}
 					
+
 					if(((Page) itemList.get(i)).getDecisions().size() == 0){				
 						outList = outList + "{Endpoint} ";
 					}
 					outList = outList + "(" + 
 					          ((Page) itemList.get(i)).getRefNum() + ") " + 
 							  ((Page) itemList.get(i)).getTitle();
-					
 				} else if(itemList.get(i).getClass().equals(Story.class)) {
-				
 					
 					//If the story has been saved locally, note it
-					if(((Story) itemList.get(i)).getLocal() == 1)
+					if(((Story) itemList.get(i)).getHandler() instanceof DBHandler){
 						outList = "Cached: ";
+					}
 					outList = outList + ((Story) itemList.get(i)).getTitle();
-					
 				}
 				infoText.add(outList);
 			}
-		
 		}
 		
 		return infoText;
@@ -498,8 +496,9 @@ public class ControllerApp extends Application {
 	public void addComment(String text, PhotoTile photo) {
 		String poster = Secure.getString( 
 				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+
 		Comment comment = new Comment(text, poster, photo);
-		ESHandler eshandler = new ESHandler();
+		
 		
 		currentPage.addComment(comment);
 		setCommentsChanged();

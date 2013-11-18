@@ -41,7 +41,6 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
  * A Story is serialized and stored via a Handler implementation which interact
  * solely with Storys.  
  * 
- * TODO Storys should store their handler as an attribute
  */
 public class Story {
 	
@@ -60,6 +59,7 @@ public class Story {
 	
 	private transient Handler handler;
 
+
 	/**
 	 * @return the hpCount
 	 */
@@ -71,14 +71,15 @@ public class Story {
 		this.firstpage = new Page().getId();
 		this.timeStamp = System.currentTimeMillis() / 1000L;
 	}
-	
+
 	/**
-	 +   * This is a copy constructor to copy a story 
-	 +   */
-	 public Story(Story story) {
-		 this.firstpage = new Page().getId();
-	     
-	 }
+	 * This is a copy constructor to copy a story 
+	 */
+	public Story(Story story) {
+		this.firstpage = new Page().getId();
+		
+	}
+
 
 	/**
 	 * @param firstpage the firstpage to set
@@ -186,12 +187,10 @@ public class Story {
     public void deletePage(Page aPage) {
     	
     }
-    
     /**
 	 * This function updates the stories data in the database
 	 */
 	public void updateStory(){
-		
 		try {
 			handler.updateStory(this);
 		} catch (HandlerException e) {
@@ -199,21 +198,21 @@ public class Story {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
-	 +   * This sets the scope of the storage of a story
-	 +   * @param state The type of Handler to set our handler to
-	 +   */
-	 public void setHandler(Handler state) {
-		 handler = state;
-	 }
-	 /**
-	 +   * This gets the scope of the storage of a story
-	 +   * @return state The type of Handler we are using
-	 +   */
-	 public Handler getHandler() {
-		 return handler;
-	 }
+	 * This sets the scope of the storage of a story
+	 * @param state The type of Handler to set our handler to
+	 */
+	public void setHandler(Handler state) {
+		handler = state;
+	}
+	/**
+	 * This gets the scope of the storage of a story
+	 * @return state The type of Handler we are using
+	 */
+	public Handler getHandler() {
+		return handler;
+	}
 
 	/**
 	 * Compares this story for deep equality with another story

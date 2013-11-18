@@ -36,13 +36,11 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 
-
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
-import android.os.Bundle;
-import android.provider.Settings.Secure;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,6 +55,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
+
 
 /**
  * The main activity of the application. Displays a list of stories to read. <br />
@@ -221,7 +222,7 @@ public class ViewStoriesActivity extends Activity {
 			final Story story = storyList.get(pos);
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			final String[] titles;
-			final String[] titlesA = {"Cache","Upload","Edit","Delete","Cancel"};
+			final String[] titlesA = {"Cache","Upload","Edit","{Placeholder} Delete","Cancel"};
 			final String[] titlesB = {"Cache","Upload Copy","Cancel"};
 			final String myId = Secure.getString(
 					getBaseContext().getContentResolver(), Secure.ANDROID_ID);
@@ -230,56 +231,49 @@ public class ViewStoriesActivity extends Activity {
 				titles = titlesA;
 				builder.setTitle(R.string.story_options_author);
 			}
-			else
-			{
+			else {
 				titles = titlesB;
 				builder.setTitle(R.string.story_options_user);
 			}
-            
-            
             builder.setItems(titles, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int item) {
                 	switch(item){
-                	case(0):
+
+                	case(0): //cache
                 		//set to local handler, 1 means it is local
-                		story.setHandler(dbhandler, 1);
+                		story.setHandler(dbhandler);
+	                	story.setAuthor(myId);
+
                 		try {
                 			story.getHandler().addStory(story);
                 		} catch (HandlerException e) {
                 			e.printStackTrace();
                 		}
-        				
+
+                		refresh();
                 		break;
-                	case(1):
+                	case(1): //upload
                 		// the 0 passed means it isn't local
-                		story.setHandler(eshandler, 0);
-                		//Author can update the story, user creates a new one.
-                		if(myId.equals(storyID)){
-                			story.updateStory();
-                		} 
-                		else {
-                			//create a new story because you have to change author ID
-                			Story newStory = story;
-                			newStory.setAuthor(myId);
-                			//set it to be online initially
-                			newStory.setHandler(eshandler, 0);
-							try {
-								newStory.getHandler().addStory(newStory);
-							} catch (HandlerException e) {
-								e.printStackTrace();
-							}
-                		}
+                		story.setHandler(eshandler);
+            			//create a new story because you have to change author ID
+            			story.setAuthor(myId);
+            			//set it to be online initially
+						try {
+							eshandler.addStory(story);
+						} catch (HandlerException e) {
+							e.printStackTrace();
+						}
+						refresh();
                 		break;
-                	case(2):
+                	case(2): //edit story
                 		if(myId.equals(storyID)){          			
                     		app.jump(EditStoryActivity.class, story, null);
                 		}
                 		else{}
                 		break;
-                	case(3):
+                	case(3): //delete
                 		break;
                 	}
-                        
                     }});
             builder.show();
         }

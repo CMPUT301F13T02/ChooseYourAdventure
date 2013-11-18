@@ -65,6 +65,21 @@ public class Comment {
 	 * @param text The comment
 	 * @param poster Who left the comment
 	 */
+	public Comment(String text, String poster) {
+		this.text = text;
+		this.poster = poster;
+		
+		Calendar calendar = Calendar.getInstance(); 
+		String dayField = "" + calendar.get(Calendar.DAY_OF_MONTH) + "\\" + calendar.get(Calendar.MONTH) + "\\" + calendar.get(Calendar.YEAR);
+		this.setTimestamp(dayField);
+	}
+	
+	/**
+	 * This is a constructor for a comment with a user and photo
+	 * @param text The comment
+	 * @param poster Who left the comment
+	 * @param photo A photo tile to go with the comment
+	 */
 	public Comment(String text, String poster, PhotoTile photo) {
 		this.text = text;
 		this.poster = poster;

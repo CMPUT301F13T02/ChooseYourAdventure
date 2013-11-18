@@ -2,6 +2,8 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
+import android.provider.Settings.Secure;
+
 public class SampleGenerator {
 	private Story outStory = new Story();
 	
@@ -125,7 +127,6 @@ public class SampleGenerator {
     		}
     		newStory.addPage(newPage);
     	}
-    	newStory.setAuthor("Blargh");
     	for (int i = 0; i < 16; i++){	
     		Page newPage = newStory.getPages().get(i);
     		switch(i){

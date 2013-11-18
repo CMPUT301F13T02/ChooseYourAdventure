@@ -31,6 +31,7 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.UUID;
 
 import android.app.Activity;
@@ -39,6 +40,7 @@ import android.provider.MediaStore;
 import android.provider.Settings.Secure;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.content.Intent;
+import android.graphics.Bitmap;
 
 /**
  * This class represents the controller for our application. This class stores the state
@@ -58,11 +60,16 @@ public class ControllerApp extends Application {
 	private boolean decisionsChanged;
 	private boolean commentsChanged;
 	private boolean endingChanged;
+	private Object tempSpace;
+	
+	private boolean onEntry;
 	
 	private Story currentStory;
 	private Page currentPage;
 	private ArrayList<Story> stories;
 	private static ControllerApp instance = new ControllerApp();
+	
+	
 	
 	@Override
 	public void onCreate() {
@@ -154,12 +161,12 @@ public class ControllerApp extends Application {
 	    	Page newPage = initializeNewPage("First Page");
 	    	newStory.addPage(newPage);
 	    	newStory.setFirstpage(newPage.getId());
-	    	newStory.setAuthor(Secure.getString(
-					getBaseContext().getContentResolver(), Secure.ANDROID_ID));
+	    	newStory.setAuthor(Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID));
+	    	newStory.setHandler(new ESHandler());
+
 		    try
 			{			    	
-		    	ESHandler eshandler = new ESHandler();
-				eshandler.addStory(newStory);
+		    	newStory.getHandler().addStory(newStory);
 				
 	
 			} catch (Exception e)
@@ -169,6 +176,31 @@ public class ControllerApp extends Application {
 			}	
 		    jump(EditStoryActivity.class,newStory, newPage);
 	    }
+	
+	//This should be refactored.
+	public void initializeNewStory(String storyTitle, Counters playerStats) throws HandlerException{
+    	
+    	final Story newStory = new Story(); 
+    	newStory.setUsesCombat(true);
+    	newStory.setPlayerStats(playerStats);
+    	newStory.setTitle(storyTitle);	    	
+    	Page newPage = initializeNewPage("First Page");
+    	newStory.addPage(newPage);
+    	newStory.setFirstpage(newPage.getId());
+    	newStory.setAuthor(Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID));
+    	newStory.setHandler(new ESHandler());
+	    try
+		{			    	
+	    	newStory.getHandler().addStory(newStory);
+			
+
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	    jump(EditStoryActivity.class,newStory, newPage);
+    }
 
 
 	/**
@@ -221,10 +253,10 @@ public class ControllerApp extends Application {
 		ArrayList<String> pageNames = new ArrayList<String>();
 		for (int i = 0; i < pages.size(); i++) {
 			pageNames.add("(" + pages.get(i).getRefNum() + ") " + pages.get(i).getTitle());
-		}
-		
+		}		
 		return pageNames;
 	}
+	
 
 
 	/**
@@ -237,36 +269,40 @@ public class ControllerApp extends Application {
 	 */
 	protected <T> ArrayList<String> updateView(ArrayList<T> itemList,
 	                                            ArrayList<String> infoText) {
-		
 		infoText.clear();
 		if(itemList.size() != 0)
 		{
 			for (int i = 0; i < itemList.size(); i++) {
 				String outList = "";
-			
 				if(itemList.get(i).getClass().equals(Page.class))
 				{
 					
 					if(itemList.get(i).equals(currentStory.getFirstpage())){
 						outList = "{Start} ";
 					}
+
 					
+					if(((Page) itemList.get(i)).isFightingFrag() == true){
+						outList = outList + "{Fight} ";
+					}
+					
+
 					if(((Page) itemList.get(i)).getDecisions().size() == 0){				
 						outList = outList + "{Endpoint} ";
 					}
 					outList = outList + "(" + 
 					          ((Page) itemList.get(i)).getRefNum() + ") " + 
 							  ((Page) itemList.get(i)).getTitle();
-					
 				} else if(itemList.get(i).getClass().equals(Story.class)) {
-				
 					
-					outList = ((Story) itemList.get(i)).getTitle();
-					
+					//If the story has been saved locally, note it
+					if(((Story) itemList.get(i)).getHandler() instanceof DBHandler){
+						outList = "Cached: ";
+					}
+					outList = outList + ((Story) itemList.get(i)).getTitle();
 				}
 				infoText.add(outList);
 			}
-		
 		}
 		
 		return infoText;
@@ -287,9 +323,15 @@ public class ControllerApp extends Application {
 	 * title.
 	 * @param pageTitle
 	 */
-	protected void updateTitle(String pageTitle){
+	protected void updateTitle(String pageTitle, boolean fight, String health, String name){
 		Page newPage = initializeNewPage(pageTitle);
+		newPage.setFightingFrag(fight);
+		newPage.setEnemyName(name);
+		try{
+			newPage.setEnemyHealth(Integer.parseInt(health));
+		} catch(Exception e){}
 		currentStory.addPage(newPage);
+		System.out.println("ALL GOOD TO HERE");
 		currentStory.updateStory();
 	}
 
@@ -319,9 +361,10 @@ public class ControllerApp extends Application {
 	 * @param story
 	 * @param page
 	 */
-	public <T> void jump(Class<T> classItem, Story story, Page page) {
+	public <T> void jump(Class<T> classItem, Story story, Page page) {	
 		setStory(story);
 		setPage(page);
+		setOnEntry(true);
 		Intent intent = new Intent(this, classItem);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
@@ -338,13 +381,25 @@ public class ControllerApp extends Application {
 		UUID toPageId = decision.getPageID();
 		ArrayList<Page> pages = currentStory.getPages();
 		Page toPage = currentPage;
+		while(toPageId == null){
+			Random rn = new Random();
+			decision = currentPage.getDecisions().get(rn.nextInt(currentPage.getDecisions().size()));
+			toPageId = decision.getPageID();
+		}
 		for (int i = 0; i < pages.size(); i++) {
 			if (toPageId.equals(pages.get(i).getId())) {
 				toPage = pages.get(i);
 				break;
 			}
 		}
+		
+		
+		setOnEntry(true);
+		if(currentPage.getId().equals(toPageId) == true){
+			setOnEntry(false);
+		}
 		setPage(toPage);
+		
 		reloadPage();
 	}
 
@@ -412,6 +467,18 @@ public class ControllerApp extends Application {
 		currentPage.updateDecision(text, pages.get(whichPage), whichDecision);
 		setDecisionsChanged();
 	}
+	
+	public void updateDecision(String text, int whichPage, int whichDecision, Counters counter) {
+		ArrayList<Page> pages = currentStory.getPages();
+		if(whichPage == pages.size()){
+			currentPage.updateDecision(text, new Page(null), whichDecision, counter);
+		}
+		else{
+			currentPage.updateDecision(text, pages.get(whichPage), whichDecision, counter);
+		}
+		setDecisionsChanged();
+	}
+	
 
 	/**
 	 * Deletes the decision at position whichDecision.
@@ -426,17 +493,18 @@ public class ControllerApp extends Application {
 	 * This adds a comment to the current page
 	 * @param A comment to add
 	 */
-	public void addComment(String text) {
+	public void addComment(String text, PhotoTile photo) {
 		String poster = Secure.getString( 
 				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
-		Comment comment = new Comment(text, poster);
-		ESHandler eshandler = new ESHandler();
+
+		Comment comment = new Comment(text, poster, photo);
+		
 		
 		currentPage.addComment(comment);
 		setCommentsChanged();
 		try
 		{
-			eshandler.addComment(getStory(), getPage(), comment);
+			currentStory.getHandler().addComment(getStory(), getPage(), comment);
 		} catch (HandlerException e)
 		{
 			// TODO Auto-generated catch block
@@ -550,6 +618,24 @@ public class ControllerApp extends Application {
 		if (pageActivity != null) {
 			pageActivity.update(currentPage);
 		}
+	}
+
+	public boolean isOnEntry() {
+		return onEntry;
+	}
+
+	public void setOnEntry(boolean onEntry) {
+		this.onEntry = onEntry;
+	}
+
+	public Object getTempSpace() {
+		return tempSpace;
+	}
+
+
+	public void setTempSpace(Object loadObject) {
+		this.tempSpace = loadObject;
+		
 	}
 	
 }

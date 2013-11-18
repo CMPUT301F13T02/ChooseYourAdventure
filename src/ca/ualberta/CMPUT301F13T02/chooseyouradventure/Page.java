@@ -48,12 +48,24 @@ public class Page {
 	private String title;
 	private String pageEnding;
 	private int refNum;
+	private boolean fightingFrag = false;
+	private int enemyHealth = 0;
+	private String enemyName = "Enemy";
 	
 	/**
 	 * This is the constructor that binds the arraylists to itself
 	 */
 	public Page() {
 		id = UUID.randomUUID();
+		tiles = new ArrayList<Tile>();
+		decisions = new ArrayList<Decision>();
+		comments = new ArrayList<Comment>();
+		title = new String();
+		pageEnding = "+ Add an ending to this page";
+	}
+	
+	public Page(String enterAnything){
+		id = null;
 		tiles = new ArrayList<Tile>();
 		decisions = new ArrayList<Decision>();
 		comments = new ArrayList<Comment>();
@@ -187,6 +199,10 @@ public class Page {
 	public void updateDecision(String text, Page page, int decisionNumber) {
 		decisions.get(decisionNumber).updateDecision(text, page);
 	}
+	
+	public void updateDecision(String text, Page page, int decisionNumber, Counters counter) {
+		decisions.get(decisionNumber).updateDecision(text, page, counter);
+	}
 
 	public void deleteDecision(int whichDecision) {
 		decisions.remove(whichDecision);
@@ -256,5 +272,31 @@ public class Page {
 	public String toString() {
 		return "" + id + comments + tiles;
 	}
+
+	public boolean isFightingFrag() {
+		return fightingFrag;
+	}
+
+	public void setFightingFrag(boolean fightingFrag) {
+		this.fightingFrag = fightingFrag;
+	}
+
+	public int getEnemyHealth() {
+		return enemyHealth;
+	}
+
+	public void setEnemyHealth(int enemyHealth) {
+		this.enemyHealth = enemyHealth;
+	}
+
+	public String getEnemyName() {
+		return enemyName;
+	}
+
+	public void setEnemyName(String enemyName) {
+		this.enemyName = enemyName;
+	}
+
+	
 	
 }

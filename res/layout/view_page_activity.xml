@@ -44,6 +44,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         android:orientation="vertical" >
         
         <LinearLayout
+            android:id="@+id/fightingLayout"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" 
+            android:orientation="vertical"
+			android:background="#FFAAAAAA">
+        </LinearLayout>
+        
+        <LinearLayout
             android:id="@+id/tilesLayout"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"

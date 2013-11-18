@@ -33,14 +33,14 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
-import android.os.Bundle;
-import android.provider.Settings.Secure;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,9 +49,15 @@ import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.TextView;
+
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
+
 
 /**
  * The main activity of the application. Displays a list of stories to read. <br />
@@ -77,11 +83,13 @@ import android.widget.ScrollView;
 public class ViewStoriesActivity extends Activity {
 	private ListView mainPage;
 	private Button createNew;
+	private Button refreshButton;
 	ArrayList<String> storyText = new ArrayList<String>();
 	ArrayList<Story> storyList = new ArrayList<Story>();
 	private ControllerApp app; 
 	private SampleGenerator sampleGen = new SampleGenerator();
 	private Handler eshandler = new ESHandler();
+	private Handler dbhandler = new DBHandler(this);
 	private static final int HELP_INDEX = 0;
 	
 	ArrayAdapter<String> adapter;
@@ -91,10 +99,17 @@ public class ViewStoriesActivity extends Activity {
         setContentView(R.layout.view_stories_activity);
         mainPage = (ListView) findViewById(R.id.mainView);
         createNew = (Button) findViewById(R.id.createButton);
+        refreshButton = (Button) findViewById(R.id.button1);
         createNew.setOnClickListener(new OnClickListener() {
            
             public void onClick(View v) {
                 createStory();
+            }
+        });
+        refreshButton.setOnClickListener(new OnClickListener() {
+            
+            public void onClick(View v) {
+                refresh();
             }
         });
         
@@ -104,8 +119,8 @@ public class ViewStoriesActivity extends Activity {
 		try {
 			
 			storyList =  eshandler.getAllStories();
-			//Story sampleStory = sampleGen.getStory();
-			//storyList.add(sampleStory);
+			Story sampleStory = sampleGen.getStory();
+			storyList.add(sampleStory);
 			storyText = app.updateView(storyList, storyText);
 		} catch (HandlerException e1) {
 			// TODO Auto-generated catch block
@@ -197,7 +212,9 @@ public class ViewStoriesActivity extends Activity {
     }
     
 	protected void onListItemClick(View v, int pos, long id) throws HandlerException {	
+		
 	    app.jump(ViewPageActivity.class, storyList.get(pos), storyList.get(pos).getFirstpage());
+	    
 	}
 	
 	public boolean onLongListItemClick(View v, int pos, long id) { 
@@ -213,8 +230,8 @@ public class ViewStoriesActivity extends Activity {
 			final Story story = storyList.get(pos);
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			final String[] titles;
-			final String[] titlesA = {"{Placeholder} Cache","{Placeholder} Upload","Edit","{Placeholder} Delete","Cancel"};
-			final String[] titlesB = {"{Placeholder} Cache","{Placeholder} Upload Copy","Cancel"};
+			final String[] titlesA = {"Cache","Upload","Edit","{Placeholder} Delete","Cancel"};
+			final String[] titlesB = {"Cache","Upload Copy","Cancel"};
 			final String myId = Secure.getString(
 					getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 			final String storyID = story.getAuthor();
@@ -222,33 +239,56 @@ public class ViewStoriesActivity extends Activity {
 				titles = titlesA;
 				builder.setTitle(R.string.story_options_author);
 			}
-			else
-			{
+			else {
 				titles = titlesB;
 				builder.setTitle(R.string.story_options_user);
 			}
-            
-            
             builder.setItems(titles, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int item) {
                 	switch(item){
-                	case(0):
-                		
-        				
+
+                	case(0): //cache
+                		//set to local handler, 1 means it is local
+                		story.setHandler(dbhandler);
+	                	story.setAuthor(myId);
+
+                		try {
+                			story.getHandler().addStory(story);
+                		} catch (HandlerException e) {
+                			e.printStackTrace();
+                		}
+
+                		refresh();
                 		break;
-                	case(1):
-                		
+                	case(1): //upload
+                		// the 0 passed means it isn't local
+                		story.setHandler(eshandler);
+            			//create a new story because you have to change author ID
+            			story.setAuthor(myId);
+            			//set it to be online initially
+						try {
+							eshandler.addStory(story);
+						} catch (HandlerException e) {
+							e.printStackTrace();
+						}
+						refresh();
                 		break;
-                	case(2):
+                	case(2): //edit story
                 		if(myId.equals(storyID)){          			
                     		app.jump(EditStoryActivity.class, story, null);
                 		}
                 		else{}
                 		break;
-                	case(3):
+                	case(3): //delete
+                		try {
+							story.getHandler().deleteStory(story);
+						} catch (HandlerException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+                		refresh();
                 		break;
                 	}
-                        
                     }});
             builder.show();
         }
@@ -263,14 +303,34 @@ public class ViewStoriesActivity extends Activity {
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle("Create New");
     	
+    	final LinearLayout layout = new LinearLayout(this);
+    	layout.setOrientation(LinearLayout.VERTICAL);
+    	
     	final EditText alertEdit = new EditText(this);
-    	builder.setView(alertEdit);
+    	layout.addView(alertEdit);
+    	
+    	final TextView alertText = new TextView(this);
+    	alertText.setText("Use Counters and Combat?");
+    	layout.addView(alertText);
+    	
+    	final CheckBox check = new CheckBox(this);
+    	layout.addView(check);
+        
+    	builder.setView(layout);
     	builder.setMessage("Enter the title of your story")
     	.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	
 					try {
-						app.initializeNewStory(alertEdit.getText().toString());
+						if(check.isChecked() == true){
+							Counters baseCount = new Counters();
+							baseCount.setBasic("0", "100");
+							app.initializeNewStory(alertEdit.getText().toString(), baseCount);
+						}
+						else{
+						app.initializeNewStory(alertEdit.getText().toString());}
+						
+						
 						refresh();
 					} catch (HandlerException e) {
 						// TODO Auto-generated catch block
@@ -295,8 +355,7 @@ public class ViewStoriesActivity extends Activity {
     
     	try {
         	storyList = eshandler.getAllStories();
-        	//Story sampleStory = sampleGen.getStory();
-			//storyList.add(sampleStory);
+        	storyList.addAll(dbhandler.getAllStories());
 			storyText = app.updateView(storyList, storyText);
 		} catch (HandlerException e1) {
 			// TODO Auto-generated catch block

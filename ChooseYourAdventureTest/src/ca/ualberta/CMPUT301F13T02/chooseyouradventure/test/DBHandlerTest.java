@@ -32,6 +32,7 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
 import android.test.AndroidTestCase;
+import android.test.RenamingDelegatingContext;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.DBHandler;
@@ -46,7 +47,11 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
 public class DBHandlerTest extends AndroidTestCase {
 
 	//Test if the DB Handler actually works
-	DBHandler handler = new DBHandler(null);
+	DBHandler handler;
+	
+	public void setUp() {
+		 handler = new DBHandler(new RenamingDelegatingContext(getContext(), "test"));
+	}
 	
 	public void testUpdateStory() {
 		try {
@@ -54,7 +59,7 @@ public class DBHandlerTest extends AndroidTestCase {
 			Page page1 = new Page();
 			page1.addTile(new TextTile("test1"));
 			page1.addTile(new TextTile("test2"));
-			page1.addComment(new Comment("LOLz I CN HAZ CHEEZBUERGR?"));
+			page1.addComment(new Comment("LOLz I CN HAZ CHEEZBUERGR?", "Geoff"));
 			
 			Page page2 = new Page();
 			page2.addTile(new TextTile("test3"));
@@ -68,8 +73,10 @@ public class DBHandlerTest extends AndroidTestCase {
 			story1.addPage(page1);
 			story1.addPage(page2);
 			handler.updateStory(story1);
+			
 			//Get same story
 			Story story2 = handler.getStory("testUpdate");
+			
 			//Compare
 			assertTrue(story1.equals(story2));
 		}
@@ -103,6 +110,7 @@ public class DBHandlerTest extends AndroidTestCase {
 			
 			//Create story
 			Story story1 = new Story();
+			story1.setId("test");
 			story1.addPage(page1);
 			story1.addPage(page2);
 			handler.addStory(story1);

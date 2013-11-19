@@ -47,7 +47,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 /**
  * This Activity allows a story's author to edit a story by adding adding pages,
@@ -211,28 +210,23 @@ public class EditStoryActivity extends Activity {
 	 * @param Input from longclick
 	 */
 	public void pageOptions(final int pos){
+
+        final AlertDialog.Builder titleEditor = new AlertDialog.Builder(this);
 		final Page currentPage = app.getStory().getPages().get(pos);
 		final Page FP = app.getStory().getFirstpage();
 		String[] titlesA = {"Goto/Edit","Page Properties","Cancel"};
 		String[] titlesB = {"Goto/Edit","Page Properties","Assign as First Page","Delete","Cancel"};
 		final String[] titles;
-		if(currentPage == FP){titles = titlesA;}
-		else{titles = titlesB;}
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final AlertDialog.Builder titleEditor = new AlertDialog.Builder(this);
-        final EditText alertEdit = new EditText(this);
+
+		if(currentPage == FP)
+			titles = titlesA;
+		else
+			titles = titlesB;
         
-        final EditText alertEdit3 = new EditText(this);
-		final CheckBox check = new CheckBox(this);
-		final EditText alertEdit2 = new EditText(this);
-		final LinearLayout layout = new LinearLayout(this);
-		final TextView alertText2 = new TextView(this);
-		final TextView alertText = new TextView(this);
-		final TextView alertText3 = new TextView(this);
-		
-		
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.page_options);
         builder.setItems(titles, new DialogInterface.OnClickListener() {
+
             public void onClick(DialogInterface dialog, int item) {
             	
             	switch(item){
@@ -243,50 +237,42 @@ public class EditStoryActivity extends Activity {
             	break;
             	case(1):
             		
+                	final LinearLayout layout = (LinearLayout) View.inflate(titleEditor.getContext(), R.layout.create_page_dialog, null);
+	            	final LinearLayout fightingLayout = (LinearLayout) layout.findViewById(R.id.create_page_dialog_fighting_options);
+	            	final EditText titleEdit = (EditText) layout.findViewById(R.id.create_page_dialog_edittext);
+	            	
+	            	if(!app.getStory().isUsesCombat()) {
+	            		fightingLayout.setVisibility(View.GONE);
+	            	}
+	            	else {
+	            		
+	                	final EditText healthEdit = (EditText) layout.findViewById(R.id.create_page_dialog_health_edittext);
+	                	final EditText nameEdit = (EditText) layout.findViewById(R.id.create_page_dialog_name_edittext);
+	                	final CheckBox check = (CheckBox) layout.findViewById(R.id.create_page_dialog_checkbox);
+
+	            		check.setChecked(currentPage.isFightingFrag());
+	            		healthEdit.setText("" + currentPage.getEnemyHealth());
+	            		nameEdit.setText(currentPage.getEnemyName());
+	            	}
             		
+	            	titleEdit.setText(currentPage.getTitle());
+	            	
             		titleEditor.setTitle("Create New");	
-            		
-            		layout.setOrientation(LinearLayout.VERTICAL);
-
-            		
-            		layout.addView(alertEdit);
-
-            		
-
-            		if(app.getStory().isUsesCombat()){
-          			
-            			alertText.setText("Fighting Fragment?");
-            			layout.addView(alertText);
-            			check.setChecked(currentPage.isFightingFrag());
-            			layout.addView(check);     			
-            			alertText2.setText("Health of the Enemy on this Page?");
-            			layout.addView(alertText2);
-            			alertEdit2.setText("" + currentPage.getEnemyHealth());
-            			layout.addView(alertEdit2);
-            			alertText3.setText("Name of the Enemy on this Page?");
-            			layout.addView(alertText3);
-            			alertEdit3.setText("" + currentPage.getEnemyName());
-            			layout.addView(alertEdit3);
-            		}
-
-
             		titleEditor.setView(layout);
             		titleEditor.setMessage("Enter the title of your new page")
             		.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+
             			public void onClick(DialogInterface dialog, int id) {
-            				String pageTitle = alertEdit.getText().toString();
+            				String pageTitle = titleEdit.getText().toString();
             				app.updateTitle(pageTitle, currentPage);         	
             				refresh();
-
             			}
             		})
-            		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            			public void onClick(DialogInterface dialog, int id) {
-
-            			}
-            		});
+            		.setNegativeButton("Cancel", null);
             		titleEditor.show();
+            		
             		break;
+
             	case(2):
             		app.updateFP(currentPage);
             		refresh();
@@ -295,7 +281,6 @@ public class EditStoryActivity extends Activity {
             		app.removePage(currentPage);
             		refresh();
             		break;
-
             	}
 
             }	

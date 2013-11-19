@@ -142,5 +142,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         ]]> 
     </string>
     <string name="refresh">Refresh</string>
+    <string name="save">Save</string>
+    <string name="enterPageTitle">Enter the title of your new page</string>
+    <string name="createNew">Create New</string>
+    <string name="fightingPage">Fighting Page</string>
+    <string name="enemyHealth">Health of the enemy on this page</string>
+    <string name="enemyName">Name of the enemy on this page</string>
 
 </resources>

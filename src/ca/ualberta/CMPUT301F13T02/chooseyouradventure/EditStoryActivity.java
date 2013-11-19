@@ -54,8 +54,6 @@ import android.widget.TextView;
  * deleting pages, setting the first page, or deleting the story.
  * 
  * This class is part of the view of the application.
- * 
- * TODO Delete functionality not yet hooked up
  */
 
 public class EditStoryActivity extends Activity {
@@ -87,7 +85,6 @@ public class EditStoryActivity extends Activity {
 				createPage();
 			} catch (HandlerException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
               adapter.notifyDataSetChanged();
@@ -100,7 +97,6 @@ public class EditStoryActivity extends Activity {
             	try {
 					story.getHandler().deleteStory(story);
 				} catch (HandlerException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
             	finish();
@@ -183,63 +179,31 @@ public class EditStoryActivity extends Activity {
 	 * @throws HandlerException
 	 */
 	private void createPage() throws HandlerException{
+
+    	final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.create_page_dialog, null);
+    	
+    	final EditText titleEdit = (EditText) layout.findViewById(R.id.create_page_dialog_edittext);
+    	final EditText healthEdit = (EditText) layout.findViewById(R.id.create_page_dialog_health_edittext);
+    	final EditText nameEdit = (EditText) layout.findViewById(R.id.create_page_dialog_name_edittext);
+    	final CheckBox check = (CheckBox) layout.findViewById(R.id.create_page_dialog_checkbox);
+    	final LinearLayout fightingLayout = (LinearLayout) layout.findViewById(R.id.create_page_dialog_fighting_options);
+    	
+    	if(!app.getStory().isUsesCombat())
+    		fightingLayout.setVisibility(View.GONE);
+    	
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle("Create New");	
-    	final LinearLayout layout = new LinearLayout(this);
-    	layout.setOrientation(LinearLayout.VERTICAL);
-    	
-    	final EditText alertEdit = new EditText(this);
-    	alertEdit.setText("");
-    	layout.addView(alertEdit);
-    	
-    	final EditText alertEdit3 = new EditText(this);
-    	final CheckBox check = new CheckBox(this);
-    	final EditText alertEdit2 = new EditText(this);
-    	
-    	if(app.getStory().isUsesCombat()){
-    		final TextView alertText = new TextView(this);
-        	alertText.setText("Fighting Fragment?");
-        	layout.addView(alertText);
-        	
-        	
-        	layout.addView(check);
-        	
-        	final TextView alertText2 = new TextView(this);
-        	alertText2.setText("Health of the Enemy on this Page?");
-        	layout.addView(alertText2);
-        	
-        	
-        	alertEdit2.setText("0");
-        	layout.addView(alertEdit2);
-        	
-        	final TextView alertText3 = new TextView(this);
-        	alertText3.setText("Name of the Enemy on this Page?");
-        	layout.addView(alertText3);
-        	
-        	
-        	alertEdit3.setText("Enemy");
-        	layout.addView(alertEdit3);
-    	}
-    	
-    	
     	builder.setView(layout);
-    	builder.setMessage("Enter the title of your new page")
-    	.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+    	builder.setTitle(getString(R.string.createNew));
+    	builder.setMessage(getString(R.string.enterPageTitle))
+    	.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
+
             public void onClick(DialogInterface dialog, int id) {
-            	
-            	app.updateTitle(alertEdit.getText().toString(), check.isChecked(), alertEdit2.getText().toString(), alertEdit3.getText().toString());         	
+            	app.updateTitle(titleEdit.getText().toString(), check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString());         	
             	refresh();
-            	
             }
         })
-        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                
-            }
-        });
+        .setNegativeButton(getString(R.string.cancel), null);
         builder.show();
-    	
-    	
     }
 
 	/**

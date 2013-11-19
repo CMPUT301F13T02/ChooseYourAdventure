@@ -876,6 +876,7 @@ public class ViewPageActivity extends Activity {
 	}
 
 	protected void onEditConditionals(View view) {
+		
 		final int whichDecision = decisionsLayout.indexOfChild(view);
 		final Decision decision = app.getPage().getDecisions().get(whichDecision);
 		
@@ -888,84 +889,39 @@ public class ViewPageActivity extends Activity {
 			System.out.println("toPageID: " + toPageId + "\ncomparePage: " + comparePage + "\nPage: " + app.getPage() + "\nDecision: " + decision.getPageID() + decision.getText());
 			if (toPageId.equals(comparePage)) {
 				toPagePosition = i;
-				
+				break;
 			}
 		}
 		
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle("Set the conditions in which this decision appears");
     	
-    	final LinearLayout layout = new LinearLayout(this);
-    	layout.setOrientation(LinearLayout.VERTICAL);
+    	final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.edit_conditionals_dialog, null);
+    	final EditText decisionText = (EditText) layout.findViewById(R.id.edit_conditionals_dialog_decision_edittext);
+    	final EditText conditionText = (EditText) layout.findViewById(R.id.edit_conditionals_dialog_threshold_edittext);
+    	final Spinner pageSpinner = (Spinner) layout.findViewById(R.id.edit_conditionals_dialog_page_spinner);
+    	final Spinner condSpinner = (Spinner) layout.findViewById(R.id.edit_conditionals_dialog_type_spinner);
+    	final Spinner signSpinner = (Spinner) layout.findViewById(R.id.edit_conditionals_dialog_op_spinner);
     	
-    	final EditText alertEdit = new EditText(this);
-    	alertEdit.setText(decision.getText());
-    	layout.addView(alertEdit);
+    	conditionText.setText("" + decision.getChoiceModifiers().getThresholdValue());
+    	decisionText.setText(decision.getText());
     	
-    	final Spinner pageSpinner = new Spinner(this);
     	ArrayList<String> pageStrings = app.getPageStrings(pages);
-    	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, 
-    			R.layout.list_item_base, pageStrings);
+    	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, R.layout.list_item_base, pageStrings);
     	pageSpinner.setAdapter(pagesAdapter);
     	pageSpinner.setSelection(toPagePosition);
-    	layout.addView(pageSpinner);
     	
-    	final Spinner condSpinner = new Spinner(this);	
-    	ArrayList<String> typeString = new ArrayList<String>();
-    	typeString.add("Health");
-    	typeString.add("Enemy Health");
-    	typeString.add("Treasure");
-    	ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(this, 
-    			R.layout.list_item_base,typeString);
-    	condSpinner.setAdapter(typeAdapter);
-    	condSpinner.setSelection(decision.getChoiceModifiers().getThresholdType());
-    	layout.addView(condSpinner);
-    	
-    	final Spinner signSpinner = new Spinner(this);
-    	ArrayList<String> signString = new ArrayList<String>();
-    	signString.add("<");
-    	signString.add(">");
-    	signString.add("=");
-    	ArrayAdapter<String> signAdapter = new ArrayAdapter<String>(this, 
-    			R.layout.list_item_base,signString);
-    	signSpinner.setAdapter(signAdapter);
-    	signSpinner.setSelection(decision.getChoiceModifiers().getThresholdSign());
-    	layout.addView(signSpinner);
-    	
-    	
-    	
-    	
-    	
-    	final TextView cText = new TextView(this);
-    	cText.setText("Threshold Level for Activation?");
-    	layout.addView(cText);
-
-    	final EditText conditionValue = new EditText(this);
-    	conditionValue.setText("" + decision.getChoiceModifiers().getThresholdValue());
-    	layout.addView(conditionValue);
-        	
-        	
-
     	builder.setView(layout);
     	builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-        		
-        					
-        		Counters counter = decision.getChoiceModifiers();
-        		counter.setThresholds(signSpinner.getSelectedItemPosition(), condSpinner.getSelectedItemPosition(), conditionValue.getText().toString());
-        		app.updateDecision(alertEdit.getText().toString(), 
-            			pageSpinner.getSelectedItemPosition(),whichDecision, counter);
-            }
 
-            
-        })
-        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                
+        		Counters counter = decision.getChoiceModifiers();
+        		counter.setThresholds(signSpinner.getSelectedItemPosition(), condSpinner.getSelectedItemPosition(), conditionText.getText().toString());
+        		app.updateDecision(decisionText.getText().toString(), pageSpinner.getSelectedItemPosition(), whichDecision, counter);
             }
-        });
+        })
+        .setNegativeButton("Cancel", null);
         builder.show();
-		
 	}
 
 	/**

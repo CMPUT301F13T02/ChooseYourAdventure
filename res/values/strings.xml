@@ -152,5 +152,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="takingDamageMessage">Message for taking data</string>
     <string name="enemyDamageMessage">Message for damaging enemy</string>
     <string name="coinMessage">Message for gain/loss of coins</string>
+    <string name="threshold">Threshold level for activation</string>
+    <string-array name="conditionalTypes">
+    	<item>Health</item>
+    	<item>Enemy Health</item>
+    	<item>Treasure</item>
+    </string-array>
+        <string-array name="conditionalOps">
+    	<item>&lt;</item>
+    	<item>&gt;</item>
+    	<item>=</item>
+    </string-array>
 
 </resources>

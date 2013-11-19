@@ -304,6 +304,7 @@ public class ViewStoriesActivity extends Activity {
     	layout.setOrientation(LinearLayout.VERTICAL);
     	
     	final EditText alertEdit = new EditText(this);
+    	alertEdit.setSingleLine(true);
     	layout.addView(alertEdit);
     	
     	final TextView alertText = new TextView(this);

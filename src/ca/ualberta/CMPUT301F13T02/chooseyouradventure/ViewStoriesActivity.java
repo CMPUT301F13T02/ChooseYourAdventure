@@ -83,6 +83,7 @@ public class ViewStoriesActivity extends Activity {
 	private ListView mainPage;
 	private Button createNew;
 	private Button searchButton;
+	private Button randomStoryButton;
 	ArrayList<String> storyText = new ArrayList<String>();
 	ArrayList<Story> storyList = new ArrayList<Story>();
 	private ControllerApp app; 
@@ -98,6 +99,7 @@ public class ViewStoriesActivity extends Activity {
         mainPage = (ListView) findViewById(R.id.mainView);
         createNew = (Button) findViewById(R.id.createButton);
         searchButton = (Button) findViewById(R.id.searchButton);
+        randomStoryButton = (Button) findViewById(R.id.randomButton);
         createNew.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 createStory();
@@ -109,6 +111,16 @@ public class ViewStoriesActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				onSearchRequested();
+			}
+        	
+        });
+        
+        randomStoryButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				onRandomStory();
+				
 			}
         	
         });
@@ -155,7 +167,18 @@ public class ViewStoriesActivity extends Activity {
         
     }
     
-    @Override
+    protected void onRandomStory() {
+		try {
+			Story random = eshandler.getRandomStory();
+			app.jump(ViewPageActivity.class, random, random.getFirstpage());
+		} catch (HandlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
 	public void onResume() {
         super.onResume();
         refresh();

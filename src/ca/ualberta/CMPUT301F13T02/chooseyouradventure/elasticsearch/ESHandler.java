@@ -41,6 +41,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -235,8 +237,10 @@ public class ESHandler implements Handler{
 		 * Pass query to elastic search.
 		 * See https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ESClient.java
 		 */
-	
-		ESHttpGet get = new ESHttpGet(getStoryPath() + "_search");
+		
+		int numHits = 1000;
+		
+		ESHttpGet get = new ESHttpGet(getStoryPath() + "_search" + "?size=" + String.valueOf(numHits));
 		String query = "{\"query\" : {\"query_string\" : {\"default_field\" : \"title\",\"query\" : \"" + searchKey + "*" + "\"}}}";
 		StringEntity stringentity = new StringEntity(query);
 		
@@ -262,5 +266,64 @@ public class ESHandler implements Handler{
 		
 		return stories;
 		
+	}
+	
+	public Story getRandomStory() throws HandlerException {
+		
+		ESHttpGet get = new ESHttpGet(getStoryPath() + "_count");
+		
+		String response = null;
+		try{
+			response = get.execute();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		int numStories;
+		Type esCountResponseType = new TypeToken<ESCountResponse<Integer>>(){}.getType();
+		ESCountResponse<Integer> esCount = gson.fromJson(response, esCountResponseType);
+		numStories = esCount.getCount();
+		System.out.println(String.valueOf(numStories));
+		
+		int location = 0 + (int)(Math.random()*(numStories+1));
+		get = new ESHttpGet(getStoryPath() + "_search" + "?from=" + String.valueOf(location) + "&size=1");
+		
+		response=null;
+		try {
+			response = get.execute();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		/* For each hit, add it to the list */
+		Type esSearchResponseType = new TypeToken<ESSearchResponse<Story>>(){}.getType();
+		ESSearchResponse<Story> esResponse = gson.fromJson(response, esSearchResponseType);
+		
+		Story story = esResponse.getHits().iterator().next().getSource();
+		return story;
+		
+		
+		/*int numHits = 1000;
+		
+		ESHttpGet get = new ESHttpGet(getStoryPath() + "_search" + "?size=" + String.valueOf(numHits));
+		
+		String response = null;
+		try {
+			response = get.execute();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Type esSearchResponseType = new TypeToken<ESSearchResponse<Story>>(){}.getType();
+		ESSearchResponse<Story> esResponse = gson.fromJson(response, esSearchResponseType);
+		
+		Story[] stories = new Story[numHits];
+		stories = esResponse.getHits().toArray(stories);
+		int location = 0 + (int)(Math.random()*((stories.length-0)+1));
+		return stories[location];
+		*/
 	}
 }

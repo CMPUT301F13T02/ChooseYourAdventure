@@ -1054,7 +1054,9 @@ public class ViewPageActivity extends Activity {
     	
     	final Spinner pageSpinner = new Spinner(this);
     	ArrayList<String> pageStrings = app.getPageStrings(pages);
-    	pageStrings.add("RANDOM CHOICE");
+    	if(pageStrings.size() > 2){
+    		pageStrings.add("RANDOM CHOICE");
+    	}
     	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, 
     			R.layout.list_item_base, pageStrings);
     	pageSpinner.setAdapter(pagesAdapter);

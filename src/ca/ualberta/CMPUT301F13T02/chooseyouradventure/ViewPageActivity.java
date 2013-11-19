@@ -961,7 +961,7 @@ public class ViewPageActivity extends Activity {
 			System.out.println("toPageID: " + toPageId + "\ncomparePage: " + comparePage + "\nPage: " + app.getPage() + "\nDecision: " + decision.getPageID() + decision.getText());
 			if (toPageId.equals(comparePage)) {
 				toPagePosition = i;
-				
+				break;
 			}
 		}
 		
@@ -970,74 +970,86 @@ public class ViewPageActivity extends Activity {
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle("Set text and next page");
     	
-    	final LinearLayout layout = new LinearLayout(this);
-    	layout.setOrientation(LinearLayout.VERTICAL);
+    	final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.edit_decision_dialog, null);
+    	final LinearLayout combatOptions = (LinearLayout) layout.findViewById(R.id.edit_decision_dialog_page_combatoptions);
+    	final LinearLayout fightOptions = (LinearLayout) layout.findViewById(R.id.edit_decision_dialog_page_fightoptions);
+    	final Spinner pageSpinner = (Spinner) layout.findViewById(R.id.edit_decision_dialog_page_spinner);
+    	final EditText decisionText = (EditText) layout.findViewById(R.id.edit_decision_dialog_decision_edittext);
+    	final EditText alertTreasure = (EditText) layout.findViewById(R.id.edit_decision_dialog_coin_edittext);
+    	final EditText playerDamage = (EditText) layout.findViewById(R.id.edit_decision_dialog_playerDamage_edittext); 
+    	final EditText playerHitRate = (EditText) layout.findViewById(R.id.edit_decision_dialog_playerHitRate_edittext); 
+    	final EditText enemyDamage = (EditText) layout.findViewById(R.id.edit_decision_dialog_enemyDamage_edittext); 
+    	final EditText enemyHitRate = (EditText) layout.findViewById(R.id.edit_decision_dialog_enemyHitRate_edittext); 
+
+//    	final LinearLayout layout = new LinearLayout(this);
+//    	layout.setOrientation(LinearLayout.VERTICAL);
     	
-    	final EditText alertEdit = new EditText(this);
-    	alertEdit.setText(decision.getText());
-    	layout.addView(alertEdit);
+//    	final EditText alertEdit = new EditText(this);
+    	decisionText.setText(decision.getText());
+//    	layout.addView(alertEdit);
     	
-    	final Spinner pageSpinner = new Spinner(this);
+//    	final Spinner pageSpinner = new Spinner(this);
     	ArrayList<String> pageStrings = app.getPageStrings(pages);
     	pageStrings.add("RANDOM CHOICE");
-    	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, 
-    			R.layout.list_item_base, pageStrings);
+    	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, R.layout.list_item_base, pageStrings);
     	pageSpinner.setAdapter(pagesAdapter);
     	pageSpinner.setSelection(toPagePosition);
-    	layout.addView(pageSpinner);
+//    	layout.addView(pageSpinner);
     	
     	
-    	final EditText alertTreasure = new EditText(this);
-    	final EditText alertHP = new EditText(this);
-    	final EditText hitPercentage = new EditText(this);
-    	final EditText alertEnemyHP = new EditText(this);
-    	final EditText hitPercentage2 = new EditText(this);
+//    	final EditText alertTreasure = new EditText(this);
+//    	final EditText alertHP = new EditText(this);
+//    	final EditText hitPercentage = new EditText(this);
+//    	final EditText alertEnemyHP = new EditText(this);
+//    	final EditText hitPercentage2 = new EditText(this);
     	
-    	
-    	
-    	if(app.getStory().isUsesCombat() == true){
-    		final TextView tText = new TextView(this);
-        	tText.setText("Change in coins? (+/-)");
-        	layout.addView(tText);
-        	
+    	if(!app.getStory().isUsesCombat()) {
+			combatOptions.setVisibility(View.GONE);
+    	}
+    	else {
+
+//    		final TextView tText = new TextView(this);
+//        	tText.setText("Change in coins? (+/-)");
+//        	layout.addView(tText);
         	
         	alertTreasure.setText("" + decision.getChoiceModifiers().getTreasureStat());
-        	layout.addView(alertTreasure);
+//        	layout.addView(alertTreasure);
         	
-        	final TextView hpText = new TextView(this);
-        	hpText.setText("Damage to player? (+/-)");
-        	layout.addView(hpText);
-
+//        	final TextView hpText = new TextView(this);
+//        	hpText.setText("Damage to player? (+/-)");
+//        	layout.addView(hpText);
     		
-        	alertHP.setText("" + decision.getChoiceModifiers().getPlayerHpStat());
-        	layout.addView(alertHP);
-        	
+        	playerDamage.setText("" + decision.getChoiceModifiers().getPlayerHpStat());
+//        	layout.addView(playerDamage);
 
-        	if(app.getPage().isFightingFrag() == true){
+        	if(!app.getPage().isFightingFrag()){
+        		fightOptions.setVisibility(View.GONE);
+        	}
+        	else {
         		
-        		final TextView percText = new TextView(this);
-            	percText.setText("Enemy Hit Percantage (1-100)");
-            	layout.addView(percText);
+//        		final TextView percText = new TextView(this);
+//            	percText.setText("Enemy Hit Percantage (1-100)");
+//            	layout.addView(percText);
             	           	
-            	hitPercentage.setText("" + decision.getChoiceModifiers().getEnemyHitPercent());
-            	layout.addView(hitPercentage);
+            	playerHitRate.setText("" + decision.getChoiceModifiers().getEnemyHitPercent());
+//            	layout.addView(playerHitRate);
 
-            	final TextView eText = new TextView(this);
-            	eText.setText("Damage to enemy ? (+/-)");
-            	layout.addView(eText);
+//            	final TextView eText = new TextView(this);
+//            	eText.setText("Damage to enemy ? (+/-)");
+//            	layout.addView(eText);
             	
             	
-            	alertEnemyHP.setText("" + decision.getChoiceModifiers().getEnemyHpStat());
-            	layout.addView(alertEnemyHP);   	
+            	enemyDamage.setText("" + decision.getChoiceModifiers().getEnemyHpStat());
+//            	layout.addView(enemyDamage);   	
             	
        	
-            	final TextView percText2 = new TextView(this);
-            	percText2.setText("Player Hit Percantage (1-100)");
-            	layout.addView(percText2);
+//            	final TextView percText2 = new TextView(this);
+//            	percText2.setText("Player Hit Percantage (1-100)");
+//            	layout.addView(percText2);
             	
             	
-            	hitPercentage2.setText("" + decision.getChoiceModifiers().getPlayerHitPercent());
-            	layout.addView(hitPercentage2);
+            	enemyHitRate.setText("" + decision.getChoiceModifiers().getPlayerHitPercent());
+//            	layout.addView(enemyHitRate);
         	}
     	}
 
@@ -1048,25 +1060,25 @@ public class ViewPageActivity extends Activity {
         		int decisionNumber = decisionsLayout.indexOfChild(decisionView);
         		if(app.getStory().isUsesCombat() == true){
         			String treasure = alertTreasure.getText().toString();
-        			String hp = alertHP.getText().toString();
+        			String hp = playerDamage.getText().toString();
         			if(app.getPage().isFightingFrag() == false){      				
         				counter.setBasic(treasure, hp);
-	        			app.updateDecision(alertEdit.getText().toString(), 
+	        			app.updateDecision(decisionText.getText().toString(), 
 	                			pageSpinner.getSelectedItemPosition(), decisionNumber, counter);
         			}
 	        		else{
-	        			String ehp = alertEnemyHP.getText().toString();
-	        			String hitP = hitPercentage.getText().toString();
-	        			String hitE = hitPercentage2.getText().toString();
+	        			String ehp = enemyDamage.getText().toString();
+	        			String hitP = playerHitRate.getText().toString();
+	        			String hitE = enemyHitRate.getText().toString();
 	        			
 	        			counter.setStats(treasure, hp, ehp, hitE, hitP);
-	        			app.updateDecision(alertEdit.getText().toString(), 
+	        			app.updateDecision(decisionText.getText().toString(), 
 	                			pageSpinner.getSelectedItemPosition(), decisionNumber, counter);
 	        		}     			
         		}
         		else{
         		
-            	app.updateDecision(alertEdit.getText().toString(), 
+            	app.updateDecision(decisionText.getText().toString(), 
             			pageSpinner.getSelectedItemPosition(), decisionNumber);
         		}
             }

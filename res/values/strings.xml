@@ -163,5 +163,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     	<item>&gt;</item>
     	<item>=</item>
     </string-array>
+    <string name="coinChange">Change in coins (+/-)</string>
+    <string name="playerDamage">Damage to player (+/-)</string>
+    <string name="enemyHitRate">Enemy Hit Percentage (1&#8211;100)</string>
+    <string name="enemyDamage">Damage to enemy (+/-)</string>
+    <string name="playerHitRate">Player Hit Percentage (1&#8211;100)</string>
 
 </resources>

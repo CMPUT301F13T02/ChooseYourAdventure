@@ -30,11 +30,9 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
-import android.graphics.Bitmap;
-
 import java.io.ByteArrayOutputStream;
-import java.nio.ByteBuffer;
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 

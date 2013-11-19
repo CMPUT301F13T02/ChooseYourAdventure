@@ -33,8 +33,6 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 
 import java.util.ArrayList;
-import java.util.UUID;
-
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -55,7 +53,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
 

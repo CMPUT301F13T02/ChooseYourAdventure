@@ -33,8 +33,6 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
-
 /**
  * This class represents a story -- it is part of the model of the application.
  * 

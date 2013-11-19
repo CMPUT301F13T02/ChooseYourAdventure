@@ -202,9 +202,9 @@ public class ViewPageActivity extends Activity {
      */
 	public void makeMenu(Menu menu) {
 	
-		MenuItem editPage = menu.add(0, EDIT_INDEX, EDIT_INDEX, "Edit");
-		MenuItem savePage = menu.add(0, SAVE_INDEX, SAVE_INDEX, "Done");
-		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, "Help");
+		MenuItem editPage = menu.add(0, EDIT_INDEX, EDIT_INDEX, getString(R.string.edit));
+		MenuItem savePage = menu.add(0, SAVE_INDEX, SAVE_INDEX, getString(R.string.done));
+		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, getString(R.string.help));
 
 		editPage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		savePage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
@@ -318,10 +318,9 @@ public class ViewPageActivity extends Activity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		final AlertDialog.Builder photoSelector = 
 				new AlertDialog.Builder(this);
-		final String[] titles = {"Text Tile","Photo Tile",
-				                  "Video Tile",
-				                  "Audio Tile","Cancel"};   
-		final String[] titlesPhoto = {"From File","Take New Photo","Cancel"};
+		final String[] titles = { getString(R.string.textTile), getString(R.string.photoTile),
+				                   getString(R.string.videoTile), getString(R.string.audioTile), getString(R.string.cancel) };   
+		final String[] titlesPhoto = { getString(R.string.fromFile), getString(R.string.takePhoto), getString(R.string.cancel) };
         builder.setItems(titles, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
             	switch(item){
@@ -683,7 +682,7 @@ public class ViewPageActivity extends Activity {
 	 * @param view
 	 */
 	public void editTileMenu(final View view){
-		final String[] titles = {"Edit","Delete"};
+		final String[] titles = { getString(R.string.edit), getString(R.string.delete) };
 		
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.story_options);
@@ -725,17 +724,14 @@ public class ViewPageActivity extends Activity {
     	final EditText alertEdit = new EditText(this);
     	alertEdit.setText(textView.getText().toString());
     	builder.setView(alertEdit);
-    	builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+    	builder.setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	int whichTile = tilesLayout.indexOfChild(textView);
             	app.updateTile(alertEdit.getText().toString(), whichTile);
             }
         })
-        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                
-            }
-        });
+        .setNegativeButton(getString(R.string.done), null);
+
         builder.show();
 	}
 	
@@ -783,9 +779,11 @@ public class ViewPageActivity extends Activity {
 	 */
 	public void decisionMenu(final View view){
 		final String[] titles;
-		final String[] titlesBasic = {"Edit","Delete","Cancel"};
-		final String[] titlesCounter = {"Edit Properties","Delete","Transition Messages","Cancel"};
-		final String[] titlesFight = {"Edit Properties","Delete","Transition Messages","Set Conditionals","Cancel"};
+		final String[] titlesBasic = { getString(R.string.edit), getString(R.string.delete), getString(R.string.cancel) };
+		final String[] titlesCounter = { getString(R.string.editProperties), getString(R.string.delete),
+				                          getString(R.string.transitionMessages), getString(R.string.cancel) };
+		final String[] titlesFight = { getString(R.string.editProperties), getString(R.string.delete), getString(R.string.transitionMessages),
+				                        getString(R.string.setConditionals), getString(R.string.cancel) };
 		
 		if(app.getPage().isFightingFrag() == true){
 			titles = titlesFight;
@@ -842,7 +840,7 @@ public class ViewPageActivity extends Activity {
 		}
 		
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle("Set the messages that occur after a change in a counter");
+    	builder.setTitle(getString(R.string.counterMessage));
     	
     	final LinearLayout layout = new LinearLayout(this);
     	layout.setOrientation(LinearLayout.VERTICAL);
@@ -884,7 +882,7 @@ public class ViewPageActivity extends Activity {
     	layout.addView(tMessage);
     	
     	builder.setView(layout);
-    	builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+    	builder.setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
         		
         					
@@ -896,14 +894,9 @@ public class ViewPageActivity extends Activity {
 
             
         })
-        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                
-            }
-        });
+        .setNegativeButton(getString(R.string.cancel), null);
+
         builder.show();
-		
-		
 	}
 
 	protected void onEditConditionals(View view) {
@@ -924,7 +917,7 @@ public class ViewPageActivity extends Activity {
 		}
 		
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle("Set the conditions in which this decision appears");
+    	builder.setTitle(getString(R.string.setDecisionConditions));
     	
     	final LinearLayout layout = new LinearLayout(this);
     	layout.setOrientation(LinearLayout.VERTICAL);
@@ -978,7 +971,7 @@ public class ViewPageActivity extends Activity {
         	
 
     	builder.setView(layout);
-    	builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+    	builder.setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
         		
         					
@@ -990,13 +983,9 @@ public class ViewPageActivity extends Activity {
 
             
         })
-        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                
-            }
-        });
+        .setNegativeButton(getString(R.string.cancel), null);
+
         builder.show();
-		
 	}
 
 	/**
@@ -1043,7 +1032,7 @@ public class ViewPageActivity extends Activity {
 		final TextView decisionView = (TextView) view;
 		
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle("Set text and next page");
+    	builder.setTitle(getString(R.string.setTextandPage));
     	
     	final LinearLayout layout = new LinearLayout(this);
     	layout.setOrientation(LinearLayout.VERTICAL);
@@ -1055,7 +1044,7 @@ public class ViewPageActivity extends Activity {
     	final Spinner pageSpinner = new Spinner(this);
     	ArrayList<String> pageStrings = app.getPageStrings(pages);
     	if(pageStrings.size() > 2){
-    		pageStrings.add("RANDOM CHOICE");
+    		pageStrings.add(getString(R.string.randomChoice));
     	}
     	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, 
     			R.layout.list_item_base, pageStrings);
@@ -1119,7 +1108,7 @@ public class ViewPageActivity extends Activity {
     	}
 
     	builder.setView(layout);
-    	builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+    	builder.setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	Counters counter = decision.getChoiceModifiers();
         		int decisionNumber = decisionsLayout.indexOfChild(decisionView);
@@ -1148,11 +1137,8 @@ public class ViewPageActivity extends Activity {
         		}
             }
         })
-        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                
-            }
-        });
+        .setNegativeButton(getString(R.string.cancel), null);
+
         builder.show();
 	}
 	

@@ -143,7 +143,7 @@ public class EditStoryActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 	
-		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, "Help");
+		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, getString(R.string.help));
 		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 	
 	    return true;
@@ -197,7 +197,7 @@ public class EditStoryActivity extends Activity {
 	 */
 	private void createPage() throws HandlerException{
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle("Create New");	
+    	builder.setTitle(getString(R.string.createNew));
     	final LinearLayout layout = new LinearLayout(this);
     	layout.setOrientation(LinearLayout.VERTICAL);
     	
@@ -236,8 +236,8 @@ public class EditStoryActivity extends Activity {
     	
     	
     	builder.setView(layout);
-    	builder.setMessage("Enter the title of your new page")
-    	.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+    	builder.setMessage(getString(R.string.enterPageTitle))
+    	.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	
             	app.updateTitle(alertEdit.getText().toString(), check.isChecked(), alertEdit2.getText().toString(), alertEdit3.getText().toString());         	
@@ -245,14 +245,9 @@ public class EditStoryActivity extends Activity {
             	
             }
         })
-        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                
-            }
-        });
+        .setNegativeButton(getString(R.string.cancel), null);
+
         builder.show();
-    	
-    	
     }
 
 	/**
@@ -262,8 +257,11 @@ public class EditStoryActivity extends Activity {
 	public void pageOptions(final int pos){
 		final Page currentPage = app.getStory().getPages().get(pos);
 		final Page FP = app.getStory().getFirstpage();
-		String[] titlesA = {"Goto/Edit","Page Properties","Cancel"};
-		String[] titlesB = {"Goto/Edit","Page Properties","Assign as First Page","Delete","Cancel"};
+
+		String[] titlesA = { getString(R.string.gotoEdit), getString(R.string.pageProperties), getString(R.string.cancel) };
+		String[] titlesB = { getString(R.string.gotoEdit), getString(R.string.pageProperties), getString(R.string.assignFirst),
+							getString(R.string.delete), getString(R.string.cancel) };
+
 		final String[] titles;
 		if(currentPage == FP){titles = titlesA;}
 		else{titles = titlesB;}
@@ -293,7 +291,7 @@ public class EditStoryActivity extends Activity {
             	case(1):
             		
             		
-            		titleEditor.setTitle("Create New");	
+            		titleEditor.setTitle(getString(R.string.createNew));
             		
             		layout.setOrientation(LinearLayout.VERTICAL);
 
@@ -320,8 +318,8 @@ public class EditStoryActivity extends Activity {
 
 
             		titleEditor.setView(layout);
-            		titleEditor.setMessage("Enter the title of your new page")
-            		.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            		titleEditor.setMessage(getString(R.string.enterPageTitle))
+            		.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
             			public void onClick(DialogInterface dialog, int id) {
             				String pageTitle = alertEdit.getText().toString();
             				app.updateTitle(pageTitle, currentPage);         	
@@ -329,11 +327,8 @@ public class EditStoryActivity extends Activity {
 
             			}
             		})
-            		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            			public void onClick(DialogInterface dialog, int id) {
+            		.setNegativeButton(getString(R.string.cancel), null);
 
-            			}
-            		});
             		titleEditor.show();
             		break;
             	case(2):

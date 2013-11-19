@@ -142,5 +142,25 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         ]]> 
     </string>
     <string name="refresh">Refresh</string>
+    <string name="createNew">Create New</string>
+    <string name="enterPageTitle">Enter the title of your new page</string>
+    <string name="save">Save</string>
+    <string name="gotoEdit">Goto/Edit</string>
+    <string name="pageProperties">Page Properties</string>
+    <string name="assignFirst">Assign as First Page</string>
+    <string name="done">Done</string>
+    <string name="textTile">Text Tile</string>
+    <string name="photoTile">Photo Tile</string>
+    <string name="audioTile">Audio Tile</string>
+    <string name="videoTile">Video Tile</string>
+    <string name="fromFile">From File</string>
+    <string name="takePhoto">Take New Photo</string>
+    <string name="editProperties">Edit Properties</string>
+    <string name="transitionMessages">Transition Messages</string>
+    <string name="setConditionals">Set Conditionals</string>
+    <string name="counterMessage">Set the messages that occur after a change in a counter</string>
+    <string name="setDecisionConditions">Set the conditions in which this decision appears</string>
+    <string name="setTextandPage">Set text and next page</string>
+    <string name="randomChoice">RANDOM CHOICE</string>
 
 </resources>

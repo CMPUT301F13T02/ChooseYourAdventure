@@ -34,13 +34,10 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
 
-import android.app.Activity;
 import android.app.Application;
-import android.provider.MediaStore;
+import android.content.Intent;
 import android.provider.Settings.Secure;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
-import android.content.Intent;
-import android.graphics.Bitmap;
 
 /**
  * This class represents the controller for our application. This class stores the state

@@ -31,7 +31,6 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.UUID;
 
 import android.app.Activity;
@@ -57,7 +56,6 @@ import android.view.View.OnLongClickListener;
 import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -842,7 +840,6 @@ public class ViewPageActivity extends Activity {
 				
 			}
 		}
-		final TextView decisionView = (TextView) view;
 		
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle("Set the messages that occur after a change in a counter");
@@ -925,7 +922,6 @@ public class ViewPageActivity extends Activity {
 				
 			}
 		}
-		final TextView decisionView = (TextView) view;
 		
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle("Set the conditions in which this decision appears");

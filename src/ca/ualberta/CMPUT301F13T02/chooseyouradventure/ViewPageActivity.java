@@ -222,7 +222,6 @@ public class ViewPageActivity extends Activity {
     	try {
 			return menuItemClicked(item);
 		} catch (HandlerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	return true;
@@ -399,11 +398,6 @@ public class ViewPageActivity extends Activity {
 	private void updateCounters() {
 		fightingLayout.removeAllViews();
 		
-		
-			
-			
-			
-		
 		if(app.isOnEntry() == true){
 			
 			if(app.getStory().getFirstpage().getId().equals(app.getPage().getId())){
@@ -414,13 +408,11 @@ public class ViewPageActivity extends Activity {
 			app.getStory().getPlayerStats().setEnemyHpStat(app.getPage().getEnemyHealth());
 		}
 		
-		
 		TextView fightingUpdate = new TextView(app);
 		TextView healthView = new TextView(app);
 		TextView treasureView = new TextView(app);
 		TextView enemyView = new TextView(app);
 		Counters stat = app.getStory().getPlayerStats();
-		
 		
 		healthView.setTextColor(Color.BLUE);
 		healthView.setText("Current Health: " + stat.getPlayerHpStat());
@@ -431,6 +423,7 @@ public class ViewPageActivity extends Activity {
 		fightingLayout.addView(treasureView);
 		
 		if(app.getPage().isFightingFrag() == true){
+
 			enemyView.setTextColor(Color.RED);
 			enemyView.setText("Enemy Health: " + stat.getEnemyHpStat());
 			fightingLayout.addView(enemyView);
@@ -441,24 +434,41 @@ public class ViewPageActivity extends Activity {
 		}
 		
 		String displayChanges = "\n";
-		if(stat.getEnemyHpChange() != 0){
+
+		if(stat.getEnemyHpChange() != 0) {
 			displayChanges += stat.getHitMessage() + "\n";
 			displayChanges += app.getPage().getEnemyName();
-			if(stat.getEnemyHpChange() <= 0){displayChanges += " gained ";}
-			else{displayChanges += " lost ";}
-			displayChanges += stat.getEnemyHpChange() + " hitpoints\n";}
+
+			if(stat.getEnemyHpChange() <= 0) 
+				displayChanges += " gained ";
+			else 
+				displayChanges += " lost ";
+
+			displayChanges += stat.getEnemyHpChange() + " hitpoints\n";
+		}
 		if(stat.getPlayerHpChange() != 0){
 			displayChanges += stat.getDamageMessage() + "\n";
 			displayChanges += "You ";
-			if(stat.getPlayerHpChange() <= 0){displayChanges += "gained ";}
-			else{displayChanges += "lost ";}
-			displayChanges += stat.getPlayerHpChange() + " hitpoints\n";}
-		if(stat.getTreasureChange() != 0){
+
+			if(stat.getPlayerHpChange() <= 0)
+				displayChanges += "gained ";
+			else
+				displayChanges += "lost ";
+
+			displayChanges += stat.getPlayerHpChange() + " hitpoints\n";
+		}
+		if(stat.getTreasureChange() != 0) {
 			displayChanges += stat.getTreasureMessage() + "\n";
 			displayChanges += "You ";
-			if(stat.getTreasureChange() <= 0){displayChanges += "gained ";}
-			else{displayChanges += "lost ";}
-			displayChanges += stat.getTreasureChange() + " coins worth of treasure.";}
+
+			if(stat.getTreasureChange() <= 0)
+				displayChanges += "gained ";
+			else 
+				displayChanges += "lost ";
+
+			displayChanges += stat.getTreasureChange() + " coins worth of treasure.";
+		}
+		
 		fightingUpdate.setTextColor(Color.GREEN);
 		fightingUpdate.setText(displayChanges);
 		fightingLayout.addView(fightingUpdate);
@@ -815,86 +825,54 @@ public class ViewPageActivity extends Activity {
     }
 	
 	protected void onEditMessages(View view) {
+
 		final int whichDecision = decisionsLayout.indexOfChild(view);
 		final Decision decision = app.getPage().getDecisions().get(whichDecision);
 		
 		UUID toPageId = decision.getPageID();
 		ArrayList<Page> pages = app.getStory().getPages();
 		int toPagePosition = -1;
+
 		for (int i = 0; i < pages.size(); i++) {
 
 			UUID comparePage = pages.get(i).getId();
 			System.out.println("toPageID: " + toPageId + "\ncomparePage: " + comparePage + "\nPage: " + app.getPage() + "\nDecision: " + decision.getPageID() + decision.getText());
 			if (toPageId.equals(comparePage)) {
 				toPagePosition = i;
-				
+				break;
 			}
 		}
-		final TextView decisionView = (TextView) view;
 		
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle("Set the messages that occur after a change in a counter");
     	
-    	final LinearLayout layout = new LinearLayout(this);
-    	layout.setOrientation(LinearLayout.VERTICAL);
-    	
-    	final EditText alertEdit = new EditText(this);
-    	alertEdit.setText(decision.getText());
-    	layout.addView(alertEdit);
-    	
-    	final Spinner pageSpinner = new Spinner(this);
+    	final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.edit_messages_dialog, null);
+    	final EditText decisionTitle = (EditText) layout.findViewById(R.id.edit_messages_dialog_decision_edittext);
+    	final EditText dMessage = (EditText) layout.findViewById(R.id.edit_messages_dialog_takeDamage_edittext);
+    	final EditText hMessage = (EditText) layout.findViewById(R.id.edit_messages_dialog_giveDamage_edittext);
+    	final EditText tMessage = (EditText) layout.findViewById(R.id.edit_messages_dialog_coin_edittext);
+    	final Spinner pageSpinner = (Spinner) layout.findViewById(R.id.edit_messages_dialog_page_spinner);
+
     	ArrayList<String> pageStrings = app.getPageStrings(pages);
-    	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, 
-    			R.layout.list_item_base, pageStrings);
+    	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, R.layout.list_item_base, pageStrings);
     	pageSpinner.setAdapter(pagesAdapter);
     	pageSpinner.setSelection(toPagePosition);
-    	layout.addView(pageSpinner);
-    	
-    	final TextView dText = new TextView(this);
-    	dText.setText("Message for taking damage?");
-    	layout.addView(dText);
 
-    	final EditText dMessage = new EditText(this);
     	dMessage.setText("" + decision.getChoiceModifiers().getDamageMessage());
-    	layout.addView(dMessage);
-    	
-    	final TextView hText = new TextView(this);
-    	hText.setText("Message for damaging enemy?");
-    	layout.addView(hText);
-
-    	final EditText hMessage = new EditText(this);
     	hMessage.setText("" + decision.getChoiceModifiers().getHitMessage());
-    	layout.addView(hMessage);
-    	
-    	final TextView tText = new TextView(this);
-    	tText.setText("Message for a gain/loss of coins?");
-    	layout.addView(tText);
-
-    	final EditText tMessage = new EditText(this);
     	tMessage.setText("" + decision.getChoiceModifiers().getTreasureMessage());
-    	layout.addView(tMessage);
     	
     	builder.setView(layout);
     	builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+    		
             public void onClick(DialogInterface dialog, int id) {
-        		
-        					
         		Counters counter = decision.getChoiceModifiers();
         		counter.setMessages(dMessage.getText().toString(), tMessage.getText().toString(), hMessage.getText().toString());
-        		app.updateDecision(alertEdit.getText().toString(), 
-            			pageSpinner.getSelectedItemPosition(),whichDecision, counter);
+        		app.updateDecision(decisionTitle.getText().toString(), pageSpinner.getSelectedItemPosition(),whichDecision, counter);
             }
-
-            
         })
-        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                
-            }
-        });
+        .setNegativeButton("Cancel", null);
         builder.show();
-		
-		
 	}
 
 	protected void onEditConditionals(View view) {
@@ -913,7 +891,6 @@ public class ViewPageActivity extends Activity {
 				
 			}
 		}
-		final TextView decisionView = (TextView) view;
 		
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle("Set the conditions in which this decision appears");
@@ -1249,10 +1226,6 @@ public class ViewPageActivity extends Activity {
 	 * Opens a dialog that allows the user to edit the pageEnding.
 	 * @param view
 	 */
-	
-	
-	
-	
 	private void onEditPageEnding(View view) {
 		if (app.getEditing()) {
 			TextView textView = (TextView) view;

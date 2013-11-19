@@ -24,41 +24,47 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int TextTiletextView=0x7f080014;
-        public static final int action_settings=0x7f080018;
-        public static final int addComment=0x7f080013;
-        public static final int addDecision=0x7f080010;
-        public static final int addTile=0x7f08000d;
-        public static final int button1=0x7f080015;
-        public static final int commentTitle=0x7f080011;
-        public static final int commentsLayout=0x7f080012;
-        public static final int createButton=0x7f080016;
-        public static final int createButton2=0x7f080007;
+        public static final int TextTiletextView=0x7f080019;
+        public static final int action_settings=0x7f08001d;
+        public static final int addComment=0x7f080018;
+        public static final int addDecision=0x7f080015;
+        public static final int addTile=0x7f080012;
+        public static final int button1=0x7f08001a;
+        public static final int commentTitle=0x7f080016;
+        public static final int commentsLayout=0x7f080017;
+        public static final int createButton=0x7f08001b;
+        public static final int createButton2=0x7f08000c;
         public static final int create_page_dialog_checkbox=0x7f080002;
         public static final int create_page_dialog_edittext=0x7f080000;
         public static final int create_page_dialog_fighting_options=0x7f080001;
         public static final int create_page_dialog_health_edittext=0x7f080003;
         public static final int create_page_dialog_name_edittext=0x7f080004;
         public static final int decisionTextView=0x7f080005;
-        public static final int decisionsLayout=0x7f08000f;
-        public static final int deleteButton=0x7f080006;
-        public static final int fightingLayout=0x7f08000b;
-        public static final int help_scrollview=0x7f080009;
-        public static final int help_webview=0x7f08000a;
-        public static final int mainView=0x7f080017;
-        public static final int pageEnding=0x7f08000e;
-        public static final int tilesLayout=0x7f08000c;
-        public static final int treeView=0x7f080008;
+        public static final int decisionsLayout=0x7f080014;
+        public static final int deleteButton=0x7f08000b;
+        public static final int edit_messages_dialog_coin_edittext=0x7f08000a;
+        public static final int edit_messages_dialog_decision_edittext=0x7f080006;
+        public static final int edit_messages_dialog_giveDamage_edittext=0x7f080009;
+        public static final int edit_messages_dialog_page_spinner=0x7f080007;
+        public static final int edit_messages_dialog_takeDamage_edittext=0x7f080008;
+        public static final int fightingLayout=0x7f080010;
+        public static final int help_scrollview=0x7f08000e;
+        public static final int help_webview=0x7f08000f;
+        public static final int mainView=0x7f08001c;
+        public static final int pageEnding=0x7f080013;
+        public static final int tilesLayout=0x7f080011;
+        public static final int treeView=0x7f08000d;
     }
     public static final class layout {
         public static final int create_page_dialog=0x7f030000;
         public static final int decision_adapter_layout=0x7f030001;
-        public static final int edit_story_activity=0x7f030002;
-        public static final int help_dialog=0x7f030003;
-        public static final int list_item_base=0x7f030004;
-        public static final int view_page_activity=0x7f030005;
-        public static final int view_page_adapter_layout=0x7f030006;
-        public static final int view_stories_activity=0x7f030007;
+        public static final int edit_messages_dialog=0x7f030002;
+        public static final int edit_story_activity=0x7f030003;
+        public static final int help_dialog=0x7f030004;
+        public static final int list_item_base=0x7f030005;
+        public static final int view_page_activity=0x7f030006;
+        public static final int view_page_adapter_layout=0x7f030007;
+        public static final int view_stories_activity=0x7f030008;
     }
     public static final class menu {
         public static final int view_stories=0x7f070000;
@@ -73,12 +79,15 @@ public final class R {
         public static final int app_name=0x7f050000;
         public static final int cache=0x7f05000d;
         public static final int cancel=0x7f05000f;
+        public static final int coinMessage=0x7f050027;
         public static final int comment_title=0x7f050013;
         public static final int createNew=0x7f050020;
+        public static final int decisionText=0x7f050024;
         public static final int delete=0x7f050006;
         public static final int edit=0x7f05000c;
         public static final int edit_page_help=0x7f05001a;
         public static final int edit_story_help=0x7f05001c;
+        public static final int enemyDamageMessage=0x7f050026;
         public static final int enemyHealth=0x7f050022;
         public static final int enemyName=0x7f050023;
         public static final int enterPageTitle=0x7f05001f;
@@ -95,6 +104,7 @@ public final class R {
         public static final int story_options=0x7f050008;
         public static final int story_options_author=0x7f050009;
         public static final int story_options_user=0x7f05000a;
+        public static final int takingDamageMessage=0x7f050025;
         public static final int title_edit_story_activity=0x7f050004;
         public static final int title_view_page_activity=0x7f050002;
         public static final int title_view_stories_activity=0x7f050003;

@@ -192,19 +192,8 @@ public class ViewStoriesActivity extends Activity {
 		switch (item.getItemId()) {
 		case HELP_INDEX:
 
-			ScrollView scrollView = new ScrollView(this);
-			WebView view = new WebView(this);
-
-        	view.loadData(getString(R.string.view_stories_help), "text/html", "UTF-8");
-	        
-	        scrollView.addView(view);
-	        scrollView.setPadding(10, 10, 10, 10);
-	        
-	        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	        builder.setTitle(R.string.help);
-	        builder.setPositiveButton(R.string.ok, null);
-	        builder.setView(scrollView);
-	        builder.show();
+			AlertDialog dialog = HelpDialogFactory.create(R.string.view_stories_help, this);
+			dialog.show();
 	        
 			break;
 		}

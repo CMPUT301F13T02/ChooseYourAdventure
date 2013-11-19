@@ -31,7 +31,6 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.UUID;
 
 import android.app.Activity;
@@ -54,14 +53,11 @@ import android.view.View;
 import android.view.View.DragShadowBuilder;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -265,22 +261,14 @@ public class ViewPageActivity extends Activity {
 
 		case HELP_INDEX:
 
-			ScrollView scrollView = new ScrollView(this);
-			WebView view = new WebView(this);
+			AlertDialog dialog = null;
 
 	        if (app.getEditing())
-				view.loadData(getString(R.string.edit_page_help), "text/html", "UTF-8");
+	        	dialog = HelpDialogFactory.create(R.string.edit_page_help, this);
 	        else
-	        	view.loadData(getString(R.string.read_page_help), "text/html", "UTF-8");
+	        	dialog = HelpDialogFactory.create(R.string.read_page_help, this);
 	        
-	        scrollView.addView(view);
-	        scrollView.setPadding(10, 10, 10, 10);
-	        
-	        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	        builder.setTitle(R.string.help);
-	        builder.setPositiveButton(R.string.ok, null);
-	        builder.setView(scrollView);
-	        builder.show();
+	        dialog.show();
 	        
 			break;
 		}

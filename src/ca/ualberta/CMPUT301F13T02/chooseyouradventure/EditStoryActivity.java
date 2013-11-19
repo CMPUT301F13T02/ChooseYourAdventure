@@ -40,7 +40,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -48,7 +47,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 /**
@@ -161,19 +159,8 @@ public class EditStoryActivity extends Activity {
 		switch (item.getItemId()) {
 		case HELP_INDEX:
 	
-			ScrollView scrollView = new ScrollView(this);
-			WebView view = new WebView(this);
-	
-	    	view.loadData(getString(R.string.edit_story_help), "text/html", "UTF-8");
-	        
-	        scrollView.addView(view);
-	        scrollView.setPadding(10, 10, 10, 10);
-	        
-	        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	        builder.setTitle(R.string.help);
-	        builder.setPositiveButton(R.string.ok, null);
-	        builder.setView(scrollView);
-	        builder.show();
+			AlertDialog dialog = HelpDialogFactory.create(R.string.edit_story_help, this);
+			dialog.show();
 	        
 			break;
 		}

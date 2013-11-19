@@ -33,8 +33,6 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 
 import java.util.ArrayList;
-import java.util.UUID;
-
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -55,7 +53,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
 
@@ -219,7 +216,7 @@ public class ViewStoriesActivity extends Activity {
 			final Story story = storyList.get(pos);
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			final String[] titles;
-			final String[] titlesA = {"Cache","Upload","Edit","{Placeholder} Delete","Cancel"};
+			final String[] titlesA = {"Cache","Upload","Edit","Delete","Cancel"};
 			final String[] titlesB = {"Cache","Upload Copy","Cancel"};
 			final String myId = Secure.getString(
 					getBaseContext().getContentResolver(), Secure.ANDROID_ID);
@@ -296,6 +293,7 @@ public class ViewStoriesActivity extends Activity {
     	layout.setOrientation(LinearLayout.VERTICAL);
     	
     	final EditText alertEdit = new EditText(this);
+    	alertEdit.setSingleLine(true);
     	layout.addView(alertEdit);
     	
     	final TextView alertText = new TextView(this);

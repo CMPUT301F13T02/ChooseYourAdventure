@@ -38,11 +38,9 @@ import java.net.URISyntaxException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 
 import android.os.StrictMode;
-
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.HandlerException;
 
 /**

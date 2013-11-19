@@ -2,7 +2,6 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
-import android.provider.Settings.Secure;
 
 public class SampleGenerator {
 	private Story outStory = new Story();

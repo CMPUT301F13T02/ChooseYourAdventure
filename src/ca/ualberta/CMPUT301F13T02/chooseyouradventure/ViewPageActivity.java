@@ -981,75 +981,34 @@ public class ViewPageActivity extends Activity {
     	final EditText enemyDamage = (EditText) layout.findViewById(R.id.edit_decision_dialog_enemyDamage_edittext); 
     	final EditText enemyHitRate = (EditText) layout.findViewById(R.id.edit_decision_dialog_enemyHitRate_edittext); 
 
-//    	final LinearLayout layout = new LinearLayout(this);
-//    	layout.setOrientation(LinearLayout.VERTICAL);
-    	
-//    	final EditText alertEdit = new EditText(this);
     	decisionText.setText(decision.getText());
-//    	layout.addView(alertEdit);
     	
-//    	final Spinner pageSpinner = new Spinner(this);
     	ArrayList<String> pageStrings = app.getPageStrings(pages);
-    	pageStrings.add("RANDOM CHOICE");
     	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, R.layout.list_item_base, pageStrings);
+
+    	if(pageStrings.size() > 2){
+    		pageStrings.add("RANDOM CHOICE");
+    	}
+
     	pageSpinner.setAdapter(pagesAdapter);
     	pageSpinner.setSelection(toPagePosition);
-//    	layout.addView(pageSpinner);
-    	
-    	
-//    	final EditText alertTreasure = new EditText(this);
-//    	final EditText alertHP = new EditText(this);
-//    	final EditText hitPercentage = new EditText(this);
-//    	final EditText alertEnemyHP = new EditText(this);
-//    	final EditText hitPercentage2 = new EditText(this);
     	
     	if(!app.getStory().isUsesCombat()) {
 			combatOptions.setVisibility(View.GONE);
     	}
     	else {
 
-//    		final TextView tText = new TextView(this);
-//        	tText.setText("Change in coins? (+/-)");
-//        	layout.addView(tText);
-        	
         	alertTreasure.setText("" + decision.getChoiceModifiers().getTreasureStat());
-//        	layout.addView(alertTreasure);
-        	
-//        	final TextView hpText = new TextView(this);
-//        	hpText.setText("Damage to player? (+/-)");
-//        	layout.addView(hpText);
-    		
         	playerDamage.setText("" + decision.getChoiceModifiers().getPlayerHpStat());
-//        	layout.addView(playerDamage);
 
-        	if(!app.getPage().isFightingFrag()){
+        	if(!app.getPage().isFightingFrag()) {
         		fightOptions.setVisibility(View.GONE);
         	}
         	else {
         		
-//        		final TextView percText = new TextView(this);
-//            	percText.setText("Enemy Hit Percantage (1-100)");
-//            	layout.addView(percText);
-            	           	
             	playerHitRate.setText("" + decision.getChoiceModifiers().getEnemyHitPercent());
-//            	layout.addView(playerHitRate);
-
-//            	final TextView eText = new TextView(this);
-//            	eText.setText("Damage to enemy ? (+/-)");
-//            	layout.addView(eText);
-            	
-            	
             	enemyDamage.setText("" + decision.getChoiceModifiers().getEnemyHpStat());
-//            	layout.addView(enemyDamage);   	
-            	
-       	
-//            	final TextView percText2 = new TextView(this);
-//            	percText2.setText("Player Hit Percantage (1-100)");
-//            	layout.addView(percText2);
-            	
-            	
             	enemyHitRate.setText("" + decision.getChoiceModifiers().getPlayerHitPercent());
-//            	layout.addView(enemyHitRate);
         	}
     	}
 

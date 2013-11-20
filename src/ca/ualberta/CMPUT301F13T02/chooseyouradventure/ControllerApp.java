@@ -34,13 +34,10 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
 
-import android.app.Activity;
 import android.app.Application;
-import android.provider.MediaStore;
+import android.content.Intent;
 import android.provider.Settings.Secure;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
-import android.content.Intent;
-import android.graphics.Bitmap;
 
 /**
  * This class represents the controller for our application. This class stores the state
@@ -278,17 +275,17 @@ public class ControllerApp extends Application {
 				{
 					
 					if(itemList.get(i).equals(currentStory.getFirstpage())){
-						outList = "{Start} ";
+						outList = getString(R.string.startDesignator);
 					}
 
 					
 					if(((Page) itemList.get(i)).isFightingFrag() == true){
-						outList = outList + "{Fight} ";
+						outList = outList + getString(R.string.fightDesignator);
 					}
 					
 
 					if(((Page) itemList.get(i)).getDecisions().size() == 0){				
-						outList = outList + "{Endpoint} ";
+						outList = outList + getString(R.string.endDesignator);
 					}
 					outList = outList + "(" + 
 					          ((Page) itemList.get(i)).getRefNum() + ") " + 
@@ -297,7 +294,7 @@ public class ControllerApp extends Application {
 					
 					//If the story has been saved locally, note it
 					if(((Story) itemList.get(i)).getHandler() instanceof DBHandler){
-						outList = "Cached: ";
+						outList = getString(R.string.cahcedDesignator);
 					}
 					outList = outList + ((Story) itemList.get(i)).getTitle();
 				}
@@ -323,7 +320,18 @@ public class ControllerApp extends Application {
 	 * title.
 	 * @param pageTitle
 	 */
-	protected void updateTitle(String pageTitle, boolean fight, String health, String name){
+	protected void updateTitle(String pageTitle, boolean fight, String health, String name, Page page){
+		page.setTitle(pageTitle);
+		page.setFightingFrag(fight);
+		page.setEnemyName(name);
+		try{
+			page.setEnemyHealth(Integer.parseInt(health));
+		} catch(Exception e){}
+		
+		currentStory.updateStory();
+	}
+	
+	protected void newTitle(String pageTitle, boolean fight, String health, String name){
 		Page newPage = initializeNewPage(pageTitle);
 		newPage.setFightingFrag(fight);
 		newPage.setEnemyName(name);
@@ -331,7 +339,6 @@ public class ControllerApp extends Application {
 			newPage.setEnemyHealth(Integer.parseInt(health));
 		} catch(Exception e){}
 		currentStory.addPage(newPage);
-		System.out.println("ALL GOOD TO HERE");
 		currentStory.updateStory();
 	}
 

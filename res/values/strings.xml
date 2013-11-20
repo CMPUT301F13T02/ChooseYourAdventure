@@ -142,5 +142,68 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         ]]> 
     </string>
     <string name="refresh">Refresh</string>
+    <string name="gotoEdit">Goto/Edit</string>
+    <string name="pageProperties">Page Properties</string>
+    <string name="assignFirst">Assign as First Page</string>
+    <string name="done">Done</string>
+    <string name="textTile">Text Tile</string>
+    <string name="photoTile">Photo Tile</string>
+    <string name="audioTile">Audio Tile</string>
+    <string name="videoTile">Video Tile</string>
+    <string name="noImage">No Image</string>
+    <string name="fromFile">From File</string>
+    <string name="takePhoto">Take New Photo</string>
+    <string name="editProperties">Edit Properties</string>
+    <string name="transitionMessages">Transition Messages</string>
+    <string name="setConditionals">Set Conditionals</string>
+    <string name="counterMessage">Set the messages that occur after a change in a counter</string>
+    <string name="setDecisionConditions">Set the conditions in which this decision appears</string>
+    <string name="setTextandPage">Set text and next page</string>
+    <string name="randomChoice">RANDOM CHOICE</string>
+    <string name="enterPageTitle">Enter the title of your new page</string>
+    <string name="createNew">Create New</string>
+    <string name="fightingPage">Fighting Page</string>
+    <string name="enemyHealth">Health of the enemy on this page</string>
+    <string name="enemyName">Name of the enemy on this page</string>
+    <string name="decisionText">Decision text</string>
+    <string name="takingDamageMessage">Message for taking damage</string>
+    <string name="enemyDamageMessage">Message for damaging enemy</string>
+    <string name="coinMessage">Message for gain/loss of coins</string>
+    <string name="threshold">Threshold level for activation</string>
+    <string-array name="conditionalTypes">
+    	<item>Health</item>
+    	<item>Enemy Health</item>
+    	<item>Treasure</item>
+    </string-array>
+        <string-array name="conditionalOps">
+    	<item>&lt;</item>
+    	<item>&gt;</item>
+    	<item>=</item>
+    </string-array>
+    <string name="coinChange">Change in coins (+/-)</string>
+    <string name="playerDamage">Damage to player (+/-)</string>
+    <string name="enemyHitRate">Enemy Hit Percentage (1&#8211;100)</string>
+    <string name="enemyDamage">Damage to enemy (+/-)</string>
+    <string name="playerHitRate">Player Hit Percentage (1&#8211;100)</string>
+    <string name="save">Save</string>
+    <string name="currentHealth">Current Health: </string>
+    <string name="currentTreasure">Current Treasure: </string>
+    <string name="enemyHealthColon">Enemy Health: </string>
+    <string name="gained"> gained </string>
+    <string name="lost"> lost </string>
+    <string name="hitpoints"> hitpoints</string>
+    <string name="you">You</string>
+    <string name="coinsWorth"> coins worth of treasure.</string>
+    <string name="usePhotoComment">Use a photograph in this comment?</string>
+    <string name="whatToSay">What to Say</string>
+    <string name="retakeQuestion">Are you satisfied with this photo?</string>
+    <string name="retake">Retake</string>
+    <string name="uploadCopy">Upload Copy</string>
+    <string name="useCountersAndCombat">Use Counters and Combat?</string>
+    <string name="enterStoryTitle">Enter the title of your story</string>
+    <string name="startDesignator">{Start} </string>
+    <string name="fightDesignator">{Fight} </string>
+    <string name="endDesignator">{Endpoint} </string>
+    <string name="cahcedDesignator">Cached: </string>
 
 </resources>

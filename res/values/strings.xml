@@ -206,5 +206,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="endDesignator">{Endpoint} </string>
     <string name="cahcedDesignator">Cached: </string>
     <string name="edit">Edit</string>
+    <string name="textView">TextView</string>
 
 </resources>

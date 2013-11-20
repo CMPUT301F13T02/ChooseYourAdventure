@@ -161,6 +161,7 @@ public final class R {
         public static final int takePhoto=0x7f050028;
         public static final int takingDamageMessage=0x7f050036;
         public static final int textTile=0x7f050022;
+        public static final int textView=0x7f050054;
         public static final int threshold=0x7f050039;
         public static final int title_edit_story_activity=0x7f050004;
         public static final int title_view_page_activity=0x7f050002;

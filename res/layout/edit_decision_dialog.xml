@@ -50,12 +50,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@+string/coinChange" />
+
         <EditText
             android:id="@+id/edit_decision_dialog_coin_edittext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@+string/coinChange"
             android:inputType="number" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@+string/playerDamage" />
 
         <EditText
             android:id="@+id/edit_decision_dialog_playerDamage_edittext"
@@ -70,6 +80,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@+string/enemyHitRate" />
+
             <EditText
                 android:id="@+id/edit_decision_dialog_enemyHitRate_edittext"
                 android:layout_width="match_parent"
@@ -77,12 +92,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 android:hint="@+string/enemyHitRate"
                 android:inputType="number" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@+string/enemyDamage" />
+
             <EditText
                 android:id="@+id/edit_decision_dialog_enemyDamage_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@+string/enemyDamage"
                 android:inputType="number" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@+string/playerHitRate" />
 
             <EditText
                 android:id="@+id/edit_decision_dialog_playerHitRate_edittext"

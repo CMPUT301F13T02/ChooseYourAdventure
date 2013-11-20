@@ -43,7 +43,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="story_options_author">[Author] Advanced Story Options</string>
     <string name="story_options_user">[User] Advanced Story Options</string>
     <string name="page_options">Page Options</string>
-    <string name="edit">Enter Edit Mode</string>
+    <string name="enterEditMode">Enter Edit Mode</string>
     <string name="cache">Cache</string>
     <string name="upload">Upload</string>
     <string name="cancel">Cancel</string>
@@ -205,5 +205,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="fightDesignator">{Fight} </string>
     <string name="endDesignator">{Endpoint} </string>
     <string name="cahcedDesignator">Cached: </string>
+    <string name="edit">Edit</string>
 
 </resources>

@@ -911,6 +911,12 @@ public class ViewPageActivity extends Activity {
     	pageSpinner.setAdapter(pagesAdapter);
     	pageSpinner.setSelection(toPagePosition);
     	
+    	
+    	condSpinner.setSelection(decision.getChoiceModifiers().getThresholdType());
+    	
+    	
+    	signSpinner.setSelection(decision.getChoiceModifiers().getThresholdSign());
+    	
     	builder.setView(layout);
     	builder.setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
 

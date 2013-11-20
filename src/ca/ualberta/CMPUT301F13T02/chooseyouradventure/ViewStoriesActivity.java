@@ -196,7 +196,7 @@ public class ViewStoriesActivity extends Activity {
     }
     
 	protected void onListItemClick(View v, int pos, long id) throws HandlerException {	
-		
+		app.setEditing(false);
 	    app.jump(ViewPageActivity.class, storyList.get(pos), storyList.get(pos).getFirstpage());
 	    
 	}

@@ -414,17 +414,17 @@ public class ViewPageActivity extends Activity {
 		Counters stat = app.getStory().getPlayerStats();
 		
 		healthView.setTextColor(Color.BLUE);
-		healthView.setText(getString(R.string.currentHealth) + stat.getPlayerHpStat());
+		healthView.setText(getString(R.string.currentHealth) + " " + stat.getPlayerHpStat());
 		fightingLayout.addView(healthView);
 		
 		treasureView.setTextColor(Color.YELLOW);
-		treasureView.setText(getString(R.string.currentTreasure) + stat.getTreasureStat());
+		treasureView.setText(getString(R.string.currentTreasure) + " " + stat.getTreasureStat());
 		fightingLayout.addView(treasureView);
 		
 		if(app.getPage().isFightingFrag() == true){
 
 			enemyView.setTextColor(Color.RED);
-			enemyView.setText(getString(R.string.enemyHealthColon) + stat.getEnemyHpStat());
+			enemyView.setText(getString(R.string.enemyHealthColon) + " " + stat.getEnemyHpStat());
 			fightingLayout.addView(enemyView);
 			app.getStory().getPlayerStats().setEnemyRange(true);
 		}
@@ -439,33 +439,33 @@ public class ViewPageActivity extends Activity {
 			displayChanges += app.getPage().getEnemyName();
 
 			if(stat.getEnemyHpChange() <= 0) 
-				displayChanges += getString(R.string.gained);
+				displayChanges += " " + getString(R.string.gained) + " ";
 			else 
-				displayChanges += getString(R.string.lost);
+				displayChanges += " " + getString(R.string.lost) + " ";
 
-			displayChanges += stat.getEnemyHpChange() + getString(R.string.hitpoints) + "\n";
+			displayChanges += stat.getEnemyHpChange() + " " + getString(R.string.hitpoints) + "\n";
 		}
 		if(stat.getPlayerHpChange() != 0){
 			displayChanges += stat.getDamageMessage() + "\n";
 			displayChanges += getString(R.string.you);
 
 			if(stat.getPlayerHpChange() <= 0)
-				displayChanges += getString(R.string.gained);
+				displayChanges += " " + getString(R.string.gained) + " ";
 			else
-				displayChanges += getString(R.string.lost);
+				displayChanges += " " + getString(R.string.lost) + " ";
 
-			displayChanges += stat.getPlayerHpChange() + getString(R.string.hitpoints) + "\n";
+			displayChanges += stat.getPlayerHpChange() +" " +  getString(R.string.hitpoints) + "\n";
 		}
 		if(stat.getTreasureChange() != 0) {
 			displayChanges += stat.getTreasureMessage() + "\n";
 			displayChanges += getString(R.string.you);
 
 			if(stat.getTreasureChange() <= 0)
-				displayChanges += getString(R.string.gained);
+				displayChanges += " " + getString(R.string.lost) + " ";
 			else 
-				displayChanges += getString(R.string.lost);
+				displayChanges += " " + getString(R.string.lost) + " ";
 
-			displayChanges += stat.getTreasureChange() + getString(R.string.coinsWorth);
+			displayChanges += stat.getTreasureChange() + " " +  getString(R.string.coinsWorth);
 		}
 		
 		fightingUpdate.setTextColor(Color.GREEN);

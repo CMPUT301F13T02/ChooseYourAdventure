@@ -156,7 +156,10 @@ public class ESHandler implements Handler{
 		Type responseType = new TypeToken<ESResponse<Story>>(){}.getType();
 		ESResponse<Story> esResponse = gson.fromJson(response, responseType);
 		
-		return esResponse.getSource();	
+		Story story = esResponse.getSource();
+		story.setHandler(this);
+		
+		return story;	
 	}
 
 	/**
@@ -198,7 +201,7 @@ public class ESHandler implements Handler{
      */
 	@Override
     public ArrayList<Story> getAllStories() throws HandlerException {
-		ESHttpGet get = new ESHttpGet(getStoryPath() + "_search");
+		ESHttpGet get = new ESHttpGet(getStoryPath() + "_search?sort=timeStamp:desc");
 
 		String response = null;
 		try {
@@ -214,7 +217,9 @@ public class ESHandler implements Handler{
 		Type esSearchResponseType = new TypeToken<ESSearchResponse<Story>>(){}.getType();
 		ESSearchResponse<Story> esResponse = gson.fromJson(response, esSearchResponseType);
 		for (ESResponse<Story> s : esResponse.getHits()) {
-			stories.add(s.getSource());
+			Story story = s.getSource();
+			story.setHandler(this);
+			stories.add(story);
 		}
 		
 		return stories;

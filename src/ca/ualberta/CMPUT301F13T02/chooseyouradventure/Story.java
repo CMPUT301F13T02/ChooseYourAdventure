@@ -33,15 +33,12 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
-
 /**
  * This class represents a story -- it is part of the model of the application.
  * 
  * A Story is serialized and stored via a Handler implementation which interact
  * solely with Storys.  
  * 
- * TODO Storys should store their handler as an attribute
  */
 public class Story {
 	
@@ -51,13 +48,36 @@ public class Story {
     private int currRefNum = 1;
     private String author;
 	private String title = new String();
+	@SuppressWarnings("unused")
+	private long timeStamp;
+	
+	
+	private boolean usesCombat = false;
+	private Counters playerStats;
+	
+	private transient Handler handler;
 
+
+	/**
+	 * @return the hpCount
+	 */
+	
 	/**
 	 * This is the main constructor for Story
 	 */
 	public Story() {
 		this.firstpage = new Page().getId();
+		this.timeStamp = System.currentTimeMillis() / 1000L;
 	}
+
+	/**
+	 * This is a copy constructor to copy a story 
+	 */
+	public Story(Story story) {
+		this.firstpage = new Page().getId();
+		
+	}
+
 
 	/**
 	 * @param firstpage the firstpage to set
@@ -165,18 +185,31 @@ public class Story {
     public void deletePage(Page aPage) {
     	
     }
-    
     /**
 	 * This function updates the stories data in the database
 	 */
 	public void updateStory(){
-		ESHandler eshandler = new ESHandler();
 		try {
-			eshandler.updateStory(this);
+			handler.updateStory(this);
 		} catch (HandlerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * This sets the scope of the storage of a story
+	 * @param state The type of Handler to set our handler to
+	 */
+	public void setHandler(Handler state) {
+		handler = state;
+	}
+	/**
+	 * This gets the scope of the storage of a story
+	 * @return state The type of Handler we are using
+	 */
+	public Handler getHandler() {
+		return handler;
 	}
 
 	/**
@@ -202,5 +235,25 @@ public class Story {
 		}
 		return true;
 	}
+
+	public boolean isUsesCombat() {
+		return usesCombat;
+	}
+
+	public void setUsesCombat(boolean usesCombat) {
+		this.usesCombat = usesCombat;
+	}
+
+	public Counters getPlayerStats() {
+		return playerStats;
+	}
+
+	public void setPlayerStats(Counters playerStats) {
+		this.playerStats = playerStats;
+	}
+	
+	
+	
+	 
 	
 }

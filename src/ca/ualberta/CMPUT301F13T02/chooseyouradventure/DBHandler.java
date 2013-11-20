@@ -45,11 +45,13 @@ import android.database.sqlite.SQLiteOpenHelper;
  * The DBHandler will use SQLite to store stories so that users may store stories locally (cache stories).
  */
 public class DBHandler extends SQLiteOpenHelper implements Handler  {
+
 	static final int dbVersion = 1;	
 	static final String dbName="storyDB";
 	static final String storyTable="Story";
 	static final String colID = "ID";
 	static final String colContents = "contents";
+
 	private Gson gson = new GsonBuilder().registerTypeAdapter(Tile.class, new TileGsonMarshal()).create();
 	/**
 	 * This is the default constructor for a SQLite Database class
@@ -88,7 +90,8 @@ public class DBHandler extends SQLiteOpenHelper implements Handler  {
 		//This assumes the getId returns a unique identifier
 		values.put(colID, id);
 		values.put(colContents, story);
-		db.insert(storyTable, null, values);
+		//db.insert(storyTable, null, values);
+		db.update(storyTable, values, "id = \"" + id + "\"", null);
 	}
 	/**
 	 * This deletes a local copy of a story.
@@ -113,7 +116,10 @@ public class DBHandler extends SQLiteOpenHelper implements Handler  {
 		//This assumes the getId returns a unique value
 		values.put(colID, id);
 		values.put(colContents, story);
-		db.insert(storyTable, null, values);
+		
+		if (db.insert(storyTable, null, values) == -1)
+			throw new HandlerException("Failed to insert story");
+
 	}
 	/**
 	 * This returns a local copy of a story from the database
@@ -125,11 +131,18 @@ public class DBHandler extends SQLiteOpenHelper implements Handler  {
 		Story story = new Story();
 		//Select * from story where ID = supplied ID
 		String selectQuery = "SELECT  * FROM " + storyTable + 
-								"WHERE " + colID + " = " + id;
+								" WHERE " + colID + " = \"" + id + "\"";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
+        
+        if (!cursor.moveToFirst())
+        	throw new HandlerException("No story with matching ID");
+        	
+        	
         story.setId(cursor.getString(0)); //will the next line make this redundant?
         story = gson.fromJson(cursor.getString(1), Story.class);
+        story.setHandler(this);
+        
 		return story;
 	}
 	/** 
@@ -163,6 +176,7 @@ public class DBHandler extends SQLiteOpenHelper implements Handler  {
         		Story story = new Story();
         		story.setId(cursor.getString(0));
         		story = gson.fromJson(cursor.getString(1), Story.class);
+        		story.setHandler(this);
         		storyList.add(story);
         	} while (cursor.moveToNext());
         }

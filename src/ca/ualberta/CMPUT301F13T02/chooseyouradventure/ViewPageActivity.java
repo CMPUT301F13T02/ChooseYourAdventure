@@ -41,6 +41,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -52,13 +53,11 @@ import android.view.View;
 import android.view.View.DragShadowBuilder;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -86,6 +85,8 @@ public class ViewPageActivity extends Activity {
 	
 	private static final int RESULT_LOAD_IMAGE = 1;
 	private final int TAKE_PHOTO = 2;
+	private final int GRAB_PHOTO = 3;
+	private final int ADD_PHOTO = 4;
 	
 	private final int EDIT_INDEX = 0;
 	private final int SAVE_INDEX = 1;
@@ -94,6 +95,7 @@ public class ViewPageActivity extends Activity {
 	private LinearLayout tilesLayout;
 	private LinearLayout decisionsLayout;
 	private LinearLayout commentsLayout;
+	private LinearLayout fightingLayout;
 	
 	
     private ControllerApp app;
@@ -114,16 +116,23 @@ public class ViewPageActivity extends Activity {
         
         app = (ControllerApp) this.getApplication();
         
+        fightingLayout = (LinearLayout) findViewById(R.id.fightingLayout);
         tilesLayout = (LinearLayout) findViewById(R.id.tilesLayout);
         decisionsLayout = (LinearLayout) findViewById(R.id.decisionsLayout);
         commentsLayout = (LinearLayout) findViewById(R.id.commentsLayout);
         
         app.setActivity(this);
+        
+        
+		
+		
         update(app.getPage());
         
         /* Set up onClick listeners for buttons on screen, even if some aren't
          * shown at the time.
          */
+        
+        
 		Button addTileButton = (Button) findViewById(R.id.addTile);
 		addTileButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -144,7 +153,8 @@ public class ViewPageActivity extends Activity {
         addComment.setOnClickListener(new OnClickListener() {
         	@Override
         	public void onClick(View view) {
-        		onEditComment(view);
+        		onCallComment();
+        		
         	}
         });
         
@@ -190,9 +200,9 @@ public class ViewPageActivity extends Activity {
      */
 	public void makeMenu(Menu menu) {
 	
-		MenuItem editPage = menu.add(0, EDIT_INDEX, EDIT_INDEX, "Edit");
-		MenuItem savePage = menu.add(0, SAVE_INDEX, SAVE_INDEX, "Done");
-		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, "Help");
+		MenuItem editPage = menu.add(0, EDIT_INDEX, EDIT_INDEX, getString(R.string.edit));
+		MenuItem savePage = menu.add(0, SAVE_INDEX, SAVE_INDEX, getString(R.string.done));
+		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, getString(R.string.help));
 
 		editPage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		savePage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
@@ -212,7 +222,6 @@ public class ViewPageActivity extends Activity {
     	try {
 			return menuItemClicked(item);
 		} catch (HandlerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	return true;
@@ -251,22 +260,14 @@ public class ViewPageActivity extends Activity {
 
 		case HELP_INDEX:
 
-			ScrollView scrollView = new ScrollView(this);
-			WebView view = new WebView(this);
+			AlertDialog dialog = null;
 
 	        if (app.getEditing())
-				view.loadData(getString(R.string.edit_page_help), "text/html", "UTF-8");
+	        	dialog = HelpDialogFactory.create(R.string.edit_page_help, this);
 	        else
-	        	view.loadData(getString(R.string.read_page_help), "text/html", "UTF-8");
+	        	dialog = HelpDialogFactory.create(R.string.read_page_help, this);
 	        
-	        scrollView.addView(view);
-	        scrollView.setPadding(10, 10, 10, 10);
-	        
-	        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	        builder.setTitle(R.string.help);
-	        builder.setPositiveButton(R.string.ok, null);
-	        builder.setView(scrollView);
-	        builder.show();
+	        dialog.show();
 	        
 			break;
 		}
@@ -306,10 +307,9 @@ public class ViewPageActivity extends Activity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		final AlertDialog.Builder photoSelector = 
 				new AlertDialog.Builder(this);
-		final String[] titles = {"Text Tile","Photo Tile",
-				                  "{Placeholder} Video Tile",
-				                  "{Placeholder} Audio Tile","Cancel"};   
-		final String[] titlesPhoto = {"From File","Take New Photo","Cancel"};
+		final String[] titles = { getString(R.string.textTile), getString(R.string.photoTile),
+				                   getString(R.string.videoTile), getString(R.string.audioTile), getString(R.string.cancel) };   
+		final String[] titlesPhoto = { getString(R.string.fromFile), getString(R.string.takePhoto), getString(R.string.cancel) };
         builder.setItems(titles, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
             	switch(item){
@@ -326,10 +326,7 @@ public class ViewPageActivity extends Activity {
             					              int item) {
             	            	switch(item){
 	            	            	case(0):
-	            	            		Intent i = new Intent(
-	            	            		Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-	            	            				 
-	            	            		startActivityForResult(i, RESULT_LOAD_IMAGE);	
+	            	            		getPhoto();
 	            	            		
 	            	            		
 	            	            		break;
@@ -359,9 +356,24 @@ public class ViewPageActivity extends Activity {
 	 * edit mode.
 	 * @param page The current page
 	 */
+	public void grabPhoto(){
+		Intent i = new Intent(
+        Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, GRAB_PHOTO);
+	}
+	
+	public void getPhoto(){
+		Intent i = new Intent(
+        Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, RESULT_LOAD_IMAGE);
+	}
 	public void update(Page page) {
 		
 		setButtonVisibility();
+		
+		if (app.getStory().isUsesCombat() == true) {
+			updateCounters();
+		}
 		
 		if (app.haveTilesChanged()) {
 			updateTiles(page);
@@ -381,7 +393,86 @@ public class ViewPageActivity extends Activity {
 		
 		app.finishedUpdating();
 	}
+	
+	private void updateCounters() {
+		fightingLayout.removeAllViews();
 		
+		if(app.isOnEntry() == true){
+			
+			if(app.getStory().getFirstpage().getId().equals(app.getPage().getId())){
+				Counters counter = new Counters();
+				counter.setBasic("0","100");
+				app.getStory().setPlayerStats(counter);
+			}
+			app.getStory().getPlayerStats().setEnemyHpStat(app.getPage().getEnemyHealth());
+		}
+		
+		TextView fightingUpdate = new TextView(app);
+		TextView healthView = new TextView(app);
+		TextView treasureView = new TextView(app);
+		TextView enemyView = new TextView(app);
+		Counters stat = app.getStory().getPlayerStats();
+		
+		healthView.setTextColor(Color.BLUE);
+		healthView.setText(getString(R.string.currentHealth) + " " + stat.getPlayerHpStat());
+		fightingLayout.addView(healthView);
+		
+		treasureView.setTextColor(Color.YELLOW);
+		treasureView.setText(getString(R.string.currentTreasure) + " " + stat.getTreasureStat());
+		fightingLayout.addView(treasureView);
+		
+		if(app.getPage().isFightingFrag() == true){
+
+			enemyView.setTextColor(Color.RED);
+			enemyView.setText(getString(R.string.enemyHealthColon) + " " + stat.getEnemyHpStat());
+			fightingLayout.addView(enemyView);
+			app.getStory().getPlayerStats().setEnemyRange(true);
+		}
+		else {
+			app.getStory().getPlayerStats().setEnemyRange(false);
+		}
+		
+		String displayChanges = "\n";
+
+		if(stat.getEnemyHpChange() != 0) {
+			displayChanges += stat.getHitMessage() + "\n";
+			displayChanges += app.getPage().getEnemyName();
+
+			if(stat.getEnemyHpChange() <= 0) 
+				displayChanges += " " + getString(R.string.gained) + " ";
+			else 
+				displayChanges += " " + getString(R.string.lost) + " ";
+
+			displayChanges += stat.getEnemyHpChange() + " " + getString(R.string.hitpoints) + "\n";
+		}
+		if(stat.getPlayerHpChange() != 0){
+			displayChanges += stat.getDamageMessage() + "\n";
+			displayChanges += getString(R.string.you);
+
+			if(stat.getPlayerHpChange() <= 0)
+				displayChanges += " " + getString(R.string.gained) + " ";
+			else
+				displayChanges += " " + getString(R.string.lost) + " ";
+
+			displayChanges += stat.getPlayerHpChange() +" " +  getString(R.string.hitpoints) + "\n";
+		}
+		if(stat.getTreasureChange() != 0) {
+			displayChanges += stat.getTreasureMessage() + "\n";
+			displayChanges += getString(R.string.you);
+
+			if(stat.getTreasureChange() <= 0)
+				displayChanges += " " + getString(R.string.lost) + " ";
+			else 
+				displayChanges += " " + getString(R.string.lost) + " ";
+
+			displayChanges += stat.getTreasureChange() + " " +  getString(R.string.coinsWorth);
+		}
+		
+		fightingUpdate.setTextColor(Color.GREEN);
+		fightingUpdate.setText(displayChanges);
+		fightingLayout.addView(fightingUpdate);
+	}
+
 	/**
 	 * Handles removing or showing the proper buttons in both the action bar
 	 * and the in the page.
@@ -437,10 +528,43 @@ public class ViewPageActivity extends Activity {
 		//For each decision in the page, add it to decisionsLayout
 		ArrayList<Decision> decisions = page.getDecisions();
 		for (int i = 0; i < decisions.size(); i++) {
-			addDecision(i, decisions.get(i));
+			if(page.isFightingFrag() == false){
+				addDecision(i, decisions.get(i));
+			}
+			else if(app.getEditing() == true){
+				addDecision(i, decisions.get(i));
+			}
+			else{			
+				boolean outcome = passThreshold(decisions.get(i));
+				if(outcome == true){
+					addDecision(i, decisions.get(i));
+				}
+			}
+			
 		}
 	}
 	
+	private boolean passThreshold(Decision decision) {
+		int type = decision.getChoiceModifiers().getThresholdType();
+		int sign = decision.getChoiceModifiers().getThresholdSign();
+		int value = decision.getChoiceModifiers().getThresholdValue();
+		Counters counter = app.getStory().getPlayerStats();
+		boolean outcome = false;
+		int[] typeBase = {counter.getPlayerHpStat(),counter.getEnemyHpStat(),counter.getTreasureStat()};
+		switch(sign){
+			case(0):
+				if(typeBase[type] < value){outcome = true;};
+				break;
+			case(1):
+				if(typeBase[type] > value){outcome = true;};
+				break;
+			case(2):
+				if(typeBase[type] == value){outcome = true;};
+				break;
+		}
+		return outcome;
+	}
+
 	/**
 	 * Removes the comments from commentsLayout and repopulates it with the
 	 * current comments.
@@ -558,7 +682,7 @@ public class ViewPageActivity extends Activity {
 	 * @param view
 	 */
 	public void editTileMenu(final View view){
-		final String[] titles = {"Edit","Delete"};
+		final String[] titles = { getString(R.string.edit), getString(R.string.delete) };
 		
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.story_options);
@@ -585,6 +709,11 @@ public class ViewPageActivity extends Activity {
 		startActivityForResult(intent, TAKE_PHOTO);
 	}
 	
+	private void addPhoto() {
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		startActivityForResult(intent, ADD_PHOTO);
+	}
+	
 	/**
 	 * Displays a dialog for editing a tile.
 	 * @param view
@@ -595,17 +724,14 @@ public class ViewPageActivity extends Activity {
     	final EditText alertEdit = new EditText(this);
     	alertEdit.setText(textView.getText().toString());
     	builder.setView(alertEdit);
-    	builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+    	builder.setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	int whichTile = tilesLayout.indexOfChild(textView);
             	app.updateTile(alertEdit.getText().toString(), whichTile);
             }
         })
-        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                
-            }
-        });
+        .setNegativeButton(getString(R.string.done), null);
+
         builder.show();
 	}
 	
@@ -652,8 +778,22 @@ public class ViewPageActivity extends Activity {
 	 * @param view
 	 */
 	public void decisionMenu(final View view){
-		final String[] titles = {"Edit","Delete"};
+		final String[] titles;
+		final String[] titlesBasic = { getString(R.string.editProperties), getString(R.string.delete), getString(R.string.cancel) };
+		final String[] titlesCounter = { getString(R.string.editProperties), getString(R.string.delete),
+				                          getString(R.string.transitionMessages), getString(R.string.cancel) };
+		final String[] titlesFight = { getString(R.string.editProperties), getString(R.string.delete), getString(R.string.transitionMessages),
+				                        getString(R.string.setConditionals), getString(R.string.cancel) };
 		
+		if(app.getPage().isFightingFrag() == true){
+			titles = titlesFight;
+		}
+		else if(app.getStory().isUsesCombat() == true){
+			titles = titlesCounter;
+		}
+		else{
+			titles = titlesBasic;
+		}
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.story_options);
         builder.setItems(titles, new DialogInterface.OnClickListener() {
@@ -666,29 +806,79 @@ public class ViewPageActivity extends Activity {
             	case(1):
             		app.deleteDecision(whichDecision);
             		break;
+            	case(2):
+            		if(app.getStory().isUsesCombat() == true){
+            			onEditMessages(view);
+            		}
+            		break;
+            	case(3):
+            		if(app.getPage().isFightingFrag() == true){
+            			onEditConditionals(view);
+            		}
+            		break;
             	}
             }
         });
         builder.show();
     }
 	
-	/**
-	 * Changes the view so that the next page is showing.
-	 * @param view
-	 */
-	private void decisionClicked(View view) {
-		int whichDecision = decisionsLayout.indexOfChild(view);
-		app.followDecision(whichDecision);
+	protected void onEditMessages(View view) {
 
+		final int whichDecision = decisionsLayout.indexOfChild(view);
+		final Decision decision = app.getPage().getDecisions().get(whichDecision);
+		
+		UUID toPageId = decision.getPageID();
+		ArrayList<Page> pages = app.getStory().getPages();
+		int toPagePosition = -1;
+
+		for (int i = 0; i < pages.size(); i++) {
+
+			UUID comparePage = pages.get(i).getId();
+			System.out.println("toPageID: " + toPageId + "\ncomparePage: " + comparePage + "\nPage: " + app.getPage() + "\nDecision: " + decision.getPageID() + decision.getText());
+			if (toPageId.equals(comparePage)) {
+				toPagePosition = i;
+				break;
+			}
+		}
+		
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	builder.setTitle(getString(R.string.counterMessage));
+    	
+    	final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.edit_messages_dialog, null);
+    	final EditText decisionTitle = (EditText) layout.findViewById(R.id.edit_messages_dialog_decision_edittext);
+    	final EditText dMessage = (EditText) layout.findViewById(R.id.edit_messages_dialog_takeDamage_edittext);
+    	final EditText hMessage = (EditText) layout.findViewById(R.id.edit_messages_dialog_giveDamage_edittext);
+    	final EditText tMessage = (EditText) layout.findViewById(R.id.edit_messages_dialog_coin_edittext);
+    	final Spinner pageSpinner = (Spinner) layout.findViewById(R.id.edit_messages_dialog_page_spinner);
+
+    	ArrayList<String> pageStrings = app.getPageStrings(pages);
+    	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, R.layout.list_item_base, pageStrings);
+    	pageSpinner.setAdapter(pagesAdapter);
+    	pageSpinner.setSelection(toPagePosition);
+    	
+    	decisionTitle.setText(decision.getText());
+    	dMessage.setText("" + decision.getChoiceModifiers().getDamageMessage());
+    	hMessage.setText("" + decision.getChoiceModifiers().getHitMessage());
+    	tMessage.setText("" + decision.getChoiceModifiers().getTreasureMessage());
+    	
+    	builder.setView(layout);
+    	builder.setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int id) {
+        		Counters counter = decision.getChoiceModifiers();
+        		counter.setMessages(dMessage.getText().toString(), tMessage.getText().toString(), hMessage.getText().toString());
+        		app.updateDecision(decisionTitle.getText().toString(), pageSpinner.getSelectedItemPosition(),whichDecision, counter);
+            }
+        })
+        .setNegativeButton(getString(R.string.cancel), null);
+
+        builder.show();
 	}
-	
-	/**
-	 * Brings up a dialog for editing the decision clicked.
-	 * @param view
-	 */
-	private void onEditDecision(View view) {
-		int whichDecision = decisionsLayout.indexOfChild(view);
-		Decision decision = app.getPage().getDecisions().get(whichDecision);
+
+	protected void onEditConditionals(View view) {
+		
+		final int whichDecision = decisionsLayout.indexOfChild(view);
+		final Decision decision = app.getPage().getDecisions().get(whichDecision);
 		
 		UUID toPageId = decision.getPageID();
 		ArrayList<Page> pages = app.getStory().getPages();
@@ -699,43 +889,168 @@ public class ViewPageActivity extends Activity {
 			System.out.println("toPageID: " + toPageId + "\ncomparePage: " + comparePage + "\nPage: " + app.getPage() + "\nDecision: " + decision.getPageID() + decision.getText());
 			if (toPageId.equals(comparePage)) {
 				toPagePosition = i;
-				
+				break;
+			}
+		}
+		
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	builder.setTitle(getString(R.string.setDecisionConditions));
+    	
+    	final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.edit_conditionals_dialog, null);
+    	final EditText decisionText = (EditText) layout.findViewById(R.id.edit_conditionals_dialog_decision_edittext);
+    	final EditText conditionText = (EditText) layout.findViewById(R.id.edit_conditionals_dialog_threshold_edittext);
+    	final Spinner pageSpinner = (Spinner) layout.findViewById(R.id.edit_conditionals_dialog_page_spinner);
+    	final Spinner condSpinner = (Spinner) layout.findViewById(R.id.edit_conditionals_dialog_type_spinner);
+    	final Spinner signSpinner = (Spinner) layout.findViewById(R.id.edit_conditionals_dialog_op_spinner);
+    	
+    	conditionText.setText("" + decision.getChoiceModifiers().getThresholdValue());
+    	decisionText.setText(decision.getText());
+    	
+    	ArrayList<String> pageStrings = app.getPageStrings(pages);
+    	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, R.layout.list_item_base, pageStrings);
+    	pageSpinner.setAdapter(pagesAdapter);
+    	pageSpinner.setSelection(toPagePosition);
+    	
+    	
+    	condSpinner.setSelection(decision.getChoiceModifiers().getThresholdType());
+    	
+    	
+    	signSpinner.setSelection(decision.getChoiceModifiers().getThresholdSign());
+    	
+    	builder.setView(layout);
+    	builder.setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int id) {
+        		Counters counter = decision.getChoiceModifiers();
+        		counter.setThresholds(signSpinner.getSelectedItemPosition(), condSpinner.getSelectedItemPosition(), conditionText.getText().toString());
+        		app.updateDecision(decisionText.getText().toString(), pageSpinner.getSelectedItemPosition(), whichDecision, counter);
+            }
+        })
+        .setNegativeButton(getString(R.string.cancel), null);
+
+        builder.show();
+	}
+
+	/**
+	 * Changes the view so that the next page is showing.
+	 * @param view
+	 */
+	private void decisionClicked(View view) {
+		int whichDecision = decisionsLayout.indexOfChild(view);
+		if(app.getStory().isUsesCombat() == true){
+			Decision decision = app.getPage().getDecisions().get(whichDecision);
+			if(app.getPage().isFightingFrag() == true){
+				app.getStory().getPlayerStats().invokeUpdateComplex(decision.getChoiceModifiers());
+			}
+			else{
+				app.getStory().getPlayerStats().invokeUpdateSimple(decision.getChoiceModifiers());
+			}
+			
+		}
+		app.followDecision(whichDecision);
+
+	}
+	
+	/**
+	 * Brings up a dialog for editing the decision clicked.
+	 * @param view
+	 */
+	private void onEditDecision(View view) {
+		int whichDecision = decisionsLayout.indexOfChild(view);
+		final Decision decision = app.getPage().getDecisions().get(whichDecision);
+		
+		UUID toPageId = decision.getPageID();
+		ArrayList<Page> pages = app.getStory().getPages();
+		int toPagePosition = -1;
+		for (int i = 0; i < pages.size(); i++) {
+
+			UUID comparePage = pages.get(i).getId();
+			System.out.println("toPageID: " + toPageId + "\ncomparePage: " + comparePage + "\nPage: " + app.getPage() + "\nDecision: " + decision.getPageID() + decision.getText());
+			if (toPageId.equals(comparePage)) {
+				toPagePosition = i;
+				break;
 			}
 		}
 		
 		final TextView decisionView = (TextView) view;
 		
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle("Set text and next page");
+    	builder.setTitle(getString(R.string.setTextandPage));
     	
-    	final LinearLayout layout = new LinearLayout(this);
-    	layout.setOrientation(LinearLayout.VERTICAL);
+    	final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.edit_decision_dialog, null);
+    	final LinearLayout combatOptions = (LinearLayout) layout.findViewById(R.id.edit_decision_dialog_page_combatoptions);
+    	final LinearLayout fightOptions = (LinearLayout) layout.findViewById(R.id.edit_decision_dialog_page_fightoptions);
+    	final Spinner pageSpinner = (Spinner) layout.findViewById(R.id.edit_decision_dialog_page_spinner);
+    	final EditText decisionText = (EditText) layout.findViewById(R.id.edit_decision_dialog_decision_edittext);
+    	final EditText alertTreasure = (EditText) layout.findViewById(R.id.edit_decision_dialog_coin_edittext);
+    	final EditText playerDamage = (EditText) layout.findViewById(R.id.edit_decision_dialog_playerDamage_edittext); 
+    	final EditText playerHitRate = (EditText) layout.findViewById(R.id.edit_decision_dialog_playerHitRate_edittext); 
+    	final EditText enemyDamage = (EditText) layout.findViewById(R.id.edit_decision_dialog_enemyDamage_edittext); 
+    	final EditText enemyHitRate = (EditText) layout.findViewById(R.id.edit_decision_dialog_enemyHitRate_edittext); 
+
+    	decisionText.setText(decision.getText());
     	
-    	final EditText alertEdit = new EditText(this);
-    	alertEdit.setText(decision.getText());
-    	layout.addView(alertEdit);
-    	
-    	final Spinner pageSpinner = new Spinner(this);
     	ArrayList<String> pageStrings = app.getPageStrings(pages);
-    	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, 
-    			R.layout.list_item_base, pageStrings);
+    	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, R.layout.list_item_base, pageStrings);
+
+    	if(pageStrings.size() > 2){
+    		pageStrings.add(getString(R.string.randomChoice));
+    	}
+
     	pageSpinner.setAdapter(pagesAdapter);
     	pageSpinner.setSelection(toPagePosition);
-    	layout.addView(pageSpinner);
     	
+    	if(!app.getStory().isUsesCombat()) {
+			combatOptions.setVisibility(View.GONE);
+    	}
+    	else {
+
+        	alertTreasure.setText("" + decision.getChoiceModifiers().getTreasureStat());
+        	playerDamage.setText("" + decision.getChoiceModifiers().getPlayerHpStat());
+
+        	if(!app.getPage().isFightingFrag()) {
+        		fightOptions.setVisibility(View.GONE);
+        	}
+        	else {
+        		
+            	playerHitRate.setText("" + decision.getChoiceModifiers().getEnemyHitPercent());
+            	enemyDamage.setText("" + decision.getChoiceModifiers().getEnemyHpStat());
+            	enemyHitRate.setText("" + decision.getChoiceModifiers().getPlayerHitPercent());
+        	}
+    	}
+
     	builder.setView(layout);
-    	builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+    	builder.setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+            	Counters counter = decision.getChoiceModifiers();
         		int decisionNumber = decisionsLayout.indexOfChild(decisionView);
-            	app.updateDecision(alertEdit.getText().toString(), 
+        		if(app.getStory().isUsesCombat() == true){
+        			String treasure = alertTreasure.getText().toString();
+        			String hp = playerDamage.getText().toString();
+        			if(app.getPage().isFightingFrag() == false){      				
+        				counter.setBasic(treasure, hp);
+	        			app.updateDecision(decisionText.getText().toString(), 
+	                			pageSpinner.getSelectedItemPosition(), decisionNumber, counter);
+        			}
+	        		else{
+	        			String ehp = enemyDamage.getText().toString();
+	        			String hitP = playerHitRate.getText().toString();
+	        			String hitE = enemyHitRate.getText().toString();
+	        			
+	        			counter.setStats(treasure, hp, ehp, hitE, hitP);
+	        			app.updateDecision(decisionText.getText().toString(), 
+	                			pageSpinner.getSelectedItemPosition(), decisionNumber, counter);
+	        		}     			
+        		}
+        		else{
+        		
+            	app.updateDecision(decisionText.getText().toString(), 
             			pageSpinner.getSelectedItemPosition(), decisionNumber);
+        		}
             }
         })
-        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                
-            }
-        });
+        .setNegativeButton(getString(R.string.cancel), null);
+
         builder.show();
 	}
 	
@@ -744,16 +1059,27 @@ public class ViewPageActivity extends Activity {
 	 * @param comment
 	 */
 	public void addComment(Comment comment) {
+		final LinearLayout layout = new LinearLayout(this);
+    	layout.setOrientation(LinearLayout.VERTICAL);
+    	
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
-		lp.setMargins(0, 0, 0, 5);
+		lp.setMargins(0, 5, 0, 0);
 		TextView view = new TextView(this);
 		view.setBackgroundColor(0xFFFFFFFF);
 		view.setPadding(10, 5, 10, 5);
 		view.setLayoutParams(lp);
 		view.setText(comment.getTimestamp() + " - '" + comment.getText() + "'");
-	    commentsLayout.addView(view);
+		layout.addView(view);
+		
+		if(comment.getAnnotation() != null){
+			ImageView imageView = new ImageView(this);
+			imageView.setImageBitmap(comment.getAnnotation().getImage());
+			imageView.setBackgroundColor(0xFFFFFFFF);
+			layout.addView(imageView);
+		}
+	    commentsLayout.addView(layout);
 	}
 	
 	/**
@@ -761,21 +1087,65 @@ public class ViewPageActivity extends Activity {
 	 * allows the user to input text and then save the comment.
 	 * @param view
 	 */
-	private void onEditComment(View view) {
+	private void onCallComment(){
+		final String[] titlesPhoto = { getString(R.string.noImage), getString(R.string.fromFile),
+				                       getString(R.string.takePhoto) };
+		final AlertDialog.Builder photoSelector = 
+				new AlertDialog.Builder(this); 
+		photoSelector.setTitle(getString(R.string.usePhotoComment));
+		photoSelector.setItems(titlesPhoto, 
+				new DialogInterface.OnClickListener() {
+			 public void onClick(DialogInterface dialog, 
+					              int item) {
+	            	switch(item){
+    	            	
+    	            	
+    	            	case(0):
+    	            		onEditComment();
+    	            		break;
+    	            	case(1):
+    	            		grabPhoto();	            		
+    	            		break;
+    	            	case(2):
+    	            		addPhoto();            		
+    	            		break;
+	            	}
+	            	
+	                }
+			 }
+		
+		);
+		photoSelector.show();
+	      
+	}
+	private void onEditComment() {
+
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle("What to Say");
+    	builder.setTitle(getString(R.string.whatToSay));
+    	
+    	final LinearLayout layout = new LinearLayout(this);
+    	layout.setOrientation(LinearLayout.VERTICAL);
+    	
     	final EditText alertEdit = new EditText(this);
-    	builder.setView(alertEdit);
-    	builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+    	layout.addView(alertEdit);
+    	
+    	final ImageView alertImage = new ImageView(this);
+    	
+    	final PhotoTile photoAdd = (PhotoTile) app.getTempSpace();
+		app.setTempSpace(null);
+
+		if(photoAdd != null)
+			alertImage.setImageBitmap(photoAdd.getImage());
+
+    	layout.addView(alertImage);
+    	
+		builder.setView(layout);
+    	builder.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-            	app.addComment(alertEdit.getText().toString());
+            	app.addComment(alertEdit.getText().toString(),photoAdd );
             }
         })
-        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                
-            }
-        });
+        .setNegativeButton(getString(R.string.cancel), null);
         builder.show();
 	}
 	
@@ -790,16 +1160,12 @@ public class ViewPageActivity extends Activity {
 	    	final EditText alertEdit = new EditText(this);
 	    	alertEdit.setText(textView.getText().toString());
 	    	builder.setView(alertEdit);
-	    	builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+	    	builder.setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
 	            public void onClick(DialogInterface dialog, int id) {
 	            	app.setEnding(alertEdit.getText().toString());
 	            }
 	        })
-	        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-	            public void onClick(DialogInterface dialog, int id) {
-	                
-	            }
-	        });
+	        .setNegativeButton(getString(R.string.cancel), null);
 	        builder.show();
 		}
 	}
@@ -807,33 +1173,21 @@ public class ViewPageActivity extends Activity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		AlertDialog.Builder successChecker = new AlertDialog.Builder(this);
 		if (resultCode == RESULT_OK && null != data) {
 			switch(requestCode) {
 			case (RESULT_LOAD_IMAGE):
-				Uri selectedImage = data.getData();
-				String[] filePathColumn = { MediaStore.Images.Media.DATA };
-
-				Cursor cursor = getContentResolver().query(selectedImage,
-						filePathColumn, null, null, null);
-				cursor.moveToFirst();
-
-				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-				String picturePath = cursor.getString(columnIndex);
-				cursor.close();       	
-				Bitmap pickedPhoto = BitmapFactory.decodeFile(picturePath);
-				PhotoTile newPhoto = new PhotoTile();
-				newPhoto.setImageFile(pickedPhoto);
-				app.addTile(newPhoto);
+				app.addTile(loadImage(data));
+				break;
+			case (GRAB_PHOTO):
+				app.setTempSpace(loadImage(data));
+			onEditComment();
 				break;
 			case(TAKE_PHOTO):
-				Bundle bundle = data.getExtras();
-				final Bitmap image = (Bitmap) bundle.get("data");
-				AlertDialog.Builder successChecker = new AlertDialog.Builder(this);
-				ImageView pictureTaken = new ImageView(this);
-				pictureTaken.setImageBitmap(image);
-				successChecker.setView(pictureTaken);
-				successChecker.setTitle("Are you satisfied with this photo?");
-				successChecker.setPositiveButton("Save", 
+				final Bitmap image = retrievePhoto(data);
+				successChecker.setView(makeViewByPhoto(image));
+				successChecker.setTitle(getString(R.string.retakeQuestion));
+				successChecker.setPositiveButton(getString(R.string.save),
 						new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						PhotoTile tile = new PhotoTile();
@@ -841,15 +1195,61 @@ public class ViewPageActivity extends Activity {
 						app.addTile(tile);
 					}
 				})
-				.setNegativeButton("Retake", new DialogInterface.OnClickListener() {
+				.setNegativeButton(getString(R.string.retake), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						takePhoto();
 					}
 				});
 				successChecker.show();
 				break;
-			}
-		}
+			case(ADD_PHOTO):
+				final Bitmap image2 = retrievePhoto(data);
+				successChecker.setView(makeViewByPhoto(image2));
+				successChecker.setTitle(getString(R.string.retakeQuestion));
+				successChecker.setPositiveButton(getString(R.string.save),
+					new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						PhotoTile tile = new PhotoTile();
+						tile.setContent(image2);
+						app.setTempSpace(tile);
+						onEditComment();
+					}
+				})
+				.setNegativeButton(getString(R.string.retake), new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						addPhoto();
+					}
+				});
+				successChecker.show();
+				break;
+		}}
+	}
+	
+	public PhotoTile loadImage(Intent data){
+		Uri selectedImage = data.getData();
+		String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+		Cursor cursor = getContentResolver().query(selectedImage,
+				filePathColumn, null, null, null);
+		cursor.moveToFirst();
+
+		int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+		String picturePath = cursor.getString(columnIndex);
+		cursor.close();       	
+		Bitmap pickedPhoto = BitmapFactory.decodeFile(picturePath);
+		PhotoTile newPhoto = new PhotoTile();
+		newPhoto.setImageFile(pickedPhoto);	
+		return newPhoto;
+	}
+	
+	public Bitmap retrievePhoto(Intent data){
+		Bundle bundle = data.getExtras();
+		return  (Bitmap) bundle.get("data");	
+	}
+	public ImageView makeViewByPhoto(Bitmap image){
+		ImageView pictureTaken = new ImageView(this);
+		pictureTaken.setImageBitmap(image);
+		return pictureTaken;
 	}
 	
 }

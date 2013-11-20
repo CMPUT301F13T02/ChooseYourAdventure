@@ -229,7 +229,6 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 	public void testAddDecision() {
 		page.getDecisions().clear();
 		
-	    Solo solo = new Solo(getInstrumentation(), getActivity());
 	    getInstrumentation().waitForIdleSync();
 	    
 		activity.runOnUiThread(

@@ -855,7 +855,8 @@ public class ViewPageActivity extends Activity {
     	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, R.layout.list_item_base, pageStrings);
     	pageSpinner.setAdapter(pagesAdapter);
     	pageSpinner.setSelection(toPagePosition);
-
+    	
+    	decisionTitle.setText(decision.getText());
     	dMessage.setText("" + decision.getChoiceModifiers().getDamageMessage());
     	hMessage.setText("" + decision.getChoiceModifiers().getHitMessage());
     	tMessage.setText("" + decision.getChoiceModifiers().getTreasureMessage());

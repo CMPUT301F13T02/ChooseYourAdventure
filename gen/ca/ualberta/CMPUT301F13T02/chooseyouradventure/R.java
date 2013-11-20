@@ -113,7 +113,7 @@ public final class R {
         public static final int decisionText=0x7f050035;
         public static final int delete=0x7f050006;
         public static final int done=0x7f050021;
-        public static final int edit=0x7f05000c;
+        public static final int edit=0x7f050053;
         public static final int editProperties=0x7f050029;
         public static final int edit_page_help=0x7f05001a;
         public static final int edit_story_help=0x7f05001c;
@@ -124,6 +124,7 @@ public final class R {
         public static final int enemyHealthColon=0x7f050042;
         public static final int enemyHitRate=0x7f05003c;
         public static final int enemyName=0x7f050034;
+        public static final int enterEditMode=0x7f05000c;
         public static final int enterPageTitle=0x7f050030;
         public static final int enterStoryTitle=0x7f05004e;
         public static final int fightDesignator=0x7f050050;

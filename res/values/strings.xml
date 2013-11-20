@@ -142,9 +142,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         ]]> 
     </string>
     <string name="refresh">Refresh</string>
-    <string name="createNew">Create New</string>
-    <string name="enterPageTitle">Enter the title of your new page</string>
-    <string name="save">Save</string>
     <string name="gotoEdit">Goto/Edit</string>
     <string name="pageProperties">Page Properties</string>
     <string name="assignFirst">Assign as First Page</string>
@@ -162,5 +159,31 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="setDecisionConditions">Set the conditions in which this decision appears</string>
     <string name="setTextandPage">Set text and next page</string>
     <string name="randomChoice">RANDOM CHOICE</string>
+    <string name="enterPageTitle">Enter the title of your new page</string>
+    <string name="createNew">Create New</string>
+    <string name="fightingPage">Fighting Page</string>
+    <string name="enemyHealth">Health of the enemy on this page</string>
+    <string name="enemyName">Name of the enemy on this page</string>
+    <string name="decisionText">Decision text</string>
+    <string name="takingDamageMessage">Message for taking data</string>
+    <string name="enemyDamageMessage">Message for damaging enemy</string>
+    <string name="coinMessage">Message for gain/loss of coins</string>
+    <string name="threshold">Threshold level for activation</string>
+    <string-array name="conditionalTypes">
+    	<item>Health</item>
+    	<item>Enemy Health</item>
+    	<item>Treasure</item>
+    </string-array>
+        <string-array name="conditionalOps">
+    	<item>&lt;</item>
+    	<item>&gt;</item>
+    	<item>=</item>
+    </string-array>
+    <string name="coinChange">Change in coins (+/-)</string>
+    <string name="playerDamage">Damage to player (+/-)</string>
+    <string name="enemyHitRate">Enemy Hit Percentage (1&#8211;100)</string>
+    <string name="enemyDamage">Damage to enemy (+/-)</string>
+    <string name="playerHitRate">Player Hit Percentage (1&#8211;100)</string>
+    <string name="save">Save</string>
 
 </resources>

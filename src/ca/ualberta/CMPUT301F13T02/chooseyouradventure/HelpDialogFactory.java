@@ -59,7 +59,7 @@ public class HelpDialogFactory {
 		ScrollView scrollView = (ScrollView) View.inflate(context, R.layout.help_dialog, null);
 		WebView view = (WebView) scrollView.findViewById(R.id.help_webview);
 
-		view.loadData(context.getString(id), "text/html", "UTF-8");
+		view.loadData(context.getString(id), "text/html; charset=utf-8", "UTF-8");
         
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.help);

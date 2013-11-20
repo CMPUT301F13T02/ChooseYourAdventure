@@ -136,7 +136,7 @@ public class EditStoryActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 	
-		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, "Help");
+		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, getString(R.string.help));
 		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 	
 	    return true;
@@ -180,7 +180,6 @@ public class EditStoryActivity extends Activity {
 	private void createPage() throws HandlerException{
 
     	final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.create_page_dialog, null);
-    	
     	final EditText titleEdit = (EditText) layout.findViewById(R.id.create_page_dialog_edittext);
     	final EditText healthEdit = (EditText) layout.findViewById(R.id.create_page_dialog_health_edittext);
     	final EditText nameEdit = (EditText) layout.findViewById(R.id.create_page_dialog_name_edittext);
@@ -195,7 +194,6 @@ public class EditStoryActivity extends Activity {
     	builder.setTitle(getString(R.string.createNew));
     	builder.setMessage(getString(R.string.enterPageTitle))
     	.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
-
             public void onClick(DialogInterface dialog, int id) {
             	app.updateTitle(titleEdit.getText().toString(), check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString());         	
             	refresh();
@@ -214,8 +212,11 @@ public class EditStoryActivity extends Activity {
         final AlertDialog.Builder titleEditor = new AlertDialog.Builder(this);
 		final Page currentPage = app.getStory().getPages().get(pos);
 		final Page FP = app.getStory().getFirstpage();
-		String[] titlesA = {"Goto/Edit","Page Properties","Cancel"};
-		String[] titlesB = {"Goto/Edit","Page Properties","Assign as First Page","Delete","Cancel"};
+
+		String[] titlesA = { getString(R.string.gotoEdit), getString(R.string.pageProperties), getString(R.string.cancel) };
+		String[] titlesB = { getString(R.string.gotoEdit), getString(R.string.pageProperties), getString(R.string.assignFirst),
+							getString(R.string.delete), getString(R.string.cancel) };
+
 		final String[] titles;
 
 		if(currentPage == FP)
@@ -257,10 +258,10 @@ public class EditStoryActivity extends Activity {
             		
 	            	titleEdit.setText(currentPage.getTitle());
 	            	
-            		titleEditor.setTitle("Create New");	
+            		titleEditor.setTitle(getString(R.string.createNew));
             		titleEditor.setView(layout);
-            		titleEditor.setMessage("Enter the title of your new page")
-            		.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            		titleEditor.setMessage(getString(R.string.enterPageTitle))
+            		.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
 
             			public void onClick(DialogInterface dialog, int id) {
             				String pageTitle = titleEdit.getText().toString();
@@ -268,7 +269,8 @@ public class EditStoryActivity extends Activity {
             				refresh();
             			}
             		})
-            		.setNegativeButton("Cancel", null);
+            		.setNegativeButton(getString(R.string.cancel), null);
+
             		titleEditor.show();
             		
             		break;

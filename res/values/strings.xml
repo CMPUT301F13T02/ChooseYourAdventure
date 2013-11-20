@@ -166,7 +166,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="enemyHealth">Health of the enemy on this page</string>
     <string name="enemyName">Name of the enemy on this page</string>
     <string name="decisionText">Decision text</string>
-    <string name="takingDamageMessage">Message for taking data</string>
+    <string name="takingDamageMessage">Message for taking damage</string>
     <string name="enemyDamageMessage">Message for damaging enemy</string>
     <string name="coinMessage">Message for gain/loss of coins</string>
     <string name="threshold">Threshold level for activation</string>

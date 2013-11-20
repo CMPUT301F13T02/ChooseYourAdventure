@@ -779,7 +779,7 @@ public class ViewPageActivity extends Activity {
 	 */
 	public void decisionMenu(final View view){
 		final String[] titles;
-		final String[] titlesBasic = { getString(R.string.edit), getString(R.string.delete), getString(R.string.cancel) };
+		final String[] titlesBasic = { getString(R.string.editProperties), getString(R.string.delete), getString(R.string.cancel) };
 		final String[] titlesCounter = { getString(R.string.editProperties), getString(R.string.delete),
 				                          getString(R.string.transitionMessages), getString(R.string.cancel) };
 		final String[] titlesFight = { getString(R.string.editProperties), getString(R.string.delete), getString(R.string.transitionMessages),

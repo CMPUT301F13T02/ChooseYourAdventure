@@ -45,6 +45,7 @@ public class Comment {
 	private String poster;
 	private String text;
 	private String timestamp;
+	private PhotoTile annotation = null;
 
 	/**
 	 * This is a constructor for a comment with no user
@@ -67,6 +68,22 @@ public class Comment {
 	public Comment(String text, String poster) {
 		this.text = text;
 		this.poster = poster;
+		
+		Calendar calendar = Calendar.getInstance(); 
+		String dayField = "" + calendar.get(Calendar.DAY_OF_MONTH) + "\\" + calendar.get(Calendar.MONTH) + "\\" + calendar.get(Calendar.YEAR);
+		this.setTimestamp(dayField);
+	}
+	
+	/**
+	 * This is a constructor for a comment with a user and photo
+	 * @param text The comment
+	 * @param poster Who left the comment
+	 * @param photo A photo tile to go with the comment
+	 */
+	public Comment(String text, String poster, PhotoTile photo) {
+		this.text = text;
+		this.poster = poster;
+		this.annotation = photo;
 		
 		
 		Calendar calendar = Calendar.getInstance(); 
@@ -117,6 +134,14 @@ public class Comment {
 	public boolean equals(Comment comment) {
 		return text.equals(comment.getText()) &&
 				poster.equals(comment.getPoster());
+	}
+
+	public PhotoTile getAnnotation() {
+		return annotation;
+	}
+
+	public void setAnnotation(PhotoTile annotation) {
+		this.annotation = annotation;
 	}
 	
 }

@@ -28,27 +28,45 @@
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
+package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.PhotoTile;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.test.InstrumentationTestCase;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.view.View;
+import android.webkit.WebView;
+import android.widget.ScrollView;
 
-public class TestPhotoTile extends InstrumentationTestCase {
-	
-	public void testSetContent() {
-		PhotoTile tile = new PhotoTile();
-		Bitmap bm = BitmapFactory.decodeFile("/ChooseYourAdventure/res/drawable-hdpi/ic_launcher.png");
-//		tile.setImage(bm); Not implemented? Konrad 11/17/13
-		Bitmap tileBm = tile.getImage();
-		assertEquals(bm, tileBm);
-		
+/**
+ * This class is responsible for creating help Dialogs for use in the views of this application
+ * 
+ * This class employs the Factory design pattern
+ * 
+ * @author Konrad Lindenbach
+ */
+
+public class HelpDialogFactory {
+
+	/**
+	 * Creates and returns an AlertDialog for the help feature
+	 * 
+	 * @param text The id of a string to display in the WebView
+	 * @param context The context of the new AlertDialog
+	 * @return An AlertDialog displaying the passed string
+	 * @author Konrad Lindenbach
+	 */
+	public static AlertDialog create(int id, Context context) {
+
+		ScrollView scrollView = (ScrollView) View.inflate(context, R.layout.help_dialog, null);
+		WebView view = (WebView) scrollView.findViewById(R.id.help_webview);
+
+		view.loadData(context.getString(id), "text/html; charset=utf-8", "UTF-8");
+        
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.help);
+        builder.setPositiveButton(R.string.ok, null);
+        builder.setView(scrollView);
+        //builder.show();
+
+        return builder.create();
 	}
-	
-	public void testGetType() {
-		PhotoTile tile = new PhotoTile();
-		assertEquals("photo", tile.getType());
-	}
-
 }

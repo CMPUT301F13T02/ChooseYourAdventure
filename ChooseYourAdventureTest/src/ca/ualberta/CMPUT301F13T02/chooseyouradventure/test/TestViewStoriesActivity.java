@@ -30,15 +30,6 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
-import com.jayway.android.robotium.solo.Solo;
-
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ControllerApp;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.EditStoryActivity;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ViewPageActivity;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ViewStoriesActivity;
 import android.app.Activity;
 import android.app.Instrumentation.ActivityMonitor;
 import android.provider.Settings.Secure;
@@ -46,7 +37,15 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ControllerApp;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.EditStoryActivity;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ViewPageActivity;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ViewStoriesActivity;
+
+import com.jayway.android.robotium.solo.Solo;
 
 /**
  * Tests for the TestViewStoriesActivity

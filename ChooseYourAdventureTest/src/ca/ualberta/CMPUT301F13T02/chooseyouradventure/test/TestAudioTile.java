@@ -30,11 +30,8 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.AudioTile;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.PhotoTile;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.test.InstrumentationTestCase;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.AudioTile;
 
 public class TestAudioTile extends InstrumentationTestCase {
 	

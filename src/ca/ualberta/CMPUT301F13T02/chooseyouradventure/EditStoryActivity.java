@@ -40,21 +40,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 
 /**
  * This Activity allows a story's author to edit a story by adding adding pages,
  * deleting pages, setting the first page, or deleting the story.
  * 
  * This class is part of the view of the application.
- * 
- * TODO Delete functionality not yet hooked up
  */
 
 public class EditStoryActivity extends Activity {
@@ -78,6 +76,7 @@ public class EditStoryActivity extends Activity {
         treePage = (ListView) findViewById(R.id.treeView);
         createNew2 = (Button) findViewById(R.id.createButton2);
         deleteStory = (Button) findViewById(R.id.deleteButton);
+        app = (ControllerApp) getApplication();
         createNew2.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
               try
@@ -85,7 +84,6 @@ public class EditStoryActivity extends Activity {
 				createPage();
 			} catch (HandlerException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
               adapter.notifyDataSetChanged();
@@ -94,10 +92,16 @@ public class EditStoryActivity extends Activity {
         deleteStory.setOnClickListener(new OnClickListener() {
             
             public void onClick(View v) {
-              //deleteCurrentStory();
+            	Story story = app.getStory();
+            	try {
+					story.getHandler().deleteStory(story);
+				} catch (HandlerException e) {
+					e.printStackTrace();
+				}
+            	finish();
             }
         });       
-        app = (ControllerApp) getApplication();
+        
         
 		pageList = app.getStory().getPages();
 		pageText = app.updateView(pageList, pageText);
@@ -132,7 +136,7 @@ public class EditStoryActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 	
-		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, "Help");
+		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, getString(R.string.help));
 		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 	
 	    return true;
@@ -150,19 +154,8 @@ public class EditStoryActivity extends Activity {
 		switch (item.getItemId()) {
 		case HELP_INDEX:
 	
-			ScrollView scrollView = new ScrollView(this);
-			WebView view = new WebView(this);
-	
-	    	view.loadData(getString(R.string.edit_story_help), "text/html", "UTF-8");
-	        
-	        scrollView.addView(view);
-	        scrollView.setPadding(10, 10, 10, 10);
-	        
-	        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	        builder.setTitle(R.string.help);
-	        builder.setPositiveButton(R.string.ok, null);
-	        builder.setView(scrollView);
-	        builder.show();
+			AlertDialog dialog = HelpDialogFactory.create(R.string.edit_story_help, this);
+			dialog.show();
 	        
 			break;
 		}
@@ -185,28 +178,29 @@ public class EditStoryActivity extends Activity {
 	 * @throws HandlerException
 	 */
 	private void createPage() throws HandlerException{
+
+    	final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.create_page_dialog, null);
+    	final EditText titleEdit = (EditText) layout.findViewById(R.id.create_page_dialog_edittext);
+    	final EditText healthEdit = (EditText) layout.findViewById(R.id.create_page_dialog_health_edittext);
+    	final EditText nameEdit = (EditText) layout.findViewById(R.id.create_page_dialog_name_edittext);
+    	final CheckBox check = (CheckBox) layout.findViewById(R.id.create_page_dialog_checkbox);
+    	final LinearLayout fightingLayout = (LinearLayout) layout.findViewById(R.id.create_page_dialog_fighting_options);
+    	
+    	if(!app.getStory().isUsesCombat())
+    		fightingLayout.setVisibility(View.GONE);
+    	
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle("Create New");	
-    	final EditText alertEdit = new EditText(this);
-    	builder.setView(alertEdit);
-    	builder.setMessage("Enter the title of your new page")
-    	.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+    	builder.setView(layout);
+    	builder.setTitle(getString(R.string.createNew));
+    	builder.setMessage(getString(R.string.enterPageTitle))
+    	.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-            	String pageTitle = alertEdit.getText().toString();
-            	app.updateTitle(pageTitle);
-            	
+            	app.newTitle(titleEdit.getText().toString(), check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString());         	
             	refresh();
-            	
             }
         })
-        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                
-            }
-        });
+        .setNegativeButton(getString(R.string.cancel), null);
         builder.show();
-    	
-    	
     }
 
 	/**
@@ -214,48 +208,79 @@ public class EditStoryActivity extends Activity {
 	 * @param Input from longclick
 	 */
 	public void pageOptions(final int pos){
-		final Page currentPage = pageList.get(pos);
-		final Page FP = app.getStory().getFirstpage();
-		String[] titlesA = {"Goto/Edit","Rename","Cancel"};
-		String[] titlesB = {"Goto/Edit","Rename","Assign as First Page","Delete","Cancel"};
-		final String[] titles;
-		if(currentPage == FP){titles = titlesA;}
-		else{titles = titlesB;}
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
         final AlertDialog.Builder titleEditor = new AlertDialog.Builder(this);
-        final EditText alertEdit = new EditText(this);
+		final Page currentPage = app.getStory().getPages().get(pos);
+		final Page FP = app.getStory().getFirstpage();
+
+		String[] titlesA = { getString(R.string.gotoEdit), getString(R.string.pageProperties), getString(R.string.cancel) };
+		String[] titlesB = { getString(R.string.gotoEdit), getString(R.string.pageProperties), getString(R.string.assignFirst),
+							getString(R.string.delete), getString(R.string.cancel) };
+
+		final String[] titles;
+
+		if(currentPage == FP)
+			titles = titlesA;
+		else
+			titles = titlesB;
+        
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.page_options);
         builder.setItems(titles, new DialogInterface.OnClickListener() {
+
             public void onClick(DialogInterface dialog, int item) {
             	
             	switch(item){
             	case(0):
             		app.setEditing(true);
             		app.jump(ViewPageActivity.class,app.getStory(),app.getStory().getPages().get(pos));
+            		
             	break;
             	case(1):
             		
-            		titleEditor.setTitle("Rename Page");
-            		String titleText = currentPage.getTitle();
-            		
-            		alertEdit.setText(titleText);
-            		titleEditor.setView(alertEdit);
-            		titleEditor.setMessage("Enter the title of your story")
-            		.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-            			public void onClick(DialogInterface dialog, int id) {
-            				String pageTitle = alertEdit.getText().toString();
-            				app.updateTitle(pageTitle, currentPage);
-            				refresh();
+                	final LinearLayout layout = (LinearLayout) View.inflate(titleEditor.getContext(), R.layout.create_page_dialog, null);
+	            	final LinearLayout fightingLayout = (LinearLayout) layout.findViewById(R.id.create_page_dialog_fighting_options);
+	            	final EditText titleEdit = (EditText) layout.findViewById(R.id.create_page_dialog_edittext);
+	            	final EditText healthEdit = (EditText) layout.findViewById(R.id.create_page_dialog_health_edittext);
+                	final EditText nameEdit = (EditText) layout.findViewById(R.id.create_page_dialog_name_edittext);
+                	final CheckBox check = (CheckBox) layout.findViewById(R.id.create_page_dialog_checkbox);
+	            	
+	            	if(!app.getStory().isUsesCombat()) {
+	            		fightingLayout.setVisibility(View.GONE);
+	            	}
+	            	else {
+	            		
+	                	
 
+	            		check.setChecked(currentPage.isFightingFrag());
+	            		healthEdit.setText("" + currentPage.getEnemyHealth());
+	            		nameEdit.setText(currentPage.getEnemyName());
+	            	}
+            		
+	            	titleEdit.setText(currentPage.getTitle());
+	            	
+            		titleEditor.setTitle(getString(R.string.createNew));
+            		titleEditor.setView(layout);
+            		titleEditor.setMessage(getString(R.string.enterPageTitle))
+            		.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
+
+            			public void onClick(DialogInterface dialog, int id) {
+            				String pageTitle = titleEdit.getText().toString();
+            				if(app.getStory().isUsesCombat() == true){
+            					app.updateTitle(pageTitle, check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString(), currentPage); 
+            				}
+            				else{
+            					app.updateTitle(pageTitle, currentPage);    
+            				}
+            				refresh();
             			}
             		})
-            		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            			public void onClick(DialogInterface dialog, int id) {
+            		.setNegativeButton(getString(R.string.cancel), null);
 
-            			}
-            		});
             		titleEditor.show();
+            		
             		break;
+
             	case(2):
             		app.updateFP(currentPage);
             		refresh();
@@ -264,7 +289,6 @@ public class EditStoryActivity extends Activity {
             		app.removePage(currentPage);
             		refresh();
             		break;
-
             	}
 
             }	

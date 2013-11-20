@@ -34,7 +34,6 @@ import java.util.ArrayList;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Handler;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.HandlerException;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
 

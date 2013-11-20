@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Copyright (c) 2013, TeamCMPUT301F13T02
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+  Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+  Redistributions in binary form must reproduce the above copyright notice, this
+  list of conditions and the following disclaimer in the documentation and/or
+  other materials provided with the distribution.
+
+  Neither the name of the {organization} nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<resources>
+    <string name="action_settings">настройки</string>
+    <string name="title_view_page_activity">Просмотр истории</string>
+    <string name="title_view_stories_activity">Выберите история</string>
+    <string name="title_edit_story_activity">История дерева</string>
+    <string name="search">Поиск</string>
+    <string name="delete">удалять</string>
+    <string name="add">Добавить</string>
+    <string name="story_options">Дополнительные параметры история</string>
+    <string name="story_options_author">[Автор] Дополнительные параметры история</string>
+    <string name="story_options_user">[пользователь] Дополнительные параметры история</string>
+    <string name="page_options">Параметры страницы</string>
+    <string name="edit">Войдите в режим редактирования</string>
+    <string name="cache">кэш</string>
+    <string name="upload">загружать</string>
+    <string name="cancel">отменить</string>
+    <string name="search_stories">Поиск</string>
+    <string name="add_new">Добавить</string>
+    <string name="comment_title">Комментарии</string>
+    <string name="add_comment_button">+ Добавить комментарий</string>
+    <string name="add_tile_button">Новая плитка</string>
+    <string name="add_decision_button">Добавить выбор</string>
+    <string name="help">помощь</string>
+    <string name="ok">хорошо</string>
+    <string name="read_page_help">
+	    <![CDATA[
+Добро пожаловать на выбор ваших приключений . <br /> <br />
+        
+В этой странице приложения вы можете прочитать одну страницуистории. <br /> <br />
+
+В нижней части этой истории, вы увидитеокончание последующейжирная серая линия . Окончание следует
+набором решений , каждое из которых последующим тонкой линией серого цвета. Чтобы выбрать решение , просто нажмите на нее
+- это может у вас на новую страницу , где вы узнаетепоследствия ваших действий . <br /> <br />
+
+Не забывайте оставлять комментарии, если вам понравилась эта страница ! Комментарии от читателей историю
+и находятся в нижней части страницы под заголовком «комментарии» . Чтобы добавить комментарий нажмите
+" + Добавить комментарий" . <br /> <br />
+
+Если это ваша история , вы увидите"Изменить" действие на Android бар в верхней части экрана.
+Нажмите сюда, чтобы войти в режим редактирования и изменить то, что читатели увидят на этой странице. <br /> <br />
+
+Другие вопросы: <a href=\"tel:14035058506\"> +1 (403) 505-8506 </ A> (24 часа Help Line )
+        ]]> 
+    </string>
+    <string name="edit_page_help">
+        <![CDATA[
+	        Добро пожаловать на выбор ваших приключений . <br /> <br />
+        
+В этой странице приложения можно редактировать одну страницу своей истории . <br /> <br />
+
+История состоит из " плиток ", которые расположены вертикально вниз по экрану. Есть четыре типа
+плиток :
+
+<ol>
+<li> текста плитки </ li>
+<li> плитки фото ( скоро!) </ li>
+<li> Аудио плитки ( скоро!) </ li>
+<li> Видео плитки ( скоро!) </ li>
+</ OL >
+
+Чтобы создать новую плитку , нажмите кнопку " Новая плитка " кнопку. Это автоматически добавляет новую плитку на плитку
+внизу страницы . Если вместо этого вы хотите отредактироватьплитка, просто нажмите на нее и выберите , хотите ли вы
+редактировать его содержание, или удалить его. <br /> <br />
+
+Каждая история имеет конец, и вВыберите Ваше приключение каждая страница книги является потенциальным окончание. Вот почему вы
+просят положить окончание на каждой странице. Чтобы сделать это, нажмите чуть выше перечень решений , где значение по умолчанию страницы окончание
+читает " + Добавитьконец этой странице" . Используйте это место , чтобы дать пользователю сделать выбор в решениях ниже. <br /> <br />
+
+После того как вы спросили ваших читателей , чтобы сделать выбор , вы должны предоставить им некоторые возможные решения, чтобы сделать . Это происходит
+после плитки иокончание страницы , ниже толстая серая линия . Чтобы добавить пресс выбора кнопку " Добавитьвыбор"
+который автоматически добавит новый выбор чуть ниже других. Чтобы изменить выбор, просто нажмите на него, и вы можете изменить то, что он говорит ,
+а также то, что страницы , ссылки. <br /> <br />
+
+Другие вопросы: <a href=\"tel:14035058506\"> +1 (403) 505-8506 </ A> (24 часа Help Line )
+        ]]> 
+    </string>
+    <string name="view_stories_help"> 
+        <![CDATA[
+	        Добро пожаловать на выбор ваших приключений. <br /> <br />
+        
+В этой странице приложения можно увидеть истории, написанные себя и других хранятся
+в интернете и одном устройстве (скоро). <br /> <br />
+
+Для начала читать рассказ, просто нажмите на историю, которую вы хотели бы прочитать и вы перенесетесь
+на первую страницу, чтобы начать чтение. <br /> <br />
+
+Для получения дополнительных возможностей для истории, долгое нажатие на историю, и вам будет предоставлена ​​возможность кэшировать историю
+для чтения в автономном режиме (скоро), и, если вы автор рассказа изменения или удаления (скоро) история. <br /> <br />
+
+Для поиска историй читать Нажмите "Поиск" или создать новую историю вашего собственного нажмите "Добавить". <br /> <br />
+
+Другие вопросы: <a href=\"tel:14035058506\"> +1 (403) 505-8506 </ A> (24 часа Help Line)
+        ]]> 
+    </string>
+    <string name="edit_story_help"> 
+        <![CDATA[
+Добро пожаловать на выбор ваших приключений. <br /> <br />
+        
+В этой странице приложения вы можете увидеть страницы, которые составляют вашу историю. <br /> <br />
+
+Чтобы добавить новую страницу, нажмите кнопку "Добавить", или редактировать страницы нажимайте на нее в списке. При нажатии на странице в
+списка вам будет предоставлен со списком важных опций для страницы, включая переименование, обозначая его
+в качестве первой страницы, и удалить его. <br /> <br />
+
+Если вы хотите удалить всю историю, просто нажмите кнопку "Удалить". <br /> <br />
+
+Другие вопросы: <a href=\"tel:14035058506\"> +1 (403) 505-8506 </ A> (24 часа Help Line)
+        ]]> 
+    </string>
+    <string name="refresh">обновление</string>
+    <string name="gotoEdit">На / Редактировать</string>
+    <string name="pageProperties">Свойства страницы</string>
+    <string name="assignFirst">Назначают в качестве первой страницы</string>
+    <string name="done">сделанный</string>
+    <string name="textTile">Текст Плитка</string>
+    <string name="photoTile">фотографии Плитка</string>
+    <string name="audioTile">Аудио Плитка</string>
+    <string name="videoTile">Видео Плитка</string>
+    <string name="noImage">В Изображение</string>
+    <string name="fromFile">Из файла</string>
+    <string name="takePhoto">Возьмите Нью-фотография</string>
+    <string name="editProperties">Изменить свойства</string>
+    <string name="transitionMessages">Переход сообщения</string>
+    <string name="setConditionals">Условные указан</string>
+    <string name="counterMessage">Установите сообщения, которые происходят после изменения счетчика</string>
+    <string name="setDecisionConditions">Установить условия, в которых это решение появляется</string>
+    <string name="setTextandPage">Набор текста и следующую страницу</string>
+    <string name="randomChoice">Случайный выбор</string>
+    <string name="enterPageTitle">Введите название вашей новой страницы</string>
+    <string name="createNew">Создать новую</string>
+    <string name="fightingPage">Борьба страницу</string>
+    <string name="enemyHealth">Здоровье противника на этой странице</string>
+    <string name="enemyName">Имя противника на этой странице</string>
+    <string name="decisionText">Решение текст</string>
+    <string name="takingDamageMessage">Сообщение для принятия данных</string>
+    <string name="enemyDamageMessage">Сообщение за причинение вреда врагу</string>
+    <string name="coinMessage">Сообщение для прибылей / убытков монет</string>
+    <string name="threshold">Пороговый уровень для активации</string>
+    <string-array name="conditionalTypes">
+    	<item>здоровье</item>
+    	<item>Враг здоровья</item>
+    	<item>сокровище</item>
+    </string-array>
+        <string-array name="conditionalOps">
+    	<item>&lt;</item>
+    	<item>&gt;</item>
+    	<item>=</item>
+    </string-array>
+    <string name="coinChange">Изменение монет (+ / -)</string>
+    <string name="playerDamage">Повреждение игрок (+ / -)</string>
+    <string name="enemyHitRate">Враг Хитов в процентах (1&#8211;100)</string>
+    <string name="enemyDamage">Повреждение врага (+/-)</string>
+    <string name="playerHitRate">Хитов игрока в процентах (1&#8211;100)</string>
+    <string name="save">экономить</string>
+    <string name="currentHealth">Текущий Здоровье: </string>
+    <string name="currentTreasure">Текущий Сокровище: </string>
+    <string name="enemyHealthColon">Враг Здоровье: </string>
+    <string name="gained"> получила </string>
+    <string name="lost"> потерянный </string>
+    <string name="hitpoints"> хитпойнтов</string>
+    <string name="you">вы</string>
+    <string name="coinsWorth"> монеты достоинством сокровищ.</string>
+    <string name="usePhotoComment">Использование фотографии в этот комментарий?</string>
+    <string name="whatToSay">Что сказать</string>
+    <string name="retakeQuestion">Довольны ли вы с этой фотографией?</string>
+    <string name="retake">пересдавать</string>
+    <string name="uploadCopy">Загрузить Копировать</string>
+    <string name="useCountersAndCombat">Используйте Счетчики и бои?</string>
+    <string name="enterStoryTitle">Введите название вашего рассказа</string>
+    <string name="startDesignator">{начало} </string>
+    <string name="fightDesignator">{бороться} </string>
+    <string name="endDesignator">{конечная точка} </string>
+    <string name="cahcedDesignator">кэш: </string>
+
+</resources>

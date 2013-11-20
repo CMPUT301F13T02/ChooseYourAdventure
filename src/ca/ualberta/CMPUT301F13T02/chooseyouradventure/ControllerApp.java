@@ -320,7 +320,18 @@ public class ControllerApp extends Application {
 	 * title.
 	 * @param pageTitle
 	 */
-	protected void updateTitle(String pageTitle, boolean fight, String health, String name){
+	protected void updateTitle(String pageTitle, boolean fight, String health, String name, Page page){
+		page.setTitle(pageTitle);
+		page.setFightingFrag(fight);
+		page.setEnemyName(name);
+		try{
+			page.setEnemyHealth(Integer.parseInt(health));
+		} catch(Exception e){}
+		
+		currentStory.updateStory();
+	}
+	
+	protected void newTitle(String pageTitle, boolean fight, String health, String name){
 		Page newPage = initializeNewPage(pageTitle);
 		newPage.setFightingFrag(fight);
 		newPage.setEnemyName(name);
@@ -328,7 +339,6 @@ public class ControllerApp extends Application {
 			newPage.setEnemyHealth(Integer.parseInt(health));
 		} catch(Exception e){}
 		currentStory.addPage(newPage);
-		System.out.println("ALL GOOD TO HERE");
 		currentStory.updateStory();
 	}
 

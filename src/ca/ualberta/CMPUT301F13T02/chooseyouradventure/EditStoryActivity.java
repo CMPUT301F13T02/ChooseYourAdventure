@@ -195,7 +195,7 @@ public class EditStoryActivity extends Activity {
     	builder.setMessage(getString(R.string.enterPageTitle))
     	.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-            	app.updateTitle(titleEdit.getText().toString(), check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString());         	
+            	app.newTitle(titleEdit.getText().toString(), check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString());         	
             	refresh();
             }
         })
@@ -241,15 +241,16 @@ public class EditStoryActivity extends Activity {
                 	final LinearLayout layout = (LinearLayout) View.inflate(titleEditor.getContext(), R.layout.create_page_dialog, null);
 	            	final LinearLayout fightingLayout = (LinearLayout) layout.findViewById(R.id.create_page_dialog_fighting_options);
 	            	final EditText titleEdit = (EditText) layout.findViewById(R.id.create_page_dialog_edittext);
+	            	final EditText healthEdit = (EditText) layout.findViewById(R.id.create_page_dialog_health_edittext);
+                	final EditText nameEdit = (EditText) layout.findViewById(R.id.create_page_dialog_name_edittext);
+                	final CheckBox check = (CheckBox) layout.findViewById(R.id.create_page_dialog_checkbox);
 	            	
 	            	if(!app.getStory().isUsesCombat()) {
 	            		fightingLayout.setVisibility(View.GONE);
 	            	}
 	            	else {
 	            		
-	                	final EditText healthEdit = (EditText) layout.findViewById(R.id.create_page_dialog_health_edittext);
-	                	final EditText nameEdit = (EditText) layout.findViewById(R.id.create_page_dialog_name_edittext);
-	                	final CheckBox check = (CheckBox) layout.findViewById(R.id.create_page_dialog_checkbox);
+	                	
 
 	            		check.setChecked(currentPage.isFightingFrag());
 	            		healthEdit.setText("" + currentPage.getEnemyHealth());
@@ -265,7 +266,12 @@ public class EditStoryActivity extends Activity {
 
             			public void onClick(DialogInterface dialog, int id) {
             				String pageTitle = titleEdit.getText().toString();
-            				app.updateTitle(pageTitle, currentPage);         	
+            				if(app.getStory().isUsesCombat() == true){
+            					app.updateTitle(pageTitle, check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString(), currentPage); 
+            				}
+            				else{
+            					app.updateTitle(pageTitle, currentPage);    
+            				}
             				refresh();
             			}
             		})

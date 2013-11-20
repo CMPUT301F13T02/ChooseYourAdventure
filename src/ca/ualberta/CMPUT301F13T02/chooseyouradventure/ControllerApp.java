@@ -168,7 +168,6 @@ public class ControllerApp extends Application {
 	
 			} catch (Exception e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}	
 		    jump(EditStoryActivity.class,newStory, newPage);
@@ -193,7 +192,6 @@ public class ControllerApp extends Application {
 
 		} catch (Exception e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
 	    jump(EditStoryActivity.class,newStory, newPage);
@@ -514,7 +512,6 @@ public class ControllerApp extends Application {
 			currentStory.getHandler().addComment(getStory(), getPage(), comment);
 		} catch (HandlerException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

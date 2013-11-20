@@ -192,7 +192,6 @@ public class Story {
 		try {
 			handler.updateStory(this);
 		} catch (HandlerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

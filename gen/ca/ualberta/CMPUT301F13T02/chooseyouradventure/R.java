@@ -54,12 +54,12 @@ public final class R {
         public static final int edit_decision_dialog_coin_edittext=0x7f09000e;
         public static final int edit_decision_dialog_decision_edittext=0x7f09000b;
         public static final int edit_decision_dialog_enemyDamage_edittext=0x7f090012;
-        public static final int edit_decision_dialog_enemyHitRate_edittext=0x7f090011;
+        public static final int edit_decision_dialog_enemyPerc=0x7f090011;
         public static final int edit_decision_dialog_page_combatoptions=0x7f09000d;
         public static final int edit_decision_dialog_page_fightoptions=0x7f090010;
         public static final int edit_decision_dialog_page_spinner=0x7f09000c;
         public static final int edit_decision_dialog_playerDamage_edittext=0x7f09000f;
-        public static final int edit_decision_dialog_playerHitRate_edittext=0x7f090013;
+        public static final int edit_decision_dialog_playerPerc=0x7f090013;
         public static final int edit_messages_dialog_coin_edittext=0x7f090018;
         public static final int edit_messages_dialog_decision_edittext=0x7f090014;
         public static final int edit_messages_dialog_giveDamage_edittext=0x7f090017;

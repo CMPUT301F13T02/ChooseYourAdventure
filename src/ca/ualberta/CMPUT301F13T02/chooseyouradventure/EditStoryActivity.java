@@ -188,7 +188,8 @@ public class EditStoryActivity extends Activity {
     	
     	if(!app.getStory().isUsesCombat())
     		fightingLayout.setVisibility(View.GONE);
-    	
+    	nameEdit.setText("Enemy");
+    	healthEdit.setText("0");
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setView(layout);
     	builder.setTitle(getString(R.string.createNew));

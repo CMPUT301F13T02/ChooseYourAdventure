@@ -258,7 +258,7 @@ public class EditStoryActivity extends Activity {
             		
 	            	titleEdit.setText(currentPage.getTitle());
 	            	
-            		titleEditor.setTitle("Create New");	
+            		titleEditor.setTitle(getString(R.string.createNew));
             		titleEditor.setView(layout);
             		titleEditor.setMessage(getString(R.string.enterPageTitle))
             		.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {

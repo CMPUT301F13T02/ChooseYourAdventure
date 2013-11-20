@@ -275,17 +275,17 @@ public class ControllerApp extends Application {
 				{
 					
 					if(itemList.get(i).equals(currentStory.getFirstpage())){
-						outList = "{Start} ";
+						outList = getString(R.string.startDesignator);
 					}
 
 					
 					if(((Page) itemList.get(i)).isFightingFrag() == true){
-						outList = outList + "{Fight} ";
+						outList = outList + getString(R.string.fightDesignator);
 					}
 					
 
 					if(((Page) itemList.get(i)).getDecisions().size() == 0){				
-						outList = outList + "{Endpoint} ";
+						outList = outList + getString(R.string.endDesignator);
 					}
 					outList = outList + "(" + 
 					          ((Page) itemList.get(i)).getRefNum() + ") " + 
@@ -294,7 +294,7 @@ public class ControllerApp extends Application {
 					
 					//If the story has been saved locally, note it
 					if(((Story) itemList.get(i)).getHandler() instanceof DBHandler){
-						outList = "Cached: ";
+						outList = getString(R.string.cahcedDesignator);
 					}
 					outList = outList + ((Story) itemList.get(i)).getTitle();
 				}

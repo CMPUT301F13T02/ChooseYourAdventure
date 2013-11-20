@@ -43,7 +43,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -51,7 +50,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
@@ -171,7 +169,7 @@ public class ViewStoriesActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
     	super.onCreateOptionsMenu(menu);
 
-		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, "Help");
+		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, getString(R.string.help));
 		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
         return true;
@@ -216,8 +214,9 @@ public class ViewStoriesActivity extends Activity {
 			final Story story = storyList.get(pos);
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			final String[] titles;
-			final String[] titlesA = {"Cache","Upload","Edit","Delete","Cancel"};
-			final String[] titlesB = {"Cache","Upload Copy","Cancel"};
+			final String[] titlesA = { getString(R.string.cache), getString(R.string.upload), getString(R.string.edit), 
+									   getString(R.string.delete), getString(R.string.cancel) };
+			final String[] titlesB = { getString(R.string.cache), getString(R.string.uploadCopy), getString(R.string.cancel) };
 			final String myId = Secure.getString(
 					getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 			final String storyID = story.getAuthor();
@@ -287,7 +286,7 @@ public class ViewStoriesActivity extends Activity {
     private void createStory(){
 
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle("Create New");
+    	builder.setTitle(getString(R.string.createNew));
     	
     	final LinearLayout layout = new LinearLayout(this);
     	layout.setOrientation(LinearLayout.VERTICAL);
@@ -297,15 +296,15 @@ public class ViewStoriesActivity extends Activity {
     	layout.addView(alertEdit);
     	
     	final TextView alertText = new TextView(this);
-    	alertText.setText("Use Counters and Combat?");
+    	alertText.setText(getString(R.string.useCountersAndCombat));
     	layout.addView(alertText);
     	
     	final CheckBox check = new CheckBox(this);
     	layout.addView(check);
         
     	builder.setView(layout);
-    	builder.setMessage("Enter the title of your story")
-    	.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+    	builder.setMessage(getString(R.string.enterStoryTitle))
+    	.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	
 					try {
@@ -320,17 +319,12 @@ public class ViewStoriesActivity extends Activity {
 						
 						refresh();
 					} catch (HandlerException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 
             }
         })
-        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                
-            }
-        });
+        .setNegativeButton(getString(R.string.cancel), null);
         builder.show();
     }
     
@@ -345,7 +339,6 @@ public class ViewStoriesActivity extends Activity {
         	storyList.addAll(dbhandler.getAllStories());
 			storyText = app.updateView(storyList, storyText);
 		} catch (HandlerException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
         adapter.notifyDataSetChanged();

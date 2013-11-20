@@ -414,17 +414,17 @@ public class ViewPageActivity extends Activity {
 		Counters stat = app.getStory().getPlayerStats();
 		
 		healthView.setTextColor(Color.BLUE);
-		healthView.setText("Current Health: " + stat.getPlayerHpStat());
+		healthView.setText(getString(R.string.currentHealth) + stat.getPlayerHpStat());
 		fightingLayout.addView(healthView);
 		
 		treasureView.setTextColor(Color.YELLOW);
-		treasureView.setText("Current Treasure: " + stat.getTreasureStat());
+		treasureView.setText(getString(R.string.currentTreasure) + stat.getTreasureStat());
 		fightingLayout.addView(treasureView);
 		
 		if(app.getPage().isFightingFrag() == true){
 
 			enemyView.setTextColor(Color.RED);
-			enemyView.setText("Enemy Health: " + stat.getEnemyHpStat());
+			enemyView.setText(getString(R.string.enemyHealthColon) + stat.getEnemyHpStat());
 			fightingLayout.addView(enemyView);
 			app.getStory().getPlayerStats().setEnemyRange(true);
 		}
@@ -439,33 +439,33 @@ public class ViewPageActivity extends Activity {
 			displayChanges += app.getPage().getEnemyName();
 
 			if(stat.getEnemyHpChange() <= 0) 
-				displayChanges += " gained ";
+				displayChanges += getString(R.string.gained);
 			else 
-				displayChanges += " lost ";
+				displayChanges += getString(R.string.lost);
 
-			displayChanges += stat.getEnemyHpChange() + " hitpoints\n";
+			displayChanges += stat.getEnemyHpChange() + getString(R.string.hitpoints) + "\n";
 		}
 		if(stat.getPlayerHpChange() != 0){
 			displayChanges += stat.getDamageMessage() + "\n";
-			displayChanges += "You ";
+			displayChanges += getString(R.string.you);
 
 			if(stat.getPlayerHpChange() <= 0)
-				displayChanges += "gained ";
+				displayChanges += getString(R.string.gained);
 			else
-				displayChanges += "lost ";
+				displayChanges += getString(R.string.lost);
 
-			displayChanges += stat.getPlayerHpChange() + " hitpoints\n";
+			displayChanges += stat.getPlayerHpChange() + getString(R.string.hitpoints) + "\n";
 		}
 		if(stat.getTreasureChange() != 0) {
 			displayChanges += stat.getTreasureMessage() + "\n";
-			displayChanges += "You ";
+			displayChanges += getString(R.string.you);
 
 			if(stat.getTreasureChange() <= 0)
-				displayChanges += "gained ";
+				displayChanges += getString(R.string.gained);
 			else 
-				displayChanges += "lost ";
+				displayChanges += getString(R.string.lost);
 
-			displayChanges += stat.getTreasureChange() + " coins worth of treasure.";
+			displayChanges += stat.getTreasureChange() + getString(R.string.coinsWorth);
 		}
 		
 		fightingUpdate.setTextColor(Color.GREEN);
@@ -1081,10 +1081,11 @@ public class ViewPageActivity extends Activity {
 	 * @param view
 	 */
 	private void onCallComment(){
-		final String[] titlesPhoto = {"No Image","From File","Take New Photo",};
+		final String[] titlesPhoto = { getString(R.string.noImage), getString(R.string.fromFile),
+				                       getString(R.string.takePhoto) };
 		final AlertDialog.Builder photoSelector = 
 				new AlertDialog.Builder(this); 
-		photoSelector.setTitle("Use a photograph in this comment?");
+		photoSelector.setTitle(getString(R.string.usePhotoComment));
 		photoSelector.setItems(titlesPhoto, 
 				new DialogInterface.OnClickListener() {
 			 public void onClick(DialogInterface dialog, 
@@ -1111,8 +1112,9 @@ public class ViewPageActivity extends Activity {
 	      
 	}
 	private void onEditComment() {
+
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle("What to Say");
+    	builder.setTitle(getString(R.string.whatToSay));
     	
     	final LinearLayout layout = new LinearLayout(this);
     	layout.setOrientation(LinearLayout.VERTICAL);
@@ -1124,25 +1126,19 @@ public class ViewPageActivity extends Activity {
     	
     	final PhotoTile photoAdd = (PhotoTile) app.getTempSpace();
 		app.setTempSpace(null);
-		if(photoAdd != null){
+
+		if(photoAdd != null)
 			alertImage.setImageBitmap(photoAdd.getImage());
-		}
+
     	layout.addView(alertImage);
     	
-    	
-		
-		
 		builder.setView(layout);
-    	builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+    	builder.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	app.addComment(alertEdit.getText().toString(),photoAdd );
             }
         })
-        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                
-            }
-        });
+        .setNegativeButton(getString(R.string.cancel), null);
         builder.show();
 	}
 	
@@ -1157,16 +1153,12 @@ public class ViewPageActivity extends Activity {
 	    	final EditText alertEdit = new EditText(this);
 	    	alertEdit.setText(textView.getText().toString());
 	    	builder.setView(alertEdit);
-	    	builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+	    	builder.setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
 	            public void onClick(DialogInterface dialog, int id) {
 	            	app.setEnding(alertEdit.getText().toString());
 	            }
 	        })
-	        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-	            public void onClick(DialogInterface dialog, int id) {
-	                
-	            }
-	        });
+	        .setNegativeButton(getString(R.string.cancel), null);
 	        builder.show();
 		}
 	}
@@ -1187,8 +1179,8 @@ public class ViewPageActivity extends Activity {
 			case(TAKE_PHOTO):
 				final Bitmap image = retrievePhoto(data);
 				successChecker.setView(makeViewByPhoto(image));
-				successChecker.setTitle("Are you satisfied with this photo?");
-				successChecker.setPositiveButton("Save", 
+				successChecker.setTitle(getString(R.string.retakeQuestion));
+				successChecker.setPositiveButton(getString(R.string.save),
 						new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						PhotoTile tile = new PhotoTile();
@@ -1196,7 +1188,7 @@ public class ViewPageActivity extends Activity {
 						app.addTile(tile);
 					}
 				})
-				.setNegativeButton("Retake", new DialogInterface.OnClickListener() {
+				.setNegativeButton(getString(R.string.retake), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						takePhoto();
 					}
@@ -1206,8 +1198,8 @@ public class ViewPageActivity extends Activity {
 			case(ADD_PHOTO):
 				final Bitmap image2 = retrievePhoto(data);
 				successChecker.setView(makeViewByPhoto(image2));
-				successChecker.setTitle("Are you satisfied with this photo?");
-				successChecker.setPositiveButton("Save", 
+				successChecker.setTitle(getString(R.string.retakeQuestion));
+				successChecker.setPositiveButton(getString(R.string.save),
 					new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						PhotoTile tile = new PhotoTile();
@@ -1216,7 +1208,7 @@ public class ViewPageActivity extends Activity {
 						onEditComment();
 					}
 				})
-				.setNegativeButton("Retake", new DialogInterface.OnClickListener() {
+				.setNegativeButton(getString(R.string.retake), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						addPhoto();
 					}

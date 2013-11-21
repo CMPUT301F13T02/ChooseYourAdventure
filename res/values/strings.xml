@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- 
+<!--
 Copyright (c) 2013, TeamCMPUT301F13T02
 All rights reserved.
 
@@ -31,7 +31,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
 <resources>
+
     <string name="app_name">ChooseYourAdventure</string>
+    <string name="random">Random Story</string>
     <string name="action_settings">Settings</string>
     <string name="title_view_page_activity">Viewing Story</string>
     <string name="title_view_stories_activity">Choose a Story</string>
@@ -56,8 +58,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="add_decision_button">Add a Choice</string>
     <string name="help">Help</string>
     <string name="ok">OK</string>
+    <string name="action_search">Search By Title</string>
     <string name="read_page_help">
-	    <![CDATA[
+<![CDATA[
 	        Welcome to Choose Your Adventure. <br /><br />
         
 	        In this page of the application you can read a single page of a story. <br /><br />
@@ -74,10 +77,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	        Press this to enter the edit mode and change what readers will see on this page. <br /> <br />
 	        
 	        Other questions: <a href=\"tel:14035058506\">+1 (403) 505&mdash;8506</a> (24 Hour Help Line)
-        ]]> 
+        ]]>
     </string>
     <string name="edit_page_help">
-        <![CDATA[
+<![CDATA[
 	        Welcome to Choose Your Adventure. <br /><br />
         
 	        In this page of the application you can edit a single page of your story. <br /><br />
@@ -106,10 +109,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	    	as well as what page it links to. <br /><br />
 	    	
 	    	Other questions: <a href=\"tel:14035058506\">+1 (403) 505&mdash;8506</a> (24 Hour Help Line)
-        ]]> 
+        ]]>
     </string>
-    <string name="view_stories_help"> 
-        <![CDATA[
+    <string name="view_stories_help">
+<![CDATA[
 	        Welcome to Choose Your Adventure. <br /><br />
         
 	        In this page of the application you can see stories written by yourself and others stored
@@ -124,10 +127,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	        To search for stories to read press &ldquo;Search&rdquo; or to create a new story of your own press &ldquo;Add New&rdquo;. <br /><br />
 	        
 	        Other questions: <a href=\"tel:14035058506\">+1 (403) 505&mdash;8506</a> (24 Hour Help Line)
-        ]]> 
+        ]]>
     </string>
-    <string name="edit_story_help"> 
-        <![CDATA[
+    <string name="edit_story_help">
+<![CDATA[
 	        Welcome to Choose Your Adventure. <br /><br />
         
 	        In this page of the application you can see the pages that make up your story. <br /><br />
@@ -139,8 +142,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	        If you would like to delete your entire story, simply press the &ldquo;Delete&rdquo; button. <br /><br />
 	        
 	        Other questions: <a href=\"tel:14035058506\">+1 (403) 505&mdash;8506</a> (24 Hour Help Line)
-        ]]> 
+        ]]>
     </string>
+    <string name="title_activity_search_stories">SearchStoriesActivity</string>
     <string name="refresh">Refresh</string>
     <string name="gotoEdit">Goto/Edit</string>
     <string name="pageProperties">Page Properties</string>

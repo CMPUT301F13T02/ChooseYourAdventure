@@ -36,6 +36,10 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
@@ -50,9 +54,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
+import android.widget.SearchView;
+
 import android.widget.TextView;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
-
 
 /**
  * The main activity of the application. Displays a list of stories to read. <br />
@@ -77,6 +83,8 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 public class ViewStoriesActivity extends Activity {
 	private ListView mainPage;
 	private Button createNew;
+	private Button searchButton;
+	private Button randomStoryButton;
 	private Button refreshButton;
 	ArrayList<String> storyText = new ArrayList<String>();
 	ArrayList<Story> storyList = new ArrayList<Story>();
@@ -93,9 +101,10 @@ public class ViewStoriesActivity extends Activity {
         setContentView(R.layout.view_stories_activity);
         mainPage = (ListView) findViewById(R.id.mainView);
         createNew = (Button) findViewById(R.id.createButton);
+        searchButton = (Button) findViewById(R.id.searchButton);
+        randomStoryButton = (Button) findViewById(R.id.randomButton);
         refreshButton = (Button) findViewById(R.id.button1);
         createNew.setOnClickListener(new OnClickListener() {
-           
             public void onClick(View v) {
                 createStory();
             }
@@ -107,11 +116,29 @@ public class ViewStoriesActivity extends Activity {
             }
         });
         
+        searchButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				onSearchRequested();
+			}
+        	
+        });
+        
+        randomStoryButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				onRandomStory();
+				
+			}
+        	
+        });
+        
         app = (ControllerApp) getApplication();
         
         
 		try {
-			
 			storyList =  eshandler.getAllStories();
 			Story sampleStory = sampleGen.getStory();
 			storyList.add(sampleStory);
@@ -148,7 +175,18 @@ public class ViewStoriesActivity extends Activity {
         
     }
     
-    @Override
+    protected void onRandomStory() {
+		try {
+			Story random = eshandler.getRandomStory();
+			app.jump(ViewPageActivity.class, random, random.getFirstpage());
+		} catch (HandlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
 	public void onResume() {
         super.onResume();
         refresh();
@@ -165,6 +203,8 @@ public class ViewStoriesActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	super.onCreateOptionsMenu(menu);
+    	
+    	getMenuInflater().inflate(R.menu.view_stories, menu);
 
 		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, getString(R.string.help));
 		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);

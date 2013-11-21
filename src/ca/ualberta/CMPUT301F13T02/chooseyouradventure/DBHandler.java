@@ -29,6 +29,7 @@
 */
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -181,5 +182,16 @@ public class DBHandler extends SQLiteOpenHelper implements Handler  {
         	} while (cursor.moveToNext());
         }
         return storyList;
+	}
+	@Override
+	public ArrayList<Story> search(String searchKey) throws HandlerException,
+			UnsupportedEncodingException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Story getRandomStory() throws HandlerException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

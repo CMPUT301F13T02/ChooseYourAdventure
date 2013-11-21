@@ -61,7 +61,7 @@ public class Page {
 		decisions = new ArrayList<Decision>();
 		comments = new ArrayList<Comment>();
 		title = new String();
-		pageEnding = "+ Add an ending to this page";
+		pageEnding = ControllerApp.getInstance().getString(R.string.defaultEnding);
 	}
 	
 	public Page(String enterAnything){
@@ -70,7 +70,7 @@ public class Page {
 		decisions = new ArrayList<Decision>();
 		comments = new ArrayList<Comment>();
 		title = new String();
-		pageEnding = "+ Add an ending to this page";
+		pageEnding = ControllerApp.getInstance().getString(R.string.defaultEnding);
 	}
 
 	/**

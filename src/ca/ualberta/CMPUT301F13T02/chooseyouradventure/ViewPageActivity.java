@@ -529,18 +529,8 @@ public class ViewPageActivity extends Activity {
 		//For each decision in the page, add it to decisionsLayout
 		ArrayList<Decision> decisions = page.getDecisions();
 		for (int i = 0; i < decisions.size(); i++) {
-			if(page.isFightingFrag() == false){
-				addDecision(i, decisions.get(i));
-			}
-			else if(app.getEditing() == true){
-				addDecision(i, decisions.get(i));
-			}
-			else{			
-				boolean outcome = passThreshold(decisions.get(i));
-				if(outcome == true){
-					addDecision(i, decisions.get(i));
-				}
-			}
+			addDecision(i, decisions.get(i));
+			
 			
 		}
 	}
@@ -756,6 +746,19 @@ public class ViewPageActivity extends Activity {
 		view.setLayoutParams(lp);
 		view.setText(decision.getText());
 		decisionsLayout.addView(view, i);
+		if(app.getPage().isFightingFrag() == false){
+			view.setVisibility(View.VISIBLE);
+		}
+		else if(app.getEditing() == true){
+			view.setVisibility(View.VISIBLE);
+		}
+		else{			
+			boolean outcome = passThreshold(decision);
+			if(outcome == false){
+				view.setVisibility(View.GONE);
+			}
+		}
+		
 		
 		if (app.getEditing()) {
 			view.setOnClickListener(new OnClickListener() {

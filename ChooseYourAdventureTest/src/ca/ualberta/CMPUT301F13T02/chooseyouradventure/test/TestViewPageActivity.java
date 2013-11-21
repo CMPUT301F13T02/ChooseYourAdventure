@@ -65,7 +65,6 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 
 	public TestViewPageActivity() {
 		super(ViewPageActivity.class);
-		// TODO Auto-generated constructor stub
 	}
 	
 	

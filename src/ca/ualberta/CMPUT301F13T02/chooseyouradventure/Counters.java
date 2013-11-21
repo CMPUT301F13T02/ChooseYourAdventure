@@ -134,7 +134,7 @@ public class Counters {
 		Random rn = new Random();
 		int randomFlagP = rn.nextInt(100) + 1;
 		int randomFlagE = rn.nextInt(100) + 1;
-		this.treasureStat = treasureStat - choiceModifiers.treasureStat ;
+		this.treasureStat = treasureStat + choiceModifiers.treasureStat ;
 		this.treasureChange = choiceModifiers.treasureStat;
 		
 		this.damageMessage = choiceModifiers.getDamageMessage();
@@ -176,7 +176,7 @@ public class Counters {
 	}
 	
 	public void invokeUpdateSimple(Counters choiceModifiers){
-		this.treasureStat = treasureStat - choiceModifiers.treasureStat ;
+		this.treasureStat = treasureStat + choiceModifiers.treasureStat ;
 		this.treasureChange = choiceModifiers.treasureStat;
 		if(choiceModifiers.isEnemyRange() == true){
 			Random rn = new Random();

@@ -77,7 +77,6 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
  * 
  * The ViewStoriesActivity is a view of the application.
  * 
- * TODO There is work to be done to make this activity respect a Story's choice of handler
  * TODO Search needs to be implemented
  */
 
@@ -145,7 +144,6 @@ public class ViewStoriesActivity extends Activity {
 			storyList.add(sampleStory);
 			storyText = app.updateView(storyList, storyText);
 		} catch (HandlerException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		adapter = new ArrayAdapter<String>(this,
@@ -162,7 +160,6 @@ public class ViewStoriesActivity extends Activity {
 		        try {
 					onListItemClick(v,pos,listNum);
 				} catch (HandlerException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		    }
@@ -308,7 +305,6 @@ public class ViewStoriesActivity extends Activity {
                 		try {
 							story.getHandler().deleteStory(story);
 						} catch (HandlerException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
                 		refresh();

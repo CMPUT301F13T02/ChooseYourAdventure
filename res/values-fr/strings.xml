@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Copyright (c) 2013, TeamCMPUT301F13T02
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+  Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+  Redistributions in binary form must reproduce the above copyright notice, this
+  list of conditions and the following disclaimer in the documentation and/or
+  other materials provided with the distribution.
+
+  Neither the name of the {organization} nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<resources>
+    <string name="app_name"> ChooseYourAdventure </string>
+    <string name="action_settings"> Paramètres </string >
+    <string name="title_view_page_activity"> Regarde Histoire </string>
+    <string name="title_view_stories_activity"> Choisissez une histoire </string>
+    <string name="title_edit_story_activity"> histoire Arbre </string>
+    <string name="search"> recherche </string>
+    <string name="delete"> Supprimer </string>
+    <string name="add"> Add New </string>
+    <string name="story_options"> Histoire Options avancées </string>
+    <string name="story_options_author"> [Auteur] Histoire Options avancées </string >
+    <string name="story_options_user"> [Utilisateur] Histoire options avancées </string >
+    <string name="page_options"> Options de la page </string>
+    <string name="enterEditMode"> entrer en mode édition </string>
+    <string name="cache"> Cache </string>
+    <string name="upload"> Upload </string>
+    <string name="cancel"> Annuler </string>
+    <string name="hello_world"> Bonjour tout le monde ! </string>
+    <string name="search_stories"> recherche </string>
+    <string name="add_new"> Add New </string>
+    <string name="comment_title"> Commentaires </string>
+    <string name="add_comment_button"> + Ajouter un commentaire </string>
+    <string name="add_tile_button"> nouvelle tuile </string>
+    <string name="add_decision_button"> Ajouter un choix </string>
+    <string name="help"> Aide </string>
+    <string name="ok"> OK </string>
+    <string name="read_page_help">
+<![CDATA[
+Bienvenue à choisir votre aventure . <br /> <br />
+        
+Dans cette page de l&apos;application que vous pouvez lire une seule page d&apos; une histoire. <br /> <br />
+
+Au bas de l&apos;histoire, vous verrez une fin suivie par une ligne grise épaisse . La fin est suivie
+par un ensemble de décisions , chacune suivie d&apos;une fine ligne grise . Pour choisir une décision, il suffit d&apos;appuyer sur le
+- Cela vous mènera à une nouvelle page où vous apprendrez les conséquences de vos actes . <br /> <br />
+
+N&apos;oubliez pas de laisser des commentaires si vous avez apprécié cette page ! Les commentaires sont des lecteurs de l&apos;histoire
+et se retrouvent au bas de la page, sous la rubrique " Commentaires" . Pour ajouter un commentaire appuyer sur la
+"+ Ajouter un commentaire " bouton. <br /> <br />
+
+S&apos;il s&apos;agit de votre histoire , vous verrez une action "Modifier " dans la barre android en haut de l&apos;écran.
+Appuyez ici pour entrer dans le mode d&apos;édition et de changer ce que les lecteurs verront sur cette page. <br /> <br />
+
+Autres questions: <a href=\"tel:14035058506\"> +1 (403) 505-8506 </a> ( 24 heures Help Line )
+        ]]>
+    </string>
+    <string name="edit_page_help">
+        <![CDATA[
+Bienvenue à choisir votre aventure . <br /> <br />
+        
+Dans cette page de l&apos; application, vous pouvez modifier une seule page de votre histoire. <br /> <br />
+
+Une histoire est composée de «tuiles» qui sont disposés verticalement à l&apos; écran . Il existe quatre types
+des tuiles :
+
+<ol>
+<li> texte tuiles </li >
+tuiles d&apos;image <li> (à venir! ) </li>
+tuiles Audio <li> (à venir! ) </li>
+<li> carreaux vidéo (à venir! ) </li>
+</ol>
+
+Pour créer une nouvelle tuile , appuyez sur le bouton «Nouvelle tuile " . Cela va ajouter automatiquement une nouvelle dalle de carrelage à l&apos;
+en bas de page . Si au contraire vous souhaitez modifier une tuile , cliquez simplement dessus et choisissez si vous souhaitez
+pour modifier son contenu , ou le supprimer. <br /> <br />
+
+Chaque histoire a une fin, et dans un livre Choisissez votre aventure chaque page est une fin potentielle. C&apos;est pourquoi vous êtes
+demandé de mettre une fin à chaque page. Pour ce faire, cliquez simplement dessus de la liste des décisions , où la page de fin par défaut
+lectures "+ Ajouter un dénouement à cette page" . Utilisez cet espace pour donner à l&apos;utilisateur un choix à faire dans les décisions ci-dessous. <br /> <br />
+
+Une fois que vous avez demandé à vos lecteurs à faire un choix, vous devriez leur donner quelques décisions possibles à faire. Cela arrive
+après les tuiles et la page de fin , en dessous de la ligne grise épaisse. Pour ajouter un choix, appuyez sur le bouton " Ajouter un choix "
+qui va ajouter automatiquement un nouveau choix juste en dessous des autres. Pour modifier un choix , appuyez simplement sur ​​elle et vous pouvez changer ce qu&apos;il dit,
+ainsi que ce qui le relie à la page . <br /> <br />
+
+Autres questions: <a href=\"tel:14035058506\"> +1 (403) 505-8506 </a> ( 24 heures Help Line )
+        ]]>
+    </string>
+    <string name="view_stories_help">
+        <![CDATA[
+Bienvenue à choisir votre aventure . <br /> <br />
+        
+Dans cette page de l&apos; application, vous pouvez voir des histoires écrites par vous-même et d&apos;autres conservés
+sur l&apos;Internet et un appareil (à venir) . <br /> <br />
+
+Pour commencer à lire une histoire, appuyez simplement sur ​​l&apos;histoire que vous aimeriez lire et vous serez transporté
+à la première page pour commencer la lecture. <br /> <br />
+
+Pour plus d&apos;options pour une histoire, appuyez longuement sur l&apos;histoire et vous aurez la possibilité de mettre en cache l&apos;histoire
+pour une lecture hors ligne (à venir) et , si vous êtes l&apos;auteur d&apos;édition de l&apos; histoire ou de supprimer (à venir) de l&apos;histoire. <br /> <br />
+
+Pour rechercher des histoires à lire la presse "Recherche" ou de créer une nouvelle histoire de votre propre appuyez sur " Add New" . <br /> <br />
+
+Autres questions: <a href=\"tel:14035058506\"> +1 (403) 505-8506 </a> ( 24 heures Help Line )
+        ]]>
+    </string>
+    <string name="edit_story_help">
+        <![CDATA[
+Bienvenue à choisir votre aventure . <br /> <br />
+        
+Dans cette page de l&apos;application, vous pouvez voir les pages qui composent votre histoire . <br /> <br />
+
+Pour ajouter une nouvelle page, appuyez sur «Ajouter» ou d&apos;éditer une presse d&apos;une page sur elle dans la liste. En appuyant sur ​​une page
+la liste vous sera fourni avec une liste des options importantes pour la page, y compris le renommer , le désignant
+que la première page, et de le supprimer . <br /> <br />
+
+Si vous souhaitez supprimer l&apos;ensemble de votre histoire , il suffit d&apos;appuyer sur le bouton "Supprimer" . <br /> <br />
+
+Autres questions: <a href=\"tel:14035058506\"> +1 (403) 505-8506 </a> ( 24 heures Help Line )
+        ]]>
+    </string>
+    <string name="refresh"> Actualiser </string>
+    <string name="gotoEdit"> Aller / Modifier </string>
+    <string name="pageProperties"> Propriétés de la page </string>
+    <string name="assignFirst"> affecter en tant que Première page </string>
+    <string name="done"> done </string>
+    <string name="textTile"> Tile du texte </string>
+    <string name="photoTile"> Tuile de photo </string>
+    <string name="audioTile"> Tile audio </string>
+    <string name="videoTile"> Tile de la vidéo </string>
+    <string name="noImage"> Pas d\'image </string>
+    <string name="fromFile"> partir du fichier </string>
+    <string name="takePhoto"> prendre de nouvelles photos </string>
+    <string name="editProperties"> Modifier les propriétés </string>
+    <string name="transitionMessages"> transition Messages </string>
+    <string name="setConditionals"> Set conditionnelles </string>
+    <string name="counterMessage"> Définir les messages qui se produisent après un changement dans un compteur </string>
+    <string name="setDecisionConditions"> fixer les conditions dans lesquelles cette décision semble </string>
+    <string name="setTextandPage">page de texte et à côté de Set</string>
+    <string name="randomChoice"> choix aléatoire </string>
+    <string name="enterPageTitle"> Entrez le titre de votre nouvelle page </string>
+    <string name="createNew"> Créer Nouveau </string>
+    <string name="fightingPage"> Fighting Page </string>
+    <string name="enemyHealth"> santé de l\'ennemi sur cette page </string>
+    <string name="enemyName"> Nom de l\'ennemi sur cette page </string>
+    <string name="decisionText"> Texte de la décision </string>
+    <string name="takingDamageMessage"> message pour prendre des dégâts </string>
+    <string name="enemyDamageMessage"> message pour ennemi dommageable </string>
+    <string name="coinMessage"> message pour le gain / la perte de pièces de monnaie </string>
+    <string name="threshold"> Seuil pour l\'activation </string>
+    <string-array name="conditionalTypes">
+    <item> Santé </item>
+    <item> Enemy Santé </item>
+    <item> trésor </item>
+    </string-array>
+    <string-array name="conditionalOps">
+    <item> &gt; </item>
+    <item> &lt; </item>
+    </string-array>
+    <string name="coinChange"> Variation des pièces ( + / -) </string>
+    <string name="playerDamage"> dommages au joueur ( + / -) </string>
+    <string name="enemyHitRate"> Enemy pourcentage de réussite ( 1&#8211;100) </string >
+    <string name="enemyDamage"> dommages à l\'ennemi ( + / -) </string>
+    <string name="playerHitRate"> joueur Pourcentage de réussite ( 1&#8211;100) </string >
+    <string name="save"> Enregistrer </string>
+    <string name="currentHealth"> santé actuel: </string>
+    <string name="currentTreasure"> trésor courant: </string>
+    <string name="enemyHealthColon"> Enemy santé: </string>
+    <string name="gained"> gagné </string>
+    <string name="lost"> perdu </string>
+    <string name="hitpoints">points de vie</string>
+    <string name="you"> Vous </string>
+    <string name="coinsWorth"> pièces d \'e dollars de trésor. </string> 
+    <string name="usePhotoComment"> Utilisez une photographie dans ce commentaire? </string> 
+    <string name="whatToSay"> quoi dire </string>
+    <string name="retakeQuestion"> Êtes-vous satisfait avec cette photo? </string>
+    <string name="retake"> Reprise </string>
+    <string name="uploadCopy"> Upload Copier </string>
+    <string name="useCountersAndCombat"> utiliser les compteurs et Combat? </string> 
+    <string name="enterStoryTitle"> Entrez le titre de votre histoire </string>
+    <string name="startDesignator"> {Départ} </string>
+    <string name="fightDesignator"> {Combat} </string>
+    <string name="endDesignator"> {Endpoint} </string>
+    <string name="cahcedDesignator"> cache: </string>
+    <string name="edit"> Modifier </string>
+    <string name="textView"> TextView </string>
+    <string name="defaultEnding">+ Ajouter un dénouement à cette page</string>
+
+</resources >

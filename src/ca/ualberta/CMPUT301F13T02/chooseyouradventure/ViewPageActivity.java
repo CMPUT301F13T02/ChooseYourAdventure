@@ -58,6 +58,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -528,18 +529,8 @@ public class ViewPageActivity extends Activity {
 		//For each decision in the page, add it to decisionsLayout
 		ArrayList<Decision> decisions = page.getDecisions();
 		for (int i = 0; i < decisions.size(); i++) {
-			if(page.isFightingFrag() == false){
-				addDecision(i, decisions.get(i));
-			}
-			else if(app.getEditing() == true){
-				addDecision(i, decisions.get(i));
-			}
-			else{			
-				boolean outcome = passThreshold(decisions.get(i));
-				if(outcome == true){
-					addDecision(i, decisions.get(i));
-				}
-			}
+			addDecision(i, decisions.get(i));
+			
 			
 		}
 	}
@@ -755,6 +746,19 @@ public class ViewPageActivity extends Activity {
 		view.setLayoutParams(lp);
 		view.setText(decision.getText());
 		decisionsLayout.addView(view, i);
+		if(app.getPage().isFightingFrag() == false){
+			view.setVisibility(View.VISIBLE);
+		}
+		else if(app.getEditing() == true){
+			view.setVisibility(View.VISIBLE);
+		}
+		else{			
+			boolean outcome = passThreshold(decision);
+			if(outcome == false){
+				view.setVisibility(View.GONE);
+			}
+		}
+		
 		
 		if (app.getEditing()) {
 			view.setOnClickListener(new OnClickListener() {
@@ -984,16 +988,15 @@ public class ViewPageActivity extends Activity {
     	final EditText decisionText = (EditText) layout.findViewById(R.id.edit_decision_dialog_decision_edittext);
     	final EditText alertTreasure = (EditText) layout.findViewById(R.id.edit_decision_dialog_coin_edittext);
     	final EditText playerDamage = (EditText) layout.findViewById(R.id.edit_decision_dialog_playerDamage_edittext); 
-    	final EditText playerHitRate = (EditText) layout.findViewById(R.id.edit_decision_dialog_playerHitRate_edittext); 
     	final EditText enemyDamage = (EditText) layout.findViewById(R.id.edit_decision_dialog_enemyDamage_edittext); 
-    	final EditText enemyHitRate = (EditText) layout.findViewById(R.id.edit_decision_dialog_enemyHitRate_edittext); 
-
+    	final SeekBar seekPlayer = (SeekBar) layout.findViewById(R.id.edit_decision_dialog_playerPerc); 
+    	final SeekBar seekEnemy = (SeekBar) layout.findViewById(R.id.edit_decision_dialog_enemyPerc); 
     	decisionText.setText(decision.getText());
     	
     	ArrayList<String> pageStrings = app.getPageStrings(pages);
     	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, R.layout.list_item_base, pageStrings);
 
-    	if(pageStrings.size() > 2){
+    	if(app.getPage().getDecisions().size() > 2){
     		pageStrings.add(getString(R.string.randomChoice));
     	}
 
@@ -1013,9 +1016,9 @@ public class ViewPageActivity extends Activity {
         	}
         	else {
         		
-            	playerHitRate.setText("" + decision.getChoiceModifiers().getEnemyHitPercent());
+            	seekPlayer.setProgress(decision.getChoiceModifiers().getPlayerHitPercent());
             	enemyDamage.setText("" + decision.getChoiceModifiers().getEnemyHpStat());
-            	enemyHitRate.setText("" + decision.getChoiceModifiers().getPlayerHitPercent());
+            	seekEnemy.setProgress(decision.getChoiceModifiers().getEnemyHitPercent());
         	}
     	}
 
@@ -1034,8 +1037,8 @@ public class ViewPageActivity extends Activity {
         			}
 	        		else{
 	        			String ehp = enemyDamage.getText().toString();
-	        			String hitP = playerHitRate.getText().toString();
-	        			String hitE = enemyHitRate.getText().toString();
+	        			String hitP = "" + seekPlayer.getProgress();
+	        			String hitE = "" + seekEnemy.getProgress();
 	        			
 	        			counter.setStats(treasure, hp, ehp, hitE, hitP);
 	        			app.updateDecision(decisionText.getText().toString(), 

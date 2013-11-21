@@ -54,12 +54,12 @@ public final class R {
         public static final int edit_decision_dialog_coin_edittext=0x7f0a000f;
         public static final int edit_decision_dialog_decision_edittext=0x7f0a000c;
         public static final int edit_decision_dialog_enemyDamage_edittext=0x7f0a0013;
-        public static final int edit_decision_dialog_enemyHitRate_edittext=0x7f0a0012;
+        public static final int edit_decision_dialog_enemyPerc=0x7f0a0012;
         public static final int edit_decision_dialog_page_combatoptions=0x7f0a000e;
         public static final int edit_decision_dialog_page_fightoptions=0x7f0a0011;
         public static final int edit_decision_dialog_page_spinner=0x7f0a000d;
         public static final int edit_decision_dialog_playerDamage_edittext=0x7f0a0010;
-        public static final int edit_decision_dialog_playerHitRate_edittext=0x7f0a0014;
+        public static final int edit_decision_dialog_playerPerc=0x7f0a0014;
         public static final int edit_messages_dialog_coin_edittext=0x7f0a0019;
         public static final int edit_messages_dialog_decision_edittext=0x7f0a0015;
         public static final int edit_messages_dialog_giveDamage_edittext=0x7f0a0018;
@@ -117,6 +117,7 @@ public final class R {
         public static final int currentHealth=0x7f060043;
         public static final int currentTreasure=0x7f060044;
         public static final int decisionText=0x7f060038;
+        public static final int defaultEnding=0x7f060058;
         public static final int delete=0x7f060007;
         public static final int done=0x7f060024;
         public static final int edit=0x7f060056;

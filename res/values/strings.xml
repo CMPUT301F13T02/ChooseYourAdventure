@@ -186,9 +186,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     </string-array>
     <string name="coinChange">Change in coins (+/-)</string>
     <string name="playerDamage">Damage to player (+/-)</string>
-    <string name="enemyHitRate">Enemy Hit Percentage (1&#8211;100)</string>
+    <string name="enemyHitRate">Enemy Hit Percentage (0&#8211;100)</string>
     <string name="enemyDamage">Damage to enemy (+/-)</string>
-    <string name="playerHitRate">Player Hit Percentage (1&#8211;100)</string>
+    <string name="playerHitRate">Player Hit Percentage (0&#8211;100)</string>
     <string name="save">Save</string>
     <string name="currentHealth">Current Health: </string>
     <string name="currentTreasure">Current Treasure: </string>
@@ -211,5 +211,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="cahcedDesignator">Cached: </string>
     <string name="edit">Edit</string>
     <string name="textView">TextView</string>
+    <string name="defaultEnding">+ Add an ending to this page</string>
 
 </resources>

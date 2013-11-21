@@ -206,5 +206,6 @@ Autres questions: <a href=\"tel:14035058506\"> +1 (403) 505-8506 </a> ( 24 heure
     <string name="cahcedDesignator"> cache: </string>
     <string name="edit"> Modifier </string>
     <string name="textView"> TextView </string>
+    <string name="defaultEnding">+ Ajouter un dénouement à cette page</string>
 
 </resources >

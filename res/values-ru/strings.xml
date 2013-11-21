@@ -203,5 +203,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="fightDesignator">{бороться} </string>
     <string name="endDesignator">{конечная точка} </string>
     <string name="cahcedDesignator">кэш: </string>
+    <string name="defaultEnding">+ Добавить окончание к этой странице</string>
 
 </resources>

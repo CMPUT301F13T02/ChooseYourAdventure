@@ -111,6 +111,7 @@ public final class R {
         public static final int currentHealth=0x7f050040;
         public static final int currentTreasure=0x7f050041;
         public static final int decisionText=0x7f050035;
+        public static final int defaultEnding=0x7f050055;
         public static final int delete=0x7f050006;
         public static final int done=0x7f050021;
         public static final int edit=0x7f050053;

@@ -36,6 +36,7 @@ import java.util.UUID;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -46,13 +47,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings.Secure;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.DragShadowBuilder;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -87,6 +92,8 @@ public class ViewPageActivity extends Activity {
 	private final int TAKE_PHOTO = 2;
 	private final int GRAB_PHOTO = 3;
 	private final int ADD_PHOTO = 4;
+	private final int FIND_VIDEO = 5;
+	private final int FIND_AUDIO = 6;
 	
 	private final int EDIT_INDEX = 0;
 	private final int SAVE_INDEX = 1;
@@ -328,8 +335,6 @@ public class ViewPageActivity extends Activity {
             	            	switch(item){
 	            	            	case(0):
 	            	            		getPhoto();
-	            	            		
-	            	            		
 	            	            		break;
 	            	            	case(1):
 	            	            		takePhoto();
@@ -342,14 +347,23 @@ public class ViewPageActivity extends Activity {
             		
             		
             	case(2):
+            		chooseMedia(FIND_VIDEO);
             		break;
             	case(3):
+            		chooseMedia(FIND_AUDIO);
             		break;
             	}
                     
                 }});
         builder.show();
     }
+	
+	private void chooseMedia(int media_type) {
+		Intent intent = new Intent(this, BrowseYouTubeActivity.class);
+		intent.putExtra("url", "http://www.youtube.com");
+		
+		startActivityForResult(intent, media_type);
+	}
 	
 	/**
 	 * Updates a page to show any changes that have been made. These
@@ -599,11 +613,10 @@ public class ViewPageActivity extends Activity {
 	public void addTile(int i, Tile tile) {
 		
 		if (tile.getType() == "text") {
-			View view = makeTileView("text");
+			TextView view = (TextView) makeTileView("text");
 			TextTile textTile = (TextTile) tile;
-			TextView textView = (TextView) view;
 			
-			textView.setText(textTile.getText());
+			view.setText((String)textTile.getContent());
 
 			tilesLayout.addView(view, i);
 			
@@ -617,9 +630,6 @@ public class ViewPageActivity extends Activity {
 				view.setOnLongClickListener(new OnLongClickListener() {
 					@Override
 					public boolean onLongClick(View v) {
-						ClipData data = ClipData.newPlainText("", "");
-						DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
-						v.startDrag(data, shadowBuilder, v, 0);
 						return true;
 					}
 				});
@@ -628,20 +638,79 @@ public class ViewPageActivity extends Activity {
 			
 		} else if (tile.getType() == "photo") {
 			
-			View view = makeTileView("photo");
+			ImageView view = (ImageView) makeTileView("photo");
 			PhotoTile photoTile = (PhotoTile) tile;
-			ImageView imageView = (ImageView) view;
-			imageView.setImageBitmap(photoTile.getImage());
+			view.setImageBitmap((Bitmap)photoTile.getContent());
 			
-			tilesLayout.addView(imageView, i);
+			tilesLayout.addView(view, i);
 
+			if (app.getEditing()) {
+				view.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						
+					}
+				});
+				view.setOnLongClickListener(new OnLongClickListener() {
+					@Override
+					public boolean onLongClick(View v) {
+						return true;
+					}
+				});
+
+			}
+			
 		} else if (tile.getType() == "video") {
-			// TODO Implement for part 4
+			Log.d("video tile", "trying to display");
+			WebView view = (WebView) makeTileView("video");
+			VideoTile videoTile = (VideoTile) tile;
+			
+			String video = (String) videoTile.getContent();
+			
+			WebSettings settings = view.getSettings();
+			settings.setJavaScriptEnabled(true);
+
+			view.loadData(video, "text/html", "UTF-8");
+			
+			tilesLayout.addView(view, i);
+			
+			if (app.getEditing()) {
+				view.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						chooseMedia(FIND_VIDEO);
+					}
+				});
+				view.setOnLongClickListener(new OnLongClickListener() {
+					@Override
+					public boolean onLongClick(View v) {
+						return true;
+					}
+				});
+
+			}
+			
 		} else if (tile.getType() == "audio") {
-			// TODO Implement for part 4
+			WebView view = (WebView) makeTileView("audio");
+			AudioTile audioTile = (AudioTile) tile;
+			
+			String audio = (String) audioTile.getContent();
+			
+			WebSettings settings = view.getSettings();
+			settings.setJavaScriptEnabled(true);
+			
+			view.loadData(audio, "text/html", "UTF-8");
+			
+			tilesLayout.addView(view, i);
+			
 		} else {
 			Log.d("no such tile", "no tile of type " + tile.getType());
 		}
+	}
+
+	public static float dipToPixels(Context context, float dipValue) {
+	    DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+	    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, dipValue, metrics);
 	}
 	
 	/**
@@ -658,8 +727,10 @@ public class ViewPageActivity extends Activity {
 		
 		if (type == "text") {
 			view = new TextView(this);
-		} else {
+		} else if (type == "photo") {
 			view = new ImageView(this);
+		} else {
+			view = new WebView(this);
 		}
 		
 		// Set what the tiles look like
@@ -693,7 +764,7 @@ public class ViewPageActivity extends Activity {
             	int whichTile = tilesLayout.indexOfChild(view);
             	switch(item){
             	case(0):
-            		onEditTile(view);
+            		onEditTextTile(view);
             		break;
             	case(1):
             		app.deleteTile(whichTile);
@@ -719,7 +790,7 @@ public class ViewPageActivity extends Activity {
 	 * Displays a dialog for editing a tile.
 	 * @param view
 	 */
-	private void onEditTile(View view) {
+	private void onEditTextTile(View view) {
 		final TextView textView = (TextView) view;
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	final EditText alertEdit = new EditText(this);
@@ -1071,7 +1142,7 @@ public class ViewPageActivity extends Activity {
 		
 		if(comment.getAnnotation() != null){
 			ImageView imageView = new ImageView(this);
-			imageView.setImageBitmap(comment.getAnnotation().getImage());
+			imageView.setImageBitmap((Bitmap)comment.getAnnotation().getContent());
 			imageView.setBackgroundColor(0xFFFFFFFF);
 			layout.addView(imageView);
 		}
@@ -1128,7 +1199,7 @@ public class ViewPageActivity extends Activity {
     	final PhotoTile photoAdd = (PhotoTile) app.getTempSpace();
 		app.setTempSpace(null);
 		if(photoAdd != null){
-			alertImage.setImageBitmap(photoAdd.getImage());
+			alertImage.setImageBitmap((Bitmap)photoAdd.getContent());
 		}
     	layout.addView(alertImage);
     	
@@ -1185,7 +1256,7 @@ public class ViewPageActivity extends Activity {
 				break;
 			case (GRAB_PHOTO):
 				app.setTempSpace(loadImage(data));
-			onEditComment();
+				onEditComment();
 				break;
 			case(TAKE_PHOTO):
 				final Bitmap image = retrievePhoto(data);
@@ -1225,6 +1296,18 @@ public class ViewPageActivity extends Activity {
 					}
 				});
 				successChecker.show();
+				break;
+			case(FIND_VIDEO):
+				String videoUrl = (String) data.getSerializableExtra("returnUrl");
+				VideoTile videoTile = new VideoTile();
+				videoTile.setContent(videoUrl);
+				app.addTile(videoTile);
+				break;
+			case(FIND_AUDIO):
+				String audioUrl = (String) data.getSerializableExtra("returnUrl");
+				AudioTile audioTile = new AudioTile();
+				audioTile.setContent(audioUrl);
+				app.addTile(audioTile);
 				break;
 		}}
 	}

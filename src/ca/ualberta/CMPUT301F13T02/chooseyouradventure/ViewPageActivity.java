@@ -98,6 +98,7 @@ public class ViewPageActivity extends Activity {
 	private LinearLayout commentsLayout;
 	private LinearLayout fightingLayout;
 	
+	private FightingView fightView = new FightingView();
 	private StoryController storyController; 
 	private PageController pageController; 
     private ControllerApp app;
@@ -376,7 +377,7 @@ public class ViewPageActivity extends Activity {
 		setButtonVisibility();
 		
 		if (storyController.getStory().isUsesCombat() == true) {
-			updateCounters();
+			fightView.updateCounters(fightingLayout, app);
 		}
 		
 		if (pageController.haveTilesChanged()) {
@@ -398,85 +399,7 @@ public class ViewPageActivity extends Activity {
 		pageController.finishedUpdating();
 	}
 	
-	private void updateCounters() {
-		fightingLayout.removeAllViews();
-		Story story = storyController.getStory();
-		Page page = pageController.getPage();
-		if(pageController.isOnEntry() == true){
-			
-			if(story.getFirstpage().getId().equals(page.getId())){
-				Counters counter = new Counters();
-				counter.setBasic("0","100");
-				story.setPlayerStats(counter);
-			}
-			story.getPlayerStats().setEnemyHpStat(page.getEnemyHealth());
-		}
-		
-		TextView fightingUpdate = new TextView(app);
-		TextView healthView = new TextView(app);
-		TextView treasureView = new TextView(app);
-		TextView enemyView = new TextView(app);
-		Counters stat = story.getPlayerStats();
-		
-		healthView.setTextColor(Color.BLUE);
-		healthView.setText(getString(R.string.currentHealth) + " " + stat.getPlayerHpStat());
-		fightingLayout.addView(healthView);
-		
-		treasureView.setTextColor(Color.YELLOW);
-		treasureView.setText(getString(R.string.currentTreasure) + " " + stat.getTreasureStat());
-		fightingLayout.addView(treasureView);
-		
-		if(page.isFightingFrag() == true){
-
-			enemyView.setTextColor(Color.RED);
-			enemyView.setText(getString(R.string.enemyHealthColon) + " " + stat.getEnemyHpStat());
-			fightingLayout.addView(enemyView);
-			story.getPlayerStats().setEnemyRange(true);
-		}
-		else {
-			story.getPlayerStats().setEnemyRange(false);
-		}
-		
-		String displayChanges = "\n";
-
-		if(stat.getEnemyHpChange() != 0) {
-			displayChanges += stat.getHitMessage() + "\n";
-			displayChanges += page.getEnemyName();
-
-			if(stat.getEnemyHpChange() <= 0) 
-				displayChanges += " " + getString(R.string.gained) + " ";
-			else 
-				displayChanges += " " + getString(R.string.lost) + " ";
-
-			displayChanges += stat.getEnemyHpChange() + " " + getString(R.string.hitpoints) + "\n";
-		}
-		if(stat.getPlayerHpChange() != 0){
-			displayChanges += stat.getDamageMessage() + "\n";
-			displayChanges += getString(R.string.you);
-
-			if(stat.getPlayerHpChange() <= 0)
-				displayChanges += " " + getString(R.string.gained) + " ";
-			else
-				displayChanges += " " + getString(R.string.lost) + " ";
-
-			displayChanges += stat.getPlayerHpChange() +" " +  getString(R.string.hitpoints) + "\n";
-		}
-		if(stat.getTreasureChange() != 0) {
-			displayChanges += stat.getTreasureMessage() + "\n";
-			displayChanges += getString(R.string.you);
-
-			if(stat.getTreasureChange() <= 0)
-				displayChanges += " " + getString(R.string.lost) + " ";
-			else 
-				displayChanges += " " + getString(R.string.lost) + " ";
-
-			displayChanges += stat.getTreasureChange() + " " +  getString(R.string.coinsWorth);
-		}
-		
-		fightingUpdate.setTextColor(Color.GREEN);
-		fightingUpdate.setText(displayChanges);
-		fightingLayout.addView(fightingUpdate);
-	}
+	
 
 	/**
 	 * Handles removing or showing the proper buttons in both the action bar

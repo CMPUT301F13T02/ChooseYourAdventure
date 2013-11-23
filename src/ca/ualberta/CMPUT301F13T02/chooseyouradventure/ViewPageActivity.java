@@ -880,23 +880,10 @@ public class ViewPageActivity extends Activity {
 	}
 
 	protected void onEditConditionals(View view) {
-		
 		final int whichDecision = decisionsLayout.indexOfChild(view);
-		final Decision decision = app.getPage().getDecisions().get(whichDecision);
-		
-		UUID toPageId = decision.getPageID();
-		ArrayList<Page> pages = app.getStory().getPages();
-		int toPagePosition = -1;
-		for (int i = 0; i < pages.size(); i++) {
-
-			UUID comparePage = pages.get(i).getId();
-			System.out.println("toPageID: " + toPageId + "\ncomparePage: " + comparePage + "\nPage: " + app.getPage() + "\nDecision: " + decision.getPageID() + decision.getText());
-			if (toPageId.equals(comparePage)) {
-				toPagePosition = i;
-				break;
-			}
-		}
-		
+		final Decision decision = app.findDecisionByIndex(whichDecision);
+		ArrayList<Page> pages = app.getPages();
+		int toPagePosition = app.findArrayPosition(decision, pages);
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle(getString(R.string.setDecisionConditions));
     	

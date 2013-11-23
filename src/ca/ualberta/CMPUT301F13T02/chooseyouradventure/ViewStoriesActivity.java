@@ -56,7 +56,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.SearchView;
-
 import android.widget.TextView;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
@@ -323,7 +322,6 @@ public class ViewStoriesActivity extends Activity {
 
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle(getString(R.string.createNew));
-    	
     	final LinearLayout layout = new LinearLayout(this);
     	layout.setOrientation(LinearLayout.VERTICAL);
     	
@@ -332,12 +330,13 @@ public class ViewStoriesActivity extends Activity {
     	layout.addView(alertEdit);
     	
     	final TextView alertText = new TextView(this);
-    	alertText.setText(getString(R.string.useCountersAndCombat));
+    	alertText.setText(this.getString(R.string.useCountersAndCombat));
     	layout.addView(alertText);
     	
     	final CheckBox check = new CheckBox(this);
     	layout.addView(check);
-        
+    	
+    	
     	builder.setView(layout);
     	builder.setMessage(getString(R.string.enterStoryTitle))
     	.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
@@ -389,4 +388,6 @@ public class ViewStoriesActivity extends Activity {
     public void setHandler(Handler handler) {
     	eshandler = handler;
     }
+    
+
 }

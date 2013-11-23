@@ -318,7 +318,7 @@ public class ControllerApp extends Application {
 	 * title.
 	 * @param pageTitle
 	 */
-	protected void updateTitle(String pageTitle, boolean fight, String health, String name, Page page){
+	protected void updateFightTitle(String pageTitle, boolean fight, String health, String name, Page page){
 		page.setTitle(pageTitle);
 		page.setFightingFrag(fight);
 		page.setEnemyName(name);
@@ -641,5 +641,29 @@ public class ControllerApp extends Application {
 		this.tempSpace = loadObject;
 		
 	}
+	
+	public int findArrayPosition(Decision decision, ArrayList<Page> pages){		
+		UUID toPageId = decision.getPageID();
+		int toPagePosition = -1;
+		for (int i = 0; i < pages.size(); i++) {
+
+			UUID comparePage = pages.get(i).getId();
+			System.out.println("toPageID: " + toPageId + "\ncomparePage: " + comparePage + "\nPage: " + getPage() + "\nDecision: " + decision.getPageID() + decision.getText());
+			if (toPageId.equals(comparePage)) {
+				toPagePosition = i;
+				break;
+			}
+		}
+		return toPagePosition;
+	}
+	
+	public Decision findDecisionByIndex(int whichDecision){
+		return getPage().getDecisions().get(whichDecision);
+	}
+	
+	public ArrayList<Page> getPages(){
+		return getStory().getPages();
+	}
+	
 	
 }

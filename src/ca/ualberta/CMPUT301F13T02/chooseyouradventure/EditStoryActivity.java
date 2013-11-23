@@ -268,7 +268,7 @@ public class EditStoryActivity extends Activity {
             			public void onClick(DialogInterface dialog, int id) {
             				String pageTitle = titleEdit.getText().toString();
             				if(app.getStory().isUsesCombat() == true){
-            					app.updateTitle(pageTitle, check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString(), currentPage); 
+            					app.updateFightTitle(pageTitle, check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString(), currentPage); 
             				}
             				else{
             					app.updateTitle(pageTitle, currentPage);    

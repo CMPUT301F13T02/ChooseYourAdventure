@@ -30,6 +30,8 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
+import android.util.Log;
+
 /**
  * An audio Tile for use in stories. AudioTile is a concrete implementation of the abstract
  * class Tile.
@@ -44,7 +46,7 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 public class AudioTile extends Tile{
 
-	private Object audio;
+	private String audioURL;
 	private final String type = "audio";
 	
 	/**
@@ -60,20 +62,47 @@ public class AudioTile extends Tile{
 	/**
 	 * Sets the content of this Tile to content
 	 * 
+	 * HTML for showing only the control bar of youtube video was taken from
+	 * http://rcdewebmasters.wordpress.com/2012/04/19/embed-audio-only-youtube-video/
+	 * 
 	 * @param content The content to set for this Tile
 	 */
 	@Override
 	public void setContent(Object content) {
-		audio = content;
+		String beginningHtml = "<html><body><center><div style=\"position:relative;width:267px;height:0px;overflow:hidden;\">" +
+    " <iframe width=\"300\" height=\"300\"" + 
+      " src=\"";
+		String endingHtml = "?rel=0&autohide=0\" frameborder=\"0\">" +
+    " </iframe>" +
+" </div>";
+		
+		String url = (String) content;
+		
+		if(content == null || !url.contains("youtube.com/watch?v=")) {
+			audioURL = "<html><body><center><p>Sorry, we couldn't load that video</p></center></body></html>";
+			return;
+		} 
+		
+		Log.d("url to parse", url);
+		String urlStart = url.substring(0, 7);
+		String urlMiddle = url.substring(8, 21);
+		String urlEnd = url.substring(29);
+		
+		String embed = "embed/";
+		String www = "www";
+		
+		audioURL = beginningHtml + urlStart + www + urlMiddle + embed + urlEnd + endingHtml;
+		Log.d("video url", audioURL);
 	}
-
+	
 	/**
 	 * Returns the audio of this Tile
 	 * 
 	 * @return The audio of this Tile
 	 */
-	public Object getAudio() {
-		return audio;
+	@Override
+	public Object getContent() {
+		return audioURL;
 	}
 
 	/**

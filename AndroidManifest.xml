@@ -70,6 +70,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             android:label="@string/title_edit_story_activity" >
            
         </activity>
+        <activity
+            android:name="ca.ualberta.CMPUT301F13T02.chooseyouradventure.BrowseYouTubeActivity"
+            android:label="@string/title_browse_youtube" >
+            
+        </activity>
         <uses-library android:name="android.test.runner" />
     </application>
     <instrumentation android:name="android.test.InstrumentationTestRunner"

@@ -30,6 +30,8 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
+import android.util.Log;
+
 /**
  * A video Tile for use in stories. VideoTile is a concrete implementation of the abstract
  * class Tile.
@@ -44,7 +46,7 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 public class VideoTile extends Tile{
 
-	private Object video;
+	private String videoURL;
 	private final String type = "video";
 	
 	public String getType() {
@@ -53,11 +55,30 @@ public class VideoTile extends Tile{
 
 	@Override
 	public void setContent(Object content) {
-		video = content;
+		String beginningHtml = "<html><body><center><iframe src=\"";
+		String endingHtml = "?rel=0\" frameborder=\"0\"/></center></body></html>";
+		
+		String url = (String) content;
+		
+		if(content == null || !url.contains("youtube.com/watch?v=")) {
+			videoURL = "<html><body><center><p>Sorry, we couldn't load that video</p></center></body></html>";
+			return;
+		}
+		
+		Log.d("url to parse", url);
+		String urlStart = url.substring(0, 7);
+		String urlMiddle = url.substring(8, 21);
+		String urlEnd = url.substring(29);
+		
+		String embed = "embed/";
+		String www = "www";
+		
+		videoURL = beginningHtml + urlStart + www + urlMiddle + embed + urlEnd + endingHtml;
+		Log.d("video url", videoURL);
 	}
 
-	public Object getVideo() {
-		return video;
+	public Object getContent() {
+		return videoURL;
 	}
 
 	@Override

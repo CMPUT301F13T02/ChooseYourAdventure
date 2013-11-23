@@ -36,6 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="title_view_page_activity">Viewing Story</string>
     <string name="title_view_stories_activity">Choose a Story</string>
     <string name="title_edit_story_activity">Story Tree</string>
+    <string name="title_browse_youtube">Find Your Video</string>
     <string name="search">Search</string>
     <string name="delete">Delete</string>
     <string name="add">Add New</string>
@@ -46,6 +47,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="edit">Enter Edit Mode</string>
     <string name="cache">Cache</string>
     <string name="upload">Upload</string>
+    <string name="select">Select</string>
     <string name="cancel">Cancel</string>
     <string name="hello_world">Hello world!</string>
     <string name="search_stories">Search</string>

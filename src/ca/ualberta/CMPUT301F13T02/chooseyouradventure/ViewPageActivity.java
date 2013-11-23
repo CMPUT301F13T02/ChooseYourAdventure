@@ -98,7 +98,7 @@ public class ViewPageActivity extends Activity {
 	private LinearLayout commentsLayout;
 	private LinearLayout fightingLayout;
 	
-	private FightingView fightView = new FightingView();
+	private ViewTemplates viewTemplate = new ViewTemplates();
 	private StoryController storyController; 
 	private PageController pageController; 
     private ControllerApp app;
@@ -377,7 +377,7 @@ public class ViewPageActivity extends Activity {
 		setButtonVisibility();
 		
 		if (storyController.getStory().isUsesCombat() == true) {
-			fightView.updateCounters(fightingLayout, app);
+			viewTemplate.updateFightView(fightingLayout, app);
 		}
 		
 		if (pageController.haveTilesChanged()) {
@@ -435,7 +435,7 @@ public class ViewPageActivity extends Activity {
 	 * the current state of the tiles.
 	 * @param page
 	 */
-	private void updateTiles(Page page) {
+	private void updateTiles(Page page, LinearLayout tilesLayout) {
 		tilesLayout.removeAllViews();
 		
 		//For each tile in the page, add the tile to tilesLayout

@@ -36,6 +36,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         android:showAsAction="never"
         android:title="@string/action_settings"/>
     
+    <item
+        android:id="@+id/search"
+        android:showAsAction="ifRoom"
+        android:title="@string/search"/>
+        
+    
     
 
 </menu>

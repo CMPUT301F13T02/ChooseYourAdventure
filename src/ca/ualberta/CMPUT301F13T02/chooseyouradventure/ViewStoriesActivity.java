@@ -32,6 +32,7 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -41,8 +42,10 @@ import android.app.SearchableInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -83,7 +86,7 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 public class ViewStoriesActivity extends Activity {
 	private ListView mainPage;
 	private Button createNew;
-	private Button searchButton;
+	//private Button searchButton;
 	private Button randomStoryButton;
 	private Button refreshButton;
 	ArrayList<String> storyText = new ArrayList<String>();
@@ -101,7 +104,7 @@ public class ViewStoriesActivity extends Activity {
         setContentView(R.layout.view_stories_activity);
         mainPage = (ListView) findViewById(R.id.mainView);
         createNew = (Button) findViewById(R.id.createButton);
-        searchButton = (Button) findViewById(R.id.searchButton);
+        //searchButton = (Button) findViewById(R.id.searchButton);
         randomStoryButton = (Button) findViewById(R.id.randomButton);
         refreshButton = (Button) findViewById(R.id.button1);
         createNew.setOnClickListener(new OnClickListener() {
@@ -116,14 +119,14 @@ public class ViewStoriesActivity extends Activity {
             }
         });
         
-        searchButton.setOnClickListener(new OnClickListener() {
+        //searchButton.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				onSearchRequested();
-			}
+			//@Override
+			//public void onClick(View v) {
+				//onSearchRequested();
+			//}
         	
-        });
+        //});
         
         randomStoryButton.setOnClickListener(new OnClickListener() {
 
@@ -172,7 +175,15 @@ public class ViewStoriesActivity extends Activity {
 		    }
 		});
 		
-        
+     try {
+		handleIntent(getIntent());
+	} catch (UnsupportedEncodingException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (HandlerException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}   
     }
     
     protected void onRandomStory() {
@@ -189,12 +200,48 @@ public class ViewStoriesActivity extends Activity {
 	@Override
 	public void onResume() {
         super.onResume();
-        refresh();
+        //refresh();
     }
+	
+	protected void onNewIntent(Intent intent) {
+		Log.d("onNewIntent:", "method called");
+		setIntent(intent);
+		try {
+			handleIntent(intent);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (HandlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
         
 
 
-    /**
+    private void handleIntent(Intent intent) throws UnsupportedEncodingException, HandlerException {
+    	if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			Log.d("SearchKey:", query);
+			performSearch(query);
+    	}
+		
+	}
+
+	private void performSearch(String query) throws UnsupportedEncodingException, HandlerException {
+		storyList = eshandler.search(query);
+		for (Story s: storyList) {
+			System.out.println(s.getTitle());
+		}
+		System.out.println("************");
+		storyText = app.updateView(storyList, storyText);
+		for (String s: storyText) {
+			System.out.println(s);
+		}
+		adapter.notifyDataSetChanged();
+	}
+
+	/**
      * Inflate the options menu; this adds items to the action bar if it is present 
      * 
      *  @param menu The menu to inflate
@@ -226,6 +273,8 @@ public class ViewStoriesActivity extends Activity {
 
 			AlertDialog dialog = HelpDialogFactory.create(R.string.view_stories_help, this);
 			dialog.show();
+		case R.id.search:
+			onSearchRequested();
 	        
 			break;
 		}

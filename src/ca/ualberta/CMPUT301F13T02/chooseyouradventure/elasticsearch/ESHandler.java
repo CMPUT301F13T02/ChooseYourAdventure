@@ -246,7 +246,7 @@ public class ESHandler implements Handler{
 		int numHits = 1000;
 		
 		ESHttpGet get = new ESHttpGet(getStoryPath() + "_search" + "?size=" + String.valueOf(numHits));
-		String query = "{\"query\" : {\"query_string\" : {\"default_field\" : \"title\",\"query\" : \"" + searchKey + "*" + "\"}}}";
+		String query = "{\"query\" : {\"query_string\" : {\"default_field\" : \"title\",\"query\" : \"" + searchKey + "\"}}}";
 		StringEntity stringentity = new StringEntity(query);
 		
 		get.setHeader("Accept", "application/json");
@@ -290,7 +290,7 @@ public class ESHandler implements Handler{
 		numStories = esCount.getCount();
 		System.out.println(String.valueOf(numStories));
 		
-		int location = 0 + (int)(Math.random()*(numStories+1));
+		int location = 0 + (int)(Math.random()*(numStories));
 		get = new ESHttpGet(getStoryPath() + "_search" + "?from=" + String.valueOf(location) + "&size=1");
 		
 		response=null;

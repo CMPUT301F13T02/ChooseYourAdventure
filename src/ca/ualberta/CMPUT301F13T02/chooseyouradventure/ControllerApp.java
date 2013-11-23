@@ -51,22 +51,15 @@ public class ControllerApp extends Application {
 	
 	private boolean isEditing = false;
 	
-	// These variables shouldn't be saved.
-	private ViewPageActivity pageActivity;
-	private boolean tilesChanged;
-	private boolean decisionsChanged;
-	private boolean commentsChanged;
-	private boolean endingChanged;
+	
+	
 	private Object tempSpace;
 	
-	private boolean onEntry;
 	
-	private Story currentStory;
-	private Page currentPage;
 	private ArrayList<Story> stories;
 	private static ControllerApp instance = new ControllerApp();
-	
-	
+	private StoryController storyController = new StoryController();
+	private PageController pageController = new PageController();
 	
 	@Override
 	public void onCreate() {
@@ -89,54 +82,7 @@ public class ControllerApp extends Application {
 		return instance;
 	}
 	
-	/**
-	 * This sets the current story
-	 * @param A Story
-	 */
-	public void setStory(Story story) {
-		this.currentStory = story;
-	}
 
-	/**
-	 * This gets the current Story
-	 * @return The current Story
-	 */
-	public Story getStory() {
-		return currentStory;
-	}
-	
-	/**
-	 * This sets the current Page
-	 * @param A Page
-	 */
-	public void setPage(Page page) {
-		this.currentPage = page;
-		
-		tilesChanged = true;
-		decisionsChanged = true;
-		commentsChanged = true;
-		endingChanged = true;
-	}
-
-	/**
-	 * Similar to the above function, this method creates a new page object
-	 * @param pageTitle
-	 * @return
-	 */
-	public Page initializeNewPage(String pageTitle){
-		final Page newPage = new Page();
-		newPage.setTitle(pageTitle);
-		return newPage;
-	}
-
-
-	/**
-	 * This gets the current page
-	 * @return The current Page
-	 */
-	public Page getPage() {
-		return currentPage;
-	}
 	
 	/**
 	 * Sets the list of stories.
@@ -146,58 +92,6 @@ public class ControllerApp extends Application {
 		this.stories = stories;
 	}
 	
-	/**
-	 * This function is a generalized class for creating a new story and placing it on the server
-	 * @param storyTitle
-	 * @throws HandlerException
-	 */
-	public void initializeNewStory(String storyTitle) throws HandlerException{
-	    	
-	    	final Story newStory = new Story(); 	
-	    	newStory.setTitle(storyTitle);	    	
-	    	Page newPage = initializeNewPage("First Page");
-	    	newStory.addPage(newPage);
-	    	newStory.setFirstpage(newPage.getId());
-	    	newStory.setAuthor(Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID));
-	    	newStory.setHandler(new ESHandler());
-
-		    try
-			{			    	
-		    	newStory.getHandler().addStory(newStory);
-				
-	
-			} catch (Exception e)
-			{
-				e.printStackTrace();
-			}	
-		    jump(EditStoryActivity.class,newStory, newPage);
-	    }
-	
-	//This should be refactored.
-	public void initializeNewStory(String storyTitle, Counters playerStats) throws HandlerException{
-    	
-    	final Story newStory = new Story(); 
-    	newStory.setUsesCombat(true);
-    	newStory.setPlayerStats(playerStats);
-    	newStory.setTitle(storyTitle);	    	
-    	Page newPage = initializeNewPage("First Page");
-    	newStory.addPage(newPage);
-    	newStory.setFirstpage(newPage.getId());
-    	newStory.setAuthor(Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID));
-    	newStory.setHandler(new ESHandler());
-	    try
-		{			    	
-	    	newStory.getHandler().addStory(newStory);
-			
-
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}	
-	    jump(EditStoryActivity.class,newStory, newPage);
-    }
-
-
 	/**
 	 * Returns the list of all stories.
 	 * @return the list of all stories.
@@ -223,20 +117,7 @@ public class ControllerApp extends Application {
 	}
 
 
-	/**
-	 * Sets the view associated with the currentPage to activity.
-	 * @param activity
-	 */
-	public void setActivity(ViewPageActivity activity) {
-		pageActivity = activity;
-	}
-
-	/**
-	 * Removes the view associated with this page.
-	 */
-	public void deleteActivity() {
-		pageActivity = null;
-	}
+	
 
 	/**
 	 * Returns a list of strings for each page to be displayed in the Spinner
@@ -272,7 +153,7 @@ public class ControllerApp extends Application {
 				if(itemList.get(i).getClass().equals(Page.class))
 				{
 					
-					if(itemList.get(i).equals(currentStory.getFirstpage())){
+					if(itemList.get(i).equals(storyController.grabFirstPage())){
 						outList = getString(R.string.startDesignator);
 					}
 
@@ -292,7 +173,7 @@ public class ControllerApp extends Application {
 					
 					//If the story has been saved locally, note it
 					if(((Story) itemList.get(i)).getHandler() instanceof DBHandler){
-						outList = getString(R.string.cahcedDesignator);
+						outList = getString(R.string.cachedDesignator);
 					}
 					outList = outList + ((Story) itemList.get(i)).getTitle();
 				}
@@ -303,61 +184,9 @@ public class ControllerApp extends Application {
 		return infoText;
 	}
 
-	/**
-	 * Updates a Pages title and pushes to the handler
-	 * @param pageTitle
-	 * @param currentPage
-	 */
-	protected void updateTitle(String pageTitle, Page currentPage){
-		currentPage.setTitle(pageTitle);		
-		currentStory.updateStory();
-	}
 
-	/**
-	 * Similar to the above method, but it creates a new page object with the 
-	 * title.
-	 * @param pageTitle
-	 */
-	protected void updateFightTitle(String pageTitle, boolean fight, String health, String name, Page page){
-		page.setTitle(pageTitle);
-		page.setFightingFrag(fight);
-		page.setEnemyName(name);
-		try{
-			page.setEnemyHealth(Integer.parseInt(health));
-		} catch(Exception e){}
-		
-		currentStory.updateStory();
-	}
-	
-	protected void newTitle(String pageTitle, boolean fight, String health, String name){
-		Page newPage = initializeNewPage(pageTitle);
-		newPage.setFightingFrag(fight);
-		newPage.setEnemyName(name);
-		try{
-			newPage.setEnemyHealth(Integer.parseInt(health));
-		} catch(Exception e){}
-		currentStory.addPage(newPage);
-		currentStory.updateStory();
-	}
 
-	/**
-	 * Updates the first page of a story and pushes to handler
-	 * @param currentPage
-	 */
-	protected void updateFP(Page currentPage){
-		UUID newID = currentPage.getId();
-		currentStory.setFirstpage(newID);
-		currentStory.updateStory();
-	}
 
-	/**
-	 * Deletes a page.
-	 * @param currentPage
-	 */
-	protected void removePage(Page currentPage){
-		currentStory.deletePage(currentPage);
-		currentStory.updateStory();
-	}
 
 	/**
 	 * First sets the currentStory and currentPage to story and page 
@@ -367,97 +196,14 @@ public class ControllerApp extends Application {
 	 * @param page
 	 */
 	public <T> void jump(Class<T> classItem, Story story, Page page) {	
-		setStory(story);
-		setPage(page);
-		setOnEntry(true);
+		storyController.setStory(story);
+		pageController.setPage(page);
+		pageController.setOnEntry(true);
 		Intent intent = new Intent(this, classItem);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
 	}
 
-	/**
-	 * Sets the currentPage to the page pointed to by the decision selected
-	 * and then the page is refreshed.
-	 * @param whichDecision
-	 */
-	public void followDecision(int whichDecision) {
-	    Decision decision = currentPage.getDecisions().get(whichDecision);
-		
-		UUID toPageId = decision.getPageID();
-		ArrayList<Page> pages = currentStory.getPages();
-		Page toPage = currentPage;
-		while(toPageId == null){
-			Random rn = new Random();
-			decision = currentPage.getDecisions().get(rn.nextInt(currentPage.getDecisions().size()));
-			toPageId = decision.getPageID();
-		}
-		for (int i = 0; i < pages.size(); i++) {
-			if (toPageId.equals(pages.get(i).getId())) {
-				toPage = pages.get(i);
-				break;
-			}
-		}
-		
-		
-		setOnEntry(true);
-		if(currentPage.getId().equals(toPageId) == true){
-			setOnEntry(false);
-		}
-		setPage(toPage);
-		
-		reloadPage();
-	}
-
-	/**
-	 * Sets all the changed variables to true and then tells ViewPageActivity
-	 * to update. Basically it tells ViewPageActivity to refresh the whole
-	 * view.
-	 */
-	public void reloadPage() {
-		tilesChanged = true;
-		decisionsChanged = true;
-		commentsChanged = true;
-		endingChanged = true;
-		updateActivity();
-	}
-
-	/**
-	 * Adds a tile to the currentPage.
-	 * @param tile
-	 */
-	public void addTile(Tile tile) {
-		currentPage.addTile(tile);
-		setTilesChanged();
-	}
-	
-	/**
-	 * Updates the tile at position whichTile to show the given string.
-	 * @param text
-	 * @param whichTile
-	 */
-	public void updateTile(String text, int whichTile) {
-		currentPage.updateTile(text, whichTile);
-		setTilesChanged();
-	}
-
-	/**
-	 * Deletes a tile from the page.
-	 * @param whichTile
-	 */
-	public void deleteTile(int whichTile) {
-		currentPage.removeTile(whichTile);
-		setTilesChanged();
-	}
-
-	/**
-	 * Adds a decision to the currentPage.
-	 * @param decision
-	 */
-	public void addDecision() {
-		Decision decision = new Decision(currentPage);
-		currentPage.addDecision(decision);
-		setDecisionsChanged();
-	}
 
 	/**
 	 * Updates the decision at position whichDecision to have the given text
@@ -468,31 +214,24 @@ public class ControllerApp extends Application {
 	 * @param whichDecision
 	 */
 	public void updateDecision(String text, int whichPage, int whichDecision) {
-		ArrayList<Page> pages = currentStory.getPages();
-		currentPage.updateDecision(text, pages.get(whichPage), whichDecision);
-		setDecisionsChanged();
+		ArrayList<Page> pages = storyController.grabPages();
+		pageController.getPage().updateDecision(text, pages.get(whichPage), whichDecision);
+		pageController.setDecisionsChanged();
 	}
 	
-	public void updateDecision(String text, int whichPage, int whichDecision, Counters counter) {
-		ArrayList<Page> pages = currentStory.getPages();
+	public void updateDecisionFight(String text, int whichPage, int whichDecision, Counters counter) {
+		ArrayList<Page> pages = storyController.grabPages();
 		if(whichPage == pages.size()){
-			currentPage.updateDecision(text, new Page(null), whichDecision, counter);
+			pageController.getPage().updateDecisionFight(text, new Page(null), whichDecision, counter);
 		}
 		else{
-			currentPage.updateDecision(text, pages.get(whichPage), whichDecision, counter);
+			pageController.getPage().updateDecisionFight(text, pages.get(whichPage), whichDecision, counter);
 		}
-		setDecisionsChanged();
+		pageController.setDecisionsChanged();
 	}
 	
 
-	/**
-	 * Deletes the decision at position whichDecision.
-	 * @param whichDecision
-	 */
-	public void deleteDecision(int whichDecision) {
-		currentPage.deleteDecision(whichDecision);
-		setDecisionsChanged();
-	}
+	
 
 	/**
 	 * This adds a comment to the current page
@@ -505,11 +244,11 @@ public class ControllerApp extends Application {
 		Comment comment = new Comment(text, poster, photo);
 		
 		
-		currentPage.addComment(comment);
-		setCommentsChanged();
+		pageController.getPage().addComment(comment);
+		pageController.setCommentsChanged();
 		try
 		{
-			currentStory.getHandler().addComment(getStory(), getPage(), comment);
+			storyController.getStory().getHandler().addComment(storyController.getStory(), pageController.getPage(), comment);
 		} catch (HandlerException e)
 		{
 			e.printStackTrace();
@@ -517,120 +256,13 @@ public class ControllerApp extends Application {
 		
 	}
 
-	/**
-	 * Sets the page ending the given string.
-	 * @param text
-	 */
-	public void setEnding(String text) {
-		currentPage.setPageEnding(text);
-		setEndingChanged();
-	}
+	
 
-	/**
-	 * Tells the current story to save itself.
-	 */
-	public void saveStory() {
-		currentStory.updateStory();
-	}
 	
-	/**
-	 * Sets the tilesChanged mark to true so that the ViewPageActivity will 
-	 * know that the tiles need to be updated, and then tells the 
-	 * ViewPageActivity to update.
-	 */
-	public void setTilesChanged() {
-		tilesChanged = true;
-		updateActivity();
-	}
 	
-	/**
-	 * Get whether the tiles list has changed since the last update. 
-	 * @return Returns whether tiles have changed.
-	 */
-	public boolean haveTilesChanged() {
-		return tilesChanged;
-	}
 	
-	/**
-	 * Sets decisionsChanged to true so that the ViewPageActivity will know
-	 * that the decisions need to be updated, and then tells the 
-	 * ViewPageActivity to update.
-	 */
-	public void setDecisionsChanged() {
-		decisionsChanged = true;
-		updateActivity();
-	}
-	
-	/**
-	 * Get whether the decisions list has changed since the last update/
-	 * @return Returns whether the decisions have changed.
-	 */
-	public boolean haveDecisionsChanged() {
-		return decisionsChanged;
-	}
-	
-	/**
-	 * Sets commentsChanged to true so the ViewPageActivity will know to
-	 * update the comments, and then tells ViewPageActivity to update.
-	 */
-	public void setCommentsChanged() {
-		commentsChanged = true;
-		updateActivity();
-	}
-	
-	/**
-	 * Get whether the comments have changed since the last update.
-	 * @return Whether the comments have changed.
-	 */
-	public boolean haveCommentsChanged() {
-		return commentsChanged;
-	}
-	
-	/**
-	 * Sets endingChanged to true so the ViewPageActivity will know to 
-	 * update the ending, and then tells ViewPageActivity to update.
-	 */
-	public void setEndingChanged() {
-		endingChanged = true;
-		updateActivity();
-	}
-	
-	/**
-	 * Get whether the ending has changed since the last update.
-	 * @return Whether the ending has changed.
-	 */
-	public boolean hasEndingChanged() {
-		return endingChanged;
-	}
-	
-	/**
-	 * Lets the controller know that the view has finished updating by setting
-	 * the *Changed variables back to false.
-	 */
-	public void finishedUpdating() {
-		tilesChanged = false;
-		decisionsChanged = false;
-		commentsChanged = false;
-		endingChanged = false;
-	}
 
-	/**
-	 * Calls the update method of the current ViewPageActivity associated with
-	 * this page.
-	 */
-	private void updateActivity() {
-		if (pageActivity != null) {
-			pageActivity.update(currentPage);
-		}
-	}
-
-	public boolean isOnEntry() {
-		return onEntry;
-	}
-
-	public void setOnEntry(boolean onEntry) {
-		this.onEntry = onEntry;
-	}
+	
 
 	public Object getTempSpace() {
 		return tempSpace;
@@ -642,28 +274,80 @@ public class ControllerApp extends Application {
 		
 	}
 	
-	public int findArrayPosition(Decision decision, ArrayList<Page> pages){		
+	/**
+	 * Sets the currentPage to the page pointed to by the decision selected
+	 * and then the page is refreshed.
+	 * @param whichDecision
+	 */
+	public void followDecision(int whichDecision) {
+	    Decision decision = pageController.findDecisionByIndex(whichDecision);
+		
 		UUID toPageId = decision.getPageID();
-		int toPagePosition = -1;
+		ArrayList<Page> pages = storyController.grabPages();
+		Page currentPage = pageController.getPage();
+		Page toPage = currentPage;
+		while(toPageId == null){
+			Random rn = new Random();
+			decision = currentPage.getDecisions().get(rn.nextInt(currentPage.getDecisions().size()));
+			toPageId = decision.getPageID();
+		}
 		for (int i = 0; i < pages.size(); i++) {
-
-			UUID comparePage = pages.get(i).getId();
-			System.out.println("toPageID: " + toPageId + "\ncomparePage: " + comparePage + "\nPage: " + getPage() + "\nDecision: " + decision.getPageID() + decision.getText());
-			if (toPageId.equals(comparePage)) {
-				toPagePosition = i;
+			if (toPageId.equals(pages.get(i).getId())) {
+				toPage = pages.get(i);
 				break;
 			}
 		}
-		return toPagePosition;
+		pageController.calculateEntry(toPage, toPageId);
+		
+		
 	}
 	
-	public Decision findDecisionByIndex(int whichDecision){
-		return getPage().getDecisions().get(whichDecision);
-	}
+	/**
+	 * This function is a generalized class for creating a new story and placing it on the server
+	 * @param storyTitle
+	 * @throws HandlerException
+	 */
 	
-	public ArrayList<Page> getPages(){
-		return getStory().getPages();
+	public void initializeNewStory(String storyTitle, Counters playerStats, boolean state) throws HandlerException{
+    	
+    	final Story newStory = new Story(); 
+    	newStory.setUsesCombat(state);
+    	newStory.setPlayerStats(playerStats);
+    	newStory.setTitle(storyTitle);	    	
+    	Page newPage = storyController.initializeNewPage("First Page");
+    	newStory.addPage(newPage);
+    	newStory.setFirstpage(newPage.getId());
+    	newStory.setAuthor(Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID));
+    	newStory.setHandler(new ESHandler());
+	    try
+		{			    	
+	    	newStory.getHandler().addStory(newStory);
+			
+
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}	
+	    jump(EditStoryActivity.class,newStory, newPage);
+    }
+
+	/**
+	 * @return the storyController
+	 */
+	public StoryController getStoryController() {
+		return storyController;
 	}
+
+
+	/**
+	 * @return the pageController
+	 */
+	public PageController getPageController() {
+		return pageController;
+	}
+
+	
+	
 	
 	
 }

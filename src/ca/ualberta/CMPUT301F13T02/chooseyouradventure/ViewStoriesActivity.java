@@ -343,13 +343,11 @@ public class ViewStoriesActivity extends Activity {
             public void onClick(DialogInterface dialog, int id) {
             	
 					try {
-						if(check.isChecked() == true){
-							Counters baseCount = new Counters();
-							baseCount.setBasic("0", "100");
-							app.initializeNewStory(alertEdit.getText().toString(), baseCount);
-						}
-						else{
-						app.initializeNewStory(alertEdit.getText().toString());}
+						
+						Counters baseCount = new Counters();
+						baseCount.setBasic("0", "100");
+						app.initializeNewStory(alertEdit.getText().toString(), baseCount, check.isChecked());
+						
 						
 						
 						refresh();

@@ -98,7 +98,8 @@ public class ViewPageActivity extends Activity {
 	private LinearLayout commentsLayout;
 	private LinearLayout fightingLayout;
 	
-	
+	private StoryController storyController; 
+	private PageController pageController; 
     private ControllerApp app;
     private Menu menu;
     
@@ -116,18 +117,20 @@ public class ViewPageActivity extends Activity {
         super.onResume();
         
         app = (ControllerApp) this.getApplication();
+        storyController = app.getStoryController();
+        pageController = app.getPageController();
         
         fightingLayout = (LinearLayout) findViewById(R.id.fightingLayout);
         tilesLayout = (LinearLayout) findViewById(R.id.tilesLayout);
         decisionsLayout = (LinearLayout) findViewById(R.id.decisionsLayout);
         commentsLayout = (LinearLayout) findViewById(R.id.commentsLayout);
         
-        app.setActivity(this);
+        pageController.setActivity(this);
         
         
 		
 		
-        update(app.getPage());
+        update(pageController.getPage());
         
         /* Set up onClick listeners for buttons on screen, even if some aren't
          * shown at the time.
@@ -146,7 +149,7 @@ public class ViewPageActivity extends Activity {
 		addDecisionButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				app.addDecision();
+				pageController.addDecision();
 			}
 		});
 		
@@ -171,7 +174,7 @@ public class ViewPageActivity extends Activity {
 	@Override
 	public void onPause() {
 		super.onPause();
-		app.deleteActivity();
+		pageController.deleteActivity();
 	}
 	
 	/**
@@ -239,10 +242,10 @@ public class ViewPageActivity extends Activity {
 		case EDIT_INDEX:
 
 			final String myId = Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID);
-			final String storyID = app.getStory().getAuthor();
+			final String storyID = storyController.getStory().getAuthor();
 			if(myId.equals(storyID)){
 				app.setEditing(true);
-				app.reloadPage();
+				pageController.reloadPage();
 				changeActionBarButtons();
 				setButtonVisibility();
 			}
@@ -252,8 +255,8 @@ public class ViewPageActivity extends Activity {
 		case SAVE_INDEX:
 
 			app.setEditing(false);
-			app.saveStory();
-			app.reloadPage();
+			storyController.saveStory();
+			pageController.reloadPage();
 			changeActionBarButtons();
 			setButtonVisibility();
 
@@ -284,7 +287,7 @@ public class ViewPageActivity extends Activity {
 		
 		final String myId = Secure.getString(
 				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
-		Story story = app.getStory();
+		Story story = storyController.getStory();
 		final String storyID = story.getAuthor();
 		if(myId.equals(storyID)){
 			if (app.getEditing()) {
@@ -317,8 +320,8 @@ public class ViewPageActivity extends Activity {
             	case(0):
             		//TODO fix this to be MVC and observer pattern
             		TextTile tile = new TextTile();
-					app.getPage().addTile(tile);
-					addTile(app.getPage().getTiles().size() - 1, tile);   				
+					pageController.getPage().addTile(tile);
+					addTile(pageController.getPage().getTiles().size() - 1, tile);   				
             		break;
             	case(1):
             		photoSelector.setItems(titlesPhoto, 
@@ -372,47 +375,48 @@ public class ViewPageActivity extends Activity {
 		
 		setButtonVisibility();
 		
-		if (app.getStory().isUsesCombat() == true) {
+		if (storyController.getStory().isUsesCombat() == true) {
 			updateCounters();
 		}
 		
-		if (app.haveTilesChanged()) {
+		if (pageController.haveTilesChanged()) {
 			updateTiles(page);
 		}
 		
-		if (app.haveDecisionsChanged()) {
+		if (pageController.haveDecisionsChanged()) {
 			updateDecisions(page);
 		}
 		
-		if (app.haveCommentsChanged()) {
+		if (pageController.haveCommentsChanged()) {
 			updateComments(page);
 		}
 		
-		if (app.hasEndingChanged()) {
+		if (pageController.hasEndingChanged()) {
 			updateEnding(page);
 		}
 		
-		app.finishedUpdating();
+		pageController.finishedUpdating();
 	}
 	
 	private void updateCounters() {
 		fightingLayout.removeAllViews();
-		
-		if(app.isOnEntry() == true){
+		Story story = storyController.getStory();
+		Page page = pageController.getPage();
+		if(pageController.isOnEntry() == true){
 			
-			if(app.getStory().getFirstpage().getId().equals(app.getPage().getId())){
+			if(story.getFirstpage().getId().equals(page.getId())){
 				Counters counter = new Counters();
 				counter.setBasic("0","100");
-				app.getStory().setPlayerStats(counter);
+				story.setPlayerStats(counter);
 			}
-			app.getStory().getPlayerStats().setEnemyHpStat(app.getPage().getEnemyHealth());
+			story.getPlayerStats().setEnemyHpStat(page.getEnemyHealth());
 		}
 		
 		TextView fightingUpdate = new TextView(app);
 		TextView healthView = new TextView(app);
 		TextView treasureView = new TextView(app);
 		TextView enemyView = new TextView(app);
-		Counters stat = app.getStory().getPlayerStats();
+		Counters stat = story.getPlayerStats();
 		
 		healthView.setTextColor(Color.BLUE);
 		healthView.setText(getString(R.string.currentHealth) + " " + stat.getPlayerHpStat());
@@ -422,22 +426,22 @@ public class ViewPageActivity extends Activity {
 		treasureView.setText(getString(R.string.currentTreasure) + " " + stat.getTreasureStat());
 		fightingLayout.addView(treasureView);
 		
-		if(app.getPage().isFightingFrag() == true){
+		if(page.isFightingFrag() == true){
 
 			enemyView.setTextColor(Color.RED);
 			enemyView.setText(getString(R.string.enemyHealthColon) + " " + stat.getEnemyHpStat());
 			fightingLayout.addView(enemyView);
-			app.getStory().getPlayerStats().setEnemyRange(true);
+			story.getPlayerStats().setEnemyRange(true);
 		}
 		else {
-			app.getStory().getPlayerStats().setEnemyRange(false);
+			story.getPlayerStats().setEnemyRange(false);
 		}
 		
 		String displayChanges = "\n";
 
 		if(stat.getEnemyHpChange() != 0) {
 			displayChanges += stat.getHitMessage() + "\n";
-			displayChanges += app.getPage().getEnemyName();
+			displayChanges += page.getEnemyName();
 
 			if(stat.getEnemyHpChange() <= 0) 
 				displayChanges += " " + getString(R.string.gained) + " ";
@@ -484,7 +488,7 @@ public class ViewPageActivity extends Activity {
 		
 		final String myId = Secure.getString(
 				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
-		final String storyID = app.getStory().getAuthor();
+		final String storyID = storyController.getStory().getAuthor();
 		if(myId.equals(storyID)){
 		
 			int visibility = 0;
@@ -539,7 +543,7 @@ public class ViewPageActivity extends Activity {
 		int type = decision.getChoiceModifiers().getThresholdType();
 		int sign = decision.getChoiceModifiers().getThresholdSign();
 		int value = decision.getChoiceModifiers().getThresholdValue();
-		Counters counter = app.getStory().getPlayerStats();
+		Counters counter = storyController.getStory().getPlayerStats();
 		boolean outcome = false;
 		int[] typeBase = {counter.getPlayerHpStat(),counter.getEnemyHpStat(),counter.getTreasureStat()};
 		switch(sign){
@@ -686,7 +690,7 @@ public class ViewPageActivity extends Activity {
             		onEditTile(view);
             		break;
             	case(1):
-            		app.deleteTile(whichTile);
+            		pageController.deleteTile(whichTile);
             		break;
             	}
             }
@@ -718,7 +722,7 @@ public class ViewPageActivity extends Activity {
     	builder.setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	int whichTile = tilesLayout.indexOfChild(textView);
-            	app.updateTile(alertEdit.getText().toString(), whichTile);
+            	pageController.updateTile(alertEdit.getText().toString(), whichTile);
             }
         })
         .setNegativeButton(getString(R.string.done), null);
@@ -746,7 +750,7 @@ public class ViewPageActivity extends Activity {
 		view.setLayoutParams(lp);
 		view.setText(decision.getText());
 		decisionsLayout.addView(view, i);
-		if(app.getPage().isFightingFrag() == false){
+		if(pageController.getPage().isFightingFrag() == false){
 			view.setVisibility(View.VISIBLE);
 		}
 		else if(app.getEditing() == true){
@@ -788,11 +792,12 @@ public class ViewPageActivity extends Activity {
 				                          getString(R.string.transitionMessages), getString(R.string.cancel) };
 		final String[] titlesFight = { getString(R.string.editProperties), getString(R.string.delete), getString(R.string.transitionMessages),
 				                        getString(R.string.setConditionals), getString(R.string.cancel) };
-		
-		if(app.getPage().isFightingFrag() == true){
+		final boolean fighting = pageController.getPage().isFightingFrag();
+		final boolean combat = storyController.getStory().isUsesCombat();
+		if(fighting == true){
 			titles = titlesFight;
 		}
-		else if(app.getStory().isUsesCombat() == true){
+		else if(combat == true){
 			titles = titlesCounter;
 		}
 		else{
@@ -808,15 +813,15 @@ public class ViewPageActivity extends Activity {
             		onEditDecision(view);
             		break;
             	case(1):
-            		app.deleteDecision(whichDecision);
+            		pageController.deleteDecision(whichDecision);
             		break;
             	case(2):
-            		if(app.getStory().isUsesCombat() == true){
+            		if(combat == true){
             			onEditMessages(view);
             		}
             		break;
             	case(3):
-            		if(app.getPage().isFightingFrag() == true){
+            		if(fighting == true){
             			onEditConditionals(view);
             		}
             		break;
@@ -829,21 +834,9 @@ public class ViewPageActivity extends Activity {
 	protected void onEditMessages(View view) {
 
 		final int whichDecision = decisionsLayout.indexOfChild(view);
-		final Decision decision = app.getPage().getDecisions().get(whichDecision);
-		
-		UUID toPageId = decision.getPageID();
-		ArrayList<Page> pages = app.getStory().getPages();
-		int toPagePosition = -1;
-
-		for (int i = 0; i < pages.size(); i++) {
-
-			UUID comparePage = pages.get(i).getId();
-			System.out.println("toPageID: " + toPageId + "\ncomparePage: " + comparePage + "\nPage: " + app.getPage() + "\nDecision: " + decision.getPageID() + decision.getText());
-			if (toPageId.equals(comparePage)) {
-				toPagePosition = i;
-				break;
-			}
-		}
+		final Decision decision = pageController.findDecisionByIndex(whichDecision);
+		ArrayList<Page> pages = storyController.getPages();
+		int toPagePosition = pageController.findArrayPosition(decision, pages);
 		
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle(getString(R.string.counterMessage));
@@ -871,7 +864,7 @@ public class ViewPageActivity extends Activity {
             public void onClick(DialogInterface dialog, int id) {
         		Counters counter = decision.getChoiceModifiers();
         		counter.setMessages(dMessage.getText().toString(), tMessage.getText().toString(), hMessage.getText().toString());
-        		app.updateDecision(decisionTitle.getText().toString(), pageSpinner.getSelectedItemPosition(),whichDecision, counter);
+        		app.updateDecisionFight(decisionTitle.getText().toString(), pageSpinner.getSelectedItemPosition(),whichDecision, counter);
             }
         })
         .setNegativeButton(getString(R.string.cancel), null);
@@ -881,9 +874,9 @@ public class ViewPageActivity extends Activity {
 
 	protected void onEditConditionals(View view) {
 		final int whichDecision = decisionsLayout.indexOfChild(view);
-		final Decision decision = app.findDecisionByIndex(whichDecision);
-		ArrayList<Page> pages = app.getPages();
-		int toPagePosition = app.findArrayPosition(decision, pages);
+		final Decision decision = pageController.findDecisionByIndex(whichDecision);
+		ArrayList<Page> pages = storyController.getPages();
+		int toPagePosition = pageController.findArrayPosition(decision, pages);
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle(getString(R.string.setDecisionConditions));
     	
@@ -914,7 +907,7 @@ public class ViewPageActivity extends Activity {
             public void onClick(DialogInterface dialog, int id) {
         		Counters counter = decision.getChoiceModifiers();
         		counter.setThresholds(signSpinner.getSelectedItemPosition(), condSpinner.getSelectedItemPosition(), conditionText.getText().toString());
-        		app.updateDecision(decisionText.getText().toString(), pageSpinner.getSelectedItemPosition(), whichDecision, counter);
+        		app.updateDecisionFight(decisionText.getText().toString(), pageSpinner.getSelectedItemPosition(), whichDecision, counter);
             }
         })
         .setNegativeButton(getString(R.string.cancel), null);
@@ -927,14 +920,16 @@ public class ViewPageActivity extends Activity {
 	 * @param view
 	 */
 	private void decisionClicked(View view) {
+		Story story = storyController.getStory();
+		Page page = pageController.getPage();
 		int whichDecision = decisionsLayout.indexOfChild(view);
-		if(app.getStory().isUsesCombat() == true){
-			Decision decision = app.getPage().getDecisions().get(whichDecision);
-			if(app.getPage().isFightingFrag() == true){
-				app.getStory().getPlayerStats().invokeUpdateComplex(decision.getChoiceModifiers());
+		if(story.isUsesCombat() == true){
+			Decision decision = page.getDecisions().get(whichDecision);
+			if(page.isFightingFrag() == true){
+				story.getPlayerStats().invokeUpdateComplex(decision.getChoiceModifiers());
 			}
 			else{
-				app.getStory().getPlayerStats().invokeUpdateSimple(decision.getChoiceModifiers());
+				story.getPlayerStats().invokeUpdateSimple(decision.getChoiceModifiers());
 			}
 			
 		}
@@ -948,15 +943,16 @@ public class ViewPageActivity extends Activity {
 	 */
 	private void onEditDecision(View view) {
 		int whichDecision = decisionsLayout.indexOfChild(view);
-		final Decision decision = app.getPage().getDecisions().get(whichDecision);
-		
+		final Decision decision = pageController.getPage().getDecisions().get(whichDecision);
+		final Story story = storyController.getStory();
+		final Page page = pageController.getPage();
 		UUID toPageId = decision.getPageID();
-		ArrayList<Page> pages = app.getStory().getPages();
+		ArrayList<Page> pages = story.getPages();
 		int toPagePosition = -1;
 		for (int i = 0; i < pages.size(); i++) {
 
 			UUID comparePage = pages.get(i).getId();
-			System.out.println("toPageID: " + toPageId + "\ncomparePage: " + comparePage + "\nPage: " + app.getPage() + "\nDecision: " + decision.getPageID() + decision.getText());
+			System.out.println("toPageID: " + toPageId + "\ncomparePage: " + comparePage + "\nPage: " + page + "\nDecision: " + decision.getPageID() + decision.getText());
 			if (toPageId.equals(comparePage)) {
 				toPagePosition = i;
 				break;
@@ -983,14 +979,14 @@ public class ViewPageActivity extends Activity {
     	ArrayList<String> pageStrings = app.getPageStrings(pages);
     	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, R.layout.list_item_base, pageStrings);
 
-    	if(app.getPage().getDecisions().size() > 2){
+    	if(page.getDecisions().size() > 2){
     		pageStrings.add(getString(R.string.randomChoice));
     	}
 
     	pageSpinner.setAdapter(pagesAdapter);
     	pageSpinner.setSelection(toPagePosition);
     	
-    	if(!app.getStory().isUsesCombat()) {
+    	if(!story.isUsesCombat()) {
 			combatOptions.setVisibility(View.GONE);
     	}
     	else {
@@ -998,7 +994,7 @@ public class ViewPageActivity extends Activity {
         	alertTreasure.setText("" + decision.getChoiceModifiers().getTreasureStat());
         	playerDamage.setText("" + decision.getChoiceModifiers().getPlayerHpStat());
 
-        	if(!app.getPage().isFightingFrag()) {
+        	if(!page.isFightingFrag()) {
         		fightOptions.setVisibility(View.GONE);
         	}
         	else {
@@ -1014,12 +1010,12 @@ public class ViewPageActivity extends Activity {
             public void onClick(DialogInterface dialog, int id) {
             	Counters counter = decision.getChoiceModifiers();
         		int decisionNumber = decisionsLayout.indexOfChild(decisionView);
-        		if(app.getStory().isUsesCombat() == true){
+        		if(story.isUsesCombat() == true){
         			String treasure = alertTreasure.getText().toString();
         			String hp = playerDamage.getText().toString();
-        			if(app.getPage().isFightingFrag() == false){      				
+        			if(page.isFightingFrag() == false){      				
         				counter.setBasic(treasure, hp);
-	        			app.updateDecision(decisionText.getText().toString(), 
+	        			app.updateDecisionFight(decisionText.getText().toString(), 
 	                			pageSpinner.getSelectedItemPosition(), decisionNumber, counter);
         			}
 	        		else{
@@ -1028,7 +1024,7 @@ public class ViewPageActivity extends Activity {
 	        			String hitE = "" + seekEnemy.getProgress();
 	        			
 	        			counter.setStats(treasure, hp, ehp, hitE, hitP);
-	        			app.updateDecision(decisionText.getText().toString(), 
+	        			app.updateDecisionFight(decisionText.getText().toString(), 
 	                			pageSpinner.getSelectedItemPosition(), decisionNumber, counter);
 	        		}     			
         		}
@@ -1152,7 +1148,7 @@ public class ViewPageActivity extends Activity {
 	    	builder.setView(alertEdit);
 	    	builder.setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
 	            public void onClick(DialogInterface dialog, int id) {
-	            	app.setEnding(alertEdit.getText().toString());
+	            	pageController.setEnding(alertEdit.getText().toString());
 	            }
 	        })
 	        .setNegativeButton(getString(R.string.cancel), null);
@@ -1167,7 +1163,7 @@ public class ViewPageActivity extends Activity {
 		if (resultCode == RESULT_OK && null != data) {
 			switch(requestCode) {
 			case (RESULT_LOAD_IMAGE):
-				app.addTile(loadImage(data));
+				pageController.addTile(loadImage(data));
 				break;
 			case (GRAB_PHOTO):
 				app.setTempSpace(loadImage(data));
@@ -1182,7 +1178,7 @@ public class ViewPageActivity extends Activity {
 					public void onClick(DialogInterface dialog, int id) {
 						PhotoTile tile = new PhotoTile();
 						tile.setContent(image);
-						app.addTile(tile);
+						pageController.addTile(tile);
 					}
 				})
 				.setNegativeButton(getString(R.string.retake), new DialogInterface.OnClickListener() {

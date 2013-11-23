@@ -208,7 +208,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="startDesignator">{Start} </string>
     <string name="fightDesignator">{Fight} </string>
     <string name="endDesignator">{Endpoint} </string>
-    <string name="cahcedDesignator">Cached: </string>
+    <string name="cachedDesignator">Cached: </string>
     <string name="edit">Edit</string>
     <string name="textView">TextView</string>
     <string name="defaultEnding">+ Add an ending to this page</string>

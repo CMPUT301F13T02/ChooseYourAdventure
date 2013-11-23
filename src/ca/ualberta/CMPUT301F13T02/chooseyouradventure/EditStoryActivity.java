@@ -63,6 +63,7 @@ public class EditStoryActivity extends Activity {
 	private ArrayList<Page> pageList = new ArrayList<Page>();
 	private ArrayAdapter<String> adapter;
 	private ControllerApp app;
+	private StoryController storyController; 
 	private static final int HELP_INDEX = 0;
 
 	/**
@@ -77,6 +78,7 @@ public class EditStoryActivity extends Activity {
         createNew2 = (Button) findViewById(R.id.createButton2);
         deleteStory = (Button) findViewById(R.id.deleteButton);
         app = (ControllerApp) getApplication();
+        storyController = app.getStoryController();
         createNew2.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
               try
@@ -92,7 +94,7 @@ public class EditStoryActivity extends Activity {
         deleteStory.setOnClickListener(new OnClickListener() {
             
             public void onClick(View v) {
-            	Story story = app.getStory();
+            	Story story = storyController.getStory();
             	try {
 					story.getHandler().deleteStory(story);
 				} catch (HandlerException e) {
@@ -103,7 +105,7 @@ public class EditStoryActivity extends Activity {
         });       
         
         
-		pageList = app.getStory().getPages();
+		pageList = storyController.getStory().getPages();
 		pageText = app.updateView(pageList, pageText);
 		/**
 		 * Activity to restructure Click and longClick listeners to work in a list view
@@ -186,7 +188,7 @@ public class EditStoryActivity extends Activity {
     	final CheckBox check = (CheckBox) layout.findViewById(R.id.create_page_dialog_checkbox);
     	final LinearLayout fightingLayout = (LinearLayout) layout.findViewById(R.id.create_page_dialog_fighting_options);
     	
-    	if(!app.getStory().isUsesCombat())
+    	if(!storyController.getStory().isUsesCombat())
     		fightingLayout.setVisibility(View.GONE);
     	nameEdit.setText("Enemy");
     	healthEdit.setText("0");
@@ -196,7 +198,7 @@ public class EditStoryActivity extends Activity {
     	builder.setMessage(getString(R.string.enterPageTitle))
     	.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-            	app.newTitle(titleEdit.getText().toString(), check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString());         	
+            	storyController.newTitle(titleEdit.getText().toString(), check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString());         	
             	refresh();
             }
         })
@@ -209,10 +211,10 @@ public class EditStoryActivity extends Activity {
 	 * @param Input from longclick
 	 */
 	public void pageOptions(final int pos){
-
+		final Story story = storyController.getStory();
         final AlertDialog.Builder titleEditor = new AlertDialog.Builder(this);
-		final Page currentPage = app.getStory().getPages().get(pos);
-		final Page FP = app.getStory().getFirstpage();
+		final Page currentPage = story.getPages().get(pos);
+		final Page FP = storyController.grabFirstPage();
 
 		String[] titlesA = { getString(R.string.gotoEdit), getString(R.string.pageProperties), getString(R.string.cancel) };
 		String[] titlesB = { getString(R.string.gotoEdit), getString(R.string.pageProperties), getString(R.string.assignFirst),
@@ -234,7 +236,7 @@ public class EditStoryActivity extends Activity {
             	switch(item){
             	case(0):
             		app.setEditing(true);
-            		app.jump(ViewPageActivity.class,app.getStory(),app.getStory().getPages().get(pos));
+            		app.jump(ViewPageActivity.class,story,story.getPages().get(pos));
             		
             	break;
             	case(1):
@@ -246,7 +248,7 @@ public class EditStoryActivity extends Activity {
                 	final EditText nameEdit = (EditText) layout.findViewById(R.id.create_page_dialog_name_edittext);
                 	final CheckBox check = (CheckBox) layout.findViewById(R.id.create_page_dialog_checkbox);
 	            	
-	            	if(!app.getStory().isUsesCombat()) {
+	            	if(!story.isUsesCombat()) {
 	            		fightingLayout.setVisibility(View.GONE);
 	            	}
 	            	else {
@@ -267,11 +269,11 @@ public class EditStoryActivity extends Activity {
 
             			public void onClick(DialogInterface dialog, int id) {
             				String pageTitle = titleEdit.getText().toString();
-            				if(app.getStory().isUsesCombat() == true){
-            					app.updateFightTitle(pageTitle, check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString(), currentPage); 
+            				if(story.isUsesCombat() == true){
+            					storyController.updateFightTitle(pageTitle, check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString(), currentPage); 
             				}
             				else{
-            					app.updateTitle(pageTitle, currentPage);    
+            					storyController.updateTitle(pageTitle, currentPage);    
             				}
             				refresh();
             			}
@@ -283,11 +285,11 @@ public class EditStoryActivity extends Activity {
             		break;
 
             	case(2):
-            		app.updateFP(currentPage);
+            		storyController.updateFP(currentPage);
             		refresh();
             		break;
             	case(3):
-            		app.removePage(currentPage);
+            		storyController.removePage(currentPage);
             		refresh();
             		break;
             	}
@@ -301,7 +303,7 @@ public class EditStoryActivity extends Activity {
 	 * This rebuilds the ListView by recollecting data from the controller
 	 */
 	public void refresh(){
-		pageList = app.getStory().getPages();
+		pageList = storyController.getStory().getPages();
 		pageText = app.updateView(pageList, pageText);
 		adapter.notifyDataSetChanged();
 	}	

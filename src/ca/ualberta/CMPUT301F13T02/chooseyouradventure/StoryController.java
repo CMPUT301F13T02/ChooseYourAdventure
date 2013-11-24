@@ -3,9 +3,7 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import android.content.Intent;
-import android.provider.Settings.Secure;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
+
 
 public class StoryController {
 	private Story currentStory;

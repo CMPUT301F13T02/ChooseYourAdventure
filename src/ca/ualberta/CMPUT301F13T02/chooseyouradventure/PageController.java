@@ -1,7 +1,6 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.UUID;
 
 public class PageController {

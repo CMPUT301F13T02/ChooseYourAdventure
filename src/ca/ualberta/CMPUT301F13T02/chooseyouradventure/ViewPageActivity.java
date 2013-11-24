@@ -98,7 +98,9 @@ public class ViewPageActivity extends Activity {
 	private LinearLayout commentsLayout;
 	private LinearLayout fightingLayout;
 	
-	private ViewTemplates viewTemplate = new ViewTemplates();
+	private FightView fightView = new FightView();
+	private TileView tileView;
+	private DecisionView decisionView;
 	private StoryController storyController; 
 	private PageController pageController; 
     private ControllerApp app;
@@ -118,6 +120,8 @@ public class ViewPageActivity extends Activity {
         super.onResume();
         
         app = (ControllerApp) this.getApplication();
+        tileView = new TileView(app, this);
+        decisionView = new DecisionView(app, this);
         storyController = app.getStoryController();
         pageController = app.getPageController();
         
@@ -322,7 +326,7 @@ public class ViewPageActivity extends Activity {
             		//TODO fix this to be MVC and observer pattern
             		TextTile tile = new TextTile();
 					pageController.getPage().addTile(tile);
-					addTile(pageController.getPage().getTiles().size() - 1, tile);   				
+					tileView.addTile(pageController.getPage().getTiles().size() - 1, tile, tilesLayout);   				
             		break;
             	case(1):
             		photoSelector.setItems(titlesPhoto, 
@@ -377,15 +381,15 @@ public class ViewPageActivity extends Activity {
 		setButtonVisibility();
 		
 		if (storyController.getStory().isUsesCombat() == true) {
-			viewTemplate.updateFightView(fightingLayout, app);
+			fightView.updateFightView(fightingLayout, app);
 		}
 		
 		if (pageController.haveTilesChanged()) {
-			updateTiles(page);
+			tileView.updateTiles(page, tilesLayout);
 		}
 		
 		if (pageController.haveDecisionsChanged()) {
-			updateDecisions(page);
+			decisionView.updateDecisions(page, decisionsLayout);
 		}
 		
 		if (pageController.haveCommentsChanged()) {
@@ -430,58 +434,11 @@ public class ViewPageActivity extends Activity {
 		}
 	}
 	
-	/**
-	 * Removes all the tiles from the tilesLayout and repopulates it with 
-	 * the current state of the tiles.
-	 * @param page
-	 */
-	private void updateTiles(Page page, LinearLayout tilesLayout) {
-		tilesLayout.removeAllViews();
-		
-		//For each tile in the page, add the tile to tilesLayout
-		ArrayList<Tile> tiles = page.getTiles();
-		for (int i = 0; i < tiles.size(); i++) {
-			addTile(i, tiles.get(i));
-		}
-	}
 	
-	/**
-	 * Removes all the decisions from the decisionsLayout and repopulates it
-	 * with the current state of the decisions.
-	 * @param page
-	 */
-	private void updateDecisions(Page page) {
-		decisionsLayout.removeAllViews();
-		
-		//For each decision in the page, add it to decisionsLayout
-		ArrayList<Decision> decisions = page.getDecisions();
-		for (int i = 0; i < decisions.size(); i++) {
-			addDecision(i, decisions.get(i));
-			
-			
-		}
-	}
 	
-	private boolean passThreshold(Decision decision) {
-		int type = decision.getChoiceModifiers().getThresholdType();
-		int sign = decision.getChoiceModifiers().getThresholdSign();
-		int value = decision.getChoiceModifiers().getThresholdValue();
-		Counters counter = storyController.getStory().getPlayerStats();
-		boolean outcome = false;
-		int[] typeBase = {counter.getPlayerHpStat(),counter.getEnemyHpStat(),counter.getTreasureStat()};
-		switch(sign){
-			case(0):
-				if(typeBase[type] < value){outcome = true;};
-				break;
-			case(1):
-				if(typeBase[type] > value){outcome = true;};
-				break;
-			case(2):
-				if(typeBase[type] == value){outcome = true;};
-				break;
-		}
-		return outcome;
-	}
+	
+	
+	
 
 	/**
 	 * Removes the comments from commentsLayout and repopulates it with the
@@ -507,93 +464,9 @@ public class ViewPageActivity extends Activity {
 		pageEnding.setText(page.getPageEnding());
 	}
 		
-	/**
-	 * Called to display a new tile at position i. If we are in editing mode,
-	 * add a click listener to allow user to edit the tile
-	 * @param i
-	 * @param tile
-	 */
-	public void addTile(int i, Tile tile) {
-		
-		if (tile.getType() == "text") {
-			View view = makeTileView("text");
-			TextTile textTile = (TextTile) tile;
-			TextView textView = (TextView) view;
-			
-			textView.setText(textTile.getText());
-
-			tilesLayout.addView(view, i);
-			
-			if (app.getEditing()) {
-				view.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						editTileMenu(v);
-					}
-				});
-				view.setOnLongClickListener(new OnLongClickListener() {
-					@Override
-					public boolean onLongClick(View v) {
-						ClipData data = ClipData.newPlainText("", "");
-						DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
-						v.startDrag(data, shadowBuilder, v, 0);
-						return true;
-					}
-				});
-
-			}
-			
-		} else if (tile.getType() == "photo") {
-			
-			View view = makeTileView("photo");
-			PhotoTile photoTile = (PhotoTile) tile;
-			ImageView imageView = (ImageView) view;
-			imageView.setImageBitmap(photoTile.getImage());
-			
-			tilesLayout.addView(imageView, i);
-
-		} else if (tile.getType() == "video") {
-			// TODO Implement for part 4
-		} else if (tile.getType() == "audio") {
-			// TODO Implement for part 4
-		} else {
-			Log.d("no such tile", "no tile of type " + tile.getType());
-		}
-	}
 	
-	/**
-	 * Create a view that has the proper padding, and if we are in editing
-	 * mode, adds a small margin to the bottom so we can see a little of 
-	 * the layout background which makes a line separating the tile views.
-	 * @return
-	 */
-	private View makeTileView(String type) {
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-		
-		View view;
-		
-		if (type == "text") {
-			view = new TextView(this);
-		} else {
-			view = new ImageView(this);
-		}
-		
-		// Set what the tiles look like
-		view.setPadding(0, 5, 0, 6);
-		if (app.getEditing()) {
-			/* Background to the layout is grey, so adding margins adds 
-			 * separators.
-			 */
-			lp.setMargins(0, 0, 0, 3);
-		} else {
-			view.setPadding(0, 5, 0, 9);
-		}
-		view.setBackgroundColor(0xFFFFFFFF);
-		view.setLayoutParams(lp);
-		
-		return view;
-	}
+	
+	
 	
 	/**
 	 * Brings up a menu with options of what to do to the decision.
@@ -653,56 +526,7 @@ public class ViewPageActivity extends Activity {
         builder.show();
 	}
 	
-	/**
-	 * Adds a decision to the page. If we are in editing mode, give the view a
-	 * onClickListener to allow you to edit the decision. If we are in 
-	 * viewing mode add an onClickListener to go to the next page.
-	 * 
-	 * @param i
-	 * @param decision
-	 */
-	private void addDecision(int i, Decision decision) {
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.MATCH_PARENT, 
-				LinearLayout.LayoutParams.WRAP_CONTENT
-				);
-		TextView view = new TextView(this);
-		lp.setMargins(0, 0, 0, 3);
-		view.setPadding(20, 5, 0, 5);
-		view.setBackgroundColor(0xFFFFFFFF);
-		view.setLayoutParams(lp);
-		view.setText(decision.getText());
-		decisionsLayout.addView(view, i);
-		if(pageController.getPage().isFightingFrag() == false){
-			view.setVisibility(View.VISIBLE);
-		}
-		else if(app.getEditing() == true){
-			view.setVisibility(View.VISIBLE);
-		}
-		else{			
-			boolean outcome = passThreshold(decision);
-			if(outcome == false){
-				view.setVisibility(View.GONE);
-			}
-		}
-		
-		
-		if (app.getEditing()) {
-			view.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					decisionMenu(v);
-				}
-			});
-		} else {
-			view.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					decisionClicked(v);
-				}
-			});
-		}
-	}
+	
 	
 	/**
 	 * Brings up a menu with options of what to do to the decision.
@@ -842,7 +666,7 @@ public class ViewPageActivity extends Activity {
 	 * Changes the view so that the next page is showing.
 	 * @param view
 	 */
-	private void decisionClicked(View view) {
+	protected void decisionClicked(View view) {
 		Story story = storyController.getStory();
 		Page page = pageController.getPage();
 		int whichDecision = decisionsLayout.indexOfChild(view);

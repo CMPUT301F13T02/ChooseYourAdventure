@@ -30,6 +30,7 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 /**
@@ -47,4 +48,6 @@ public interface Handler {
 	public void addComment(Story story, Page page, Comment comment) throws HandlerException;
 	public Story getStory(String id) throws HandlerException;
 	public ArrayList<Story> getAllStories() throws HandlerException;
+	public ArrayList<Story> search(String searchKey) throws HandlerException, UnsupportedEncodingException;
+	public Story getRandomStory() throws HandlerException;
 }

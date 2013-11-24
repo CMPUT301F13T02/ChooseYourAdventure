@@ -33,6 +33,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
+    
+
     <EditText
         android:id="@+id/edit_decision_dialog_decision_edittext"
         android:layout_width="match_parent"
@@ -50,12 +52,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@+string/coinChange" />
+
         <EditText
             android:id="@+id/edit_decision_dialog_coin_edittext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@+string/coinChange"
             android:inputType="number" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@+string/playerDamage" />
 
         <EditText
             android:id="@+id/edit_decision_dialog_playerDamage_edittext"
@@ -70,12 +82,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <EditText
-                android:id="@+id/edit_decision_dialog_enemyHitRate_edittext"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@+string/enemyHitRate"
-                android:inputType="number" />
+                android:text="@+string/enemyHitRate" />
+            
+            <SeekBar
+       			android:id="@+id/edit_decision_dialog_enemyPerc"
+        		android:layout_width="match_parent"
+        		android:layout_height="wrap_content"
+        		android:max="100"
+        		android:progress="100" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@+string/enemyDamage" />
 
             <EditText
                 android:id="@+id/edit_decision_dialog_enemyDamage_edittext"
@@ -83,16 +105,23 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 android:layout_height="wrap_content"
                 android:hint="@+string/enemyDamage"
                 android:inputType="number" />
+            
 
-            <EditText
-                android:id="@+id/edit_decision_dialog_playerHitRate_edittext"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@+string/playerHitRate"
-                android:inputType="number" />
+                android:text="@+string/playerHitRate" />
+            <SeekBar
+       			android:id="@+id/edit_decision_dialog_playerPerc"
+        		android:layout_width="match_parent"
+        		android:layout_height="wrap_content"
+        		android:max="100"
+        		android:progress="100" />
 
         </LinearLayout>
 
     </LinearLayout>
+
+    
 
 </LinearLayout>

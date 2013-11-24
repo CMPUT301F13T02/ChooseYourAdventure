@@ -62,12 +62,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         	    
         	</LinearLayout>	
         	
+        	<TextView
+        	        android:layout_width="wrap_content"
+        	        android:layout_height="wrap_content"
+        	        android:text="@+string/enemyHealth" /> 
+        	        
         	<EditText
         	    android:id="@+id/create_page_dialog_health_edittext"
         	    android:layout_width="match_parent"
         	    android:layout_height="wrap_content"
         	    android:hint="@+string/enemyHealth"
         	    android:inputType="number" />
+        	
+        	<TextView
+        	        android:layout_width="wrap_content"
+        	        android:layout_height="wrap_content"
+        	        android:text="@+string/enemyName" /> 
 
         	<EditText
            	    android:id="@+id/create_page_dialog_name_edittext"

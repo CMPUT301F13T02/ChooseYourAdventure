@@ -33,11 +33,15 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch;
 /* The file with inspiration from https://github.com/rayzhangcl/ESDemo */
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import org.apache.http.client.HttpClient;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -223,5 +227,108 @@ public class ESHandler implements Handler{
 		}
 		
 		return stories;
+	}
+	
+	/**
+	 * 
+	 * @param searchKey
+	 * @return An ArrayList containing the stories whose titles match or are similar to the search key
+	 * @throws HandlerException
+	 * @throws UnsupportedEncodingException
+	 */
+	public ArrayList<Story> search(String searchKey) throws HandlerException, UnsupportedEncodingException {
+		/*
+		 * Will want a query involving the searchKey.
+		 * Pass query to elastic search.
+		 * See https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ESClient.java
+		 */
+		
+		int numHits = 1000;
+		
+		ESHttpGet get = new ESHttpGet(getStoryPath() + "_search" + "?size=" + String.valueOf(numHits));
+		String query = "{\"query\" : {\"query_string\" : {\"default_field\" : \"title\",\"query\" : \"" + searchKey + "*" + "\"}}}";
+		StringEntity stringentity = new StringEntity(query);
+		
+		get.setHeader("Accept", "application/json");
+		get.setEntity(stringentity);
+		
+		String response = null;
+		try {
+			response = get.execute();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		ArrayList<Story> stories = new ArrayList<Story>();
+		
+		/* For each hit, add it to the list */
+		Type esSearchResponseType = new TypeToken<ESSearchResponse<Story>>(){}.getType();
+		ESSearchResponse<Story> esResponse = gson.fromJson(response, esSearchResponseType);
+		for (ESResponse<Story> s : esResponse.getHits()) {
+			stories.add(s.getSource());
+		}
+		
+		return stories;
+		
+	}
+	
+	public Story getRandomStory() throws HandlerException {
+		
+		ESHttpGet get = new ESHttpGet(getStoryPath() + "_count");
+		
+		String response = null;
+		try{
+			response = get.execute();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		int numStories;
+		Type esCountResponseType = new TypeToken<ESCountResponse<Integer>>(){}.getType();
+		ESCountResponse<Integer> esCount = gson.fromJson(response, esCountResponseType);
+		numStories = esCount.getCount();
+		System.out.println(String.valueOf(numStories));
+		
+		int location = 0 + (int)(Math.random()*(numStories+1));
+		get = new ESHttpGet(getStoryPath() + "_search" + "?from=" + String.valueOf(location) + "&size=1");
+		
+		response=null;
+		try {
+			response = get.execute();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		/* For each hit, add it to the list */
+		Type esSearchResponseType = new TypeToken<ESSearchResponse<Story>>(){}.getType();
+		ESSearchResponse<Story> esResponse = gson.fromJson(response, esSearchResponseType);
+		
+		Story story = esResponse.getHits().iterator().next().getSource();
+		return story;
+		
+		
+		/*int numHits = 1000;
+		
+		ESHttpGet get = new ESHttpGet(getStoryPath() + "_search" + "?size=" + String.valueOf(numHits));
+		
+		String response = null;
+		try {
+			response = get.execute();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Type esSearchResponseType = new TypeToken<ESSearchResponse<Story>>(){}.getType();
+		ESSearchResponse<Story> esResponse = gson.fromJson(response, esSearchResponseType);
+		
+		Story[] stories = new Story[numHits];
+		stories = esResponse.getHits().toArray(stories);
+		int location = 0 + (int)(Math.random()*((stories.length-0)+1));
+		return stories[location];
+		*/
 	}
 }

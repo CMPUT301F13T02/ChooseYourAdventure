@@ -36,6 +36,10 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
@@ -43,7 +47,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -52,9 +55,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.SearchView;
+
 import android.widget.TextView;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
-
 
 /**
  * The main activity of the application. Displays a list of stories to read. <br />
@@ -73,13 +77,14 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
  * 
  * The ViewStoriesActivity is a view of the application.
  * 
- * TODO There is work to be done to make this activity respect a Story's choice of handler
  * TODO Search needs to be implemented
  */
 
 public class ViewStoriesActivity extends Activity {
 	private ListView mainPage;
 	private Button createNew;
+	private Button searchButton;
+	private Button randomStoryButton;
 	private Button refreshButton;
 	ArrayList<String> storyText = new ArrayList<String>();
 	ArrayList<Story> storyList = new ArrayList<Story>();
@@ -96,9 +101,10 @@ public class ViewStoriesActivity extends Activity {
         setContentView(R.layout.view_stories_activity);
         mainPage = (ListView) findViewById(R.id.mainView);
         createNew = (Button) findViewById(R.id.createButton);
+        searchButton = (Button) findViewById(R.id.searchButton);
+        randomStoryButton = (Button) findViewById(R.id.randomButton);
         refreshButton = (Button) findViewById(R.id.button1);
         createNew.setOnClickListener(new OnClickListener() {
-           
             public void onClick(View v) {
                 createStory();
             }
@@ -110,17 +116,34 @@ public class ViewStoriesActivity extends Activity {
             }
         });
         
+        searchButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				onSearchRequested();
+			}
+        	
+        });
+        
+        randomStoryButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				onRandomStory();
+				
+			}
+        	
+        });
+        
         app = (ControllerApp) getApplication();
         
         
 		try {
-			
 			storyList =  eshandler.getAllStories();
 			Story sampleStory = sampleGen.getStory();
 			storyList.add(sampleStory);
 			storyText = app.updateView(storyList, storyText);
 		} catch (HandlerException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		adapter = new ArrayAdapter<String>(this,
@@ -137,7 +160,6 @@ public class ViewStoriesActivity extends Activity {
 		        try {
 					onListItemClick(v,pos,listNum);
 				} catch (HandlerException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		    }
@@ -153,7 +175,18 @@ public class ViewStoriesActivity extends Activity {
         
     }
     
-    @Override
+    protected void onRandomStory() {
+		try {
+			Story random = eshandler.getRandomStory();
+			app.jump(ViewPageActivity.class, random, random.getFirstpage());
+		} catch (HandlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
 	public void onResume() {
         super.onResume();
         refresh();
@@ -170,8 +203,10 @@ public class ViewStoriesActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	super.onCreateOptionsMenu(menu);
+    	
+    	getMenuInflater().inflate(R.menu.view_stories, menu);
 
-		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, "Help");
+		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, getString(R.string.help));
 		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
         return true;
@@ -198,7 +233,7 @@ public class ViewStoriesActivity extends Activity {
     }
     
 	protected void onListItemClick(View v, int pos, long id) throws HandlerException {	
-		
+		app.setEditing(false);
 	    app.jump(ViewPageActivity.class, storyList.get(pos), storyList.get(pos).getFirstpage());
 	    
 	}
@@ -216,8 +251,9 @@ public class ViewStoriesActivity extends Activity {
 			final Story story = storyList.get(pos);
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			final String[] titles;
-			final String[] titlesA = {"Cache","Upload","Edit","Delete","Cancel"};
-			final String[] titlesB = {"Cache","Upload Copy","Cancel"};
+			final String[] titlesA = { getString(R.string.cache), getString(R.string.upload), getString(R.string.edit), 
+									   getString(R.string.delete), getString(R.string.cancel) };
+			final String[] titlesB = { getString(R.string.cache), getString(R.string.uploadCopy), getString(R.string.cancel) };
 			final String myId = Secure.getString(
 					getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 			final String storyID = story.getAuthor();
@@ -269,7 +305,6 @@ public class ViewStoriesActivity extends Activity {
                 		try {
 							story.getHandler().deleteStory(story);
 						} catch (HandlerException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
                 		refresh();
@@ -287,7 +322,7 @@ public class ViewStoriesActivity extends Activity {
     private void createStory(){
 
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle("Create New");
+    	builder.setTitle(getString(R.string.createNew));
     	
     	final LinearLayout layout = new LinearLayout(this);
     	layout.setOrientation(LinearLayout.VERTICAL);
@@ -297,15 +332,15 @@ public class ViewStoriesActivity extends Activity {
     	layout.addView(alertEdit);
     	
     	final TextView alertText = new TextView(this);
-    	alertText.setText("Use Counters and Combat?");
+    	alertText.setText(getString(R.string.useCountersAndCombat));
     	layout.addView(alertText);
     	
     	final CheckBox check = new CheckBox(this);
     	layout.addView(check);
         
     	builder.setView(layout);
-    	builder.setMessage("Enter the title of your story")
-    	.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+    	builder.setMessage(getString(R.string.enterStoryTitle))
+    	.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	
 					try {
@@ -320,17 +355,12 @@ public class ViewStoriesActivity extends Activity {
 						
 						refresh();
 					} catch (HandlerException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 
             }
         })
-        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                
-            }
-        });
+        .setNegativeButton(getString(R.string.cancel), null);
         builder.show();
     }
     
@@ -345,7 +375,6 @@ public class ViewStoriesActivity extends Activity {
         	storyList.addAll(dbhandler.getAllStories());
 			storyText = app.updateView(storyList, storyText);
 		} catch (HandlerException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
         adapter.notifyDataSetChanged();

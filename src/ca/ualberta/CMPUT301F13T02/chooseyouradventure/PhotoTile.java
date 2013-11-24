@@ -44,8 +44,6 @@ import android.graphics.BitmapFactory;
  * is serialized and stored via the use of the handlers. A PhotoTile will contain an image to be displayed
  * in the story.
  * 
- * TODO This class is only partially implemented. The "Object photo" member is a place holder.
- * TODO This class needs to be designed with serialization in mind, dropping unnecessary duplication of members.
  */
 
 public class PhotoTile extends Tile{

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- 
+<!--
 Copyright (c) 2013, TeamCMPUT301F13T02
 All rights reserved.
 
@@ -35,22 +35,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-permission android:name="android.permission.INTERNET" /> 
-    <uses-permission android:name="Android.permission.WRITE_EXTERNAL_STORAGE" />  
-    <uses-permission android:name="Android.permission.CAMERA" /> 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="Android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="Android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
 
-    
     <uses-sdk
         android:minSdkVersion="12"
         android:targetSdkVersion="18" />
-	
+
     <application
+        android:name="ca.ualberta.CMPUT301F13T02.chooseyouradventure.ControllerApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" 
-        android:name="ca.ualberta.CMPUT301F13T02.chooseyouradventure.ControllerApp">
+        android:theme="@style/AppTheme" >
         <activity
             android:name="ca.ualberta.CMPUT301F13T02.chooseyouradventure.ViewStoriesActivity"
             android:label="@string/title_view_stories_activity" >
@@ -59,26 +59,40 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data 
+                android:name="android.app.default_searchable"
+                android:value="ca.ualberta.CMPUT301F13T02.chooseyouradventure.SearchableActivity" />
         </activity>
         <activity
             android:name="ca.ualberta.CMPUT301F13T02.chooseyouradventure.ViewPageActivity"
             android:label="@string/title_view_page_activity" >
-            
         </activity>
         <activity
             android:name="ca.ualberta.CMPUT301F13T02.chooseyouradventure.EditStoryActivity"
             android:label="@string/title_edit_story_activity" >
-           
         </activity>
         <activity
             android:name="ca.ualberta.CMPUT301F13T02.chooseyouradventure.BrowseYouTubeActivity"
             android:label="@string/title_browse_youtube" >
             
         </activity>
-        <uses-library android:name="android.test.runner" />
+       <uses-library android:name="android.test.runner" />
+        
+        <activity
+            android:name="ca.ualberta.CMPUT301F13T02.chooseyouradventure.SearchableActivity"
+            android:label="@string/title_activity_search_stories" >
+            <intent-filter >
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data 
+				android:name="android.app.searchable"
+				android:resource="@xml/searchable" />
+        </activity>
     </application>
-    <instrumentation android:name="android.test.InstrumentationTestRunner"
-    android:targetPackage="your.package"
-    android:label="your tests label" />
+
+    <instrumentation
+        android:name="android.test.InstrumentationTestRunner"
+        android:label="your tests label"
+        android:targetPackage="your.package" />
 
 </manifest>

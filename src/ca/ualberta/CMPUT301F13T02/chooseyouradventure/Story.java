@@ -69,6 +69,11 @@ public class Story {
 		this.firstpage = new Page().getId();
 		this.timeStamp = System.currentTimeMillis() / 1000L;
 	}
+	
+	// For testing purposes
+	public Story(String title) {
+		this.title = title;
+	}
 
 	/**
 	 * This is a copy constructor to copy a story 
@@ -192,7 +197,6 @@ public class Story {
 		try {
 			handler.updateStory(this);
 		} catch (HandlerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

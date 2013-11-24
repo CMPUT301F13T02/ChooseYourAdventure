@@ -1,43 +1,18 @@
-/*
-* Copyright (c) 2013, TeamCMPUT301F13T02
-* All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without modification,
-* are permitted provided that the following conditions are met:
-* 
-* Redistributions of source code must retain the above copyright notice, this
-* list of conditions and the following disclaimer.
-* 
-* Redistributions in binary form must reproduce the above copyright notice, this
-* list of conditions and the following disclaimer in the documentation and/or
-* other materials provided with the distribution.
-* 
-* Neither the name of the {organization} nor the names of its
-* contributors may be used to endorse or promote products derived from
-* this software without specific prior written permission.
-* 
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
-* ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-* ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.AudioTile;
 import com.jayway.android.robotium.solo.Solo;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ControllerApp;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Decision;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.PhotoTile;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Tile;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.VideoTile;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ViewPageActivity;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 import android.widget.TextView;
@@ -62,9 +37,12 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 	private static int numTiles = 1;
 	private static int numDecisions = 1;
 	
+	private ESHandler handler;
+	
 
 	public TestViewPageActivity() {
 		super(ViewPageActivity.class);
+		// TODO Auto-generated constructor stub
 	}
 	
 	
@@ -72,10 +50,12 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 		super.setUp();
 		page = new Page();
 		story = new Story();
+		handler = new ESHandler();
+		story.setHandler(handler);
 		story.setId("25");
+		story.setTitle("Unit Test Generated");
 		app.setPage(page);
 		app.setStory(story);
-
 		
 		activity = getActivity();
 		
@@ -88,6 +68,7 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 		
 	}
 	
+	
 	public void testLayout() {
 		assertNotNull(addTileButton);
 		assertNotNull(addDecisionButton);
@@ -96,11 +77,13 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 		assertNotNull(commentsTitle);
 	}
 	
+	
+	
+	
 	public void testStateDestroy() {
 		page = app.getPage();
 		page.addComment(new Comment("A comment"));
 		page.addTile(new TextTile());
-
 		page.addDecision(new Decision("A decision", new Page()));
 		
 		activity.finish();
@@ -118,7 +101,6 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 	
 	
 	
-	
 	public void testAddTextTile() {
 		page.getTiles().clear();
 		
@@ -132,7 +114,8 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 						addTileButton.performClick();
 					}
 				});
-		solo.clickOnText("TextTile");
+		solo.clickOnText("Text Tile");
+		//solo.clickOnText("Cancel");
 		page = app.getPage();
 		int l = page.getTiles().size();
 		assertEquals(l, 1);
@@ -142,62 +125,52 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 	public void testAddVideoTile() {
 		page.getTiles().clear();
 		
-	    Solo solo = new Solo(getInstrumentation(), getActivity());
-	    getInstrumentation().waitForIdleSync();
 	    
 		activity.runOnUiThread(
 				new Runnable() {
 					public void run() {
-						addTileButton.requestFocus();
-						addTileButton.performClick();
+						app.addTile(new VideoTile());
+						page = app.getPage();
+						int l = page.getTiles().size();
+						assertEquals(l, 1);
 					}
 				});
-		solo.clickOnText("{Placeholder} VideoTile");
-		page = app.getPage();
-		int l = page.getTiles().size();
-		assertEquals(l, 1);
 		
 	}
 	
 	public void testAddAudioTile() {
 		page.getTiles().clear();
-		
-	    Solo solo = new Solo(getInstrumentation(), getActivity());
-	    getInstrumentation().waitForIdleSync();
 	    
 		activity.runOnUiThread(
 				new Runnable() {
 					public void run() {
-						addTileButton.requestFocus();
-						addTileButton.performClick();
+						app.addTile(new AudioTile());
+						page = app.getPage();
+						int l = page.getTiles().size();
+						assertEquals(l, 1);
 					}
 				});
-		solo.clickOnText("{Placeholder} AudioTile");
-		page = app.getPage();
-		int l = page.getTiles().size();
-		assertEquals(l, 1);
+
 		
 	}
+	
 	
 	public void testAddPhotoTile() {
 		page.getTiles().clear();
 		
-	    Solo solo = new Solo(getInstrumentation(), getActivity());
-	    getInstrumentation().waitForIdleSync();
-	    
 		activity.runOnUiThread(
 				new Runnable() {
 					public void run() {
-						addTileButton.requestFocus();
-						addTileButton.performClick();
+						app.addTile(new PhotoTile());
+						page = app.getPage();
+						int l = page.getTiles().size();
+						assertEquals(l, 1);
 					}
 				});
-		solo.clickOnText("PhotoTile");
-		page = app.getPage();
-		int l = page.getTiles().size();
-		assertEquals(l, 1);
+
 		
 	}
+	
 	
 	
 	
@@ -213,8 +186,8 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 						addComment.performClick();
 					}
 				});
-		
-	    solo.enterText(0, "New Comment");
+		solo.clickOnText("No Image");
+	    solo.enterText(0, "Test Comment");
 	    solo.clickOnButton("Save");
 	    page = app.getPage();
 	    int l = page.getComments().size();
@@ -228,6 +201,7 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 	public void testAddDecision() {
 		page.getDecisions().clear();
 		
+	    Solo solo = new Solo(getInstrumentation(), getActivity());
 	    getInstrumentation().waitForIdleSync();
 	    
 		activity.runOnUiThread(
@@ -245,3 +219,4 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 	
 
 }
+

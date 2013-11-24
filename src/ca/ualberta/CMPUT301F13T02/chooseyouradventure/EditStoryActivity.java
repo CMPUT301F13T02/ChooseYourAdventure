@@ -63,6 +63,7 @@ public class EditStoryActivity extends Activity {
 	private ArrayList<Page> pageList = new ArrayList<Page>();
 	private ArrayAdapter<String> adapter;
 	private ControllerApp app;
+	private PageGUIs gui;
 	private StoryController storyController; 
 	private static final int HELP_INDEX = 0;
 
@@ -78,6 +79,7 @@ public class EditStoryActivity extends Activity {
         createNew2 = (Button) findViewById(R.id.createButton2);
         deleteStory = (Button) findViewById(R.id.deleteButton);
         app = (ControllerApp) getApplication();
+        gui = new PageGUIs(app, this);
         storyController = app.getStoryController();
         createNew2.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -181,28 +183,7 @@ public class EditStoryActivity extends Activity {
 	 */
 	private void createPage() throws HandlerException{
 
-    	final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.create_page_dialog, null);
-    	final EditText titleEdit = (EditText) layout.findViewById(R.id.create_page_dialog_edittext);
-    	final EditText healthEdit = (EditText) layout.findViewById(R.id.create_page_dialog_health_edittext);
-    	final EditText nameEdit = (EditText) layout.findViewById(R.id.create_page_dialog_name_edittext);
-    	final CheckBox check = (CheckBox) layout.findViewById(R.id.create_page_dialog_checkbox);
-    	final LinearLayout fightingLayout = (LinearLayout) layout.findViewById(R.id.create_page_dialog_fighting_options);
-    	
-    	if(!storyController.getStory().isUsesCombat())
-    		fightingLayout.setVisibility(View.GONE);
-    	nameEdit.setText("Enemy");
-    	healthEdit.setText("0");
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setView(layout);
-    	builder.setTitle(getString(R.string.createNew));
-    	builder.setMessage(getString(R.string.enterPageTitle))
-    	.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-            	storyController.newTitle(titleEdit.getText().toString(), check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString());         	
-            	refresh();
-            }
-        })
-        .setNegativeButton(getString(R.string.cancel), null);
+    	AlertDialog builder = gui.createPageGUI();
         builder.show();
     }
 
@@ -211,91 +192,7 @@ public class EditStoryActivity extends Activity {
 	 * @param Input from longclick
 	 */
 	public void pageOptions(final int pos){
-		final Story story = storyController.getStory();
-        final AlertDialog.Builder titleEditor = new AlertDialog.Builder(this);
-		final Page currentPage = story.getPages().get(pos);
-		final Page FP = storyController.grabFirstPage();
-
-		String[] titlesA = { getString(R.string.gotoEdit), getString(R.string.pageProperties), getString(R.string.cancel) };
-		String[] titlesB = { getString(R.string.gotoEdit), getString(R.string.pageProperties), getString(R.string.assignFirst),
-							getString(R.string.delete), getString(R.string.cancel) };
-
-		final String[] titles;
-
-		if(currentPage == FP)
-			titles = titlesA;
-		else
-			titles = titlesB;
-        
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.page_options);
-        builder.setItems(titles, new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int item) {
-            	
-            	switch(item){
-            	case(0):
-            		app.setEditing(true);
-            		app.jump(ViewPageActivity.class,story,story.getPages().get(pos));
-            		
-            	break;
-            	case(1):
-            		
-                	final LinearLayout layout = (LinearLayout) View.inflate(titleEditor.getContext(), R.layout.create_page_dialog, null);
-	            	final LinearLayout fightingLayout = (LinearLayout) layout.findViewById(R.id.create_page_dialog_fighting_options);
-	            	final EditText titleEdit = (EditText) layout.findViewById(R.id.create_page_dialog_edittext);
-	            	final EditText healthEdit = (EditText) layout.findViewById(R.id.create_page_dialog_health_edittext);
-                	final EditText nameEdit = (EditText) layout.findViewById(R.id.create_page_dialog_name_edittext);
-                	final CheckBox check = (CheckBox) layout.findViewById(R.id.create_page_dialog_checkbox);
-	            	
-	            	if(!story.isUsesCombat()) {
-	            		fightingLayout.setVisibility(View.GONE);
-	            	}
-	            	else {
-	            		
-	                	
-
-	            		check.setChecked(currentPage.isFightingFrag());
-	            		healthEdit.setText("" + currentPage.getEnemyHealth());
-	            		nameEdit.setText(currentPage.getEnemyName());
-	            	}
-            		
-	            	titleEdit.setText(currentPage.getTitle());
-	            	
-            		titleEditor.setTitle(getString(R.string.createNew));
-            		titleEditor.setView(layout);
-            		titleEditor.setMessage(getString(R.string.enterPageTitle))
-            		.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
-
-            			public void onClick(DialogInterface dialog, int id) {
-            				String pageTitle = titleEdit.getText().toString();
-            				if(story.isUsesCombat() == true){
-            					storyController.updateFightTitle(pageTitle, check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString(), currentPage); 
-            				}
-            				else{
-            					storyController.updateTitle(pageTitle, currentPage);    
-            				}
-            				refresh();
-            			}
-            		})
-            		.setNegativeButton(getString(R.string.cancel), null);
-
-            		titleEditor.show();
-            		
-            		break;
-
-            	case(2):
-            		storyController.updateFP(currentPage);
-            		refresh();
-            		break;
-            	case(3):
-            		storyController.removePage(currentPage);
-            		refresh();
-            		break;
-            	}
-
-            }	
-                });
+		AlertDialog builder = gui.pageOptionsGUI(pos);
         builder.show();
     }
 	

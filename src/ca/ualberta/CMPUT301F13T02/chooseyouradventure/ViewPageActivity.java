@@ -101,6 +101,10 @@ public class ViewPageActivity extends Activity {
 	private FightView fightView = new FightView();
 	private TileView tileView;
 	private DecisionView decisionView;
+	private ViewPageMenus gui;
+	private TilesGUIs guiTile;
+	private DecisionGUIs guiDecision;
+	private CommentGUIs guiComment;
 	private StoryController storyController; 
 	private PageController pageController; 
     private ControllerApp app;
@@ -122,6 +126,10 @@ public class ViewPageActivity extends Activity {
         app = (ControllerApp) this.getApplication();
         tileView = new TileView(app, this);
         decisionView = new DecisionView(app, this);
+        gui = new ViewPageMenus(app, this);
+        guiTile = new TilesGUIs(app, this);
+        guiDecision = new DecisionGUIs(app, this);
+        guiComment = new CommentGUIs(app, this);
         storyController = app.getStoryController();
         pageController = app.getPageController();
         
@@ -313,49 +321,7 @@ public class ViewPageActivity extends Activity {
 	 * like to add.
 	 */
 	public void addTileMenu(){		
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		final AlertDialog.Builder photoSelector = 
-				new AlertDialog.Builder(this);
-		final String[] titles = { getString(R.string.textTile), getString(R.string.photoTile),
-				                   getString(R.string.videoTile), getString(R.string.audioTile), getString(R.string.cancel) };   
-		final String[] titlesPhoto = { getString(R.string.fromFile), getString(R.string.takePhoto), getString(R.string.cancel) };
-        builder.setItems(titles, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-            	switch(item){
-            	case(0):
-            		//TODO fix this to be MVC and observer pattern
-            		TextTile tile = new TextTile();
-					pageController.getPage().addTile(tile);
-					tileView.addTile(pageController.getPage().getTiles().size() - 1, tile, tilesLayout);   				
-            		break;
-            	case(1):
-            		photoSelector.setItems(titlesPhoto, 
-            				new DialogInterface.OnClickListener() {
-            			 public void onClick(DialogInterface dialog, 
-            					              int item) {
-            	            	switch(item){
-	            	            	case(0):
-	            	            		getPhoto();
-	            	            		
-	            	            		
-	            	            		break;
-	            	            	case(1):
-	            	            		takePhoto();
-	            	            		break;
-            	            	}
-            	                }});
-            	       	photoSelector.show();
-            		
-            		break;
-            		
-            		
-            	case(2):
-            		break;
-            	case(3):
-            		break;
-            	}
-                    
-                }});
+		AlertDialog builder = guiTile.addTileMenuGUI(tilesLayout);
         builder.show();
     }
 	
@@ -473,34 +439,16 @@ public class ViewPageActivity extends Activity {
 	 * @param view
 	 */
 	public void editTileMenu(final View view){
-		final String[] titles = { getString(R.string.edit), getString(R.string.delete) };
-		
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.story_options);
-        builder.setItems(titles, new DialogInterface.OnClickListener() {
-        	
-            public void onClick(DialogInterface dialog, int item) {
-            	int whichTile = tilesLayout.indexOfChild(view);
-            	switch(item){
-            	case(0):
-            		onEditTile(view);
-            		break;
-            	case(1):
-            		pageController.deleteTile(whichTile);
-            		break;
-            	}
-            }
-            
-        });
+		AlertDialog builder = guiTile.editTileMenuGUI(view, tilesLayout);
         builder.show();
     }
 	
-	private void takePhoto() {
+	protected void takePhoto() {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		startActivityForResult(intent, TAKE_PHOTO);
 	}
 	
-	private void addPhoto() {
+	protected void addPhoto() {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		startActivityForResult(intent, ADD_PHOTO);
 	}
@@ -509,23 +457,10 @@ public class ViewPageActivity extends Activity {
 	 * Displays a dialog for editing a tile.
 	 * @param view
 	 */
-	private void onEditTile(View view) {
-		final TextView textView = (TextView) view;
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	final EditText alertEdit = new EditText(this);
-    	alertEdit.setText(textView.getText().toString());
-    	builder.setView(alertEdit);
-    	builder.setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-            	int whichTile = tilesLayout.indexOfChild(textView);
-            	pageController.updateTile(alertEdit.getText().toString(), whichTile);
-            }
-        })
-        .setNegativeButton(getString(R.string.done), null);
-
+	protected void onEditTile(View view) {
+		AlertDialog builder = guiTile.onEditTileGUI(view, tilesLayout);
         builder.show();
 	}
-	
 	
 	
 	/**
@@ -533,132 +468,18 @@ public class ViewPageActivity extends Activity {
 	 * @param view
 	 */
 	public void decisionMenu(final View view){
-		final String[] titles;
-		final String[] titlesBasic = { getString(R.string.editProperties), getString(R.string.delete), getString(R.string.cancel) };
-		final String[] titlesCounter = { getString(R.string.editProperties), getString(R.string.delete),
-				                          getString(R.string.transitionMessages), getString(R.string.cancel) };
-		final String[] titlesFight = { getString(R.string.editProperties), getString(R.string.delete), getString(R.string.transitionMessages),
-				                        getString(R.string.setConditionals), getString(R.string.cancel) };
-		final boolean fighting = pageController.getPage().isFightingFrag();
-		final boolean combat = storyController.getStory().isUsesCombat();
-		if(fighting == true){
-			titles = titlesFight;
-		}
-		else if(combat == true){
-			titles = titlesCounter;
-		}
-		else{
-			titles = titlesBasic;
-		}
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.story_options);
-        builder.setItems(titles, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-            	int whichDecision = decisionsLayout.indexOfChild(view);
-            	switch(item){
-            	case(0):
-            		onEditDecision(view);
-            		break;
-            	case(1):
-            		pageController.deleteDecision(whichDecision);
-            		break;
-            	case(2):
-            		if(combat == true){
-            			onEditMessages(view);
-            		}
-            		break;
-            	case(3):
-            		if(fighting == true){
-            			onEditConditionals(view);
-            		}
-            		break;
-            	}
-            }
-        });
+		AlertDialog builder = guiDecision.decisionMenuGUI(view, decisionsLayout);
         builder.show();
     }
 	
 	protected void onEditMessages(View view) {
 
-		final int whichDecision = decisionsLayout.indexOfChild(view);
-		final Decision decision = pageController.findDecisionByIndex(whichDecision);
-		ArrayList<Page> pages = storyController.getPages();
-		int toPagePosition = pageController.findArrayPosition(decision, pages);
-		
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle(getString(R.string.counterMessage));
-    	
-    	final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.edit_messages_dialog, null);
-    	final EditText decisionTitle = (EditText) layout.findViewById(R.id.edit_messages_dialog_decision_edittext);
-    	final EditText dMessage = (EditText) layout.findViewById(R.id.edit_messages_dialog_takeDamage_edittext);
-    	final EditText hMessage = (EditText) layout.findViewById(R.id.edit_messages_dialog_giveDamage_edittext);
-    	final EditText tMessage = (EditText) layout.findViewById(R.id.edit_messages_dialog_coin_edittext);
-    	final Spinner pageSpinner = (Spinner) layout.findViewById(R.id.edit_messages_dialog_page_spinner);
-
-    	ArrayList<String> pageStrings = app.getPageStrings(pages);
-    	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, R.layout.list_item_base, pageStrings);
-    	pageSpinner.setAdapter(pagesAdapter);
-    	pageSpinner.setSelection(toPagePosition);
-    	
-    	decisionTitle.setText(decision.getText());
-    	dMessage.setText("" + decision.getChoiceModifiers().getDamageMessage());
-    	hMessage.setText("" + decision.getChoiceModifiers().getHitMessage());
-    	tMessage.setText("" + decision.getChoiceModifiers().getTreasureMessage());
-    	
-    	builder.setView(layout);
-    	builder.setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int id) {
-        		Counters counter = decision.getChoiceModifiers();
-        		counter.setMessages(dMessage.getText().toString(), tMessage.getText().toString(), hMessage.getText().toString());
-        		app.updateDecisionFight(decisionTitle.getText().toString(), pageSpinner.getSelectedItemPosition(),whichDecision, counter);
-            }
-        })
-        .setNegativeButton(getString(R.string.cancel), null);
-
+		AlertDialog builder = guiDecision.onEditMessages(view, decisionsLayout);
         builder.show();
 	}
 
 	protected void onEditConditionals(View view) {
-		final int whichDecision = decisionsLayout.indexOfChild(view);
-		final Decision decision = pageController.findDecisionByIndex(whichDecision);
-		ArrayList<Page> pages = storyController.getPages();
-		int toPagePosition = pageController.findArrayPosition(decision, pages);
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle(getString(R.string.setDecisionConditions));
-    	
-    	final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.edit_conditionals_dialog, null);
-    	final EditText decisionText = (EditText) layout.findViewById(R.id.edit_conditionals_dialog_decision_edittext);
-    	final EditText conditionText = (EditText) layout.findViewById(R.id.edit_conditionals_dialog_threshold_edittext);
-    	final Spinner pageSpinner = (Spinner) layout.findViewById(R.id.edit_conditionals_dialog_page_spinner);
-    	final Spinner condSpinner = (Spinner) layout.findViewById(R.id.edit_conditionals_dialog_type_spinner);
-    	final Spinner signSpinner = (Spinner) layout.findViewById(R.id.edit_conditionals_dialog_op_spinner);
-    	
-    	conditionText.setText("" + decision.getChoiceModifiers().getThresholdValue());
-    	decisionText.setText(decision.getText());
-    	
-    	ArrayList<String> pageStrings = app.getPageStrings(pages);
-    	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, R.layout.list_item_base, pageStrings);
-    	pageSpinner.setAdapter(pagesAdapter);
-    	pageSpinner.setSelection(toPagePosition);
-    	
-    	
-    	condSpinner.setSelection(decision.getChoiceModifiers().getThresholdType());
-    	
-    	
-    	signSpinner.setSelection(decision.getChoiceModifiers().getThresholdSign());
-    	
-    	builder.setView(layout);
-    	builder.setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int id) {
-        		Counters counter = decision.getChoiceModifiers();
-        		counter.setThresholds(signSpinner.getSelectedItemPosition(), condSpinner.getSelectedItemPosition(), conditionText.getText().toString());
-        		app.updateDecisionFight(decisionText.getText().toString(), pageSpinner.getSelectedItemPosition(), whichDecision, counter);
-            }
-        })
-        .setNegativeButton(getString(R.string.cancel), null);
-
+		AlertDialog builder = guiDecision.onEditDecisionGUI(view, decisionsLayout);
         builder.show();
 	}
 
@@ -688,102 +509,8 @@ public class ViewPageActivity extends Activity {
 	 * Brings up a dialog for editing the decision clicked.
 	 * @param view
 	 */
-	private void onEditDecision(View view) {
-		int whichDecision = decisionsLayout.indexOfChild(view);
-		final Decision decision = pageController.getPage().getDecisions().get(whichDecision);
-		final Story story = storyController.getStory();
-		final Page page = pageController.getPage();
-		UUID toPageId = decision.getPageID();
-		ArrayList<Page> pages = story.getPages();
-		int toPagePosition = -1;
-		for (int i = 0; i < pages.size(); i++) {
-
-			UUID comparePage = pages.get(i).getId();
-			System.out.println("toPageID: " + toPageId + "\ncomparePage: " + comparePage + "\nPage: " + page + "\nDecision: " + decision.getPageID() + decision.getText());
-			if (toPageId.equals(comparePage)) {
-				toPagePosition = i;
-				break;
-			}
-		}
-		
-		final TextView decisionView = (TextView) view;
-		
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle(getString(R.string.setTextandPage));
-    	
-    	final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.edit_decision_dialog, null);
-    	final LinearLayout combatOptions = (LinearLayout) layout.findViewById(R.id.edit_decision_dialog_page_combatoptions);
-    	final LinearLayout fightOptions = (LinearLayout) layout.findViewById(R.id.edit_decision_dialog_page_fightoptions);
-    	final Spinner pageSpinner = (Spinner) layout.findViewById(R.id.edit_decision_dialog_page_spinner);
-    	final EditText decisionText = (EditText) layout.findViewById(R.id.edit_decision_dialog_decision_edittext);
-    	final EditText alertTreasure = (EditText) layout.findViewById(R.id.edit_decision_dialog_coin_edittext);
-    	final EditText playerDamage = (EditText) layout.findViewById(R.id.edit_decision_dialog_playerDamage_edittext); 
-    	final EditText enemyDamage = (EditText) layout.findViewById(R.id.edit_decision_dialog_enemyDamage_edittext); 
-    	final SeekBar seekPlayer = (SeekBar) layout.findViewById(R.id.edit_decision_dialog_playerPerc); 
-    	final SeekBar seekEnemy = (SeekBar) layout.findViewById(R.id.edit_decision_dialog_enemyPerc); 
-    	decisionText.setText(decision.getText());
-    	
-    	ArrayList<String> pageStrings = app.getPageStrings(pages);
-    	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(this, R.layout.list_item_base, pageStrings);
-
-    	if(page.getDecisions().size() > 2){
-    		pageStrings.add(getString(R.string.randomChoice));
-    	}
-
-    	pageSpinner.setAdapter(pagesAdapter);
-    	pageSpinner.setSelection(toPagePosition);
-    	
-    	if(!story.isUsesCombat()) {
-			combatOptions.setVisibility(View.GONE);
-    	}
-    	else {
-
-        	alertTreasure.setText("" + decision.getChoiceModifiers().getTreasureStat());
-        	playerDamage.setText("" + decision.getChoiceModifiers().getPlayerHpStat());
-
-        	if(!page.isFightingFrag()) {
-        		fightOptions.setVisibility(View.GONE);
-        	}
-        	else {
-        		
-            	seekPlayer.setProgress(decision.getChoiceModifiers().getPlayerHitPercent());
-            	enemyDamage.setText("" + decision.getChoiceModifiers().getEnemyHpStat());
-            	seekEnemy.setProgress(decision.getChoiceModifiers().getEnemyHitPercent());
-        	}
-    	}
-
-    	builder.setView(layout);
-    	builder.setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-            	Counters counter = decision.getChoiceModifiers();
-        		int decisionNumber = decisionsLayout.indexOfChild(decisionView);
-        		if(story.isUsesCombat() == true){
-        			String treasure = alertTreasure.getText().toString();
-        			String hp = playerDamage.getText().toString();
-        			if(page.isFightingFrag() == false){      				
-        				counter.setBasic(treasure, hp);
-	        			app.updateDecisionFight(decisionText.getText().toString(), 
-	                			pageSpinner.getSelectedItemPosition(), decisionNumber, counter);
-        			}
-	        		else{
-	        			String ehp = enemyDamage.getText().toString();
-	        			String hitP = "" + seekPlayer.getProgress();
-	        			String hitE = "" + seekEnemy.getProgress();
-	        			
-	        			counter.setStats(treasure, hp, ehp, hitE, hitP);
-	        			app.updateDecisionFight(decisionText.getText().toString(), 
-	                			pageSpinner.getSelectedItemPosition(), decisionNumber, counter);
-	        		}     			
-        		}
-        		else{
-        		
-            	app.updateDecision(decisionText.getText().toString(), 
-            			pageSpinner.getSelectedItemPosition(), decisionNumber);
-        		}
-            }
-        })
-        .setNegativeButton(getString(R.string.cancel), null);
-
+	protected void onEditDecision(View view) {
+		AlertDialog builder = guiDecision.onEditDecisionGUI(view, decisionsLayout);
         builder.show();
 	}
 	
@@ -821,64 +548,13 @@ public class ViewPageActivity extends Activity {
 	 * @param view
 	 */
 	private void onCallComment(){
-		final String[] titlesPhoto = { getString(R.string.noImage), getString(R.string.fromFile),
-				                       getString(R.string.takePhoto) };
-		final AlertDialog.Builder photoSelector = 
-				new AlertDialog.Builder(this); 
-		photoSelector.setTitle(getString(R.string.usePhotoComment));
-		photoSelector.setItems(titlesPhoto, 
-				new DialogInterface.OnClickListener() {
-			 public void onClick(DialogInterface dialog, 
-					              int item) {
-	            	switch(item){
-    	            	
-    	            	
-    	            	case(0):
-    	            		onEditComment();
-    	            		break;
-    	            	case(1):
-    	            		grabPhoto();	            		
-    	            		break;
-    	            	case(2):
-    	            		addPhoto();            		
-    	            		break;
-	            	}
-	            	
-	                }
-			 }
-		
-		);
+		AlertDialog photoSelector = guiComment.onCallCommentGUI();
 		photoSelector.show();
 	      
 	}
-	private void onEditComment() {
+	protected void onEditComment() {
 
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle(getString(R.string.whatToSay));
-    	
-    	final LinearLayout layout = new LinearLayout(this);
-    	layout.setOrientation(LinearLayout.VERTICAL);
-    	
-    	final EditText alertEdit = new EditText(this);
-    	layout.addView(alertEdit);
-    	
-    	final ImageView alertImage = new ImageView(this);
-    	
-    	final PhotoTile photoAdd = (PhotoTile) app.getTempSpace();
-		app.setTempSpace(null);
-
-		if(photoAdd != null)
-			alertImage.setImageBitmap(photoAdd.getImage());
-
-    	layout.addView(alertImage);
-    	
-		builder.setView(layout);
-    	builder.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-            	app.addComment(alertEdit.getText().toString(),photoAdd );
-            }
-        })
-        .setNegativeButton(getString(R.string.cancel), null);
+    	AlertDialog builder = guiComment.onEditCommentGUI();
         builder.show();
 	}
 	
@@ -888,17 +564,7 @@ public class ViewPageActivity extends Activity {
 	 */
 	private void onEditPageEnding(View view) {
 		if (app.getEditing()) {
-			TextView textView = (TextView) view;
-	    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	    	final EditText alertEdit = new EditText(this);
-	    	alertEdit.setText(textView.getText().toString());
-	    	builder.setView(alertEdit);
-	    	builder.setPositiveButton(getString(R.string.done), new DialogInterface.OnClickListener() {
-	            public void onClick(DialogInterface dialog, int id) {
-	            	pageController.setEnding(alertEdit.getText().toString());
-	            }
-	        })
-	        .setNegativeButton(getString(R.string.cancel), null);
+			AlertDialog builder = gui.onEditPageEndingGUI(view);
 	        builder.show();
 		}
 	}

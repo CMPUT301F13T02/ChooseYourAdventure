@@ -80,7 +80,8 @@ public class PhotoTile extends Tile{
 	/**
 	 * @return the image
 	 */
-	public Bitmap getImage() {
+	@Override
+	public Object getContent() {
 		return BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
 	}
 

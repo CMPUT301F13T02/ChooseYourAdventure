@@ -40,7 +40,7 @@ public class TestPhotoTile extends InstrumentationTestCase {
 	public void testSetContent() {
 		PhotoTile tile = new PhotoTile();
 		Bitmap bm = BitmapFactory.decodeFile("/ChooseYourAdventure/res/drawable-hdpi/ic_launcher.png");
-//		tile.setImage(bm); Not implemented? Konrad 11/17/13
+		tile.setContent(bm);
 		Bitmap tileBm = tile.getImage();
 		assertEquals(bm, tileBm);
 		

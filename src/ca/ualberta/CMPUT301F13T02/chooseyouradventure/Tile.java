@@ -66,4 +66,5 @@ public abstract class Tile {
 	public abstract String getType();
 	abstract boolean equals(Tile tile);
 	public abstract void setContent(Object content);
+	public abstract Object getContent();
 }

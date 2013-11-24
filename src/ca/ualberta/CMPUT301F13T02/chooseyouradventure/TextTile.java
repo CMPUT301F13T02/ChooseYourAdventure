@@ -61,7 +61,7 @@ public class TextTile extends Tile{
      * 
      * @return This tile's text
      */
-    public String getText() {
+    public Object getContent() {
     	return text;
     }
     
@@ -82,9 +82,11 @@ public class TextTile extends Tile{
      * @return Whether or not the two tiles are considered equal
      */
     public boolean equals(Tile tile) {
-    	if (tile instanceof TextTile)
-	    	return text.equals(((TextTile)tile).getText());
-    	else
+    	if (tile instanceof TextTile) {
+    		String tileText = (String) ((TextTile)tile).getContent();
+	    	return text.equals(tileText);
+    	} else {
     		return false;
+    	}
     }
 }

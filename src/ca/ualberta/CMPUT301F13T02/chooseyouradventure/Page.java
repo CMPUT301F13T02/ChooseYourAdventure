@@ -200,7 +200,7 @@ public class Page {
 		decisions.get(decisionNumber).updateDecision(text, page);
 	}
 	
-	public void updateDecision(String text, Page page, int decisionNumber, Counters counter) {
+	public void updateDecisionFight(String text, Page page, int decisionNumber, Counters counter) {
 		decisions.get(decisionNumber).updateDecision(text, page, counter);
 	}
 

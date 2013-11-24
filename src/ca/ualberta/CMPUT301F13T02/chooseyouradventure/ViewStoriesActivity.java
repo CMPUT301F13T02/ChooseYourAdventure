@@ -56,7 +56,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.SearchView;
-
 import android.widget.TextView;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
@@ -89,6 +88,8 @@ public class ViewStoriesActivity extends Activity {
 	ArrayList<String> storyText = new ArrayList<String>();
 	ArrayList<Story> storyList = new ArrayList<Story>();
 	private ControllerApp app; 
+	private StoryGUIs gui;
+	
 	private SampleGenerator sampleGen = new SampleGenerator();
 	private Handler eshandler = new ESHandler();
 	private Handler dbhandler = new DBHandler(this);
@@ -136,6 +137,7 @@ public class ViewStoriesActivity extends Activity {
         });
         
         app = (ControllerApp) getApplication();
+        gui = new StoryGUIs(app, this);
         
         
 		try {
@@ -248,69 +250,7 @@ public class ViewStoriesActivity extends Activity {
      * @param v The view of the longClicked story
      */
 	public void storyMenu(int pos){
-			final Story story = storyList.get(pos);
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			final String[] titles;
-			final String[] titlesA = { getString(R.string.cache), getString(R.string.upload), getString(R.string.edit), 
-									   getString(R.string.delete), getString(R.string.cancel) };
-			final String[] titlesB = { getString(R.string.cache), getString(R.string.uploadCopy), getString(R.string.cancel) };
-			final String myId = Secure.getString(
-					getBaseContext().getContentResolver(), Secure.ANDROID_ID);
-			final String storyID = story.getAuthor();
-			if(myId.equals(storyID)){
-				titles = titlesA;
-				builder.setTitle(R.string.story_options_author);
-			}
-			else {
-				titles = titlesB;
-				builder.setTitle(R.string.story_options_user);
-			}
-            builder.setItems(titles, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int item) {
-                	switch(item){
-
-                	case(0): //cache
-                		//set to local handler, 1 means it is local
-                		story.setHandler(dbhandler);
-	                	story.setAuthor(myId);
-
-                		try {
-                			story.getHandler().addStory(story);
-                		} catch (HandlerException e) {
-                			e.printStackTrace();
-                		}
-
-                		refresh();
-                		break;
-                	case(1): //upload
-                		// the 0 passed means it isn't local
-                		story.setHandler(eshandler);
-            			//create a new story because you have to change author ID
-            			story.setAuthor(myId);
-            			//set it to be online initially
-						try {
-							eshandler.addStory(story);
-						} catch (HandlerException e) {
-							e.printStackTrace();
-						}
-						refresh();
-                		break;
-                	case(2): //edit story
-                		if(myId.equals(storyID)){          			
-                    		app.jump(EditStoryActivity.class, story, null);
-                		}
-                		else{}
-                		break;
-                	case(3): //delete
-                		try {
-							story.getHandler().deleteStory(story);
-						} catch (HandlerException e) {
-							e.printStackTrace();
-						}
-                		refresh();
-                		break;
-                	}
-                    }});
+			AlertDialog builder = gui.storyMenuGUI(storyList, pos, eshandler, dbhandler);
             builder.show();
         }
 
@@ -321,46 +261,7 @@ public class ViewStoriesActivity extends Activity {
      */
     private void createStory(){
 
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle(getString(R.string.createNew));
-    	
-    	final LinearLayout layout = new LinearLayout(this);
-    	layout.setOrientation(LinearLayout.VERTICAL);
-    	
-    	final EditText alertEdit = new EditText(this);
-    	alertEdit.setSingleLine(true);
-    	layout.addView(alertEdit);
-    	
-    	final TextView alertText = new TextView(this);
-    	alertText.setText(getString(R.string.useCountersAndCombat));
-    	layout.addView(alertText);
-    	
-    	final CheckBox check = new CheckBox(this);
-    	layout.addView(check);
-        
-    	builder.setView(layout);
-    	builder.setMessage(getString(R.string.enterStoryTitle))
-    	.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-            	
-					try {
-						if(check.isChecked() == true){
-							Counters baseCount = new Counters();
-							baseCount.setBasic("0", "100");
-							app.initializeNewStory(alertEdit.getText().toString(), baseCount);
-						}
-						else{
-						app.initializeNewStory(alertEdit.getText().toString());}
-						
-						
-						refresh();
-					} catch (HandlerException e) {
-						e.printStackTrace();
-					}
-
-            }
-        })
-        .setNegativeButton(getString(R.string.cancel), null);
+    	AlertDialog builder = gui.createStoryGUI();
         builder.show();
     }
     
@@ -389,4 +290,6 @@ public class ViewStoriesActivity extends Activity {
     public void setHandler(Handler handler) {
     	eshandler = handler;
     }
+    
+
 }

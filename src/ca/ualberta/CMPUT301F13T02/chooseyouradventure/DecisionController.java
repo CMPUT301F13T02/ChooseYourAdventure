@@ -7,15 +7,14 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class DecisionView {
-	
+public class DecisionController {
 	private ControllerApp app;
 	private ViewPageActivity pageActivity;
 	private StoryController storyController; 
 	private PageController pageController; 
 	
 	
-	public DecisionView(ControllerApp app, ViewPageActivity pageActivity) {
+	public DecisionController(ControllerApp app, ViewPageActivity pageActivity) {
 		super();
 		this.app = app;
 		this.pageActivity = pageActivity;

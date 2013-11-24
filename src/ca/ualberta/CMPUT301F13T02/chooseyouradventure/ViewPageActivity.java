@@ -98,10 +98,9 @@ public class ViewPageActivity extends Activity {
 	private LinearLayout commentsLayout;
 	private LinearLayout fightingLayout;
 	
-	private FightView fightView = new FightView();
-	private TileView tileView;
-	private DecisionView decisionView;
-	private ViewPageMenus gui;
+	private FightController fightView = new FightController();
+	private TileController tileView;
+	private DecisionController decisionView;
 	private TilesGUIs guiTile;
 	private DecisionGUIs guiDecision;
 	private CommentGUIs guiComment;
@@ -124,9 +123,8 @@ public class ViewPageActivity extends Activity {
         super.onResume();
         
         app = (ControllerApp) this.getApplication();
-        tileView = new TileView(app, this);
-        decisionView = new DecisionView(app, this);
-        gui = new ViewPageMenus(app, this);
+        tileView = new TileController(app, this);
+        decisionView = new DecisionController(app, this);
         guiTile = new TilesGUIs(app, this);
         guiDecision = new DecisionGUIs(app, this);
         guiComment = new CommentGUIs(app, this);
@@ -564,7 +562,7 @@ public class ViewPageActivity extends Activity {
 	 */
 	private void onEditPageEnding(View view) {
 		if (app.getEditing()) {
-			AlertDialog builder = gui.onEditPageEndingGUI(view);
+			AlertDialog builder = guiTile.onEditPageEndingGUI(view);
 	        builder.show();
 		}
 	}

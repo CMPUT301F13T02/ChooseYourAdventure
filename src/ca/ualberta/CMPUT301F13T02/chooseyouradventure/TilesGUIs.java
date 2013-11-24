@@ -10,19 +10,16 @@ import android.widget.TextView;
 public class TilesGUIs {
 	private ControllerApp app;
 	private ViewPageActivity pageActivity;
-	private StoryController storyController; 
 	private PageController pageController; 
-	private TileView tileView;
-	private DecisionView decisionView;
+	private TileController tileView;
 	
 	public TilesGUIs(ControllerApp app, ViewPageActivity pageActivity) {
 		super();
 		this.app = app;
 		this.pageActivity = pageActivity;
-		storyController = app.getStoryController();
         pageController = app.getPageController();
-        tileView = new TileView(app, pageActivity);
-        decisionView = new DecisionView(app, pageActivity);
+        tileView = new TileController(app, pageActivity);
+
 	}
 	
 	public AlertDialog addTileMenuGUI(final LinearLayout tilesLayout){
@@ -109,6 +106,23 @@ public class TilesGUIs {
             
         });
         return builder.create();
+	}
+	
+	protected AlertDialog onEditPageEndingGUI(View view){
+		TextView textView = (TextView) view;
+		AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
+		final EditText alertEdit = new EditText(pageActivity);
+		alertEdit.setText(textView.getText().toString());
+		builder.setView(alertEdit);
+		builder.setPositiveButton(app.getString(R.string.done), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				pageController.setEnding(alertEdit.getText().toString());
+			}
+		})
+		.setNegativeButton(app.getString(R.string.cancel), null);
+		return builder.create();
+
+
 	}
 
 }

@@ -12,13 +12,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class TileView {
-	
-	
+public class TileController {
 	private ControllerApp app;
 	private ViewPageActivity pageActivity;
 	
-	public TileView(ControllerApp app, ViewPageActivity pageActivity) {
+	public TileController(ControllerApp app, ViewPageActivity pageActivity) {
 		super();
 		this.app = app;
 		this.pageActivity = pageActivity;
@@ -126,5 +124,6 @@ public class TileView {
 		
 		return view;
 	}
+
 
 }

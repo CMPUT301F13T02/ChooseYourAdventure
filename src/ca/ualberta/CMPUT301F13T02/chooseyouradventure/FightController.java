@@ -4,7 +4,7 @@ import android.graphics.Color;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class FightView {
+public class FightController {
 	protected void updateFightView(LinearLayout fightingLayout, ControllerApp app) {
 		StoryController storyController = app.getStoryController();
         PageController pageController = app.getPageController();
@@ -86,5 +86,6 @@ public class FightView {
 		fightingUpdate.setText(displayChanges);
 		fightingLayout.addView(fightingUpdate);
 	}
+
 
 }

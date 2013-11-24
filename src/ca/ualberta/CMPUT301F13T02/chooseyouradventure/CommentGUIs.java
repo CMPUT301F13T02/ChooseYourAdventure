@@ -9,19 +9,11 @@ import android.widget.LinearLayout;
 public class CommentGUIs {
 	private ControllerApp app;
 	private ViewPageActivity pageActivity;
-	private StoryController storyController; 
-	private PageController pageController; 
-	private TileView tileView;
-	private DecisionView decisionView;
 	
 	public CommentGUIs(ControllerApp app, ViewPageActivity pageActivity) {
 		super();
 		this.app = app;
 		this.pageActivity = pageActivity;
-		storyController = app.getStoryController();
-        pageController = app.getPageController();
-        tileView = new TileView(app, pageActivity);
-        decisionView = new DecisionView(app, pageActivity);
 	}
 	
 	protected AlertDialog onCallCommentGUI(){

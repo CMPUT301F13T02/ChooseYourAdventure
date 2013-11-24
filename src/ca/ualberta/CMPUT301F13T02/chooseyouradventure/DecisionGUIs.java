@@ -18,8 +18,7 @@ public class DecisionGUIs {
 	private ViewPageActivity pageActivity;
 	private StoryController storyController; 
 	private PageController pageController; 
-	private TileView tileView;
-	private DecisionView decisionView;
+
 	
 	public DecisionGUIs(ControllerApp app, ViewPageActivity pageActivity) {
 		super();
@@ -27,8 +26,7 @@ public class DecisionGUIs {
 		this.pageActivity = pageActivity;
 		storyController = app.getStoryController();
         pageController = app.getPageController();
-        tileView = new TileView(app, pageActivity);
-        decisionView = new DecisionView(app, pageActivity);
+
 	}
 	
 	protected AlertDialog onEditDecisionGUI(View view, final LinearLayout decisionsLayout){

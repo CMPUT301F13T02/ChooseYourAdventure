@@ -56,12 +56,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             android:label="@string/title_view_stories_activity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+				<action android:name="android.intent.action.SEARCH"/>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <meta-data 
-                android:name="android.app.default_searchable"
-                android:value="ca.ualberta.CMPUT301F13T02.chooseyouradventure.SearchableActivity" />
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
         </activity>
         <activity
             android:name="ca.ualberta.CMPUT301F13T02.chooseyouradventure.ViewPageActivity"
@@ -74,6 +74,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
         <uses-library android:name="android.test.runner" />
         
+        <!--  
         <activity
             android:name="ca.ualberta.CMPUT301F13T02.chooseyouradventure.SearchableActivity"
             android:label="@string/title_activity_search_stories" >
@@ -84,6 +85,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 				android:name="android.app.searchable"
 				android:resource="@xml/searchable" />
         </activity>
+        -->
     </application>
 
     <instrumentation

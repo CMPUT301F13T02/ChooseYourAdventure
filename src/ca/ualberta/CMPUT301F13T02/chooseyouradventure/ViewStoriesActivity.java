@@ -200,7 +200,7 @@ public class ViewStoriesActivity extends Activity {
 	@Override
 	public void onResume() {
         super.onResume();
-        //refresh();
+        refresh();
     }
 	
 	protected void onNewIntent(Intent intent) {

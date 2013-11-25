@@ -1,3 +1,33 @@
+/*
+* Copyright (c) 2013, TeamCMPUT301F13T02
+* All rights reserved.
+* 
+* Redistribution and use in source and binary forms, with or without modification,
+* are permitted provided that the following conditions are met:
+* 
+* Redistributions of source code must retain the above copyright notice, this
+* list of conditions and the following disclaimer.
+* 
+* Redistributions in binary form must reproduce the above copyright notice, this
+* list of conditions and the following disclaimer in the documentation and/or
+* other materials provided with the distribution.
+* 
+* Neither the name of the {organization} nor the names of its
+* contributors may be used to endorse or promote products derived from
+* this software without specific prior written permission.
+* 
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+* ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+* ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import android.app.AlertDialog;
@@ -11,7 +41,6 @@ public class PageGUIs {
 	private ControllerApp app;
 	private EditStoryActivity storyActivity;
 	private StoryController storyController; 
-	private PageController pageController;
 	
 
 	
@@ -20,7 +49,6 @@ public class PageGUIs {
 		this.app = app;
 		this.storyActivity = storyActivity;
 		storyController = app.getStoryController();
-        pageController = app.getPageController();
         
 	}
 	
@@ -49,7 +77,7 @@ public class PageGUIs {
             	
             	switch(item){
             	case(0):
-            		app.setEditing(true);
+            		
             		app.jump(ViewPageActivity.class,story,story.getPages().get(pos));
             		
             	break;
@@ -84,10 +112,10 @@ public class PageGUIs {
             			public void onClick(DialogInterface dialog, int id) {
             				String pageTitle = titleEdit.getText().toString();
             				if(story.isUsesCombat() == true){
-            					storyController.updateFightTitle(pageTitle, check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString(), currentPage); 
+            					storyController.updatePageData(pageTitle, check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString(), currentPage); 
             				}
             				else{
-            					storyController.updateTitle(pageTitle, currentPage);    
+            					storyController.updatePageData(pageTitle, false, null, null, currentPage);    
             				}
             				storyActivity.refresh();
             			}
@@ -120,7 +148,6 @@ public class PageGUIs {
     	final EditText nameEdit = (EditText) layout.findViewById(R.id.create_page_dialog_name_edittext);
     	final CheckBox check = (CheckBox) layout.findViewById(R.id.create_page_dialog_checkbox);
     	final LinearLayout fightingLayout = (LinearLayout) layout.findViewById(R.id.create_page_dialog_fighting_options);
-    	
     	if(!storyController.getStory().isUsesCombat())
     		fightingLayout.setVisibility(View.GONE);
     	nameEdit.setText("Enemy");
@@ -131,7 +158,7 @@ public class PageGUIs {
     	builder.setMessage(storyActivity.getString(R.string.enterPageTitle))
     	.setPositiveButton(storyActivity.getString(R.string.save), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-            	storyController.newTitle(titleEdit.getText().toString(), check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString());         	
+            	storyController.newPage(titleEdit.getText().toString(), check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString());         	
             	storyActivity.refresh();
             }
         })

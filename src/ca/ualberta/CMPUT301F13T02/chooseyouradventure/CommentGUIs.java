@@ -1,6 +1,34 @@
-package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
+/*
+* Copyright (c) 2013, TeamCMPUT301F13T02
+* All rights reserved.
+* 
+* Redistribution and use in source and binary forms, with or without modification,
+* are permitted provided that the following conditions are met:
+* 
+* Redistributions of source code must retain the above copyright notice, this
+* list of conditions and the following disclaimer.
+* 
+* Redistributions in binary form must reproduce the above copyright notice, this
+* list of conditions and the following disclaimer in the documentation and/or
+* other materials provided with the distribution.
+* 
+* Neither the name of the {organization} nor the names of its
+* contributors may be used to endorse or promote products derived from
+* this software without specific prior written permission.
+* 
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+* ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+* ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
 
-import java.util.ArrayList;
+package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -22,11 +50,11 @@ public class CommentGUIs {
 	}
 	
 	protected AlertDialog onCallCommentGUI(){
-		final String[] titlesPhoto = { app.getString(R.string.noImage), app.getString(R.string.fromFile),
-				app.getString(R.string.takePhoto) };
+		final String[] titlesPhoto = { pageActivity.getString(R.string.noImage), pageActivity.getString(R.string.fromFile),
+				pageActivity.getString(R.string.takePhoto) };
 		final AlertDialog.Builder photoSelector = 
 				new AlertDialog.Builder(pageActivity); 
-		photoSelector.setTitle(app.getString(R.string.usePhotoComment));
+		photoSelector.setTitle(pageActivity.getString(R.string.usePhotoComment));
 		photoSelector.setItems(titlesPhoto, 
 				new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, 
@@ -53,7 +81,7 @@ public class CommentGUIs {
 	
 	protected AlertDialog onEditCommentGUI(){
 		AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
-    	builder.setTitle(app.getString(R.string.whatToSay));
+    	builder.setTitle(pageActivity.getString(R.string.whatToSay));
     	
     	final LinearLayout layout = new LinearLayout(pageActivity);
     	layout.setOrientation(LinearLayout.VERTICAL);
@@ -72,12 +100,12 @@ public class CommentGUIs {
     	layout.addView(alertImage);
     	
 		builder.setView(layout);
-    	builder.setPositiveButton(app.getString(R.string.save), new DialogInterface.OnClickListener() {
+    	builder.setPositiveButton(pageActivity.getString(R.string.save), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	app.addComment(alertEdit.getText().toString(),photoAdd );
             }
         })
-        .setNegativeButton(app.getString(R.string.cancel), null);
+        .setNegativeButton(pageActivity.getString(R.string.cancel), null);
     	return builder.create();
 	}
 	

@@ -30,36 +30,20 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
-import java.util.ArrayList;
-import java.util.UUID;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.provider.Settings.Secure;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.DragShadowBuilder;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 /**
@@ -83,6 +67,8 @@ import android.widget.TextView;
  */
 
 public class ViewPageActivity extends Activity {
+	
+	private boolean isEditing = false;
 	
 	private static final int RESULT_LOAD_IMAGE = 1;
 	private final int TAKE_PHOTO = 2;
@@ -125,15 +111,16 @@ public class ViewPageActivity extends Activity {
         super.onResume();
         
         app = (ControllerApp) this.getApplication();
-        tileView = new TileController(app, this);
-        decisionView = new DecisionController(app, this);
-        commentView = new CommentController(app, this);
-        guiTile = new TilesGUIs(app, this);
-        guiDecision = new DecisionGUIs(app, this);
-        camera = new CameraAdapter(app, this);
-        guiComment = new CommentGUIs(app, this, camera);   
         storyController = app.getStoryController();
         pageController = app.getPageController();
+        tileView = new TileController(this);
+        decisionView = new DecisionController(storyController,pageController, this);
+        commentView = new CommentController(this);
+        guiTile = new TilesGUIs(app, this);
+        guiDecision = new DecisionGUIs(app, this);
+        camera = new CameraAdapter(this);
+        guiComment = new CommentGUIs(app, this, camera);   
+        
         
         fightingLayout = (LinearLayout) findViewById(R.id.fightingLayout);
         tilesLayout = (LinearLayout) findViewById(R.id.tilesLayout);
@@ -257,7 +244,7 @@ public class ViewPageActivity extends Activity {
 			final String myId = Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 			final String storyID = storyController.getStory().getAuthor();
 			if(myId.equals(storyID)){
-				app.setEditing(true);
+				setEditing(true);
 				pageController.reloadPage();
 				changeActionBarButtons();
 				setButtonVisibility();
@@ -267,7 +254,7 @@ public class ViewPageActivity extends Activity {
 
 		case SAVE_INDEX:
 
-			app.setEditing(false);
+			setEditing(false);
 			storyController.saveStory();
 			pageController.reloadPage();
 			changeActionBarButtons();
@@ -279,7 +266,7 @@ public class ViewPageActivity extends Activity {
 
 			AlertDialog dialog = null;
 
-	        if (app.getEditing())
+	        if (getEditing())
 	        	dialog = HelpDialogFactory.create(R.string.edit_page_help, this);
 	        else
 	        	dialog = HelpDialogFactory.create(R.string.read_page_help, this);
@@ -303,7 +290,7 @@ public class ViewPageActivity extends Activity {
 		Story story = storyController.getStory();
 		final String storyID = story.getAuthor();
 		if(myId.equals(storyID)){
-			if (app.getEditing()) {
+			if (getEditing()) {
 				saveButton.setVisible(true);
 				editButton.setVisible(false);
 			} else {
@@ -365,11 +352,9 @@ public class ViewPageActivity extends Activity {
 		final String storyID = storyController.getStory().getAuthor();
 		if(myId.equals(storyID)){
 		
-			int visibility = 0;
+			int visibility = View.VISIBLE;
 		
-			if (app.getEditing()) {
-				visibility = View.VISIBLE;
-			} else {
+			if (!getEditing()) {
 				visibility = View.GONE;
 			}
 				
@@ -486,14 +471,14 @@ public class ViewPageActivity extends Activity {
 	 * @param view
 	 */
 	private void onEditPageEnding(View view) {
-		if (app.getEditing()) {
+		if (getEditing()) {
 			AlertDialog builder = guiTile.onEditPageEndingGUI(view);
 	        builder.show();
 		}
 	}
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	public void onActivityResult(final int requestCode, final int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		AlertDialog.Builder successChecker = new AlertDialog.Builder(this);
 		if (resultCode == RESULT_OK && null != data) {
@@ -502,10 +487,11 @@ public class ViewPageActivity extends Activity {
 				pageController.addTile(camera.loadImage(data));
 				break;
 			case (GRAB_PHOTO):
-			camera.setTempSpace(camera.loadImage(data));
-			onEditComment();
+				camera.setTempSpace(camera.loadImage(data));
+				onEditComment();
 				break;
 			case(TAKE_PHOTO):
+			case(ADD_PHOTO):
 				final Bitmap image = camera.retrievePhoto(data);
 				successChecker.setView(camera.makeViewByPhoto(image));
 				successChecker.setTitle(getString(R.string.retakeQuestion));
@@ -514,32 +500,18 @@ public class ViewPageActivity extends Activity {
 					public void onClick(DialogInterface dialog, int id) {
 						PhotoTile tile = new PhotoTile();
 						tile.setContent(image);
-						pageController.addTile(tile);
+						if(requestCode == TAKE_PHOTO){
+							pageController.addTile(tile);}
+						else{
+							camera.setTempSpace(tile);
+							onEditComment();
+							
+						}
 					}
 				})
 				.setNegativeButton(getString(R.string.retake), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						takePhoto();
-					}
-				});
-				successChecker.show();
-				break;
-			case(ADD_PHOTO):
-				final Bitmap image2 = camera.retrievePhoto(data);
-				successChecker.setView(camera.makeViewByPhoto(image2));
-				successChecker.setTitle(getString(R.string.retakeQuestion));
-				successChecker.setPositiveButton(getString(R.string.save),
-					new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						PhotoTile tile = new PhotoTile();
-						tile.setContent(image2);
-						camera.setTempSpace(tile);
-						onEditComment();
-					}
-				})
-				.setNegativeButton(getString(R.string.retake), new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						addPhoto();
 					}
 				});
 				successChecker.show();
@@ -561,4 +533,20 @@ public class ViewPageActivity extends Activity {
 	public void getPhoto(){
 		camera.getPhoto(RESULT_LOAD_IMAGE);
 	}	
+	
+	/**
+	 * Sets whether the user wants to be in viewing mode or editing mode.
+	 * @param editing
+	 */
+	public void setEditing(boolean editing) {
+		isEditing = editing;
+	}
+
+	/**
+	 * Get whether the page being viewed by the user is in editing mode or not.
+	 * @return If the page is in editing mode.
+	 */
+	public boolean getEditing() {
+		return isEditing;
+	}
 }

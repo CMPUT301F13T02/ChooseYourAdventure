@@ -98,6 +98,7 @@ public class DecisionGUIs {
             public void onClick(DialogInterface dialog, int id) {
             	Counters counter = decision.getChoiceModifiers();
         		int decisionNumber = decisionsLayout.indexOfChild(decisionView);
+        		
         		if(story.isUsesCombat() == true){
         			String treasure = alertTreasure.getText().toString();
         			String hp = playerDamage.getText().toString();

@@ -211,6 +211,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="cachedDesignator">Cached: </string>
     <string name="edit">Edit</string>
     <string name="textView">TextView</string>
-    <string name="defaultEnding">+ Add an ending to this page</string>
+    <string name="defaultEnding">Choices: </string>
 
 </resources>

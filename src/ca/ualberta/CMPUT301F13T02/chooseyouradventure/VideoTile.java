@@ -60,12 +60,6 @@ public class VideoTile extends Tile{
 		return video;
 	}
 
-	@Override
-	boolean equals(Tile tile) {
-		if (!(tile instanceof VideoTile))
-			return false;
-
-		return true;
-	}
+	
 
 }

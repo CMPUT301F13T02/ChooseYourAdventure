@@ -8,18 +8,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class DecisionController {
-	private ControllerApp app;
 	private ViewPageActivity pageActivity;
 	private StoryController storyController; 
 	private PageController pageController; 
 	
 	
-	public DecisionController(ControllerApp app, ViewPageActivity pageActivity) {
+	public DecisionController(StoryController storyController,PageController pageController, ViewPageActivity pageActivity) {
 		super();
-		this.app = app;
 		this.pageActivity = pageActivity;
-		storyController = app.getStoryController();
-        pageController = app.getPageController();
+		this.storyController = storyController;
+        this.pageController = pageController;
 	}
 	
 	
@@ -38,7 +36,7 @@ public class DecisionController {
 				LinearLayout.LayoutParams.MATCH_PARENT, 
 				LinearLayout.LayoutParams.WRAP_CONTENT
 				);
-		TextView view = new TextView(app);
+		TextView view = new TextView(pageActivity);
 		lp.setMargins(0, 0, 0, 3);
 		view.setPadding(20, 5, 0, 5);
 		view.setBackgroundColor(0xFFFFFFFF);
@@ -48,7 +46,7 @@ public class DecisionController {
 		if(pageController.getPage().isFightingFrag() == false){
 			view.setVisibility(View.VISIBLE);
 		}
-		else if(app.getEditing() == true){
+		else if(pageActivity.getEditing() == true){
 			view.setVisibility(View.VISIBLE);
 		}
 		else{			
@@ -59,7 +57,7 @@ public class DecisionController {
 		}
 		
 		
-		if (app.getEditing()) {
+		if (pageActivity.getEditing()) {
 			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {

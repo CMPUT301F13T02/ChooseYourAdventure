@@ -1,5 +1,7 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
+import java.util.ArrayList;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.widget.EditText;
@@ -9,11 +11,14 @@ import android.widget.LinearLayout;
 public class CommentGUIs {
 	private ControllerApp app;
 	private ViewPageActivity pageActivity;
+	 private CameraAdapter camera;
 	
-	public CommentGUIs(ControllerApp app, ViewPageActivity pageActivity) {
+	
+	public CommentGUIs(ControllerApp app, ViewPageActivity pageActivity, CameraAdapter camera) {
 		super();
 		this.app = app;
 		this.pageActivity = pageActivity;
+		this.camera = camera;
 	}
 	
 	protected AlertDialog onCallCommentGUI(){
@@ -58,8 +63,8 @@ public class CommentGUIs {
     	
     	final ImageView alertImage = new ImageView(pageActivity);
     	
-    	final PhotoTile photoAdd = (PhotoTile) app.getTempSpace();
-		app.setTempSpace(null);
+    	final PhotoTile photoAdd = (PhotoTile) camera.getTempSpace();
+		camera.setTempSpace(null);
 
 		if(photoAdd != null)
 			alertImage.setImageBitmap(photoAdd.getImage());
@@ -75,6 +80,8 @@ public class CommentGUIs {
         .setNegativeButton(app.getString(R.string.cancel), null);
     	return builder.create();
 	}
+	
+	
 
 
 }

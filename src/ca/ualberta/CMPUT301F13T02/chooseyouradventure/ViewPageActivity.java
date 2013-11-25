@@ -101,12 +101,14 @@ public class ViewPageActivity extends Activity {
 	private FightController fightView = new FightController();
 	private TileController tileView;
 	private DecisionController decisionView;
+	private CommentController commentView;
 	private TilesGUIs guiTile;
 	private DecisionGUIs guiDecision;
 	private CommentGUIs guiComment;
 	private StoryController storyController; 
 	private PageController pageController; 
     private ControllerApp app;
+    private CameraAdapter camera;
     private Menu menu;
     
 	@Override
@@ -125,9 +127,11 @@ public class ViewPageActivity extends Activity {
         app = (ControllerApp) this.getApplication();
         tileView = new TileController(app, this);
         decisionView = new DecisionController(app, this);
+        commentView = new CommentController(app, this);
         guiTile = new TilesGUIs(app, this);
         guiDecision = new DecisionGUIs(app, this);
-        guiComment = new CommentGUIs(app, this);
+        camera = new CameraAdapter(app, this);
+        guiComment = new CommentGUIs(app, this, camera);   
         storyController = app.getStoryController();
         pageController = app.getPageController();
         
@@ -138,9 +142,7 @@ public class ViewPageActivity extends Activity {
         
         pageController.setActivity(this);
         
-        
-		
-		
+
         update(pageController.getPage());
         
         /* Set up onClick listeners for buttons on screen, even if some aren't
@@ -323,23 +325,6 @@ public class ViewPageActivity extends Activity {
         builder.show();
     }
 	
-	/**
-	 * Updates a page to show any changes that have been made. These
-	 * changes can also include whether the page is in view mode or
-	 * edit mode.
-	 * @param page The current page
-	 */
-	public void grabPhoto(){
-		Intent i = new Intent(
-        Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(i, GRAB_PHOTO);
-	}
-	
-	public void getPhoto(){
-		Intent i = new Intent(
-        Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(i, RESULT_LOAD_IMAGE);
-	}
 	public void update(Page page) {
 		
 		setButtonVisibility();
@@ -357,7 +342,7 @@ public class ViewPageActivity extends Activity {
 		}
 		
 		if (pageController.haveCommentsChanged()) {
-			updateComments(page);
+			commentView.updateComments(page, commentsLayout);
 		}
 		
 		if (pageController.hasEndingChanged()) {
@@ -367,8 +352,6 @@ public class ViewPageActivity extends Activity {
 		pageController.finishedUpdating();
 	}
 	
-	
-
 	/**
 	 * Handles removing or showing the proper buttons in both the action bar
 	 * and the in the page.
@@ -400,25 +383,6 @@ public class ViewPageActivity extends Activity {
 	
 	
 	
-	
-	
-	
-
-	/**
-	 * Removes the comments from commentsLayout and repopulates it with the
-	 * current comments.
-	 * @param page
-	 */
-	private void updateComments(Page page) {
-		commentsLayout.removeAllViews();
-		
-		//For each comment in the page, add it to commentsLayout
-		ArrayList<Comment> comments = page.getComments();
-		for (int i = 0; i < comments.size(); i++) {
-			addComment(comments.get(i));
-		}
-	}
-	
 	/**
 	 * Updates the pageEnding from the passed page object.
 	 * @param page
@@ -428,10 +392,7 @@ public class ViewPageActivity extends Activity {
 		pageEnding.setText(page.getPageEnding());
 	}
 		
-	
-	
-	
-	
+
 	/**
 	 * Brings up a menu with options of what to do to the decision.
 	 * @param view
@@ -441,16 +402,7 @@ public class ViewPageActivity extends Activity {
         builder.show();
     }
 	
-	protected void takePhoto() {
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		startActivityForResult(intent, TAKE_PHOTO);
-	}
-	
-	protected void addPhoto() {
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		startActivityForResult(intent, ADD_PHOTO);
-	}
-	
+
 	/**
 	 * Displays a dialog for editing a tile.
 	 * @param view
@@ -512,33 +464,6 @@ public class ViewPageActivity extends Activity {
         builder.show();
 	}
 	
-	/**
-	 * Called to display a new comment at position i.
-	 * @param comment
-	 */
-	public void addComment(Comment comment) {
-		final LinearLayout layout = new LinearLayout(this);
-    	layout.setOrientation(LinearLayout.VERTICAL);
-    	
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-		lp.setMargins(0, 5, 0, 0);
-		TextView view = new TextView(this);
-		view.setBackgroundColor(0xFFFFFFFF);
-		view.setPadding(10, 5, 10, 5);
-		view.setLayoutParams(lp);
-		view.setText(comment.getTimestamp() + " - '" + comment.getText() + "'");
-		layout.addView(view);
-		
-		if(comment.getAnnotation() != null){
-			ImageView imageView = new ImageView(this);
-			imageView.setImageBitmap(comment.getAnnotation().getImage());
-			imageView.setBackgroundColor(0xFFFFFFFF);
-			layout.addView(imageView);
-		}
-	    commentsLayout.addView(layout);
-	}
 	
 	/**
 	 * Called when the add comment button is clicked. It creates a dialog that
@@ -574,15 +499,15 @@ public class ViewPageActivity extends Activity {
 		if (resultCode == RESULT_OK && null != data) {
 			switch(requestCode) {
 			case (RESULT_LOAD_IMAGE):
-				pageController.addTile(loadImage(data));
+				pageController.addTile(camera.loadImage(data));
 				break;
 			case (GRAB_PHOTO):
-				app.setTempSpace(loadImage(data));
+			camera.setTempSpace(camera.loadImage(data));
 			onEditComment();
 				break;
 			case(TAKE_PHOTO):
-				final Bitmap image = retrievePhoto(data);
-				successChecker.setView(makeViewByPhoto(image));
+				final Bitmap image = camera.retrievePhoto(data);
+				successChecker.setView(camera.makeViewByPhoto(image));
 				successChecker.setTitle(getString(R.string.retakeQuestion));
 				successChecker.setPositiveButton(getString(R.string.save),
 						new DialogInterface.OnClickListener() {
@@ -600,15 +525,15 @@ public class ViewPageActivity extends Activity {
 				successChecker.show();
 				break;
 			case(ADD_PHOTO):
-				final Bitmap image2 = retrievePhoto(data);
-				successChecker.setView(makeViewByPhoto(image2));
+				final Bitmap image2 = camera.retrievePhoto(data);
+				successChecker.setView(camera.makeViewByPhoto(image2));
 				successChecker.setTitle(getString(R.string.retakeQuestion));
 				successChecker.setPositiveButton(getString(R.string.save),
 					new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						PhotoTile tile = new PhotoTile();
 						tile.setContent(image2);
-						app.setTempSpace(tile);
+						camera.setTempSpace(tile);
 						onEditComment();
 					}
 				})
@@ -622,31 +547,18 @@ public class ViewPageActivity extends Activity {
 		}}
 	}
 	
-	public PhotoTile loadImage(Intent data){
-		Uri selectedImage = data.getData();
-		String[] filePathColumn = { MediaStore.Images.Media.DATA };
+	protected void takePhoto() {
+        camera.newPhoto(TAKE_PHOTO);
+	}
 
-		Cursor cursor = getContentResolver().query(selectedImage,
-				filePathColumn, null, null, null);
-		cursor.moveToFirst();
+	protected void addPhoto() {
+        camera.newPhoto(ADD_PHOTO);
+	}
+	public void grabPhoto(){
+		camera.getPhoto(GRAB_PHOTO); 
+	}
 
-		int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-		String picturePath = cursor.getString(columnIndex);
-		cursor.close();       	
-		Bitmap pickedPhoto = BitmapFactory.decodeFile(picturePath);
-		PhotoTile newPhoto = new PhotoTile();
-		newPhoto.setImageFile(pickedPhoto);	
-		return newPhoto;
-	}
-	
-	public Bitmap retrievePhoto(Intent data){
-		Bundle bundle = data.getExtras();
-		return  (Bitmap) bundle.get("data");	
-	}
-	public ImageView makeViewByPhoto(Bitmap image){
-		ImageView pictureTaken = new ImageView(this);
-		pictureTaken.setImageBitmap(image);
-		return pictureTaken;
-	}
-	
+	public void getPhoto(){
+		camera.getPhoto(RESULT_LOAD_IMAGE);
+	}	
 }

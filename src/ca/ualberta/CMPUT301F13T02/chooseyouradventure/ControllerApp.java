@@ -53,7 +53,7 @@ public class ControllerApp extends Application {
 	
 	
 	
-	private Object tempSpace;
+	
 	
 	
 	private ArrayList<Story> stories;
@@ -264,15 +264,7 @@ public class ControllerApp extends Application {
 
 	
 
-	public Object getTempSpace() {
-		return tempSpace;
-	}
-
-
-	public void setTempSpace(Object loadObject) {
-		this.tempSpace = loadObject;
-		
-	}
+	
 	
 	/**
 	 * Sets the currentPage to the page pointed to by the decision selected

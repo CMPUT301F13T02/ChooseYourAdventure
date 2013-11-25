@@ -49,13 +49,6 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
 public class ControllerApp extends Application {
 	
-	private boolean isEditing = false;
-	
-	
-	
-	
-	
-	
 	private ArrayList<Story> stories;
 	private static ControllerApp instance = new ControllerApp();
 	private StoryController storyController = new StoryController();
@@ -100,21 +93,7 @@ public class ControllerApp extends Application {
 		return this.stories;
 	}
 	
-	/**
-	 * Sets whether the user wants to be in viewing mode or editing mode.
-	 * @param editing
-	 */
-	public void setEditing(boolean editing) {
-		isEditing = editing;
-	}
-
-	/**
-	 * Get whether the page being viewed by the user is in editing mode or not.
-	 * @return If the page is in editing mode.
-	 */
-	public boolean getEditing() {
-		return isEditing;
-	}
+	
 
 
 	

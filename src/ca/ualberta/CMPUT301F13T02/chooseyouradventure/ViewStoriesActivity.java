@@ -36,13 +36,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.SearchManager;
-import android.app.SearchableInfo;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.provider.Settings.Secure;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,13 +44,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
-import android.widget.SearchView;
-import android.widget.TextView;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
 /**
@@ -235,7 +223,7 @@ public class ViewStoriesActivity extends Activity {
     }
     
 	protected void onListItemClick(View v, int pos, long id) throws HandlerException {	
-		app.setEditing(false);
+		
 	    app.jump(ViewPageActivity.class, storyList.get(pos), storyList.get(pos).getFirstpage());
 	    
 	}
@@ -250,7 +238,8 @@ public class ViewStoriesActivity extends Activity {
      * @param v The view of the longClicked story
      */
 	public void storyMenu(int pos){
-			AlertDialog builder = gui.storyMenuGUI(storyList, pos, eshandler, dbhandler);
+			Story story = storyList.get(pos);
+			AlertDialog builder = gui.storyMenuGUI(story, eshandler, dbhandler);
             builder.show();
         }
 

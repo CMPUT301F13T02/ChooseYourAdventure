@@ -101,6 +101,7 @@ public class ViewPageActivity extends Activity {
 	private FightController fightView = new FightController();
 	private TileController tileView;
 	private DecisionController decisionView;
+	private CommentController commentView;
 	private TilesGUIs guiTile;
 	private DecisionGUIs guiDecision;
 	private CommentGUIs guiComment;
@@ -126,6 +127,7 @@ public class ViewPageActivity extends Activity {
         app = (ControllerApp) this.getApplication();
         tileView = new TileController(app, this);
         decisionView = new DecisionController(app, this);
+        commentView = new CommentController(app, this);
         guiTile = new TilesGUIs(app, this);
         guiDecision = new DecisionGUIs(app, this);
         camera = new CameraAdapter(app, this);
@@ -140,9 +142,7 @@ public class ViewPageActivity extends Activity {
         
         pageController.setActivity(this);
         
-        
-		
-		
+
         update(pageController.getPage());
         
         /* Set up onClick listeners for buttons on screen, even if some aren't
@@ -325,7 +325,6 @@ public class ViewPageActivity extends Activity {
         builder.show();
     }
 	
-	
 	public void update(Page page) {
 		
 		setButtonVisibility();
@@ -343,7 +342,7 @@ public class ViewPageActivity extends Activity {
 		}
 		
 		if (pageController.haveCommentsChanged()) {
-			updateComments(page);
+			commentView.updateComments(page, commentsLayout);
 		}
 		
 		if (pageController.hasEndingChanged()) {
@@ -353,8 +352,6 @@ public class ViewPageActivity extends Activity {
 		pageController.finishedUpdating();
 	}
 	
-	
-
 	/**
 	 * Handles removing or showing the proper buttons in both the action bar
 	 * and the in the page.
@@ -386,25 +383,6 @@ public class ViewPageActivity extends Activity {
 	
 	
 	
-	
-	
-	
-
-	/**
-	 * Removes the comments from commentsLayout and repopulates it with the
-	 * current comments.
-	 * @param page
-	 */
-	private void updateComments(Page page) {
-		commentsLayout.removeAllViews();
-		
-		//For each comment in the page, add it to commentsLayout
-		ArrayList<Comment> comments = page.getComments();
-		for (int i = 0; i < comments.size(); i++) {
-			addComment(comments.get(i));
-		}
-	}
-	
 	/**
 	 * Updates the pageEnding from the passed page object.
 	 * @param page
@@ -414,10 +392,7 @@ public class ViewPageActivity extends Activity {
 		pageEnding.setText(page.getPageEnding());
 	}
 		
-	
-	
-	
-	
+
 	/**
 	 * Brings up a menu with options of what to do to the decision.
 	 * @param view
@@ -427,8 +402,7 @@ public class ViewPageActivity extends Activity {
         builder.show();
     }
 	
-	
-	
+
 	/**
 	 * Displays a dialog for editing a tile.
 	 * @param view
@@ -490,33 +464,6 @@ public class ViewPageActivity extends Activity {
         builder.show();
 	}
 	
-	/**
-	 * Called to display a new comment at position i.
-	 * @param comment
-	 */
-	public void addComment(Comment comment) {
-		final LinearLayout layout = new LinearLayout(this);
-    	layout.setOrientation(LinearLayout.VERTICAL);
-    	
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-		lp.setMargins(0, 5, 0, 0);
-		TextView view = new TextView(this);
-		view.setBackgroundColor(0xFFFFFFFF);
-		view.setPadding(10, 5, 10, 5);
-		view.setLayoutParams(lp);
-		view.setText(comment.getTimestamp() + " - '" + comment.getText() + "'");
-		layout.addView(view);
-		
-		if(comment.getAnnotation() != null){
-			ImageView imageView = new ImageView(this);
-			imageView.setImageBitmap(comment.getAnnotation().getImage());
-			imageView.setBackgroundColor(0xFFFFFFFF);
-			layout.addView(imageView);
-		}
-	    commentsLayout.addView(layout);
-	}
 	
 	/**
 	 * Called when the add comment button is clicked. It creates a dialog that
@@ -613,7 +560,5 @@ public class ViewPageActivity extends Activity {
 
 	public void getPhoto(){
 		camera.getPhoto(RESULT_LOAD_IMAGE);
-	}
-
-	
+	}	
 }

@@ -1,5 +1,7 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
+import java.util.ArrayList;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.widget.EditText;
@@ -78,6 +80,8 @@ public class CommentGUIs {
         .setNegativeButton(app.getString(R.string.cancel), null);
     	return builder.create();
 	}
+	
+	
 
 
 }

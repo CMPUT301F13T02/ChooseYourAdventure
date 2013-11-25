@@ -141,7 +141,7 @@ public class ViewStoriesActivity extends Activity {
         
         
 		try {
-			storyList =  eshandler.getAllStories();
+			//storyList =  eshandler.getAllStories();
 			Story sampleStory = sampleGen.getStory();
 			storyList.add(sampleStory);
 			storyText = app.updateView(storyList, storyText);

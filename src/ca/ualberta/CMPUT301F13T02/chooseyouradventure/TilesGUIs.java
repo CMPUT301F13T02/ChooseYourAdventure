@@ -13,6 +13,7 @@ public class TilesGUIs {
 	private PageController pageController; 
 	private TileController tileView;
 	
+	
 	public TilesGUIs(ControllerApp app, ViewPageActivity pageActivity) {
 		super();
 		this.app = app;

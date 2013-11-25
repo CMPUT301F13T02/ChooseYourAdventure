@@ -107,6 +107,7 @@ public class ViewPageActivity extends Activity {
 	private StoryController storyController; 
 	private PageController pageController; 
     private ControllerApp app;
+    private CameraAdapter camera;
     private Menu menu;
     
 	@Override
@@ -127,7 +128,8 @@ public class ViewPageActivity extends Activity {
         decisionView = new DecisionController(app, this);
         guiTile = new TilesGUIs(app, this);
         guiDecision = new DecisionGUIs(app, this);
-        guiComment = new CommentGUIs(app, this);
+        camera = new CameraAdapter(app, this);
+        guiComment = new CommentGUIs(app, this, camera);   
         storyController = app.getStoryController();
         pageController = app.getPageController();
         
@@ -323,23 +325,7 @@ public class ViewPageActivity extends Activity {
         builder.show();
     }
 	
-	/**
-	 * Updates a page to show any changes that have been made. These
-	 * changes can also include whether the page is in view mode or
-	 * edit mode.
-	 * @param page The current page
-	 */
-	public void grabPhoto(){
-		Intent i = new Intent(
-        Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(i, GRAB_PHOTO);
-	}
 	
-	public void getPhoto(){
-		Intent i = new Intent(
-        Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(i, RESULT_LOAD_IMAGE);
-	}
 	public void update(Page page) {
 		
 		setButtonVisibility();
@@ -441,15 +427,7 @@ public class ViewPageActivity extends Activity {
         builder.show();
     }
 	
-	protected void takePhoto() {
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		startActivityForResult(intent, TAKE_PHOTO);
-	}
 	
-	protected void addPhoto() {
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		startActivityForResult(intent, ADD_PHOTO);
-	}
 	
 	/**
 	 * Displays a dialog for editing a tile.
@@ -574,15 +552,15 @@ public class ViewPageActivity extends Activity {
 		if (resultCode == RESULT_OK && null != data) {
 			switch(requestCode) {
 			case (RESULT_LOAD_IMAGE):
-				pageController.addTile(loadImage(data));
+				pageController.addTile(camera.loadImage(data));
 				break;
 			case (GRAB_PHOTO):
-				app.setTempSpace(loadImage(data));
+			camera.setTempSpace(camera.loadImage(data));
 			onEditComment();
 				break;
 			case(TAKE_PHOTO):
-				final Bitmap image = retrievePhoto(data);
-				successChecker.setView(makeViewByPhoto(image));
+				final Bitmap image = camera.retrievePhoto(data);
+				successChecker.setView(camera.makeViewByPhoto(image));
 				successChecker.setTitle(getString(R.string.retakeQuestion));
 				successChecker.setPositiveButton(getString(R.string.save),
 						new DialogInterface.OnClickListener() {
@@ -600,15 +578,15 @@ public class ViewPageActivity extends Activity {
 				successChecker.show();
 				break;
 			case(ADD_PHOTO):
-				final Bitmap image2 = retrievePhoto(data);
-				successChecker.setView(makeViewByPhoto(image2));
+				final Bitmap image2 = camera.retrievePhoto(data);
+				successChecker.setView(camera.makeViewByPhoto(image2));
 				successChecker.setTitle(getString(R.string.retakeQuestion));
 				successChecker.setPositiveButton(getString(R.string.save),
 					new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						PhotoTile tile = new PhotoTile();
 						tile.setContent(image2);
-						app.setTempSpace(tile);
+						camera.setTempSpace(tile);
 						onEditComment();
 					}
 				})
@@ -622,31 +600,20 @@ public class ViewPageActivity extends Activity {
 		}}
 	}
 	
-	public PhotoTile loadImage(Intent data){
-		Uri selectedImage = data.getData();
-		String[] filePathColumn = { MediaStore.Images.Media.DATA };
+	protected void takePhoto() {
+        camera.newPhoto(TAKE_PHOTO);
+	}
 
-		Cursor cursor = getContentResolver().query(selectedImage,
-				filePathColumn, null, null, null);
-		cursor.moveToFirst();
+	protected void addPhoto() {
+        camera.newPhoto(ADD_PHOTO);
+	}
+	public void grabPhoto(){
+		camera.getPhoto(GRAB_PHOTO); 
+	}
 
-		int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-		String picturePath = cursor.getString(columnIndex);
-		cursor.close();       	
-		Bitmap pickedPhoto = BitmapFactory.decodeFile(picturePath);
-		PhotoTile newPhoto = new PhotoTile();
-		newPhoto.setImageFile(pickedPhoto);	
-		return newPhoto;
+	public void getPhoto(){
+		camera.getPhoto(RESULT_LOAD_IMAGE);
 	}
-	
-	public Bitmap retrievePhoto(Intent data){
-		Bundle bundle = data.getExtras();
-		return  (Bitmap) bundle.get("data");	
-	}
-	public ImageView makeViewByPhoto(Bitmap image){
-		ImageView pictureTaken = new ImageView(this);
-		pictureTaken.setImageBitmap(image);
-		return pictureTaken;
-	}
+
 	
 }

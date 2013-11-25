@@ -93,10 +93,6 @@ public class ControllerApp extends Application {
 		return this.stories;
 	}
 	
-	
-
-
-	
 
 	/**
 	 * Returns a list of strings for each page to be displayed in the Spinner
@@ -193,13 +189,18 @@ public class ControllerApp extends Application {
 	 * @param whichDecision
 	 */
 	public void updateDecision(String text, int whichPage, int whichDecision) {
-		ArrayList<Page> pages = storyController.grabPages();
-		pageController.getPage().updateDecision(text, pages.get(whichPage), whichDecision);
+		ArrayList<Page> pages = storyController.getPages();
+		if(whichPage == pages.size()){
+			pageController.getPage().updateDecision(text, new Page(null), whichDecision);
+		}
+		else{
+			pageController.getPage().updateDecision(text, pages.get(whichPage), whichDecision);
+		}
 		pageController.setDecisionsChanged();
 	}
 	
 	public void updateDecisionFight(String text, int whichPage, int whichDecision, Counters counter) {
-		ArrayList<Page> pages = storyController.grabPages();
+		ArrayList<Page> pages = storyController.getPages();
 		if(whichPage == pages.size()){
 			pageController.getPage().updateDecisionFight(text, new Page(null), whichDecision, counter);
 		}
@@ -234,16 +235,6 @@ public class ControllerApp extends Application {
 		}
 		
 	}
-
-	
-
-	
-	
-	
-
-	
-
-	
 	
 	/**
 	 * Sets the currentPage to the page pointed to by the decision selected
@@ -254,7 +245,7 @@ public class ControllerApp extends Application {
 	    Decision decision = pageController.findDecisionByIndex(whichDecision);
 		
 		UUID toPageId = decision.getPageID();
-		ArrayList<Page> pages = storyController.grabPages();
+		ArrayList<Page> pages = storyController.getPages();
 		Page currentPage = pageController.getPage();
 		Page toPage = currentPage;
 		while(toPageId == null){
@@ -285,9 +276,9 @@ public class ControllerApp extends Application {
     	newStory.setUsesCombat(state);
     	newStory.setPlayerStats(playerStats);
     	newStory.setTitle(storyTitle);	    	
-    	Page newPage = storyController.initializeNewPage("First Page");
-    	newStory.addPage(newPage);
-    	newStory.setFirstpage(newPage.getId());
+    	Page page = storyController.initializeNewPage("First Page");
+    	newStory.addPage(page);
+    	newStory.setFirstpage(page.getId());
     	newStory.setAuthor(Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID));
     	newStory.setHandler(new ESHandler());
 	    try
@@ -299,7 +290,7 @@ public class ControllerApp extends Application {
 		{
 			e.printStackTrace();
 		}	
-	    jump(EditStoryActivity.class,newStory, newPage);
+	    jump(EditStoryActivity.class,newStory, page);
     }
 
 	/**

@@ -55,7 +55,7 @@ public class StoryController {
 	}
 	
 	public ArrayList<Page> getPages(){
-		return getStory().getPages();
+		return currentStory.getPages();
 	}
 	
 	/**
@@ -63,35 +63,27 @@ public class StoryController {
 	 * @param pageTitle
 	 * @param currentPage
 	 */
-	protected void updateTitle(String pageTitle, Page currentPage){
-		currentPage.setTitle(pageTitle);		
+	
+	protected void updatePageData(String pageTitle, boolean fight, String health, String name, Page page){
+		page.setTitle(pageTitle);
+		page.setFightingFrag(fight);
+		if(fight == true){
+			page.setEnemyName(name);
+			try{
+				page.setEnemyHealth(Integer.parseInt(health));
+			} catch(Exception e){}
+		}
 		currentStory.updateStory();
 	}
-
-	/**
-	 * Similar to the above method, but it creates a new page object with the 
-	 * title.
-	 * @param pageTitle
-	 */
-	protected void updateFightTitle(String pageTitle, boolean fight, String health, String name, Page page){
-		page.setTitle(pageTitle);
+	
+	protected void newPage(String pageTitle, boolean fight, String health, String name){
+		Page page = initializeNewPage(pageTitle);
 		page.setFightingFrag(fight);
 		page.setEnemyName(name);
 		try{
 			page.setEnemyHealth(Integer.parseInt(health));
 		} catch(Exception e){}
-		
-		currentStory.updateStory();
-	}
-	
-	protected void newTitle(String pageTitle, boolean fight, String health, String name){
-		Page newPage = initializeNewPage(pageTitle);
-		newPage.setFightingFrag(fight);
-		newPage.setEnemyName(name);
-		try{
-			newPage.setEnemyHealth(Integer.parseInt(health));
-		} catch(Exception e){}
-		currentStory.addPage(newPage);
+		currentStory.addPage(page);
 		currentStory.updateStory();
 	}
 	
@@ -138,7 +130,4 @@ public class StoryController {
 		return currentStory.getFirstpage();
 	}
 	
-	public ArrayList<Page> grabPages(){
-		return currentStory.getPages();
-	}
 }

@@ -352,11 +352,9 @@ public class ViewPageActivity extends Activity {
 		final String storyID = storyController.getStory().getAuthor();
 		if(myId.equals(storyID)){
 		
-			int visibility = 0;
+			int visibility = View.VISIBLE;
 		
-			if (getEditing()) {
-				visibility = View.VISIBLE;
-			} else {
+			if (!getEditing()) {
 				visibility = View.GONE;
 			}
 				
@@ -480,7 +478,7 @@ public class ViewPageActivity extends Activity {
 	}
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	public void onActivityResult(final int requestCode, final int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		AlertDialog.Builder successChecker = new AlertDialog.Builder(this);
 		if (resultCode == RESULT_OK && null != data) {
@@ -489,10 +487,11 @@ public class ViewPageActivity extends Activity {
 				pageController.addTile(camera.loadImage(data));
 				break;
 			case (GRAB_PHOTO):
-			camera.setTempSpace(camera.loadImage(data));
-			onEditComment();
+				camera.setTempSpace(camera.loadImage(data));
+				onEditComment();
 				break;
 			case(TAKE_PHOTO):
+			case(ADD_PHOTO):
 				final Bitmap image = camera.retrievePhoto(data);
 				successChecker.setView(camera.makeViewByPhoto(image));
 				successChecker.setTitle(getString(R.string.retakeQuestion));
@@ -501,32 +500,18 @@ public class ViewPageActivity extends Activity {
 					public void onClick(DialogInterface dialog, int id) {
 						PhotoTile tile = new PhotoTile();
 						tile.setContent(image);
-						pageController.addTile(tile);
+						if(requestCode == TAKE_PHOTO){
+							pageController.addTile(tile);}
+						else{
+							camera.setTempSpace(tile);
+							onEditComment();
+							
+						}
 					}
 				})
 				.setNegativeButton(getString(R.string.retake), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						takePhoto();
-					}
-				});
-				successChecker.show();
-				break;
-			case(ADD_PHOTO):
-				final Bitmap image2 = camera.retrievePhoto(data);
-				successChecker.setView(camera.makeViewByPhoto(image2));
-				successChecker.setTitle(getString(R.string.retakeQuestion));
-				successChecker.setPositiveButton(getString(R.string.save),
-					new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						PhotoTile tile = new PhotoTile();
-						tile.setContent(image2);
-						camera.setTempSpace(tile);
-						onEditComment();
-					}
-				})
-				.setNegativeButton(getString(R.string.retake), new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						addPhoto();
 					}
 				});
 				successChecker.show();

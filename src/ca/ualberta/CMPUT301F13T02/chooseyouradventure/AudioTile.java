@@ -76,15 +76,8 @@ public class AudioTile extends Tile{
 		return audio;
 	}
 
-	/**
-	 * This tests for equality with another tile
-	 * @param The tile to check equality with
-	 */
-	@Override
-	boolean equals(Tile segment) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	
+	
 
 }
 

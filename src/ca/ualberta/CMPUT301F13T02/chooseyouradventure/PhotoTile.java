@@ -101,18 +101,8 @@ public class PhotoTile extends Tile{
 		return imageData;
 	}
 
-	/**
-	 * Check if two tiles are equal
-	 * @param tile What to test equality with
-	 * @return The equality truth
-	 */
-	@Override
-	boolean equals(Tile tile) {
-		if (!(tile instanceof PhotoTile))
-			return false;
 	
-		return true;
-	}
+	
 
 	@Override
 	public void setContent(Object content) {

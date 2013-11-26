@@ -37,18 +37,18 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class TilesGUIs {
+public class TileView {
 	private ViewPageActivity pageActivity;
 	private PageController pageController; 
-	private TileController tileView;
+	private TileLayoutBuilder tileBuilder;
 	
 	
-	public TilesGUIs(PageController pageController, ViewPageActivity pageActivity) {
+	public TileView(PageController pageController, ViewPageActivity pageActivity) {
 		super();
 		
 		this.pageActivity = pageActivity;
         this.pageController = pageController;
-        tileView = new TileController(pageActivity);
+        tileBuilder = new TileLayoutBuilder(pageActivity);
 
 	}
 	
@@ -66,7 +66,7 @@ public class TilesGUIs {
             		//TODO fix this to be MVC and observer pattern
             		TextTile tile = new TextTile();
 					pageController.getPage().addTile(tile);
-					tileView.addTile(pageController.getPage().getTiles().size() - 1, tile, tilesLayout);   				
+					tileBuilder.addTile(pageController.getPage().getTiles().size() - 1, tile, tilesLayout);   				
             		break;
             	case(1):
             		photoSelector.setItems(titlesPhoto, 

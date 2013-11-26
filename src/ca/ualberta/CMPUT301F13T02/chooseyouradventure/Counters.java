@@ -79,10 +79,6 @@ public class Counters {
 		return hitMessage;
 	}
 
-	
-	
-	
-	
 	public void setStats(String treasureStat, String playerHpStat, String enemyHpStat, String enemyHitPercentage, String playerHitPercentage
 			) {
 		try{
@@ -166,13 +162,7 @@ public class Counters {
 				}
 			}
 		}
-		
-		
-		
-		
-		
-		
-		
+
 	}
 	
 	public void invokeUpdateSimple(Counters choiceModifiers){
@@ -312,20 +302,9 @@ public class Counters {
 		this.thresholdValue = thresholdValue;
 	}
 
-
-
-
-
-
-
 	public int getThresholdType() {
 		return thresholdType;
 	}
-
-
-
-
-
 
 
 	public void setThresholdType(int thresholdType) {

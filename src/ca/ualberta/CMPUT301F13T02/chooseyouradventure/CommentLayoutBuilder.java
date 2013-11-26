@@ -36,13 +36,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class CommentController {
+public class CommentLayoutBuilder {
 	
 	
 	private ViewPageActivity pageActivity;
 	
 	
-	public CommentController(ViewPageActivity pageActivity) {
+	public CommentLayoutBuilder(ViewPageActivity pageActivity) {
 		super();
 		this.pageActivity = pageActivity;
 	}
@@ -53,8 +53,7 @@ public class CommentController {
 	 */
 	public void addComment(Comment comment, LinearLayout commentsLayout) {
 		final LinearLayout layout = new LinearLayout(pageActivity);
-    	layout.setOrientation(LinearLayout.VERTICAL);
-    	
+    	layout.setOrientation(LinearLayout.VERTICAL);   	
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);

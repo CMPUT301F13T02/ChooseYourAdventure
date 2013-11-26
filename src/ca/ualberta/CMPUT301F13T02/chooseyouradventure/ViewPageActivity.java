@@ -37,7 +37,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.Settings.Secure;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,6 +68,8 @@ import android.widget.TextView;
 public class ViewPageActivity extends Activity {
 	
 	private boolean isEditing = false;
+	private boolean isFighting = false;
+	private boolean onEntry = true;
 	
 	private static final int RESULT_LOAD_IMAGE = 1;
 	private final int TAKE_PHOTO = 2;
@@ -84,16 +85,16 @@ public class ViewPageActivity extends Activity {
 	private LinearLayout commentsLayout;
 	private LinearLayout fightingLayout;
 	
-	private FightController fightView = new FightController();
-	private TileController tileView;
-	private DecisionController decisionView;
-	private CommentController commentView;
-	private TilesGUIs guiTile;
-	private DecisionGUIs guiDecision;
-	private CommentGUIs guiComment;
+	private FightingLayoutBuilder fightBuilder = new FightingLayoutBuilder();
+	private TileLayoutBuilder tileBuilder;
+	private DecisionLayoutBuilder decisionBuilder;
+	private CommentLayoutBuilder commentBuilder;
+	private TileView guiTile;
+	private DecisionView guiDecision;
+	private CommentView guiComment;
 	private StoryController storyController; 
 	private PageController pageController; 
-    private ControllerApp app;
+    private ApplicationController app;
     private CameraAdapter camera;
     private Menu menu;
     
@@ -110,23 +111,25 @@ public class ViewPageActivity extends Activity {
 	public void onResume() {
         super.onResume();
         
-        app = (ControllerApp) this.getApplication();
+        app = (ApplicationController) this.getApplication();
+        
         storyController = app.getStoryController();
         pageController = app.getPageController();
-        tileView = new TileController(this);
-        decisionView = new DecisionController(storyController,pageController, this);
-        commentView = new CommentController(this);
-        guiTile = new TilesGUIs(pageController, this);
-        guiDecision = new DecisionGUIs(storyController,pageController, this);
-        camera = new CameraAdapter(this);
-        guiComment = new CommentGUIs(app, this, camera);   
         
+        tileBuilder = new TileLayoutBuilder(this);
+        decisionBuilder = new DecisionLayoutBuilder(storyController,this);
+        commentBuilder = new CommentLayoutBuilder(this);
+        
+        camera = new CameraAdapter(this);
+        
+        guiComment = new CommentView(pageController, this, camera);
+        guiTile = new TileView(pageController, this);
+        guiDecision = new DecisionView(storyController, pageController, this);
         
         fightingLayout = (LinearLayout) findViewById(R.id.fightingLayout);
         tilesLayout = (LinearLayout) findViewById(R.id.tilesLayout);
         decisionsLayout = (LinearLayout) findViewById(R.id.decisionsLayout);
-        commentsLayout = (LinearLayout) findViewById(R.id.commentsLayout);
-        
+        commentsLayout = (LinearLayout) findViewById(R.id.commentsLayout);      
         pageController.setActivity(this);
         
 
@@ -193,7 +196,7 @@ public class ViewPageActivity extends Activity {
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		app = (ControllerApp) getApplication();
+		app = (ApplicationController) getApplication();
 		changeActionBarButtons();
 		return true;
 	}
@@ -241,7 +244,7 @@ public class ViewPageActivity extends Activity {
 		switch (item.getItemId()) {
 		case EDIT_INDEX:
 
-			final String myId = Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+			final String myId = app.getAndroidID();
 			final String storyID = storyController.getStory().getAuthor();
 			if(myId.equals(storyID)){
 				setEditing(true);
@@ -285,8 +288,7 @@ public class ViewPageActivity extends Activity {
 		MenuItem editButton = menu.findItem(EDIT_INDEX);
 		MenuItem saveButton = menu.findItem(SAVE_INDEX);
 		
-		final String myId = Secure.getString(
-				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+		final String myId = app.getAndroidID();
 		Story story = storyController.getStory();
 		final String storyID = story.getAuthor();
 		if(myId.equals(storyID)){
@@ -315,21 +317,22 @@ public class ViewPageActivity extends Activity {
 	public void update(Page page) {
 		
 		setButtonVisibility();
-		
-		if (storyController.getStory().isUsesCombat() == true) {
-			fightView.updateFightView(fightingLayout, app);
+		setFighting(page.getFightingState());
+		Story story = storyController.getStory();
+		if (story.isUsesCombat() == true) {
+			fightBuilder.updateFightView(fightingLayout,this,story,page);
 		}
 		
 		if (pageController.haveTilesChanged()) {
-			tileView.updateTiles(page, tilesLayout);
+			tileBuilder.updateTiles(page, tilesLayout);
 		}
 		
 		if (pageController.haveDecisionsChanged()) {
-			decisionView.updateDecisions(page, decisionsLayout);
+			decisionBuilder.updateDecisions(page, decisionsLayout);
 		}
 		
 		if (pageController.haveCommentsChanged()) {
-			commentView.updateComments(page, commentsLayout);
+			commentBuilder.updateComments(page, commentsLayout);
 		}
 		
 		if (pageController.hasEndingChanged()) {
@@ -347,8 +350,7 @@ public class ViewPageActivity extends Activity {
 		Button addTileButton = (Button) findViewById(R.id.addTile);
 		Button addDecisionButton = (Button) findViewById(R.id.addDecision);
 		
-		final String myId = Secure.getString(
-				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+		final String myId = app.getAndroidID();
 		final String storyID = storyController.getStory().getAuthor();
 		if(myId.equals(storyID)){
 		
@@ -414,6 +416,7 @@ public class ViewPageActivity extends Activity {
 	}
 
 	protected void onEditConditionals(View view) {
+		
 		AlertDialog builder = guiDecision.onEditDecisionGUI(view, decisionsLayout);
         builder.show();
 	}
@@ -423,28 +426,14 @@ public class ViewPageActivity extends Activity {
 	 * @param view
 	 */
 	protected void decisionClicked(View view) {
-		Story story = storyController.getStory();
-		Page page = pageController.getPage();
-		int whichDecision = decisionsLayout.indexOfChild(view);
-		if(story.isUsesCombat() == true){
-			Decision decision = page.getDecisions().get(whichDecision);
-			if(page.isFightingFrag() == true){
-				story.getPlayerStats().invokeUpdateComplex(decision.getChoiceModifiers());
-			}
-			else{
-				story.getPlayerStats().invokeUpdateSimple(decision.getChoiceModifiers());
-			}
-			
-		}
-		app.followDecision(whichDecision);
-
+		app.onDecisionClick(view, decisionsLayout);
 	}
-	
 	/**
 	 * Brings up a dialog for editing the decision clicked.
 	 * @param view
 	 */
 	protected void onEditDecision(View view) {
+		
 		AlertDialog builder = guiDecision.onEditDecisionGUI(view, decisionsLayout);
         builder.show();
 	}
@@ -461,8 +450,8 @@ public class ViewPageActivity extends Activity {
 	      
 	}
 	protected void onEditComment() {
-
-    	AlertDialog builder = guiComment.onEditCommentGUI();
+		Story story = storyController.getStory();
+    	AlertDialog builder = guiComment.onEditCommentGUI(story);
         builder.show();
 	}
 	
@@ -548,5 +537,31 @@ public class ViewPageActivity extends Activity {
 	 */
 	public boolean getEditing() {
 		return isEditing;
+	}
+
+	/**
+	 * @return the isFighting
+	 */
+	public boolean isFighting()
+	{
+
+		return isFighting;
+	}
+
+	/**
+	 * @param isFighting the isFighting to set
+	 */
+	public void setFighting(boolean isFighting)
+	{
+
+		this.isFighting = isFighting;
+	}
+	
+	public boolean isOnEntry() {
+		return onEntry;
+	}
+
+	public void setOnEntry(boolean onEntry) {
+		this.onEntry = onEntry;
 	}
 }

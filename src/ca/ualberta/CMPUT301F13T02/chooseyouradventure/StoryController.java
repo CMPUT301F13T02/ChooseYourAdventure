@@ -136,7 +136,7 @@ public class StoryController {
 		int whichPage = pageSpinner.getSelectedItemPosition();     		
 		ArrayList<Page> pages = getPages();
 		
-		Page page = null;
+		Page page = new Page("RANDOM");
 			
 		if(whichPage != pages.size()){
 			page = pages.get(whichPage);

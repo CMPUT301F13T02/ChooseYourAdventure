@@ -107,7 +107,7 @@ public final class R {
         public static final int audioTile=0x7f060027;
         public static final int cache=0x7f06000e;
         public static final int cachedDesignator=0x7f060055;
-        public static final int cahcedDesignator=0x7f060059;
+        public static final int cahcedDesignator=0x7f06005a;
         public static final int cancel=0x7f060010;
         public static final int coinChange=0x7f06003d;
         public static final int coinMessage=0x7f06003b;
@@ -144,6 +144,7 @@ public final class R {
         public static final int help=0x7f060018;
         public static final int hitpoints=0x7f060048;
         public static final int lost=0x7f060047;
+        public static final int newDecision=0x7f060059;
         public static final int noImage=0x7f060029;
         public static final int ok=0x7f060019;
         public static final int pageProperties=0x7f060022;

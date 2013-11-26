@@ -75,8 +75,8 @@ public class ViewStoriesActivity extends Activity {
 	private Button refreshButton;
 	ArrayList<String> storyText = new ArrayList<String>();
 	ArrayList<Story> storyList = new ArrayList<Story>();
-	private ControllerApp app; 
-	private StoryGUIs gui;
+	private ApplicationController app; 
+	private StoryView gui;
 	
 	
 	private Handler eshandler = new ESHandler();
@@ -124,8 +124,8 @@ public class ViewStoriesActivity extends Activity {
         	
         });
         
-        app = (ControllerApp) getApplication();
-        gui = new StoryGUIs(app, this);
+        app = (ApplicationController) getApplication();
+        gui = new StoryView(app, this);
         
         
 		try {

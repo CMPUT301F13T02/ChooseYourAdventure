@@ -42,10 +42,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class TileController {
+public class TileLayoutBuilder {
 	private ViewPageActivity pageActivity;
 	
-	public TileController(ViewPageActivity pageActivity) {
+	public TileLayoutBuilder(ViewPageActivity pageActivity) {
 		super();
 		this.pageActivity = pageActivity;
 	}

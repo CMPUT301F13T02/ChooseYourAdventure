@@ -103,8 +103,8 @@ public class StoryController {
 	 * Deletes a page.
 	 * @param currentPage
 	 */
-	protected void removePage(Page currentPage){
-		currentStory.deletePage(currentPage);
+	protected void removePage(int item){
+		currentStory.deletePage(item);
 		currentStory.updateStory();
 	}
 	

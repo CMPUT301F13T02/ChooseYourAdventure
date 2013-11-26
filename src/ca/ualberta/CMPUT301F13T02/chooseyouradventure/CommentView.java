@@ -77,7 +77,7 @@ public class CommentView {
 		photoSelector.show();
 	}
 	
-	protected AlertDialog onEditCommentGUI(final Story story){
+	protected void onEditCommentGUI(final Story story){
 		AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
     	builder.setTitle(pageActivity.getString(R.string.whatToSay));
     	
@@ -104,7 +104,7 @@ public class CommentView {
             }
         })
         .setNegativeButton(pageActivity.getString(R.string.cancel), null);
-    	return builder.create();
+    	builder.show();
 	}
 	
 	

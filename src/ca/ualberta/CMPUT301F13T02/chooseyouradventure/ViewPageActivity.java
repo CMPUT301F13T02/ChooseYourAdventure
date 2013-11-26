@@ -144,7 +144,7 @@ public class ViewPageActivity extends Activity {
 		addTileButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				addTileMenu();
+				guiTile.addTileMenuGUI(tilesLayout);
 			}
 		});
 		
@@ -307,14 +307,7 @@ public class ViewPageActivity extends Activity {
 		}
 	}
 	
-	/**
-	 * Show the dialog that allows users to pick which type of tile they would 
-	 * like to add.
-	 */
-	public void addTileMenu(){		
-		AlertDialog builder = guiTile.addTileMenuGUI(tilesLayout);
-        builder.show();
-    }
+	
 	
 	public void update(Page page) {
 		
@@ -387,8 +380,8 @@ public class ViewPageActivity extends Activity {
 	 * @param view
 	 */
 	public void editTileMenu(final View view){
-		AlertDialog builder = guiTile.editTileMenuGUI(view, tilesLayout);
-        builder.show();
+		guiTile.editTileMenuGUI(view, tilesLayout);
+        
     }
 	
 	/**
@@ -396,8 +389,7 @@ public class ViewPageActivity extends Activity {
 	 * @param view
 	 */
 	public void decisionMenu(final View view){
-		AlertDialog builder = guiDecision.decisionMenuGUI(view, decisionsLayout);
-        builder.show();
+		guiDecision.decisionMenuGUI(view, decisionsLayout);
     }
 
 	/**
@@ -413,8 +405,8 @@ public class ViewPageActivity extends Activity {
 	
 	protected void onEditComment() {
 		Story story = storyController.getStory();
-    	AlertDialog builder = guiComment.onEditCommentGUI(story);
-        builder.show();
+    	guiComment.onEditCommentGUI(story);
+       
 	}
 	
 	

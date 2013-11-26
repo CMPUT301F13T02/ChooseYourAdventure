@@ -26,7 +26,7 @@ public class DecisionView {
         this.pageController = pageController;
 	}
 	
-	protected AlertDialog onEditDecisionGUI(View view, final LinearLayout decisionsLayout){
+	protected void onEditDecisionGUI(View view, final LinearLayout decisionsLayout){
 		int whichDecision = decisionsLayout.indexOfChild(view);
 		final Decision decision = pageController.getPage().getDecisions().get(whichDecision);
 		final Story story = storyController.getStory();
@@ -110,10 +110,10 @@ public class DecisionView {
             }
         })
         .setNegativeButton(pageActivity.getString(R.string.cancel), null);
-    	return builder.create();
+    	builder.show();
 	}
 
-	protected AlertDialog onEditConditionsGUI(View view, LinearLayout decisionsLayout){
+	protected void onEditConditionsGUI(View view, LinearLayout decisionsLayout){
 		final int whichDecision = decisionsLayout.indexOfChild(view);
 		final Decision decision = pageController.findDecisionByIndex(whichDecision);
 		ArrayList<Page> pages = storyController.getPages();
@@ -153,10 +153,10 @@ public class DecisionView {
             }
         })
         .setNegativeButton(pageActivity.getString(R.string.cancel), null);
-    	return builder.create();
+    	builder.show();
 	}
 	
-	protected AlertDialog onEditMessages(View view, LinearLayout decisionsLayout){
+	protected void onEditMessages(View view, LinearLayout decisionsLayout){
 		final int whichDecision = decisionsLayout.indexOfChild(view);
 		final Decision decision = pageController.findDecisionByIndex(whichDecision);
 		ArrayList<Page> pages = storyController.getPages();
@@ -193,10 +193,10 @@ public class DecisionView {
             }
         })
         .setNegativeButton(pageActivity.getString(R.string.cancel), null);
-    	return builder.create();
+    	builder.show();
 	}
 	
-	protected AlertDialog decisionMenuGUI(final View view, final LinearLayout decisionsLayout){
+	protected void decisionMenuGUI(final View view, final LinearLayout decisionsLayout){
 		final String[] titles;
 		final String[] titlesBasic = { pageActivity.getString(R.string.editProperties), pageActivity.getString(R.string.delete), pageActivity.getString(R.string.cancel) };
 		final String[] titlesCounter = { pageActivity.getString(R.string.editProperties), pageActivity.getString(R.string.delete),
@@ -239,7 +239,7 @@ public class DecisionView {
             	}
             }
         });
-        return builder.create();
+        builder.show();
 	}
 	
 	/**

@@ -79,13 +79,7 @@ public class EditStoryActivity extends Activity {
         storyController = app.getStoryController();
         createNew2.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-              try
-			{
-				createPage();
-			} catch (HandlerException e)
-			{
-				e.printStackTrace();
-			}
+              gui.createPageGUI();
               adapter.notifyDataSetChanged();
             }
         });
@@ -170,27 +164,10 @@ public class EditStoryActivity extends Activity {
 	 * @param id
 	 */
 	protected void onListItemClick(View v, int pos, long id) {
-		pageOptions(pos);
+		gui.pageOptionsGUI(pos);;
 	}
 	
-	/**
-	 * This creates a page
-	 * @throws HandlerException
-	 */
-	private void createPage() throws HandlerException{
 
-    	AlertDialog builder = gui.createPageGUI();
-        builder.show();
-    }
-
-	/**
-	 * This shows the user a list of options on a story
-	 * @param Input from longclick
-	 */
-	public void pageOptions(final int pos){
-		AlertDialog builder = gui.pageOptionsGUI(pos);
-        builder.show();
-    }
 	
 	/**
 	 * This rebuilds the ListView by recollecting data from the controller

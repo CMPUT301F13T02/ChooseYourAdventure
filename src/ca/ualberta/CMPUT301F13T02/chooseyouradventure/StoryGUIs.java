@@ -59,7 +59,7 @@ public class StoryGUIs {
 								   storyActivity.getString(R.string.delete), storyActivity.getString(R.string.cancel) };
 		final String[] titlesB = { storyActivity.getString(R.string.cache), storyActivity.getString(R.string.uploadCopy), storyActivity.getString(R.string.cancel) };
 		final String myId = Secure.getString(
-				app.getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+				storyActivity.getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 		final String storyID = story.getAuthor();
 		if(myId.equals(storyID)){
 			titles = titlesA;

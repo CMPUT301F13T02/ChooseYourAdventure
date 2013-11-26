@@ -112,10 +112,10 @@ public class PageGUIs {
             			public void onClick(DialogInterface dialog, int id) {
             				String pageTitle = titleEdit.getText().toString();
             				if(story.isUsesCombat() == true){
-            					storyController.updateFightTitle(pageTitle, check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString(), currentPage); 
+            					storyController.updatePageData(pageTitle, check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString(), currentPage); 
             				}
             				else{
-            					storyController.updateTitle(pageTitle, currentPage);    
+            					storyController.updatePageData(pageTitle, false, null, null, currentPage);    
             				}
             				storyActivity.refresh();
             			}
@@ -148,7 +148,6 @@ public class PageGUIs {
     	final EditText nameEdit = (EditText) layout.findViewById(R.id.create_page_dialog_name_edittext);
     	final CheckBox check = (CheckBox) layout.findViewById(R.id.create_page_dialog_checkbox);
     	final LinearLayout fightingLayout = (LinearLayout) layout.findViewById(R.id.create_page_dialog_fighting_options);
-    	
     	if(!storyController.getStory().isUsesCombat())
     		fightingLayout.setVisibility(View.GONE);
     	nameEdit.setText("Enemy");
@@ -159,7 +158,7 @@ public class PageGUIs {
     	builder.setMessage(storyActivity.getString(R.string.enterPageTitle))
     	.setPositiveButton(storyActivity.getString(R.string.save), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-            	storyController.newTitle(titleEdit.getText().toString(), check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString());         	
+            	storyController.newPage(titleEdit.getText().toString(), check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString());         	
             	storyActivity.refresh();
             }
         })

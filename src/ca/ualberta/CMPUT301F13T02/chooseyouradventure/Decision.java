@@ -85,10 +85,7 @@ public class Decision {
 	 * @param text
 	 * @param page
 	 */
-	public void updateDecision(String text, Page page) {
-		this.text = text;
-		this.pageID = page.getId();
-	}
+
 	
 	public void updateDecision(String text, Page page, Counters counter) {
 		this.text = text;

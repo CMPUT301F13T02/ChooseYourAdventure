@@ -50,11 +50,11 @@ public class CommentGUIs {
 	}
 	
 	protected AlertDialog onCallCommentGUI(){
-		final String[] titlesPhoto = { app.getString(R.string.noImage), app.getString(R.string.fromFile),
-				app.getString(R.string.takePhoto) };
+		final String[] titlesPhoto = { pageActivity.getString(R.string.noImage), pageActivity.getString(R.string.fromFile),
+				pageActivity.getString(R.string.takePhoto) };
 		final AlertDialog.Builder photoSelector = 
 				new AlertDialog.Builder(pageActivity); 
-		photoSelector.setTitle(app.getString(R.string.usePhotoComment));
+		photoSelector.setTitle(pageActivity.getString(R.string.usePhotoComment));
 		photoSelector.setItems(titlesPhoto, 
 				new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, 
@@ -81,7 +81,7 @@ public class CommentGUIs {
 	
 	protected AlertDialog onEditCommentGUI(){
 		AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
-    	builder.setTitle(app.getString(R.string.whatToSay));
+    	builder.setTitle(pageActivity.getString(R.string.whatToSay));
     	
     	final LinearLayout layout = new LinearLayout(pageActivity);
     	layout.setOrientation(LinearLayout.VERTICAL);
@@ -100,12 +100,12 @@ public class CommentGUIs {
     	layout.addView(alertImage);
     	
 		builder.setView(layout);
-    	builder.setPositiveButton(app.getString(R.string.save), new DialogInterface.OnClickListener() {
+    	builder.setPositiveButton(pageActivity.getString(R.string.save), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	app.addComment(alertEdit.getText().toString(),photoAdd );
             }
         })
-        .setNegativeButton(app.getString(R.string.cancel), null);
+        .setNegativeButton(pageActivity.getString(R.string.cancel), null);
     	return builder.create();
 	}
 	

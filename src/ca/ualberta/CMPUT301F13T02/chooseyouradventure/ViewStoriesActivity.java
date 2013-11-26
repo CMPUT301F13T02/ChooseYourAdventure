@@ -78,7 +78,7 @@ public class ViewStoriesActivity extends Activity {
 	private ControllerApp app; 
 	private StoryGUIs gui;
 	
-	private SampleGenerator sampleGen = new SampleGenerator();
+	
 	private Handler eshandler = new ESHandler();
 	private Handler dbhandler = new DBHandler(this);
 	private static final int HELP_INDEX = 0;
@@ -130,8 +130,6 @@ public class ViewStoriesActivity extends Activity {
         
 		try {
 			storyList =  eshandler.getAllStories();
-			Story sampleStory = sampleGen.getStory();
-			storyList.add(sampleStory);
 			storyText = app.updateView(storyList, storyText);
 		} catch (HandlerException e1) {
 			e1.printStackTrace();

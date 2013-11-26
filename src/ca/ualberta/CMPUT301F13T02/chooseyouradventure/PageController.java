@@ -277,8 +277,7 @@ public class PageController {
 			pageActivity.setOnEntry(false);
 		}
 		setPage(toPage);		
-		reloadPage();
-		
+		reloadPage();	
 	}
 	
 	public void updateDecision(String text, Page page, int whichDecision, Counters counter) {		

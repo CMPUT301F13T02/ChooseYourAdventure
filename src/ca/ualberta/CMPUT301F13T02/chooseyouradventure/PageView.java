@@ -37,14 +37,14 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-public class PageGUIs {
-	private ControllerApp app;
+public class PageView {
+	private ApplicationController app;
 	private EditStoryActivity storyActivity;
 	private StoryController storyController; 
 	
 
 	
-	public PageGUIs(ControllerApp app, EditStoryActivity storyActivity) {
+	public PageView(ApplicationController app, EditStoryActivity storyActivity) {
 		super();
 		this.app = app;
 		this.storyActivity = storyActivity;
@@ -97,7 +97,7 @@ public class PageGUIs {
 	            		
 	                	
 
-	            		check.setChecked(currentPage.isFightingFrag());
+	            		check.setChecked(currentPage.getFightingState());
 	            		healthEdit.setText("" + currentPage.getEnemyHealth());
 	            		nameEdit.setText(currentPage.getEnemyName());
 	            	}

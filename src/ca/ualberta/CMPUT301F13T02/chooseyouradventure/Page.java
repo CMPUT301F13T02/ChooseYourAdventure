@@ -61,8 +61,9 @@ public class Page {
 		decisions = new ArrayList<Decision>();
 		comments = new ArrayList<Comment>();
 		title = new String();
-		pageEnding = ControllerApp.getInstance().getString(R.string.defaultEnding);
+		pageEnding = ApplicationController.getInstance().getString(R.string.defaultEnding);
 	}
+	
 	
 	public Page(String enterAnything){
 		id = null;
@@ -70,7 +71,7 @@ public class Page {
 		decisions = new ArrayList<Decision>();
 		comments = new ArrayList<Comment>();
 		title = new String();
-		pageEnding = ControllerApp.getInstance().getString(R.string.defaultEnding);
+		pageEnding = ApplicationController.getInstance().getString(R.string.defaultEnding);
 	}
 
 	/**
@@ -89,14 +90,6 @@ public class Page {
 	public String getTitle()
 	{
 		return title;
-	}
-	
-	/**
-	 * This sets the page ID
-	 * @param UUid
-	 */
-	public void setId(UUID id) {
-		this.id = id;
 	}
 	
 	/**
@@ -214,7 +207,7 @@ public class Page {
 	}
 
 	/**
-	 * This adds a comment to the apge
+	 * This adds a comment to the page
 	 * @param comment What comment to add
 	 */
 	public void addComment(Comment comment) {
@@ -222,7 +215,7 @@ public class Page {
 	}
 	
 
-	public boolean isFightingFrag() {
+	public boolean getFightingState() {
 		return fightingFrag;
 	}
 

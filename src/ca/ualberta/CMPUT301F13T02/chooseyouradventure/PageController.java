@@ -38,11 +38,17 @@ public class PageController {
 	
 	// These variables shouldn't be saved.
 	private ViewPageActivity pageActivity;
+	
+	/**
+	 * @return the pageActivity
+	 */
+	
+
 	private boolean tilesChanged;
 	private boolean decisionsChanged;
 	private boolean commentsChanged;
 	private boolean endingChanged;
-	private boolean onEntry;
+	
 	
 	/**
 	 * This sets the current Page
@@ -181,7 +187,7 @@ public class PageController {
 	 * @param decision
 	 */
 	public void addDecision() {
-		Decision decision = new Decision(currentPage);
+		Decision decision = new Decision(pageActivity.getString(R.string.newDecision), currentPage);
 		currentPage.addDecision(decision);
 		setDecisionsChanged();
 	}
@@ -263,18 +269,12 @@ public class PageController {
 	
 	
 	
-	public boolean isOnEntry() {
-		return onEntry;
-	}
-
-	public void setOnEntry(boolean onEntry) {
-		this.onEntry = onEntry;
-	}
+	
 	
 	public void calculateEntry(Page toPage, UUID toPageId){
-		setOnEntry(true);
+		pageActivity.setOnEntry(true);
 		if(currentPage.getId().equals(toPageId) == true){
-			setOnEntry(false);
+			pageActivity.setOnEntry(false);
 		}
 		setPage(toPage);		
 		reloadPage();
@@ -284,6 +284,25 @@ public class PageController {
 	public void updateDecision(String text, Page page, int whichDecision, Counters counter) {		
 		getPage().updateDecisionFight(text, page, whichDecision, counter);
 		setDecisionsChanged();
+	}
+	
+	/**
+	 * This adds a comment to the current page
+	 * @param A comment to add
+	 */
+	public void addComment(String text, PhotoTile photo, Story story) {
+
+		Comment comment = new Comment(text, photo);
+		getPage().addComment(comment);
+		setCommentsChanged();
+		try
+		{
+			story.getHandler().addComment(story, getPage(), comment);
+		} catch (HandlerException e)
+		{
+			e.printStackTrace();
+		}
+		
 	}
 	
 

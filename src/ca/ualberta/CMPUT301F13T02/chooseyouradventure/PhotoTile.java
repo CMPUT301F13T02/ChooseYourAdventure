@@ -65,17 +65,6 @@ public class PhotoTile extends Tile{
 	 * @param content The content to update this tile to
 	 */
 	
-	
-	/**
-	 * Sets both the image and imageData parameter via. conversion
-	 * @param image the image to set
-	 */
-	public void setImageFile(Bitmap image) {
-		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-		image.compress(Bitmap.CompressFormat.PNG, 100, outStream);
-		imageData =  outStream.toByteArray();
-		
-	}
 
 	/**
 	 * @return the image
@@ -93,21 +82,13 @@ public class PhotoTile extends Tile{
 		
 	}
 
-	/**
-	 * Gets imageData
-	 * @return the imageData
-	 */
-	public byte[] getImageData() {
-		return imageData;
-	}
-
-	
-	
 
 	@Override
 	public void setContent(Object content) {
-		Bitmap bitmap = (Bitmap) content;
-		setImageFile(bitmap);
+		Bitmap image = (Bitmap) content;
+		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+		image.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+		imageData =  outStream.toByteArray();
 	}
     
 }

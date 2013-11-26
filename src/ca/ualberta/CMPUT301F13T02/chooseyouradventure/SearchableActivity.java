@@ -18,7 +18,7 @@ public class SearchableActivity extends ListActivity {
 	private ESHandler handler = new ESHandler();
 	private ArrayList<Story> stories = new ArrayList<Story>();
 	ArrayList<String> titles = new ArrayList<String>();
-	private ControllerApp app;
+	private ApplicationController app;
 	private ArrayAdapter<String> adapter;
 
 	@Override
@@ -29,7 +29,7 @@ public class SearchableActivity extends ListActivity {
 		adapter = new ArrayAdapter<String>(this, R.layout.list_item_base, titles);
 		setListAdapter(adapter);
 		
-		app = (ControllerApp) getApplication();
+		app = (ApplicationController) getApplication();
 		
 		Intent intent = getIntent();
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {

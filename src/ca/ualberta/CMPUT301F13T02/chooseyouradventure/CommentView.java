@@ -36,15 +36,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-public class CommentGUIs {
-	private ControllerApp app;
+public class CommentView {
+	private PageController pageController;
 	private ViewPageActivity pageActivity;
 	 private CameraAdapter camera;
 	
 	
-	public CommentGUIs(ControllerApp app, ViewPageActivity pageActivity, CameraAdapter camera) {
+	public CommentView(PageController pageController, ViewPageActivity pageActivity, CameraAdapter camera) {
 		super();
-		this.app = app;
+		this.pageController = pageController;
 		this.pageActivity = pageActivity;
 		this.camera = camera;
 	}
@@ -60,8 +60,6 @@ public class CommentGUIs {
 			public void onClick(DialogInterface dialog, 
 					int item) {
 				switch(item){
-
-
 				case(0):
 					pageActivity.onEditComment();
 				break;
@@ -79,7 +77,7 @@ public class CommentGUIs {
 		return photoSelector.create();
 	}
 	
-	protected AlertDialog onEditCommentGUI(){
+	protected AlertDialog onEditCommentGUI(final Story story){
 		AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
     	builder.setTitle(pageActivity.getString(R.string.whatToSay));
     	
@@ -102,7 +100,7 @@ public class CommentGUIs {
 		builder.setView(layout);
     	builder.setPositiveButton(pageActivity.getString(R.string.save), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-            	app.addComment(alertEdit.getText().toString(),photoAdd );
+            	pageController.addComment(alertEdit.getText().toString(),photoAdd, story );
             }
         })
         .setNegativeButton(pageActivity.getString(R.string.cancel), null);

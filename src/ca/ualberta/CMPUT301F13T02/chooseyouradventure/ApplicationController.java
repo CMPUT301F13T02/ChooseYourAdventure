@@ -37,6 +37,8 @@ import java.util.UUID;
 import android.app.Application;
 import android.content.Intent;
 import android.provider.Settings.Secure;
+import android.view.View;
+import android.widget.LinearLayout;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
 /**
@@ -47,10 +49,10 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
  * saving of the model and maintaining coherence between the model and the view.
  */
 
-public class ControllerApp extends Application {
+public class ApplicationController extends Application {
 	
 	private ArrayList<Story> stories;
-	private static ControllerApp instance = new ControllerApp();
+	private static ApplicationController instance = new ApplicationController();
 	private StoryController storyController = new StoryController();
 	private PageController pageController = new PageController();
 	
@@ -59,7 +61,7 @@ public class ControllerApp extends Application {
 			super.onCreate();
 	}
 	
-	public ControllerApp() {
+	public ApplicationController() {
 		instance = this;
 	}
 	
@@ -68,15 +70,13 @@ public class ControllerApp extends Application {
 	 * of an activity.
 	 * @return the singleton instance of ControllerApp
 	 */
-	public static ControllerApp getInstance() {
+	public static ApplicationController getInstance() {
 		if (instance == null) {
-			instance = new ControllerApp();
+			instance = new ApplicationController();
 		}
 		return instance;
 	}
-	
 
-	
 	/**
 	 * Sets the list of stories.
 	 * @param stories
@@ -92,11 +92,6 @@ public class ControllerApp extends Application {
 	public ArrayList<Story> getStories() {
 		return this.stories;
 	}
-	
-
-	
-	
-
 
 	/**
 	 * This method is used for gathering new data from the model, it then 
@@ -109,46 +104,45 @@ public class ControllerApp extends Application {
 	protected <T> ArrayList<String> updateView(ArrayList<T> itemList,
 	                                            ArrayList<String> infoText) {
 		infoText.clear();
-		if(itemList.size() != 0)
+		if(itemList.size() == 0)
 		{
-			for (int i = 0; i < itemList.size(); i++) {
-				String outList = "";
-				if(itemList.get(i).getClass().equals(Page.class))
-				{
-					
-					if(itemList.get(i).equals(storyController.grabFirstPage())){
-						outList = getString(R.string.startDesignator);
-					}
+			return infoText;
+		}
+		for (int i = 0; i < itemList.size(); i++) {
+			String outList = "";
+			if(itemList.get(i).getClass().equals(Page.class))
+			{
 
-					
-					if(((Page) itemList.get(i)).isFightingFrag() == true){
-						outList = outList + getString(R.string.fightDesignator);
-					}
-					
-
-					if(((Page) itemList.get(i)).getDecisions().size() == 0){				
-						outList = outList + getString(R.string.endDesignator);
-					}
-					outList = outList + "(" + 
-					          ((Page) itemList.get(i)).getRefNum() + ") " + 
-							  ((Page) itemList.get(i)).getTitle();
-				} else if(itemList.get(i).getClass().equals(Story.class)) {
-					
-					//If the story has been saved locally, note it
-					if(((Story) itemList.get(i)).getHandler() instanceof DBHandler){
-						outList = getString(R.string.cachedDesignator);
-					}
-					outList = outList + ((Story) itemList.get(i)).getTitle();
+				if(itemList.get(i).equals(storyController.grabFirstPage())){
+					outList = getString(R.string.startDesignator);
 				}
-				infoText.add(outList);
+
+
+				if(((Page) itemList.get(i)).getFightingState() == true){
+					outList = outList + getString(R.string.fightDesignator);
+				}
+
+
+				if(((Page) itemList.get(i)).getDecisions().size() == 0){				
+					outList = outList + getString(R.string.endDesignator);
+				}
+				outList = outList + "(" + 
+						((Page) itemList.get(i)).getRefNum() + ") " + 
+						((Page) itemList.get(i)).getTitle();
+			} else if(itemList.get(i).getClass().equals(Story.class)) {
+
+				//If the story has been saved locally, note it
+				if(((Story) itemList.get(i)).getHandler() instanceof DBHandler){
+					outList = getString(R.string.cachedDesignator);
+				}
+				outList = outList + ((Story) itemList.get(i)).getTitle();
 			}
+			infoText.add(outList);
+			
 		}
 		
 		return infoText;
 	}
-
-
-
 
 
 	/**
@@ -161,41 +155,11 @@ public class ControllerApp extends Application {
 	public <T> void jump(Class<T> classItem, Story story, Page page) {	
 		storyController.setStory(story);
 		pageController.setPage(page);
-		pageController.setOnEntry(true);
 		Intent intent = new Intent(this, classItem);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
 	}
 
-
-
-	
-	
-
-	
-
-	/**
-	 * This adds a comment to the current page
-	 * @param A comment to add
-	 */
-	public void addComment(String text, PhotoTile photo) {
-		String poster = Secure.getString( 
-				getBaseContext().getContentResolver(), Secure.ANDROID_ID);
-
-		Comment comment = new Comment(text, poster, photo);
-		
-		
-		pageController.getPage().addComment(comment);
-		pageController.setCommentsChanged();
-		try
-		{
-			storyController.getStory().getHandler().addComment(storyController.getStory(), pageController.getPage(), comment);
-		} catch (HandlerException e)
-		{
-			e.printStackTrace();
-		}
-		
-	}
 	
 	/**
 	 * Sets the currentPage to the page pointed to by the decision selected
@@ -240,7 +204,7 @@ public class ControllerApp extends Application {
     	Page page = storyController.initializeNewPage("First Page");
     	newStory.addPage(page);
     	newStory.setFirstpage(page.getId());
-    	newStory.setAuthor(Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID));
+    	newStory.setAuthor(getAndroidID());
     	newStory.setHandler(new ESHandler());
 	    try
 		{			    	
@@ -271,7 +235,26 @@ public class ControllerApp extends Application {
 	
 	
 
+	protected String getAndroidID(){
+		return Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+	}
 	
+	protected void onDecisionClick(View view, LinearLayout decisionsLayout){
+		Story story = storyController.getStory();
+		Page page = pageController.getPage();
+		int whichDecision = decisionsLayout.indexOfChild(view);
+		if(story.isUsesCombat()){
+			Decision decision = page.getDecisions().get(whichDecision);
+			if(page.getFightingState()){
+				story.getPlayerStats().invokeUpdateComplex(decision.getChoiceModifiers());
+			}
+			else{
+				story.getPlayerStats().invokeUpdateSimple(decision.getChoiceModifiers());
+			}
+			
+		}
+		followDecision(whichDecision);
+	}
 	
 	
 	

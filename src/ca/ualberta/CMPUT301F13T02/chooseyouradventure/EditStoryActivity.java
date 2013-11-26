@@ -58,8 +58,8 @@ public class EditStoryActivity extends Activity {
 	private ArrayList<String> pageText = new ArrayList<String>();
 	private ArrayList<Page> pageList = new ArrayList<Page>();
 	private ArrayAdapter<String> adapter;
-	private ControllerApp app;
-	private PageGUIs gui;
+	private ApplicationController app;
+	private PageView gui;
 	private StoryController storyController; 
 	private static final int HELP_INDEX = 0;
 
@@ -74,8 +74,8 @@ public class EditStoryActivity extends Activity {
         treePage = (ListView) findViewById(R.id.treeView);
         createNew2 = (Button) findViewById(R.id.createButton2);
         deleteStory = (Button) findViewById(R.id.deleteButton);
-        app = (ControllerApp) getApplication();
-        gui = new PageGUIs(app, this);
+        app = (ApplicationController) getApplication();
+        gui = new PageView(app, this);
         storyController = app.getStoryController();
         createNew2.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {

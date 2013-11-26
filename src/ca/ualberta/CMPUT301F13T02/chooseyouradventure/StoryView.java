@@ -39,13 +39,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class StoryGUIs {
-	private ControllerApp app;
+public class StoryView {
+	private ApplicationController app;
 	private ViewStoriesActivity storyActivity;
 	
 
 	
-	public StoryGUIs(ControllerApp app, ViewStoriesActivity storyActivity) {
+	public StoryView(ApplicationController app, ViewStoriesActivity storyActivity) {
 		super();
 		this.app = app;
 		this.storyActivity = storyActivity;

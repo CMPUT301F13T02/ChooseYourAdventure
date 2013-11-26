@@ -212,5 +212,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="edit">Edit</string>
     <string name="textView">TextView</string>
     <string name="defaultEnding">Choices: </string>
+    <string name="newDecision">New Decision </string>
 
 </resources>

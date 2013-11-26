@@ -7,22 +7,17 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class DecisionController {
+public class DecisionLayoutBuilder {
 	private ViewPageActivity pageActivity;
 	private StoryController storyController; 
-	private PageController pageController; 
 	
 	
-	public DecisionController(StoryController storyController,PageController pageController, ViewPageActivity pageActivity) {
+	public DecisionLayoutBuilder(StoryController storyController, ViewPageActivity pageActivity) {
 		super();
 		this.pageActivity = pageActivity;
 		this.storyController = storyController;
-        this.pageController = pageController;
 	}
-	
-	
-	
-	
+
 	/**
 	 * Adds a decision to the page. If we are in editing mode, give the view a
 	 * onClickListener to allow you to edit the decision. If we are in 
@@ -43,7 +38,7 @@ public class DecisionController {
 		view.setLayoutParams(lp);
 		view.setText(decision.getText());
 		decisionsLayout.addView(view, i);
-		if(pageController.getPage().isFightingFrag() == false){
+		if(!pageActivity.isFighting()){
 			view.setVisibility(View.VISIBLE);
 		}
 		else if(pageActivity.getEditing() == true){
@@ -55,8 +50,7 @@ public class DecisionController {
 				view.setVisibility(View.GONE);
 			}
 		}
-		
-		
+
 		if (pageActivity.getEditing()) {
 			view.setOnClickListener(new OnClickListener() {
 				@Override

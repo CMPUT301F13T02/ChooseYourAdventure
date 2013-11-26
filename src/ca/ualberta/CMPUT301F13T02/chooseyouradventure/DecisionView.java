@@ -11,14 +11,14 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class DecisionGUIs {
+public class DecisionView {
 	
 	private ViewPageActivity pageActivity;
 	private StoryController storyController; 
 	private PageController pageController; 
 
 	
-	public DecisionGUIs(StoryController storyController,PageController pageController, ViewPageActivity pageActivity) {
+	public DecisionView(StoryController storyController,PageController pageController, ViewPageActivity pageActivity) {
 		super();
 		this.pageActivity = pageActivity;
 		this.storyController = storyController;
@@ -69,7 +69,7 @@ public class DecisionGUIs {
         	alertTreasure.setText("" + decision.getChoiceModifiers().getTreasureStat());
         	playerDamage.setText("" + decision.getChoiceModifiers().getPlayerHpStat());
 
-        	if(!page.isFightingFrag()) {
+        	if(!pageActivity.isFighting()) {
         		fightOptions.setVisibility(View.GONE);
         	}
         	else {
@@ -89,7 +89,7 @@ public class DecisionGUIs {
         		if(story.isUsesCombat() == true){
         			String treasure = alertTreasure.getText().toString();
         			String hp = playerDamage.getText().toString();
-        			if(page.isFightingFrag() == false){      				
+        			if(!pageActivity.isFighting()){      				
         				counter.setBasic(treasure, hp);
         			}
 	        		else{
@@ -202,7 +202,7 @@ public class DecisionGUIs {
 				                          pageActivity.getString(R.string.transitionMessages), pageActivity.getString(R.string.cancel) };
 		final String[] titlesFight = { pageActivity.getString(R.string.editProperties), pageActivity.getString(R.string.delete), pageActivity.getString(R.string.transitionMessages),
 				                        pageActivity.getString(R.string.setConditionals), pageActivity.getString(R.string.cancel) };
-		final boolean fighting = pageController.getPage().isFightingFrag();
+		final boolean fighting = pageActivity.isFighting();
 		final boolean combat = storyController.getStory().isUsesCombat();
 		if(fighting == true){
 			titles = titlesFight;

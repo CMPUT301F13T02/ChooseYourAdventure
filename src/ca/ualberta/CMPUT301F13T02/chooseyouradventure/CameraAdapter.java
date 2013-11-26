@@ -86,7 +86,7 @@ public class CameraAdapter {
 		cursor.close();       	
 		Bitmap pickedPhoto = BitmapFactory.decodeFile(picturePath);
 		PhotoTile newPhoto = new PhotoTile();
-		newPhoto.setImageFile(pickedPhoto);	
+		newPhoto.setContent(pickedPhoto);	
 		return newPhoto;
 	}
 	

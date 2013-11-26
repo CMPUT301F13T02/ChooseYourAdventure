@@ -46,18 +46,11 @@ public class Decision {
 	private Counters choiceModifiers = new Counters();
 	
 
-	public Decision(Page page) {
-		this.text = "New Decision";
-		this.pageID = page.getId();
-	}
-	
 	
 	/**
 	 * This sets the link for the decision
 	 * @param The text of the decision and it's corresponding page
 	 */
-	
-	
 	public Decision(String text, Page page) {
 		this.text = text;
 		this.pageID = page.getId();

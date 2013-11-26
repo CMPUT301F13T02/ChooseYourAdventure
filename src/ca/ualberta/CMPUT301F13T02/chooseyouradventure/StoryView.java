@@ -33,7 +33,6 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.provider.Settings.Secure;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -52,7 +51,7 @@ public class StoryView {
         
 	}
 	
-	protected AlertDialog storyMenuGUI(final Story story, final Handler eshandler, final Handler dbhandler){	
+	protected void storyMenuGUI(final Story story, final Handler eshandler, final Handler dbhandler){	
 		AlertDialog.Builder builder = new AlertDialog.Builder(storyActivity);
 		final String[] titles;
 		final String[] titlesA = { storyActivity.getString(R.string.cache), storyActivity.getString(R.string.upload), storyActivity.getString(R.string.edit), 
@@ -118,10 +117,10 @@ public class StoryView {
 			
 			
         });
-        return builder.create();
+        builder.show();
 	}
 	
-	protected AlertDialog createStoryGUI(){
+	protected void createStoryGUI(){
 		AlertDialog.Builder builder = new AlertDialog.Builder(storyActivity);
     	builder.setTitle(storyActivity.getString(R.string.createNew));
     	final LinearLayout layout = new LinearLayout(storyActivity);
@@ -160,7 +159,7 @@ public class StoryView {
             }
         })
         .setNegativeButton(storyActivity.getString(R.string.cancel), null);
-    	return builder.create();
+    	builder.show();
 	}
 }
 

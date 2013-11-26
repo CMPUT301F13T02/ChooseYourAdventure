@@ -52,7 +52,7 @@ public class PageView {
         
 	}
 	
-	protected AlertDialog pageOptionsGUI(final int pos){
+	protected void pageOptionsGUI(final int pos){
 		final Story story = storyController.getStory();
         final AlertDialog.Builder titleEditor = new AlertDialog.Builder(storyActivity);
 		final Page currentPage = story.getPages().get(pos);
@@ -138,10 +138,10 @@ public class PageView {
 
             }	
                 });
-        return builder.create();
+        builder.show();
 	}
 	
-	protected AlertDialog createPageGUI(){
+	protected	void createPageGUI(){
 		final LinearLayout layout = (LinearLayout) View.inflate(storyActivity, R.layout.create_page_dialog, null);
     	final EditText titleEdit = (EditText) layout.findViewById(R.id.create_page_dialog_edittext);
     	final EditText healthEdit = (EditText) layout.findViewById(R.id.create_page_dialog_health_edittext);
@@ -163,7 +163,7 @@ public class PageView {
             }
         })
         .setNegativeButton(storyActivity.getString(R.string.cancel), null);
-    	return builder.create();
+    	builder.show();
 	}
 
 }

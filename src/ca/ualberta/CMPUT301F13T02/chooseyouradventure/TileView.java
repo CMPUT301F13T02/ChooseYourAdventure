@@ -52,7 +52,7 @@ public class TileView {
 
 	}
 	
-	public AlertDialog addTileMenuGUI(final LinearLayout tilesLayout){
+	public void addTileMenuGUI(final LinearLayout tilesLayout){
 		AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
 		final AlertDialog.Builder photoSelector = 
 				new AlertDialog.Builder(pageActivity);
@@ -96,10 +96,10 @@ public class TileView {
             	}
                     
                 }});
-        return builder.create();
+        builder.show();
 	}
 	
-	protected AlertDialog onEditTileGUI(View view, final LinearLayout tilesLayout){
+	protected void onEditTileGUI(View view, final LinearLayout tilesLayout){
 		final TextView textView = (TextView) view;
     	AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
     	final EditText alertEdit = new EditText(pageActivity);
@@ -112,10 +112,10 @@ public class TileView {
             }
         })
         .setNegativeButton(pageActivity.getString(R.string.done), null);
-    	return builder.create();
+    	builder.show();
 	}
 	
-	protected AlertDialog editTileMenuGUI(final View view, final LinearLayout tilesLayout){
+	protected void editTileMenuGUI(final View view, final LinearLayout tilesLayout){
 		final String[] titles = { pageActivity.getString(R.string.edit), pageActivity.getString(R.string.delete) };
 		
         AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
@@ -126,7 +126,7 @@ public class TileView {
             	int whichTile = tilesLayout.indexOfChild(view);
             	switch(item){
             	case(0):
-            		pageActivity.onEditTile(view);
+            		onEditTileGUI(view, tilesLayout);
             		break;
             	case(1):
             		pageController.deleteTile(whichTile);
@@ -135,10 +135,10 @@ public class TileView {
             }
             
         });
-        return builder.create();
+        builder.show();
 	}
 	
-	protected AlertDialog onEditPageEndingGUI(View view){
+	protected void onEditPageEndingGUI(View view){
 		TextView textView = (TextView) view;
 		AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
 		final EditText alertEdit = new EditText(pageActivity);
@@ -150,7 +150,7 @@ public class TileView {
 			}
 		})
 		.setNegativeButton(pageActivity.getString(R.string.cancel), null);
-		return builder.create();
+		builder.show();
 
 
 	}

@@ -196,9 +196,6 @@ public class Page {
 	 * @param page The page to link in the updated decision
 	 * @param decisionNumber The position of the decision to update
 	 */
-	public void updateDecision(String text, Page page, int decisionNumber) {
-		decisions.get(decisionNumber).updateDecision(text, page);
-	}
 	
 	public void updateDecisionFight(String text, Page page, int decisionNumber, Counters counter) {
 		decisions.get(decisionNumber).updateDecision(text, page, counter);
@@ -224,54 +221,6 @@ public class Page {
 		comments.add(comment);
 	}
 	
-	/**
-	 * Compares this page for deep equality with another page
-	 * @param page What we are comparing to
-	 */
-	public boolean equals(Page page) {
-
-		//Fail if different number of comments of segments
-		if (comments.size() != page.getComments().size() ||
-			tiles.size() != page.getTiles().size() ||
-			decisions.size() != page.getDecisions().size())
-			return false;
-
-		//Check that all comments are the same
-		for (int i = 0; i < comments.size(); i++) {
-			if (!comments.get(i).equals(page.getComments().get(i))) 
-				return false;
-		}
-
-		//Check that all segments are the same
-		for (int i = 0; i < tiles.size(); i++) {
-			if (!tiles.get(i).equals(page.getTiles().get(i))) 
-				return false;
-		}
-		
-		//Check that all decisions are the same
-		for (int i = 0; i < decisions.size(); i++) {
-			if (!decisions.get(i).equals(page.getDecisions().get(i))) 
-				return false;
-		}
-		
-		//Check that the titles are the same
-		if (!title.equals(page.getTitle()))
-				return false;
-		
-		//Check that the id's are the same
-		if (!id.equals(page.id))
-			return false;
-		
-		return true;
-	}
-	
-	/**
-	 * This returns the string representation of the page
-	 * @return String Representation of a page
-	 */
-	public String toString() {
-		return "" + id + comments + tiles;
-	}
 
 	public boolean isFightingFrag() {
 		return fightingFrag;
@@ -296,6 +245,47 @@ public class Page {
 	public void setEnemyName(String enemyName) {
 		this.enemyName = enemyName;
 	}
+	
+	/**
+     * Compares this page for deep equality with another page
+     * @param page What we are comparing to
+     */
+    public boolean equals(Page page) {
+
+            //Fail if different number of comments of segments
+            if (comments.size() != page.getComments().size() ||
+                    tiles.size() != page.getTiles().size() ||
+                    decisions.size() != page.getDecisions().size())
+                    return false;
+
+            //Check that all comments are the same
+            for (int i = 0; i < comments.size(); i++) {
+                    if (!comments.get(i).equals(page.getComments().get(i)))
+                            return false;
+            }
+
+            //Check that all segments are the same
+            for (int i = 0; i < tiles.size(); i++) {
+                    if (!tiles.get(i).equals(page.getTiles().get(i)))
+                            return false;
+            }
+            
+            //Check that all decisions are the same
+            for (int i = 0; i < decisions.size(); i++) {
+                    if (!decisions.get(i).equals(page.getDecisions().get(i)))
+                            return false;
+            }
+            
+            //Check that the titles are the same
+            if (!title.equals(page.getTitle()))
+                            return false;
+            
+            //Check that the id's are the same
+            if (!id.equals(page.id))
+                    return false;
+            
+            return true;
+    }
 
 	
 	

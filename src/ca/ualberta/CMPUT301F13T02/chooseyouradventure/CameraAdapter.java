@@ -49,7 +49,6 @@ public class CameraAdapter {
 	
 	
 	private ViewPageActivity pageActivity;
-
 	private Object tempSpace;
 	
 

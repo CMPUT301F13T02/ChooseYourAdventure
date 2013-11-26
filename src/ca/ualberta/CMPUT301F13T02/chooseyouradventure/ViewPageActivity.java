@@ -116,8 +116,8 @@ public class ViewPageActivity extends Activity {
         tileView = new TileController(this);
         decisionView = new DecisionController(storyController,pageController, this);
         commentView = new CommentController(this);
-        guiTile = new TilesGUIs(app, this);
-        guiDecision = new DecisionGUIs(app, this);
+        guiTile = new TilesGUIs(pageController, this);
+        guiDecision = new DecisionGUIs(storyController,pageController, this);
         camera = new CameraAdapter(this);
         guiComment = new CommentGUIs(app, this, camera);   
         
@@ -478,7 +478,7 @@ public class ViewPageActivity extends Activity {
 	}
 
 	@Override
-	public void onActivityResult(final int requestCode, final int resultCode, Intent data) {
+	public void onActivityResult( final int requestCode, final int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		AlertDialog.Builder successChecker = new AlertDialog.Builder(this);
 		if (resultCode == RESULT_OK && null != data) {

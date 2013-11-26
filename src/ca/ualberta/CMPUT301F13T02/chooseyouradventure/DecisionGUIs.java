@@ -1,8 +1,6 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
-import java.util.UUID;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.View;
@@ -14,19 +12,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 public class DecisionGUIs {
-	private ControllerApp app;
+	
 	private ViewPageActivity pageActivity;
 	private StoryController storyController; 
 	private PageController pageController; 
 
 	
-	public DecisionGUIs(ControllerApp app, ViewPageActivity pageActivity) {
+	public DecisionGUIs(StoryController storyController,PageController pageController, ViewPageActivity pageActivity) {
 		super();
-		this.app = app;
 		this.pageActivity = pageActivity;
-		storyController = app.getStoryController();
-        pageController = app.getPageController();
-
+		this.storyController = storyController;
+        this.pageController = pageController;
 	}
 	
 	protected AlertDialog onEditDecisionGUI(View view, final LinearLayout decisionsLayout){
@@ -34,23 +30,14 @@ public class DecisionGUIs {
 		final Decision decision = pageController.getPage().getDecisions().get(whichDecision);
 		final Story story = storyController.getStory();
 		final Page page = pageController.getPage();
-		UUID toPageId = decision.getPageID();
+		
 		ArrayList<Page> pages = story.getPages();
-		int toPagePosition = -1;
-		for (int i = 0; i < pages.size(); i++) {
-
-			UUID comparePage = pages.get(i).getId();
-			System.out.println("toPageID: " + toPageId + "\ncomparePage: " + comparePage + "\nPage: " + page + "\nDecision: " + decision.getPageID() + decision.getText());
-			if (toPageId.equals(comparePage)) {
-				toPagePosition = i;
-				break;
-			}
-		}
+		int toPagePosition = pageController.findArrayPosition(decision, pages);
 		
 		final TextView decisionView = (TextView) view;
 		
     	AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
-    	builder.setTitle(app.getString(R.string.setTextandPage));
+    	builder.setTitle(pageActivity.getString(R.string.setTextandPage));
     	
     	final LinearLayout layout = (LinearLayout) View.inflate(pageActivity, R.layout.edit_decision_dialog, null);
     	final LinearLayout combatOptions = (LinearLayout) layout.findViewById(R.id.edit_decision_dialog_page_combatoptions);
@@ -64,11 +51,11 @@ public class DecisionGUIs {
     	final SeekBar seekEnemy = (SeekBar) layout.findViewById(R.id.edit_decision_dialog_enemyPerc); 
     	decisionText.setText(decision.getText());
     	
-    	ArrayList<String> pageStrings = app.getPageStrings(pages);
+    	ArrayList<String> pageStrings = getPageStrings(pages);
     	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(pageActivity, R.layout.list_item_base, pageStrings);
 
     	if(page.getDecisions().size() > 2){
-    		pageStrings.add(app.getString(R.string.randomChoice));
+    		pageStrings.add(pageActivity.getString(R.string.randomChoice));
     	}
 
     	pageSpinner.setAdapter(pagesAdapter);
@@ -94,18 +81,16 @@ public class DecisionGUIs {
     	}
 
     	builder.setView(layout);
-    	builder.setPositiveButton(app.getString(R.string.done), new DialogInterface.OnClickListener() {
+    	builder.setPositiveButton(pageActivity.getString(R.string.done), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	Counters counter = decision.getChoiceModifiers();
         		int decisionNumber = decisionsLayout.indexOfChild(decisionView);
-        		
+        		Page page = storyController.getPageFromSpinner(pageSpinner);
         		if(story.isUsesCombat() == true){
         			String treasure = alertTreasure.getText().toString();
         			String hp = playerDamage.getText().toString();
         			if(page.isFightingFrag() == false){      				
         				counter.setBasic(treasure, hp);
-	        			app.updateDecisionFight(decisionText.getText().toString(), 
-	                			pageSpinner.getSelectedItemPosition(), decisionNumber, counter);
         			}
 	        		else{
 	        			String ehp = enemyDamage.getText().toString();
@@ -113,18 +98,17 @@ public class DecisionGUIs {
 	        			String hitE = "" + seekEnemy.getProgress();
 	        			
 	        			counter.setStats(treasure, hp, ehp, hitE, hitP);
-	        			app.updateDecisionFight(decisionText.getText().toString(), 
-	                			pageSpinner.getSelectedItemPosition(), decisionNumber, counter);
+	        			
 	        		}     			
         		}
-        		else{
         		
-            	app.updateDecision(decisionText.getText().toString(), 
-            			pageSpinner.getSelectedItemPosition(), decisionNumber);
-        		}
+        		
+            	pageController.updateDecision(decisionText.getText().toString(), 
+            			page, decisionNumber, counter);
+        		
             }
         })
-        .setNegativeButton(app.getString(R.string.cancel), null);
+        .setNegativeButton(pageActivity.getString(R.string.cancel), null);
     	return builder.create();
 	}
 
@@ -134,7 +118,7 @@ public class DecisionGUIs {
 		ArrayList<Page> pages = storyController.getPages();
 		int toPagePosition = pageController.findArrayPosition(decision, pages);
     	AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
-    	builder.setTitle(app.getString(R.string.setDecisionConditions));
+    	builder.setTitle(pageActivity.getString(R.string.setDecisionConditions));
     	
     	final LinearLayout layout = (LinearLayout) View.inflate(pageActivity, R.layout.edit_conditionals_dialog, null);
     	final EditText decisionText = (EditText) layout.findViewById(R.id.edit_conditionals_dialog_decision_edittext);
@@ -146,7 +130,7 @@ public class DecisionGUIs {
     	conditionText.setText("" + decision.getChoiceModifiers().getThresholdValue());
     	decisionText.setText(decision.getText());
     	
-    	ArrayList<String> pageStrings = app.getPageStrings(pages);
+    	ArrayList<String> pageStrings = getPageStrings(pages);
     	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(pageActivity, R.layout.list_item_base, pageStrings);
     	pageSpinner.setAdapter(pagesAdapter);
     	pageSpinner.setSelection(toPagePosition);
@@ -158,15 +142,16 @@ public class DecisionGUIs {
     	signSpinner.setSelection(decision.getChoiceModifiers().getThresholdSign());
     	
     	builder.setView(layout);
-    	builder.setPositiveButton(app.getString(R.string.done), new DialogInterface.OnClickListener() {
+    	builder.setPositiveButton(pageActivity.getString(R.string.done), new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int id) {
         		Counters counter = decision.getChoiceModifiers();
         		counter.setThresholds(signSpinner.getSelectedItemPosition(), condSpinner.getSelectedItemPosition(), conditionText.getText().toString());
-        		app.updateDecisionFight(decisionText.getText().toString(), pageSpinner.getSelectedItemPosition(), whichDecision, counter);
+        		Page page = storyController.getPageFromSpinner(pageSpinner);
+        		pageController.updateDecision(decisionText.getText().toString(), page, whichDecision, counter);
             }
         })
-        .setNegativeButton(app.getString(R.string.cancel), null);
+        .setNegativeButton(pageActivity.getString(R.string.cancel), null);
     	return builder.create();
 	}
 	
@@ -177,7 +162,7 @@ public class DecisionGUIs {
 		int toPagePosition = pageController.findArrayPosition(decision, pages);
 		
     	AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
-    	builder.setTitle(app.getString(R.string.counterMessage));
+    	builder.setTitle(pageActivity.getString(R.string.counterMessage));
     	
     	final LinearLayout layout = (LinearLayout) View.inflate(pageActivity, R.layout.edit_messages_dialog, null);
     	final EditText decisionTitle = (EditText) layout.findViewById(R.id.edit_messages_dialog_decision_edittext);
@@ -186,7 +171,7 @@ public class DecisionGUIs {
     	final EditText tMessage = (EditText) layout.findViewById(R.id.edit_messages_dialog_coin_edittext);
     	final Spinner pageSpinner = (Spinner) layout.findViewById(R.id.edit_messages_dialog_page_spinner);
 
-    	ArrayList<String> pageStrings = app.getPageStrings(pages);
+    	ArrayList<String> pageStrings = getPageStrings(pages);
     	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(pageActivity, R.layout.list_item_base, pageStrings);
     	pageSpinner.setAdapter(pagesAdapter);
     	pageSpinner.setSelection(toPagePosition);
@@ -197,25 +182,26 @@ public class DecisionGUIs {
     	tMessage.setText("" + decision.getChoiceModifiers().getTreasureMessage());
     	
     	builder.setView(layout);
-    	builder.setPositiveButton(app.getString(R.string.done), new DialogInterface.OnClickListener() {
+    	builder.setPositiveButton(pageActivity.getString(R.string.done), new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int id) {
         		Counters counter = decision.getChoiceModifiers();
         		counter.setMessages(dMessage.getText().toString(), tMessage.getText().toString(), hMessage.getText().toString());
-        		app.updateDecisionFight(decisionTitle.getText().toString(), pageSpinner.getSelectedItemPosition(),whichDecision, counter);
+        		Page page = storyController.getPageFromSpinner(pageSpinner);
+        		pageController.updateDecision(decisionTitle.getText().toString(), page,whichDecision, counter);
             }
         })
-        .setNegativeButton(app.getString(R.string.cancel), null);
+        .setNegativeButton(pageActivity.getString(R.string.cancel), null);
     	return builder.create();
 	}
 	
 	protected AlertDialog decisionMenuGUI(final View view, final LinearLayout decisionsLayout){
 		final String[] titles;
-		final String[] titlesBasic = { app.getString(R.string.editProperties), app.getString(R.string.delete), app.getString(R.string.cancel) };
-		final String[] titlesCounter = { app.getString(R.string.editProperties), app.getString(R.string.delete),
-				                          app.getString(R.string.transitionMessages), app.getString(R.string.cancel) };
-		final String[] titlesFight = { app.getString(R.string.editProperties), app.getString(R.string.delete), app.getString(R.string.transitionMessages),
-				                        app.getString(R.string.setConditionals), app.getString(R.string.cancel) };
+		final String[] titlesBasic = { pageActivity.getString(R.string.editProperties), pageActivity.getString(R.string.delete), pageActivity.getString(R.string.cancel) };
+		final String[] titlesCounter = { pageActivity.getString(R.string.editProperties), pageActivity.getString(R.string.delete),
+				                          pageActivity.getString(R.string.transitionMessages), pageActivity.getString(R.string.cancel) };
+		final String[] titlesFight = { pageActivity.getString(R.string.editProperties), pageActivity.getString(R.string.delete), pageActivity.getString(R.string.transitionMessages),
+				                        pageActivity.getString(R.string.setConditionals), pageActivity.getString(R.string.cancel) };
 		final boolean fighting = pageController.getPage().isFightingFrag();
 		final boolean combat = storyController.getStory().isUsesCombat();
 		if(fighting == true){
@@ -253,5 +239,19 @@ public class DecisionGUIs {
             }
         });
         return builder.create();
+	}
+	
+	/**
+	 * Returns a list of strings for each page to be displayed in the Spinner
+	 * for editing a decision.
+	 * @param pages
+	 * @return A list of Strings, one representing each page in the story
+	 */
+	public ArrayList<String> getPageStrings(ArrayList<Page> pages) {
+		ArrayList<String> pageNames = new ArrayList<String>();
+		for (int i = 0; i < pages.size(); i++) {
+			pageNames.add("(" + pages.get(i).getRefNum() + ") " + pages.get(i).getTitle());
+		}		
+		return pageNames;
 	}
 }

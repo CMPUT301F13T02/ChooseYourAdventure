@@ -94,19 +94,7 @@ public class ControllerApp extends Application {
 	}
 	
 
-	/**
-	 * Returns a list of strings for each page to be displayed in the Spinner
-	 * for editing a decision.
-	 * @param pages
-	 * @return A list of Strings, one representing each page in the story
-	 */
-	public ArrayList<String> getPageStrings(ArrayList<Page> pages) {
-		ArrayList<String> pageNames = new ArrayList<String>();
-		for (int i = 0; i < pages.size(); i++) {
-			pageNames.add("(" + pages.get(i).getRefNum() + ") " + pages.get(i).getTitle());
-		}		
-		return pageNames;
-	}
+	
 	
 
 
@@ -180,35 +168,8 @@ public class ControllerApp extends Application {
 	}
 
 
-	/**
-	 * Updates the decision at position whichDecision to have the given text
-	 * and to point to the page at position whichPage in the story's list of
-	 * pages.
-	 * @param text
-	 * @param whichPage
-	 * @param whichDecision
-	 */
-	public void updateDecision(String text, int whichPage, int whichDecision) {
-		ArrayList<Page> pages = storyController.getPages();
-		if(whichPage == pages.size()){
-			pageController.getPage().updateDecision(text, new Page(null), whichDecision);
-		}
-		else{
-			pageController.getPage().updateDecision(text, pages.get(whichPage), whichDecision);
-		}
-		pageController.setDecisionsChanged();
-	}
+
 	
-	public void updateDecisionFight(String text, int whichPage, int whichDecision, Counters counter) {
-		ArrayList<Page> pages = storyController.getPages();
-		if(whichPage == pages.size()){
-			pageController.getPage().updateDecisionFight(text, new Page(null), whichDecision, counter);
-		}
-		else{
-			pageController.getPage().updateDecisionFight(text, pages.get(whichPage), whichDecision, counter);
-		}
-		pageController.setDecisionsChanged();
-	}
 	
 
 	
@@ -307,6 +268,8 @@ public class ControllerApp extends Application {
 	public PageController getPageController() {
 		return pageController;
 	}
+	
+	
 
 	
 	

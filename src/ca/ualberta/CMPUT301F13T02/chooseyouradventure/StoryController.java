@@ -33,6 +33,8 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import android.widget.Spinner;
+
 
 
 public class StoryController {
@@ -128,6 +130,18 @@ public class StoryController {
 	
 	public Page grabFirstPage(){
 		return currentStory.getFirstpage();
+	}
+	
+	protected Page getPageFromSpinner(Spinner pageSpinner){
+		int whichPage = pageSpinner.getSelectedItemPosition();     		
+		ArrayList<Page> pages = getPages();
+		
+		Page page = null;
+			
+		if(whichPage != pages.size()){
+			page = pages.get(whichPage);
+		}
+		return page;
 	}
 	
 }

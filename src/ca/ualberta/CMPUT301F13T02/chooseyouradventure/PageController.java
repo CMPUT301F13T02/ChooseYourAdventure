@@ -280,5 +280,11 @@ public class PageController {
 		reloadPage();
 		
 	}
+	
+	public void updateDecision(String text, Page page, int whichDecision, Counters counter) {		
+		getPage().updateDecisionFight(text, page, whichDecision, counter);
+		setDecisionsChanged();
+	}
+	
 
 }

@@ -126,7 +126,7 @@ public class TileView {
             	int whichTile = tilesLayout.indexOfChild(view);
             	switch(item){
             	case(0):
-            		pageActivity.onEditTile(view);
+            		onEditTileGUI(view, tilesLayout);
             		break;
             	case(1):
             		pageController.deleteTile(whichTile);
@@ -138,7 +138,7 @@ public class TileView {
         return builder.create();
 	}
 	
-	protected AlertDialog onEditPageEndingGUI(View view){
+	protected void onEditPageEndingGUI(View view){
 		TextView textView = (TextView) view;
 		AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
 		final EditText alertEdit = new EditText(pageActivity);
@@ -150,7 +150,7 @@ public class TileView {
 			}
 		})
 		.setNegativeButton(pageActivity.getString(R.string.cancel), null);
-		return builder.create();
+		builder.show();
 
 
 	}

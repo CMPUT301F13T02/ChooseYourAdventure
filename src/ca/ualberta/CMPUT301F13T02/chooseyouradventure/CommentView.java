@@ -49,7 +49,7 @@ public class CommentView {
 		this.camera = camera;
 	}
 	
-	protected AlertDialog onCallCommentGUI(){
+	protected void onCallCommentGUI(){
 		final String[] titlesPhoto = { pageActivity.getString(R.string.noImage), pageActivity.getString(R.string.fromFile),
 				pageActivity.getString(R.string.takePhoto) };
 		final AlertDialog.Builder photoSelector = 
@@ -74,7 +74,7 @@ public class CommentView {
 			}
 		}
 		);
-		return photoSelector.create();
+		photoSelector.show();
 	}
 	
 	protected AlertDialog onEditCommentGUI(final Story story){

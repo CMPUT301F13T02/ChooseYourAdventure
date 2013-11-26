@@ -160,7 +160,7 @@ public class ViewPageActivity extends Activity {
         addComment.setOnClickListener(new OnClickListener() {
         	@Override
         	public void onClick(View view) {
-        		onCallComment();
+        		guiComment.onCallCommentGUI();
         		
         	}
         });
@@ -169,7 +169,9 @@ public class ViewPageActivity extends Activity {
         pageEnding.setOnClickListener(new OnClickListener() {
         	@Override
         	public void onClick(View view) {
-        		onEditPageEnding(view);
+        		if (getEditing()) {
+        			guiTile.onEditPageEndingGUI(view);
+        		}
         	}
         });
 	}
@@ -389,17 +391,6 @@ public class ViewPageActivity extends Activity {
         builder.show();
     }
 	
-
-	/**
-	 * Displays a dialog for editing a tile.
-	 * @param view
-	 */
-	protected void onEditTile(View view) {
-		AlertDialog builder = guiTile.onEditTileGUI(view, tilesLayout);
-        builder.show();
-	}
-	
-	
 	/**
 	 * Brings up a menu with options of what to do to the decision.
 	 * @param view
@@ -408,18 +399,6 @@ public class ViewPageActivity extends Activity {
 		AlertDialog builder = guiDecision.decisionMenuGUI(view, decisionsLayout);
         builder.show();
     }
-	
-	protected void onEditMessages(View view) {
-
-		AlertDialog builder = guiDecision.onEditMessages(view, decisionsLayout);
-        builder.show();
-	}
-
-	protected void onEditConditionals(View view) {
-		
-		AlertDialog builder = guiDecision.onEditConditionsGUI(view, decisionsLayout);
-        builder.show();
-	}
 
 	/**
 	 * Changes the view so that the next page is showing.
@@ -428,43 +407,17 @@ public class ViewPageActivity extends Activity {
 	protected void decisionClicked(View view) {
 		app.onDecisionClick(view, decisionsLayout);
 	}
-	/**
-	 * Brings up a dialog for editing the decision clicked.
-	 * @param view
-	 */
-	protected void onEditDecision(View view) {
-		
-		AlertDialog builder = guiDecision.onEditDecisionGUI(view, decisionsLayout);
-        builder.show();
-	}
 	
 	
-	/**
-	 * Called when the add comment button is clicked. It creates a dialog that
-	 * allows the user to input text and then save the comment.
-	 * @param view
-	 */
-	private void onCallComment(){
-		AlertDialog photoSelector = guiComment.onCallCommentGUI();
-		photoSelector.show();
-	      
-	}
+	
+	
 	protected void onEditComment() {
 		Story story = storyController.getStory();
     	AlertDialog builder = guiComment.onEditCommentGUI(story);
         builder.show();
 	}
 	
-	/**
-	 * Opens a dialog that allows the user to edit the pageEnding.
-	 * @param view
-	 */
-	private void onEditPageEnding(View view) {
-		if (getEditing()) {
-			AlertDialog builder = guiTile.onEditPageEndingGUI(view);
-	        builder.show();
-		}
-	}
+	
 
 	@Override
 	public void onActivityResult( final int requestCode, final int resultCode, Intent data) {

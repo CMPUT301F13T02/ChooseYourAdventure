@@ -221,19 +221,19 @@ public class DecisionView {
             	int whichDecision = decisionsLayout.indexOfChild(view);
             	switch(item){
             	case(0):
-            		pageActivity.onEditDecision(view);
+            		onEditDecisionGUI(view, decisionsLayout);
             		break;
             	case(1):
             		pageController.deleteDecision(whichDecision);
             		break;
             	case(2):
             		if(combat == true){
-            			pageActivity.onEditMessages(view);
+            			onEditMessages(view, decisionsLayout);          		     
             		}
             		break;
             	case(3):
             		if(fighting == true){
-            			pageActivity.onEditConditionals(view);
+            			onEditConditionsGUI(view, decisionsLayout);
             		}
             		break;
             	}

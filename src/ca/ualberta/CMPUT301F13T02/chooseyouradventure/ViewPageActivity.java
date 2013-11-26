@@ -417,7 +417,7 @@ public class ViewPageActivity extends Activity {
 
 	protected void onEditConditionals(View view) {
 		
-		AlertDialog builder = guiDecision.onEditDecisionGUI(view, decisionsLayout);
+		AlertDialog builder = guiDecision.onEditConditionsGUI(view, decisionsLayout);
         builder.show();
 	}
 

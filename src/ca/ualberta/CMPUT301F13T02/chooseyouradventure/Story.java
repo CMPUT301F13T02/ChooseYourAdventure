@@ -187,8 +187,9 @@ public class Story {
      * This deletes a page from a story
      * @param aPage What to delete
      */
-    public void deletePage(Page aPage) {
-    	
+    public void deletePage(int index) {
+    	pages.remove(index);
+    	updateStory();
     }
     /**
 	 * This function updates the stories data in the database

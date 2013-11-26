@@ -131,7 +131,7 @@ public class PageView {
             		storyActivity.refresh();
             		break;
             	case(3):
-            		storyController.removePage(currentPage);
+            		storyController.removePage(pos);
             		storyActivity.refresh();
             		break;
             	}

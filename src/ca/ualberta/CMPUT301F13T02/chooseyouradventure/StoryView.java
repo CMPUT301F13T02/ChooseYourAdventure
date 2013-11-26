@@ -38,6 +38,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+/**
+ * This generates the GUIs for ViewStoriesActivity
+ *
+ */
 public class StoryView {
 	private ApplicationController app;
 	private ViewStoriesActivity storyActivity;
@@ -51,6 +55,12 @@ public class StoryView {
         
 	}
 	
+	/**
+	 * The menu you obtain from longclicking on a story.
+	 * @param story
+	 * @param eshandler
+	 * @param dbhandler
+	 */
 	protected void storyMenuGUI(final Story story, final Handler eshandler, final Handler dbhandler){	
 		AlertDialog.Builder builder = new AlertDialog.Builder(storyActivity);
 		final String[] titles;
@@ -119,6 +129,9 @@ public class StoryView {
         });
         builder.show();
 	}
+	/**
+	 * The menu for making a new story
+	 */
 	
 	protected void createStoryGUI(){
 		AlertDialog.Builder builder = new AlertDialog.Builder(storyActivity);

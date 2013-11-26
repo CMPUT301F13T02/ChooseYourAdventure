@@ -7,6 +7,12 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+/**
+ * This class stores all of the layout builders needed for interacting with decisions. 
+ * This prepares data and the view, but does not display anything. Its sister class DecisionView creates the GUI 
+ * From data set in this class
+ */
+
 public class DecisionLayoutBuilder {
 	private ViewPageActivity pageActivity;
 	private StoryController storyController; 
@@ -68,6 +74,11 @@ public class DecisionLayoutBuilder {
 		}
 	}
 	
+	/**
+	 * This decides if a particular decision will be shown, based on the levels of various counters
+	 * @param decision
+	 * @return a true of false if the decision will be shown
+	 */
 	private boolean passThreshold(Decision decision) {
 		int type = decision.getChoiceModifiers().getThresholdType();
 		int sign = decision.getChoiceModifiers().getThresholdSign();

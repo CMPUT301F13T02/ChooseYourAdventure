@@ -162,7 +162,9 @@ public class ViewStoriesActivity extends Activity {
 		
         
     }
-    
+    /**
+     * Picks a random story
+     */
     protected void onRandomStory() {
 		try {
 			Story random = eshandler.getRandomStory();
@@ -220,6 +222,13 @@ public class ViewStoriesActivity extends Activity {
 		return true;
     }
     
+    /**
+     * Goes the page selected on a click
+     * @param v
+     * @param pos
+     * @param id
+     * @throws HandlerException
+     */
 	protected void onListItemClick(View v, int pos, long id) throws HandlerException {	
 		
 	    app.jump(ViewPageActivity.class, storyList.get(pos), storyList.get(pos).getFirstpage());

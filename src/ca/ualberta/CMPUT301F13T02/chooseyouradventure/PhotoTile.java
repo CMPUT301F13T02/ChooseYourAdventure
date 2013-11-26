@@ -59,11 +59,7 @@ public class PhotoTile extends Tile{
 		return type;
 	}
 
-	/**
-	 * Sets the content to the passed content
-	 * 
-	 * @param content The content to update this tile to
-	 */
+
 	
 
 	/**
@@ -82,7 +78,11 @@ public class PhotoTile extends Tile{
 		
 	}
 
-
+	/**
+	 * Sets the content to the passed content
+	 * 
+	 * @param content The content to update this tile to
+	 */
 	@Override
 	public void setContent(Object content) {
 		Bitmap image = (Bitmap) content;

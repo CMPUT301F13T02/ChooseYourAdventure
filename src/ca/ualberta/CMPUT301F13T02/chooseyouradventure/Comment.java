@@ -94,10 +94,17 @@ public class Comment {
 		return text.equals(comment.getText());
 	}
 
+	/**
+	 * Gets the image stored in a comment
+	 * @return Image
+	 */
 	public PhotoTile getAnnotation() {
 		return annotation;
 	}
-
+/**
+ * sets the image in a comment
+ * @param annotation
+ */
 	public void setAnnotation(PhotoTile annotation) {
 		this.annotation = annotation;
 	}

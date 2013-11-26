@@ -37,6 +37,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+/**
+ * This generates all the GUI elements for EditStoryActivity.
+ * 
+ *
+ */
 public class PageView {
 	private ApplicationController app;
 	private EditStoryActivity storyActivity;
@@ -51,7 +56,10 @@ public class PageView {
 		storyController = app.getStoryController();
         
 	}
-	
+	/**
+	 * This is the main options menu when you click on a page in a story in the story tree.
+	 * @param pos
+	 */
 	protected void pageOptionsGUI(final int pos){
 		final Story story = storyController.getStory();
         final AlertDialog.Builder titleEditor = new AlertDialog.Builder(storyActivity);
@@ -140,7 +148,9 @@ public class PageView {
                 });
         builder.show();
 	}
-	
+	/**
+	 * This is teh menu for creating a new page
+	 */
 	protected	void createPageGUI(){
 		final LinearLayout layout = (LinearLayout) View.inflate(storyActivity, R.layout.create_page_dialog, null);
     	final EditText titleEdit = (EditText) layout.findViewById(R.id.create_page_dialog_edittext);

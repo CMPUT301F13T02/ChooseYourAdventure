@@ -34,6 +34,19 @@ import android.graphics.Color;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+/**
+ * This class generates the GUI asociated with fighting.
+ * It displays 6 things:
+ * 
+ * Current Health
+ * Current Treasure
+ * Current Enemy Health
+ * Recent change in Health
+ * Recent change in Treasure
+ * Recent Change in Enemy Health
+ * 
+ *
+ */
 public class FightingLayoutBuilder {
 	protected void updateFightView(LinearLayout fightingLayout,ViewPageActivity pageActivity, Story story, Page page) {
 		fightingLayout.removeAllViews();

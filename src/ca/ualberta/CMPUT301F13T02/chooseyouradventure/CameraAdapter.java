@@ -40,7 +40,12 @@ import android.provider.MediaStore;
 import android.widget.ImageView;
 
 
-
+/**
+ * This function deals with calling the camera intent and dealing with its output
+ * in a fashion similar to an adapter
+ * 
+ *
+ */
 
 
 

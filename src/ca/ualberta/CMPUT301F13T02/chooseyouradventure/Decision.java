@@ -98,12 +98,18 @@ public class Decision {
 		return true;
 	}
 
-
+/**
+ * This reflects updates to the Stories counters that will occur when following a link
+ * @return choiceModifiers
+ */
 	public Counters getChoiceModifiers() {
 		return choiceModifiers;
 	}
 
-
+/**
+ * This reflects updates to the Stories counters that will occur when following a link
+ * @param choiceModifiers
+ */
 	public void setChoiceModifiers(Counters choiceModifiers) {
 		this.choiceModifiers = choiceModifiers;
 	}

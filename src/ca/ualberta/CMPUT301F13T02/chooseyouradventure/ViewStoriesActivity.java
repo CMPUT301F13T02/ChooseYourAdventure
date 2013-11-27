@@ -38,9 +38,6 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
-import android.app.SearchableInfo;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -57,9 +54,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
-import android.widget.SearchView;
-
 import android.widget.TextView;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
@@ -84,11 +78,9 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
  */
 
 public class ViewStoriesActivity extends Activity {
+
 	private ListView mainPage;
 	private Button createNew;
-	//private Button searchButton;
-	private Button randomStoryButton;
-	private Button refreshButton;
 	ArrayList<String> storyText = new ArrayList<String>();
 	ArrayList<Story> storyList = new ArrayList<Story>();
 	private ControllerApp app; 
@@ -98,49 +90,21 @@ public class ViewStoriesActivity extends Activity {
 	private static final int HELP_INDEX = 0;
 
 	ArrayAdapter<String> adapter;
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.view_stories_activity);
-		mainPage = (ListView) findViewById(R.id.mainView);
-		createNew = (Button) findViewById(R.id.createButton);
-		//searchButton = (Button) findViewById(R.id.searchButton);
-		randomStoryButton = (Button) findViewById(R.id.randomButton);
-		refreshButton = (Button) findViewById(R.id.button1);
-		createNew.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				createStory();
-			}
-		});
-		refreshButton.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				refresh();
-			}
-		});
-
-		//searchButton.setOnClickListener(new OnClickListener() {
-
-			//@Override
-			//public void onClick(View v) {
-		//onSearchRequested();
-		//}
-
-		//});
-
-		randomStoryButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				onRandomStory();
-
-			}
-
-		});
-
-		app = (ControllerApp) getApplication();
-
-
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.view_stories_activity);
+        mainPage = (ListView) findViewById(R.id.mainView);
+        createNew = (Button) findViewById(R.id.createButton);
+        createNew.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                createStory();
+            }
+        });
+        
+        app = (ControllerApp) getApplication();
+        
+        
 		try {
 			storyList =  eshandler.getAllStories();
 			Story sampleStory = sampleGen.getStory();
@@ -175,28 +139,16 @@ public class ViewStoriesActivity extends Activity {
 			}
 		});
 
-		/*
-		try {
-			handleIntent(getIntent());
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (HandlerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
+
 	}
     
-    protected void onRandomStory() {
+    public void onRandomStory() {
 		try {
 			Story random = eshandler.getRandomStory();
 			app.jump(ViewPageActivity.class, random, random.getFirstpage());
 		} catch (HandlerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
 	@Override
@@ -235,11 +187,11 @@ public class ViewStoriesActivity extends Activity {
     private void handleIntent(Intent intent) throws UnsupportedEncodingException, HandlerException {
     	if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			String query = intent.getStringExtra(SearchManager.QUERY);
-			Log.d("SearchKey:", query);
 			performSearch(query);
     	}
 		
 	}
+
 
     /**
      * Calls the ESHandler search method to search for stories with title matching the query
@@ -265,9 +217,6 @@ public class ViewStoriesActivity extends Activity {
     	
     	getMenuInflater().inflate(R.menu.view_stories, menu);
 
-		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, getString(R.string.help));
-		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
         return true;
     }
 
@@ -281,13 +230,17 @@ public class ViewStoriesActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) 
     {
 		switch (item.getItemId()) {
-		case HELP_INDEX:
-
-			AlertDialog dialog = HelpDialogFactory.create(R.string.view_stories_help, this);
-			dialog.show();
-		case R.id.search:
+		
+		case R.id.action_refresh:
+            refresh();
+            break;
+       
+		case R.id.action_search:
 			onSearchRequested();
-	        
+		    break;	
+		        
+		case R.id.action_randomStory:
+			onRandomStory();
 			break;
 		}
 		return true;

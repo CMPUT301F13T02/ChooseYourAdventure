@@ -29,7 +29,11 @@ public final class R {
     }
     public static final class id {
         public static final int TextTiletextView=0x7f0a0028;
-        public static final int action_settings=0x7f0a002d;
+        public static final int action_help=0x7f0a002e;
+        public static final int action_randomStory=0x7f0a002d;
+        public static final int action_refresh=0x7f0a002f;
+        public static final int action_search=0x7f0a0030;
+        public static final int action_settings=0x7f0a002c;
         public static final int addComment=0x7f0a0027;
         public static final int addDecision=0x7f0a0024;
         public static final int addTile=0x7f0a0021;
@@ -70,8 +74,6 @@ public final class R {
         public static final int help_webview=0x7f0a001e;
         public static final int mainView=0x7f0a002b;
         public static final int pageEnding=0x7f0a0022;
-        public static final int randomButton=0x7f0a002c;
-        public static final int search=0x7f0a002e;
         public static final int textView1=0x7f0a0000;
         public static final int tilesLayout=0x7f0a0020;
         public static final int treeView=0x7f0a001c;

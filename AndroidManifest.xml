@@ -53,6 +53,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         android:theme="@style/AppTheme" >
         <activity
             android:name="ca.ualberta.CMPUT301F13T02.chooseyouradventure.ViewStoriesActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_view_stories_activity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,10 +66,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         </activity>
         <activity
             android:name="ca.ualberta.CMPUT301F13T02.chooseyouradventure.ViewPageActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_view_page_activity" >
         </activity>
         <activity
             android:name="ca.ualberta.CMPUT301F13T02.chooseyouradventure.EditStoryActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_edit_story_activity" >
         </activity>
 
@@ -77,6 +80,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <!--  
         <activity
             android:name="ca.ualberta.CMPUT301F13T02.chooseyouradventure.SearchableActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_search_stories" >
             <intent-filter >
                 <action android:name="android.intent.action.SEARCH" />

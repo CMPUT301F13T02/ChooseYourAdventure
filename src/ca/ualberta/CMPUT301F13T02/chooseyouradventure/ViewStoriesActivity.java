@@ -36,10 +36,6 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.SearchManager;
-import android.app.SearchableInfo;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
@@ -54,9 +50,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
-import android.widget.SearchView;
-
 import android.widget.TextView;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
@@ -93,6 +86,7 @@ public class ViewStoriesActivity extends Activity {
 	private Handler eshandler = new ESHandler();
 	private Handler dbhandler = new DBHandler(this);
 	private static final int HELP_INDEX = 0;
+	private MenuItem help;
 	
 	ArrayAdapter<String> adapter;
     @Override
@@ -170,9 +164,7 @@ public class ViewStoriesActivity extends Activity {
 		    public boolean onItemLongClick(AdapterView<?> av, View v, int pos, long listNum) {
 		        return onLongListItemClick(v,pos,listNum);
 		    }
-		});
-		
-        
+		});        
     }
     
     protected void onRandomStory() {
@@ -206,8 +198,11 @@ public class ViewStoriesActivity extends Activity {
     	
     	getMenuInflater().inflate(R.menu.view_stories, menu);
 
-		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, getString(R.string.help));
+		help = menu.add(0, HELP_INDEX, HELP_INDEX, getString(R.string.help));
 		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		help.setEnabled(!HelpPlayer.getInstance().isPlaying());
+		
+		HelpPlayer.getInstance().trackHelpItem(help);
 
         return true;
     }
@@ -224,8 +219,7 @@ public class ViewStoriesActivity extends Activity {
 		switch (item.getItemId()) {
 		case HELP_INDEX:
 
-			AlertDialog dialog = HelpDialogFactory.create(R.string.view_stories_help, this);
-			dialog.show();
+			HelpPlayer.getInstance().play(this, R.raw.mainhelp);
 	        
 			break;
 		}

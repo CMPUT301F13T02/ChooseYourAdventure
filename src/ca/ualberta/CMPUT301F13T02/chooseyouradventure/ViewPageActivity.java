@@ -204,6 +204,10 @@ public class ViewPageActivity extends Activity {
 		MenuItem editPage = menu.add(0, EDIT_INDEX, EDIT_INDEX, getString(R.string.edit));
 		MenuItem savePage = menu.add(0, SAVE_INDEX, SAVE_INDEX, getString(R.string.done));
 		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, getString(R.string.help));
+		
+		help.setEnabled(!HelpPlayer.getInstance().isPlaying());
+		
+		HelpPlayer.getInstance().trackHelpItem(help);
 
 		editPage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		savePage.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
@@ -261,14 +265,10 @@ public class ViewPageActivity extends Activity {
 
 		case HELP_INDEX:
 
-			AlertDialog dialog = null;
-
-	        if (app.getEditing())
-	        	dialog = HelpDialogFactory.create(R.string.edit_page_help, this);
-	        else
-	        	dialog = HelpDialogFactory.create(R.string.read_page_help, this);
-	        
-	        dialog.show();
+			if (app.getEditing()) 
+				HelpPlayer.getInstance().play(this, R.raw.edithelp);
+			else
+				HelpPlayer.getInstance().play(this, R.raw.readhelp);
 	        
 			break;
 		}

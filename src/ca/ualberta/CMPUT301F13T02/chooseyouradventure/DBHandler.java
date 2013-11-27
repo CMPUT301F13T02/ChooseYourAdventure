@@ -117,7 +117,6 @@ public class DBHandler extends SQLiteOpenHelper implements Handler  {
 		//This assumes the getId returns a unique value
 		values.put(colID, id);
 		values.put(colContents, story);
-		
 		if (db.insert(storyTable, null, values) == -1)
 			throw new HandlerException("Failed to insert story");
 

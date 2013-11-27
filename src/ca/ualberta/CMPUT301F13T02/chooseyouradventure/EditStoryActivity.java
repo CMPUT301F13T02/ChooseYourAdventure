@@ -138,6 +138,10 @@ public class EditStoryActivity extends Activity {
 	
 		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, getString(R.string.help));
 		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		
+		help.setEnabled(!HelpPlayer.getInstance().isPlaying());
+		
+		HelpPlayer.getInstance().trackHelpItem(help);
 	
 	    return true;
 	}
@@ -154,8 +158,7 @@ public class EditStoryActivity extends Activity {
 		switch (item.getItemId()) {
 		case HELP_INDEX:
 	
-			AlertDialog dialog = HelpDialogFactory.create(R.string.edit_story_help, this);
-			dialog.show();
+			HelpPlayer.getInstance().play(this, R.raw.storyhelp);
 	        
 			break;
 		}

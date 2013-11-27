@@ -42,7 +42,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -132,14 +131,12 @@ public class ViewStoriesActivity extends Activity {
 		});
 
 		mainPage.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-			@Override
-			public boolean onItemLongClick(AdapterView<?> av, View v, int pos, long listNum) {
-				return onLongListItemClick(v,pos,listNum);
-			}
+		    @Override
+		    public boolean onItemLongClick(AdapterView<?> av, View v, int pos, long listNum) {
+		        return onLongListItemClick(v,pos,listNum);
+		    }
 		});
-
-
-	}
+    }
     
     public void onRandomStory() {
 		try {
@@ -216,6 +213,11 @@ public class ViewStoriesActivity extends Activity {
     	
     	getMenuInflater().inflate(R.menu.view_stories, menu);
 
+    	MenuItem help = menu.getItem(1);
+		help.setEnabled(!HelpPlayer.getInstance().isPlaying());
+		
+		HelpPlayer.getInstance().trackHelpItem(help);
+
         return true;
     }
 
@@ -230,6 +232,7 @@ public class ViewStoriesActivity extends Activity {
     {
 		switch (item.getItemId()) {
 		
+
 		case R.id.action_refresh:
             refresh();
             break;

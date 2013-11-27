@@ -132,9 +132,7 @@ public class ViewStoriesActivity extends Activity {
 		    public boolean onItemLongClick(AdapterView<?> av, View v, int pos, long listNum) {
 		        return onLongListItemClick(v,pos,listNum);
 		    }
-		});
-		
-        
+		});        
     }
     
     public void onRandomStory() {
@@ -164,6 +162,11 @@ public class ViewStoriesActivity extends Activity {
     	
     	getMenuInflater().inflate(R.menu.view_stories, menu);
 
+    	MenuItem help = menu.getItem(1);
+		help.setEnabled(!HelpPlayer.getInstance().isPlaying());
+		
+		HelpPlayer.getInstance().trackHelpItem(help);
+
         return true;
     }
 
@@ -177,10 +180,11 @@ public class ViewStoriesActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) 
     {
 		switch (item.getItemId()) {
+		
 		case R.id.action_help:
-			HelpDialogFactory.create(R.string.view_stories_help, this).show();
+			HelpPlayer.getInstance().play(this, R.raw.mainhelp);
 			break;
-	        
+
 		case R.id.action_refresh:
             refresh();
             break;

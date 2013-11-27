@@ -209,8 +209,7 @@ public class ViewStoriesActivity extends Activity {
 	public boolean onLongListItemClick(View v, int pos, long id) { 
     	storyMenu(pos);
         return true;
-    }
-    
+	}
     /**
      * The options menu displayed when the user longClicks a story
      * @param v The view of the longClicked story
@@ -219,9 +218,18 @@ public class ViewStoriesActivity extends Activity {
 			final Story story = storyList.get(pos);
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			final String[] titles;
-			final String[] titlesA = { getString(R.string.cache), getString(R.string.upload), getString(R.string.edit), 
+			final String[] titlesA;
+			final String[] titlesB;
+			if(story.getHandler() instanceof DBHandler) {
+				titlesA = new String[]{getString(R.string.upload), getString(R.string.edit), 
+						   			   getString(R.string.delete), getString(R.string.cancel) };
+				titlesB = new String[]{ getString(R.string.uploadCopy), getString(R.string.cancel) };
+			} else{
+				titlesA = new String[]{ getString(R.string.cache), getString(R.string.edit), 
 									   getString(R.string.delete), getString(R.string.cancel) };
-			final String[] titlesB = { getString(R.string.cache), getString(R.string.uploadCopy), getString(R.string.cancel) };
+				titlesB = new String[]{ getString(R.string.cache), getString(R.string.cancel) };
+			}
+			
 			final String myId = Secure.getString(
 					getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 			final String storyID = story.getAuthor();
@@ -236,22 +244,32 @@ public class ViewStoriesActivity extends Activity {
             builder.setItems(titles, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int item) {
                 	switch(item){
-
-                	case(0): //cache
-                		//set to local handler, 1 means it is local
-                		story.setHandler(dbhandler);
-	                	story.setAuthor(myId);
-
-                		try {
-                			story.getHandler().addStory(story);
-                		} catch (HandlerException e) {
-                			e.printStackTrace();
+                	case(0): //cache or upload
+                		if (story.getHandler() instanceof DBHandler) {
+                			story.setHandler(eshandler);
+                			//create a new story because you have to change author ID
+                			story.setAuthor(myId);
+                			//set it to be online initially
+    						try {
+    							eshandler.addStory(story);
+    						} catch (HandlerException e) {
+    							e.printStackTrace();
+    						}
+    						refresh();
+                    		break;
+                		} else { //upload
+	                		story.setHandler(dbhandler);
+		                	story.setAuthor(myId);
+	                		try {
+	                			story.getHandler().addStory(story);
+	                		} catch (HandlerException e) {
+	                			e.printStackTrace();
+	                		}
+	                		refresh();
+	                		break;
                 		}
-
-                		refresh();
-                		break;
+                	/*
                 	case(1): //upload
-                		// the 0 passed means it isn't local
                 		story.setHandler(eshandler);
             			//create a new story because you have to change author ID
             			story.setAuthor(myId);
@@ -262,14 +280,14 @@ public class ViewStoriesActivity extends Activity {
 							e.printStackTrace();
 						}
 						refresh();
-                		break;
-                	case(2): //edit story
+                		break;*/
+                	case(1): //edit story
                 		if(myId.equals(storyID)){          			
                     		app.jump(EditStoryActivity.class, story, null);
                 		}
                 		else{}
                 		break;
-                	case(3): //delete
+                	case(2): //delete
                 		try {
 							story.getHandler().deleteStory(story);
 						} catch (HandlerException e) {

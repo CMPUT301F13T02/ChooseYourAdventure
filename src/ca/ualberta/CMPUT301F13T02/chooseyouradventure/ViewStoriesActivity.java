@@ -74,19 +74,15 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
  */
 
 public class ViewStoriesActivity extends Activity {
+
 	private ListView mainPage;
 	private Button createNew;
-	private Button searchButton;
-	private Button randomStoryButton;
-	private Button refreshButton;
 	ArrayList<String> storyText = new ArrayList<String>();
 	ArrayList<Story> storyList = new ArrayList<Story>();
 	private ControllerApp app; 
 	private SampleGenerator sampleGen = new SampleGenerator();
 	private Handler eshandler = new ESHandler();
 	private Handler dbhandler = new DBHandler(this);
-	private static final int HELP_INDEX = 0;
-	private MenuItem help;
 	
 	ArrayAdapter<String> adapter;
     @Override
@@ -95,38 +91,10 @@ public class ViewStoriesActivity extends Activity {
         setContentView(R.layout.view_stories_activity);
         mainPage = (ListView) findViewById(R.id.mainView);
         createNew = (Button) findViewById(R.id.createButton);
-        searchButton = (Button) findViewById(R.id.searchButton);
-        randomStoryButton = (Button) findViewById(R.id.randomButton);
-        refreshButton = (Button) findViewById(R.id.button1);
         createNew.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 createStory();
             }
-        });
-        refreshButton.setOnClickListener(new OnClickListener() {
-            
-            public void onClick(View v) {
-                refresh();
-            }
-        });
-        
-        searchButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				onSearchRequested();
-			}
-        	
-        });
-        
-        randomStoryButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				onRandomStory();
-				
-			}
-        	
         });
         
         app = (ControllerApp) getApplication();
@@ -167,15 +135,13 @@ public class ViewStoriesActivity extends Activity {
 		});        
     }
     
-    protected void onRandomStory() {
+    public void onRandomStory() {
 		try {
 			Story random = eshandler.getRandomStory();
 			app.jump(ViewPageActivity.class, random, random.getFirstpage());
 		} catch (HandlerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
 	@Override
@@ -184,8 +150,6 @@ public class ViewStoriesActivity extends Activity {
         refresh();
     }
         
-
-
     /**
      * Inflate the options menu; this adds items to the action bar if it is present 
      * 
@@ -198,8 +162,7 @@ public class ViewStoriesActivity extends Activity {
     	
     	getMenuInflater().inflate(R.menu.view_stories, menu);
 
-		help = menu.add(0, HELP_INDEX, HELP_INDEX, getString(R.string.help));
-		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+    	MenuItem help = menu.getItem(1);
 		help.setEnabled(!HelpPlayer.getInstance().isPlaying());
 		
 		HelpPlayer.getInstance().trackHelpItem(help);
@@ -217,10 +180,21 @@ public class ViewStoriesActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) 
     {
 		switch (item.getItemId()) {
-		case HELP_INDEX:
-
+		
+		case R.id.action_help:
 			HelpPlayer.getInstance().play(this, R.raw.mainhelp);
-	        
+			break;
+
+		case R.id.action_refresh:
+            refresh();
+            break;
+       
+		case R.id.action_search:
+			onSearchRequested();
+		    break;	
+		        
+		case R.id.action_randomStory:
+			onRandomStory();
 			break;
 		}
 		return true;

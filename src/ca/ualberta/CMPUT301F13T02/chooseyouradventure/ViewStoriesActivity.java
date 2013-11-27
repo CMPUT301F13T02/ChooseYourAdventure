@@ -87,7 +87,6 @@ public class ViewStoriesActivity extends Activity {
 	private SampleGenerator sampleGen = new SampleGenerator();
 	private Handler eshandler = new ESHandler();
 	private Handler dbhandler = new DBHandler(this);
-	private static final int HELP_INDEX = 0;
 
 	ArrayAdapter<String> adapter;
     @Override

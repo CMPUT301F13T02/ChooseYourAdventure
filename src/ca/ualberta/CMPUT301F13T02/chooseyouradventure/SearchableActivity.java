@@ -17,7 +17,7 @@ public class SearchableActivity extends ListActivity {
 	
 	private ESHandler handler = new ESHandler();
 	private ArrayList<Story> stories = new ArrayList<Story>();
-	ArrayList<String> titles = new ArrayList<String>();
+	private ArrayList<String> titles = new ArrayList<String>();
 	private ApplicationController app;
 	private ArrayAdapter<String> adapter;
 

@@ -1249,6 +1249,7 @@ public class ViewPageActivity extends Activity {
 		Bundle bundle = data.getExtras();
 		return  (Bitmap) bundle.get("data");	
 	}
+	
 	public ImageView makeViewByPhoto(Bitmap image){
 		ImageView pictureTaken = new ImageView(this);
 		pictureTaken.setImageBitmap(image);

@@ -37,6 +37,7 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ControllerApp;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.EditStoryActivity;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
 public class TestEditStoryActivity extends ActivityInstrumentationTestCase2<EditStoryActivity> {
 	
@@ -50,19 +51,27 @@ public class TestEditStoryActivity extends ActivityInstrumentationTestCase2<Edit
 	private static final ControllerApp app = ControllerApp.getInstance();
 	
 	private static int numPages = 1;
+	
+	private ESHandler handler;
 
 	public TestEditStoryActivity() {
 		super(EditStoryActivity.class);
+		// TODO Auto-generated constructor stub
 	}
 	
 	protected void setUp() throws Exception {
 		story = new Story();
+		story.setId("255");
+		story.setTitle("Unit Test Generated");
+		
 		app.setStory(story);
 		
 		activity = getActivity();
 		
 		addPageButton = (Button) activity.findViewById(ca.ualberta.CMPUT301F13T02.chooseyouradventure.R.id.createButton2);
 		deleteStoryButton = (Button) activity.findViewById(ca.ualberta.CMPUT301F13T02.chooseyouradventure.R.id.deleteButton);
+		handler = new ESHandler();
+		story.setHandler(handler);
 		
 	}
 	
@@ -117,4 +126,3 @@ public class TestEditStoryActivity extends ActivityInstrumentationTestCase2<Edit
 		assertNotNull(deleteStoryButton);
 	}
 
-}

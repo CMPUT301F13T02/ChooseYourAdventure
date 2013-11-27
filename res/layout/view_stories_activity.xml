@@ -37,7 +37,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     android:paddingRight="@dimen/activity_horizontal_margin"
     tools:context=".ViewStoriesActivity" >
 
+
+       <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/refresh" />
+        
+
     <Button
+
         android:id="@+id/createButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

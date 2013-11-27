@@ -1,3 +1,4 @@
+
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
@@ -10,6 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+/**
+ * This class displays the data pertaining to decisions in the form of a GUI. 
+ *
+ */
 
 public class DecisionView {
 	
@@ -25,7 +31,16 @@ public class DecisionView {
         this.pageController = pageController;
 	}
 	
-	protected AlertDialog onEditDecisionGUI(View view, final LinearLayout decisionsLayout){
+	
+	/**
+	 * The most fundamental page of a decision.
+	 * This lets the user name the decision and select the target page
+	 * If the fragment is fighting, this page contains all the statistic values
+	 * The menu is adaptive so only the traits needed are shown on a page by page basis.
+	 * @param view
+	 * @param decisionsLayout
+	 */
+	protected void onEditDecisionGUI(View view, final LinearLayout decisionsLayout){
 		int whichDecision = decisionsLayout.indexOfChild(view);
 		final Decision decision = pageController.getPage().getDecisions().get(whichDecision);
 		final Story story = storyController.getStory();
@@ -109,10 +124,15 @@ public class DecisionView {
             }
         })
         .setNegativeButton(pageActivity.getString(R.string.cancel), null);
-    	return builder.create();
+    	builder.show();
 	}
 
-	protected AlertDialog onEditConditionsGUI(View view, LinearLayout decisionsLayout){
+	/**
+	 * This menu lets the player set the conditionals of when a particular page is shown
+	 * @param view
+	 * @param decisionsLayout
+	 */
+	protected void onEditConditionsGUI(View view, LinearLayout decisionsLayout){
 		final int whichDecision = decisionsLayout.indexOfChild(view);
 		final Decision decision = pageController.findDecisionByIndex(whichDecision);
 		ArrayList<Page> pages = storyController.getPages();
@@ -152,10 +172,15 @@ public class DecisionView {
             }
         })
         .setNegativeButton(pageActivity.getString(R.string.cancel), null);
-    	return builder.create();
+    	builder.show();
 	}
 	
-	protected AlertDialog onEditMessages(View view, LinearLayout decisionsLayout){
+	/**
+	 * This function lets the player choose the messages that will display to let them know that a change in couunters has occured.
+	 * @param view
+	 * @param decisionsLayout
+	 */
+	protected void onEditMessages(View view, LinearLayout decisionsLayout){
 		final int whichDecision = decisionsLayout.indexOfChild(view);
 		final Decision decision = pageController.findDecisionByIndex(whichDecision);
 		ArrayList<Page> pages = storyController.getPages();
@@ -192,10 +217,15 @@ public class DecisionView {
             }
         })
         .setNegativeButton(pageActivity.getString(R.string.cancel), null);
-    	return builder.create();
+    	builder.show();
 	}
 	
-	protected AlertDialog decisionMenuGUI(final View view, final LinearLayout decisionsLayout){
+	/**
+	 * This is the main menu for a decision, which directs the players to more specific settings pages.
+	 * @param view
+	 * @param decisionsLayout
+	 */
+	protected void decisionMenuGUI(final View view, final LinearLayout decisionsLayout){
 		final String[] titles;
 		final String[] titlesBasic = { pageActivity.getString(R.string.editProperties), pageActivity.getString(R.string.delete), pageActivity.getString(R.string.cancel) };
 		final String[] titlesCounter = { pageActivity.getString(R.string.editProperties), pageActivity.getString(R.string.delete),
@@ -220,25 +250,25 @@ public class DecisionView {
             	int whichDecision = decisionsLayout.indexOfChild(view);
             	switch(item){
             	case(0):
-            		pageActivity.onEditDecision(view);
+            		onEditDecisionGUI(view, decisionsLayout);
             		break;
             	case(1):
             		pageController.deleteDecision(whichDecision);
             		break;
             	case(2):
             		if(combat == true){
-            			pageActivity.onEditMessages(view);
+            			onEditMessages(view, decisionsLayout);          		     
             		}
             		break;
             	case(3):
             		if(fighting == true){
-            			pageActivity.onEditConditionals(view);
+            			onEditConditionsGUI(view, decisionsLayout);
             		}
             		break;
             	}
             }
         });
-        return builder.create();
+        builder.show();
 	}
 	
 	/**

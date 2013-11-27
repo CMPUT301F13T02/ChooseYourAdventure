@@ -35,7 +35,11 @@ import java.util.UUID;
 
 import android.widget.Spinner;
 
-
+/**
+ * 
+ * The controller that affects the stories in a model.
+ *
+ */
 
 public class StoryController {
 	private Story currentStory;
@@ -78,6 +82,13 @@ public class StoryController {
 		currentStory.updateStory();
 	}
 	
+	/**
+	 * Sets up a new page for addition, based on the input parameters.
+	 * @param pageTitle
+	 * @param fight
+	 * @param health
+	 * @param name
+	 */
 	protected void newPage(String pageTitle, boolean fight, String health, String name){
 		Page page = initializeNewPage(pageTitle);
 		page.setFightingFrag(fight);
@@ -103,8 +114,8 @@ public class StoryController {
 	 * Deletes a page.
 	 * @param currentPage
 	 */
-	protected void removePage(Page currentPage){
-		currentStory.deletePage(currentPage);
+	protected void removePage(int item){
+		currentStory.deletePage(item);
 		currentStory.updateStory();
 	}
 	
@@ -127,11 +138,19 @@ public class StoryController {
 	}
 	
 	
-	
+	/**
+	 * 
+	 * @return The firstpage
+	 */
 	public Page grabFirstPage(){
 		return currentStory.getFirstpage();
 	}
 	
+	/**
+	 * Returns the page selected in a spinner.
+	 * @param pageSpinner
+	 * @return Page
+	 */
 	protected Page getPageFromSpinner(Spinner pageSpinner){
 		int whichPage = pageSpinner.getSelectedItemPosition();     		
 		ArrayList<Page> pages = getPages();

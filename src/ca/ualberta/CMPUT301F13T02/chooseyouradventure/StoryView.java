@@ -33,12 +33,15 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.provider.Settings.Secure;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+/**
+ * This generates the GUIs for ViewStoriesActivity
+ *
+ */
 public class StoryView {
 	private ApplicationController app;
 	private ViewStoriesActivity storyActivity;
@@ -52,14 +55,19 @@ public class StoryView {
         
 	}
 	
-	protected AlertDialog storyMenuGUI(final Story story, final Handler eshandler, final Handler dbhandler){	
+	/**
+	 * The menu you obtain from longclicking on a story.
+	 * @param story
+	 * @param eshandler
+	 * @param dbhandler
+	 */
+	protected void storyMenuGUI(final Story story, final Handler eshandler, final Handler dbhandler){	
 		AlertDialog.Builder builder = new AlertDialog.Builder(storyActivity);
 		final String[] titles;
 		final String[] titlesA = { storyActivity.getString(R.string.cache), storyActivity.getString(R.string.upload), storyActivity.getString(R.string.edit), 
 								   storyActivity.getString(R.string.delete), storyActivity.getString(R.string.cancel) };
 		final String[] titlesB = { storyActivity.getString(R.string.cache), storyActivity.getString(R.string.uploadCopy), storyActivity.getString(R.string.cancel) };
-		final String myId = Secure.getString(
-				storyActivity.getBaseContext().getContentResolver(), Secure.ANDROID_ID);
+		final String myId = app.getAndroidID();
 		final String storyID = story.getAuthor();
 		if(myId.equals(storyID)){
 			titles = titlesA;
@@ -119,10 +127,13 @@ public class StoryView {
 			
 			
         });
-        return builder.create();
+        builder.show();
 	}
+	/**
+	 * The menu for making a new story
+	 */
 	
-	protected AlertDialog createStoryGUI(){
+	protected void createStoryGUI(){
 		AlertDialog.Builder builder = new AlertDialog.Builder(storyActivity);
     	builder.setTitle(storyActivity.getString(R.string.createNew));
     	final LinearLayout layout = new LinearLayout(storyActivity);
@@ -161,7 +172,7 @@ public class StoryView {
             }
         })
         .setNegativeButton(storyActivity.getString(R.string.cancel), null);
-    	return builder.create();
+    	builder.show();
 	}
 }
 

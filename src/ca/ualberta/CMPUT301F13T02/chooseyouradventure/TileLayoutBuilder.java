@@ -42,6 +42,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
+/**
+ * This class stores all of the layout builders needed for interacting with tiles. 
+ * This prepares data and the view, but does not display anything. Its sister class TileView creates the GUI 
+ * From data set in this class
+ */
 public class TileLayoutBuilder {
 	private ViewPageActivity pageActivity;
 	

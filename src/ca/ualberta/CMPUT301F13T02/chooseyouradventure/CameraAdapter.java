@@ -40,7 +40,12 @@ import android.provider.MediaStore;
 import android.widget.ImageView;
 
 
-
+/**
+ * This function deals with calling the camera intent and dealing with its output
+ * in a fashion similar to an adapter
+ * 
+ *
+ */
 
 
 
@@ -59,19 +64,33 @@ public class CameraAdapter {
 	}
 
 
+	/**
+	 * This creates an intent indicating that we would like to get a story from Android's gallery
+	 * @param value
+	 */
 	public void getPhoto(int value){
 		Intent i = new Intent(
         Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pageActivity.startActivityForResult(i, value);
 	}
 	
+	
+	/**
+	 * This creates an intent indicating we would like to take a new photo
+	 * @param value
+	 */
 	protected void newPhoto(int value) {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		pageActivity.startActivityForResult(intent, value);
 	}
 	
 	
-	
+	/**
+	 * This functions grabs the photo from the gallery based on the index you choose,
+	 * IDea from http://viralpatel.net/blogs/pick-image-from-galary-android-app/
+	 * @param data
+	 * @return
+	 */
 	
 	public PhotoTile loadImage(Intent data){
 		Uri selectedImage = data.getData();
@@ -90,21 +109,38 @@ public class CameraAdapter {
 		return newPhoto;
 	}
 	
+	/**
+	 * Retrieves a photo from the intent
+	 * @param data
+	 * @return
+	 */
 	public Bitmap retrievePhoto(Intent data){
 		Bundle bundle = data.getExtras();
 		return  (Bitmap) bundle.get("data");	
 	}
+	
+	/**
+	 * Returns an imageView made from a bitmap
+	 * @param image
+	 * @return
+	 */
 	public ImageView makeViewByPhoto(Bitmap image){
 		ImageView pictureTaken = new ImageView(pageActivity);
 		pictureTaken.setImageBitmap(image);
 		return pictureTaken;
 	}
-	
+	/**
+	 * gets an object in the cameras tempspace: needed to get data out of the activity
+	 * @return
+	 */
 	public Object getTempSpace() {
 		return tempSpace;
 	}
 
-
+	/**
+	 * Places an object in the above mentioned tempspace
+	 * @param loadObject
+	 */
 	public void setTempSpace(Object loadObject) {
 		this.tempSpace = loadObject;
 		

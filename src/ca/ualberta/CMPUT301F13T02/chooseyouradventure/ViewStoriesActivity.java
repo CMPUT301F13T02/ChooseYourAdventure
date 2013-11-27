@@ -95,7 +95,7 @@ public class ViewStoriesActivity extends Activity {
         refreshButton = (Button) findViewById(R.id.button1);
         createNew.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                createStory();
+            	gui.createStoryGUI();
             }
         });
         refreshButton.setOnClickListener(new OnClickListener() {
@@ -162,7 +162,9 @@ public class ViewStoriesActivity extends Activity {
 		
         
     }
-    
+    /**
+     * Picks a random story
+     */
     protected void onRandomStory() {
 		try {
 			Story random = eshandler.getRandomStory();
@@ -220,38 +222,34 @@ public class ViewStoriesActivity extends Activity {
 		return true;
     }
     
+    /**
+     * Goes the page selected on a click
+     * @param v
+     * @param pos
+     * @param id
+     * @throws HandlerException
+     */
 	protected void onListItemClick(View v, int pos, long id) throws HandlerException {	
 		
 	    app.jump(ViewPageActivity.class, storyList.get(pos), storyList.get(pos).getFirstpage());
 	    
 	}
 	
-	public boolean onLongListItemClick(View v, int pos, long id) { 
-    	storyMenu(pos);
-        return true;
-    }
-    
-    /**
+	  /**
      * The options menu displayed when the user longClicks a story
      * @param v The view of the longClicked story
      */
-	public void storyMenu(int pos){
-			Story story = storyList.get(pos);
-			AlertDialog builder = gui.storyMenuGUI(story, eshandler, dbhandler);
-            builder.show();
-        }
-
-
-    
-    /**
-     * A pop up menu for creating a new story. it Simply asks for a title and then builds some framework before passing off to the Edit Story mode.
-     */
-    private void createStory(){
-
-    	AlertDialog builder = gui.createStoryGUI();
-        builder.show();
+	
+	public boolean onLongListItemClick(View v, int pos, long id) { 
+		gui.storyMenuGUI(storyList.get(pos), eshandler, dbhandler);
+        return true;
     }
     
+  
+	
+
+
+  
     /**
      * Refreshes the list of stories by getting a new list from elastic search
      * and displaying it.

@@ -42,16 +42,20 @@ import android.widget.LinearLayout;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
 /**
- * This class represents the controller for our application. This class stores the state
- * of the application -- notably the story and page currently being viewed or edited.
+ * This class represents the main controller for our application. This class stores the state
+ * of the application -- notably the functions pertaining to the story and page currently being viewed or edited.
+ * This also contains instances of our two other Controllers. The reason being that StoryController and PageController each 
+ * deal with either Storys or Pages, where ApplicationController contains functions regarding both.
  * 
- * This class is a controller and in typical MVC style is responsible for co-ordinating 
+ * This class is a controller and in typical MVC style is responsible for coordinating 
  * saving of the model and maintaining coherence between the model and the view.
  */
 
 public class ApplicationController extends Application {
 	
 	private ArrayList<Story> stories;
+	
+	//The instances of our 3 controllers are here
 	private static ApplicationController instance = new ApplicationController();
 	private StoryController storyController = new StoryController();
 	private PageController pageController = new PageController();
@@ -96,10 +100,11 @@ public class ApplicationController extends Application {
 	/**
 	 * This method is used for gathering new data from the model, it then 
 	 * returns it to update the listviews. It is generalized to work on both
-	 * listviews for Pages and Stories.
+	 * listviews for Pages and Stories. It also adds indicator flags for things
+	 * such as which stories are cached and which pages contain fights
 	 * @param itemList
 	 * @param infoText
-	 * @return
+	 * @return infoText
 	 */
 	protected <T> ArrayList<String> updateView(ArrayList<T> itemList,
 	                                            ArrayList<String> infoText) {
@@ -163,7 +168,9 @@ public class ApplicationController extends Application {
 	
 	/**
 	 * Sets the currentPage to the page pointed to by the decision selected
-	 * and then the page is refreshed.
+	 * and then the page is refreshed. If the destinationID of a page is null, 
+	 * this indicates that it will choose a random decision and follow it.
+	 * It finally calls calculate entry, which makes the change of page.
 	 * @param whichDecision
 	 */
 	public void followDecision(int whichDecision) {
@@ -190,7 +197,7 @@ public class ApplicationController extends Application {
 	}
 	
 	/**
-	 * This function is a generalized class for creating a new story and placing it on the server
+	 * This function is a generalized class for creating and initializing a new story and placing it on the server
 	 * @param storyTitle
 	 * @throws HandlerException
 	 */
@@ -234,11 +241,22 @@ public class ApplicationController extends Application {
 	}
 	
 	
-
+/**
+ * 
+ * @return The UUID of your android device
+ */
 	protected String getAndroidID(){
 		return Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 	}
 	
+	
+	/**
+	 * This function deals with what happens when a decision is clicked.
+	 * If the story is set up to use counters, it first updates changes in these counter appropriately.
+	 * Then it calls followDecision to figure out where to go from here. 
+	 * @param view
+	 * @param decisionsLayout
+	 */
 	protected void onDecisionClick(View view, LinearLayout decisionsLayout){
 		Story story = storyController.getStory();
 		Page page = pageController.getPage();

@@ -36,6 +36,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+/**
+ * This class displays the data pertaining to comments in the form of a GUI. 
+ *
+ */
 public class CommentView {
 	private PageController pageController;
 	private ViewPageActivity pageActivity;
@@ -49,7 +53,10 @@ public class CommentView {
 		this.camera = camera;
 	}
 	
-	protected AlertDialog onCallCommentGUI(){
+	/**
+	 * The first dialog that appears after clicked a comment, which dictates the image component of a comment
+	 */
+	protected void onCallCommentGUI(){
 		final String[] titlesPhoto = { pageActivity.getString(R.string.noImage), pageActivity.getString(R.string.fromFile),
 				pageActivity.getString(R.string.takePhoto) };
 		final AlertDialog.Builder photoSelector = 
@@ -74,10 +81,14 @@ public class CommentView {
 			}
 		}
 		);
-		return photoSelector.create();
+		photoSelector.show();
 	}
 	
-	protected AlertDialog onEditCommentGUI(final Story story){
+	/**
+	 * This dialog is where the user enters what text they would like in their comment
+	 * @param story
+	 */
+	protected void onEditCommentGUI(final Story story){
 		AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
     	builder.setTitle(pageActivity.getString(R.string.whatToSay));
     	
@@ -104,7 +115,7 @@ public class CommentView {
             }
         })
         .setNegativeButton(pageActivity.getString(R.string.cancel), null);
-    	return builder.create();
+    	builder.show();
 	}
 	
 	

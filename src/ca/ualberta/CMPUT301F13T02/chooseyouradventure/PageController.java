@@ -33,6 +33,11 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * 
+ * The controller for methods only affecting the page part of a model.
+ *
+ */
 public class PageController {
 	private Page currentPage;
 	
@@ -192,6 +197,11 @@ public class PageController {
 		setDecisionsChanged();
 	}
 	
+	/**
+	 * Gets a decision from the position in a list.
+	 * @param whichDecision
+	 * @return The decision that index pointed to
+	 */
 	public Decision findDecisionByIndex(int whichDecision){
 		return getPage().getDecisions().get(whichDecision);
 	}
@@ -224,6 +234,12 @@ public class PageController {
 		pageActivity = null;
 	}
 	
+	/**
+	 * Finds the position of a certain page from a list.
+	 * @param decision
+	 * @param pages
+	 * @return
+	 */
 	public int findArrayPosition(Decision decision, ArrayList<Page> pages){		
 		UUID toPageId = decision.getPageID();
 		int toPagePosition = -1;
@@ -270,17 +286,27 @@ public class PageController {
 	
 	
 	
-	
+	/**
+	 * Determines if the player is reaching a page from a different page or a cycle.
+	 * @param toPage
+	 * @param toPageId
+	 */
 	public void calculateEntry(Page toPage, UUID toPageId){
 		pageActivity.setOnEntry(true);
 		if(currentPage.getId().equals(toPageId) == true){
 			pageActivity.setOnEntry(false);
 		}
 		setPage(toPage);		
-		reloadPage();
-		
+		reloadPage();	
 	}
 	
+	/**
+	 * Updates a decision in the model
+	 * @param text
+	 * @param page
+	 * @param whichDecision
+	 * @param counter
+	 */
 	public void updateDecision(String text, Page page, int whichDecision, Counters counter) {		
 		getPage().updateDecisionFight(text, page, whichDecision, counter);
 		setDecisionsChanged();

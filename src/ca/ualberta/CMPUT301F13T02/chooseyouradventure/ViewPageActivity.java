@@ -144,7 +144,7 @@ public class ViewPageActivity extends Activity {
 		addTileButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				addTileMenu();
+				guiTile.addTileMenuGUI(tilesLayout);
 			}
 		});
 		
@@ -160,7 +160,7 @@ public class ViewPageActivity extends Activity {
         addComment.setOnClickListener(new OnClickListener() {
         	@Override
         	public void onClick(View view) {
-        		onCallComment();
+        		guiComment.onCallCommentGUI();
         		
         	}
         });
@@ -169,7 +169,9 @@ public class ViewPageActivity extends Activity {
         pageEnding.setOnClickListener(new OnClickListener() {
         	@Override
         	public void onClick(View view) {
-        		onEditPageEnding(view);
+        		if (getEditing()) {
+        			guiTile.onEditPageEndingGUI(view);
+        		}
         	}
         });
 	}
@@ -194,6 +196,9 @@ public class ViewPageActivity extends Activity {
         return true;
     }
 	
+	/**
+	 * Sets the action bar up.
+	 */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		app = (ApplicationController) getApplication();
@@ -305,15 +310,11 @@ public class ViewPageActivity extends Activity {
 		}
 	}
 	
-	/**
-	 * Show the dialog that allows users to pick which type of tile they would 
-	 * like to add.
-	 */
-	public void addTileMenu(){		
-		AlertDialog builder = guiTile.addTileMenuGUI(tilesLayout);
-        builder.show();
-    }
 	
+	/**
+	 * Tells the View to get the most recent data from the model, and refresh its view.
+	 * @param page
+	 */
 	public void update(Page page) {
 		
 		setButtonVisibility();
@@ -385,41 +386,17 @@ public class ViewPageActivity extends Activity {
 	 * @param view
 	 */
 	public void editTileMenu(final View view){
-		AlertDialog builder = guiTile.editTileMenuGUI(view, tilesLayout);
-        builder.show();
+		guiTile.editTileMenuGUI(view, tilesLayout);
+        
     }
-	
-
-	/**
-	 * Displays a dialog for editing a tile.
-	 * @param view
-	 */
-	protected void onEditTile(View view) {
-		AlertDialog builder = guiTile.onEditTileGUI(view, tilesLayout);
-        builder.show();
-	}
-	
 	
 	/**
 	 * Brings up a menu with options of what to do to the decision.
 	 * @param view
 	 */
 	public void decisionMenu(final View view){
-		AlertDialog builder = guiDecision.decisionMenuGUI(view, decisionsLayout);
-        builder.show();
+		guiDecision.decisionMenuGUI(view, decisionsLayout);
     }
-	
-	protected void onEditMessages(View view) {
-
-		AlertDialog builder = guiDecision.onEditMessages(view, decisionsLayout);
-        builder.show();
-	}
-
-	protected void onEditConditionals(View view) {
-		
-		AlertDialog builder = guiDecision.onEditDecisionGUI(view, decisionsLayout);
-        builder.show();
-	}
 
 	/**
 	 * Changes the view so that the next page is showing.
@@ -428,44 +405,23 @@ public class ViewPageActivity extends Activity {
 	protected void decisionClicked(View view) {
 		app.onDecisionClick(view, decisionsLayout);
 	}
-	/**
-	 * Brings up a dialog for editing the decision clicked.
-	 * @param view
-	 */
-	protected void onEditDecision(View view) {
-		
-		AlertDialog builder = guiDecision.onEditDecisionGUI(view, decisionsLayout);
-        builder.show();
-	}
+	
 	
 	
 	/**
-	 * Called when the add comment button is clicked. It creates a dialog that
-	 * allows the user to input text and then save the comment.
-	 * @param view
+	 * Brings up a menu to make a new comment.
 	 */
-	private void onCallComment(){
-		AlertDialog photoSelector = guiComment.onCallCommentGUI();
-		photoSelector.show();
-	      
-	}
 	protected void onEditComment() {
 		Story story = storyController.getStory();
-    	AlertDialog builder = guiComment.onEditCommentGUI(story);
-        builder.show();
+    	guiComment.onEditCommentGUI(story);
+       
 	}
 	
+	
 	/**
-	 * Opens a dialog that allows the user to edit the pageEnding.
-	 * @param view
+	 * The main interface for retrieving photos. Due to the nature of this code, it cannot be easily moved outside the activity
+	 * Even though it doesn't really belong here. This delegates off to other photo and layout methods after getting a picture.
 	 */
-	private void onEditPageEnding(View view) {
-		if (getEditing()) {
-			AlertDialog builder = guiTile.onEditPageEndingGUI(view);
-	        builder.show();
-		}
-	}
-
 	@Override
 	public void onActivityResult( final int requestCode, final int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -508,6 +464,9 @@ public class ViewPageActivity extends Activity {
 		}}
 	}
 	
+	/**
+	 * The following 4 methods all call the camera with different intents.
+	 */
 	protected void takePhoto() {
         camera.newPhoto(TAKE_PHOTO);
 	}
@@ -556,11 +515,18 @@ public class ViewPageActivity extends Activity {
 
 		this.isFighting = isFighting;
 	}
-	
+	/**
+	 * 
+	 * @return if the player is entering a page from elsewhere
+	 */
 	public boolean isOnEntry() {
 		return onEntry;
 	}
 
+	/**
+	 * Sets if the page is a new entry.
+	 * @param onEntry
+	 */
 	public void setOnEntry(boolean onEntry) {
 		this.onEntry = onEntry;
 	}

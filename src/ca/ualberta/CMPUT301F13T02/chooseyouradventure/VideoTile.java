@@ -55,26 +55,25 @@ public class VideoTile extends Tile{
 
 	@Override
 	public void setContent(Object content) {
-		String beginningHtml = "<html><body><center><iframe src=\"";
-		String endingHtml = "?rel=0\" frameborder=\"0\"/></center></body></html>";
+		
+		String beginningHtml = "<html><body><center><iframe src=\"http://www.youtube.com/embed/";
+		String endingHtml = "\" frameborder=\"0\"/></center></body></html>";
 		
 		String url = (String) content;
 		
-		if(content == null || !url.contains("youtube.com/watch?v=")) {
+		if (content == null || (!url.contains("?v=") && !url.contains("&v="))) {
 			videoURL = "<html><body><center><p>Sorry, we couldn't load that video</p></center></body></html>";
 			return;
 		}
 		
 		Log.d("url to parse", url);
-		String urlStart = url.substring(0, 7);
-		String urlMiddle = url.substring(8, 21);
-		String urlEnd = url.substring(29);
 		
-		String embed = "embed/";
-		String www = "www";
+		String pattern = ".*[&?]v=([0-9A-Za-z\\-]+).*";
+		String updated = url.replaceAll(pattern, "$1");
 		
-		videoURL = beginningHtml + urlStart + www + urlMiddle + embed + urlEnd + endingHtml;
+		videoURL = beginningHtml +  updated + endingHtml;
 		Log.d("video url", videoURL);
+		Log.d("video url", url);
 	}
 
 	public Object getContent() {

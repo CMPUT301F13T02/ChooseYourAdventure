@@ -64,7 +64,13 @@ public class Page {
 		pageEnding = ApplicationController.getInstance().getString(R.string.defaultEnding);
 	}
 	
-	
+	/**
+	 * This is a special constructor that initializes a null page. It only exists within the Page selector 
+	 * of a decision
+	 * This exists as a vessel for random stories. When the Controller encounters this special
+	 * Page, it will redirect the player through a random choice.
+	 * @param enterAnything
+	 */
 	public Page(String enterAnything){
 		id = null;
 		tiles = new ArrayList<Tile>();
@@ -214,27 +220,51 @@ public class Page {
 		comments.add(comment);
 	}
 	
+	/**
+	 * 
+	 * @return if this fragment is a fighting fragment
+	 */
 
 	public boolean getFightingState() {
 		return fightingFrag;
 	}
 
+	/**
+	 * 
+	 * @param if this fragment is a fighting fragment
+	 */
 	public void setFightingFrag(boolean fightingFrag) {
 		this.fightingFrag = fightingFrag;
 	}
 
+	/**
+	 * 
+	 * @return the health of the enemy on this page
+	 */
 	public int getEnemyHealth() {
 		return enemyHealth;
 	}
 
+	/**
+	 * Sets the health of the enemy on this page
+	 * @param enemyHealth
+	 */
 	public void setEnemyHealth(int enemyHealth) {
 		this.enemyHealth = enemyHealth;
 	}
 
+	/**
+	 * 
+	 * @return The name of the enemy on this page
+	 */
 	public String getEnemyName() {
 		return enemyName;
 	}
 
+	/**
+	 * 
+	 * @param enemyName
+	 */
 	public void setEnemyName(String enemyName) {
 		this.enemyName = enemyName;
 	}

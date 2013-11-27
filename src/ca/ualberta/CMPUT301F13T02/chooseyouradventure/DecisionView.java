@@ -12,6 +12,11 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+/**
+ * This class displays the data pertaining to decisions in the form of a GUI. 
+ *
+ */
+
 public class DecisionView {
 	
 	private ViewPageActivity pageActivity;
@@ -26,6 +31,15 @@ public class DecisionView {
         this.pageController = pageController;
 	}
 	
+	
+	/**
+	 * The most fundamental page of a decision.
+	 * This lets the user name the decision and select the target page
+	 * If the fragment is fighting, this page contains all the statistic values
+	 * The menu is adaptive so only the traits needed are shown on a page by page basis.
+	 * @param view
+	 * @param decisionsLayout
+	 */
 	protected void onEditDecisionGUI(View view, final LinearLayout decisionsLayout){
 		int whichDecision = decisionsLayout.indexOfChild(view);
 		final Decision decision = pageController.getPage().getDecisions().get(whichDecision);
@@ -113,6 +127,11 @@ public class DecisionView {
     	builder.show();
 	}
 
+	/**
+	 * This menu lets the player set the conditionals of when a particular page is shown
+	 * @param view
+	 * @param decisionsLayout
+	 */
 	protected void onEditConditionsGUI(View view, LinearLayout decisionsLayout){
 		final int whichDecision = decisionsLayout.indexOfChild(view);
 		final Decision decision = pageController.findDecisionByIndex(whichDecision);
@@ -156,6 +175,11 @@ public class DecisionView {
     	builder.show();
 	}
 	
+	/**
+	 * This function lets the player choose the messages that will display to let them know that a change in couunters has occured.
+	 * @param view
+	 * @param decisionsLayout
+	 */
 	protected void onEditMessages(View view, LinearLayout decisionsLayout){
 		final int whichDecision = decisionsLayout.indexOfChild(view);
 		final Decision decision = pageController.findDecisionByIndex(whichDecision);
@@ -196,6 +220,11 @@ public class DecisionView {
     	builder.show();
 	}
 	
+	/**
+	 * This is the main menu for a decision, which directs the players to more specific settings pages.
+	 * @param view
+	 * @param decisionsLayout
+	 */
 	protected void decisionMenuGUI(final View view, final LinearLayout decisionsLayout){
 		final String[] titles;
 		final String[] titlesBasic = { pageActivity.getString(R.string.editProperties), pageActivity.getString(R.string.delete), pageActivity.getString(R.string.cancel) };

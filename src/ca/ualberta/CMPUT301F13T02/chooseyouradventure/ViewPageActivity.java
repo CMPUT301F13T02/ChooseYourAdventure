@@ -196,6 +196,9 @@ public class ViewPageActivity extends Activity {
         return true;
     }
 	
+	/**
+	 * Sets the action bar up.
+	 */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		app = (ApplicationController) getApplication();
@@ -308,7 +311,10 @@ public class ViewPageActivity extends Activity {
 	}
 	
 	
-	
+	/**
+	 * Tells the View to get the most recent data from the model, and refresh its view.
+	 * @param page
+	 */
 	public void update(Page page) {
 		
 		setButtonVisibility();
@@ -402,7 +408,9 @@ public class ViewPageActivity extends Activity {
 	
 	
 	
-	
+	/**
+	 * Brings up a menu to make a new comment.
+	 */
 	protected void onEditComment() {
 		Story story = storyController.getStory();
     	guiComment.onEditCommentGUI(story);
@@ -410,7 +418,10 @@ public class ViewPageActivity extends Activity {
 	}
 	
 	
-
+	/**
+	 * The main interface for retrieving photos. Due to the nature of this code, it cannot be easily moved outside the activity
+	 * Even though it doesn't really belong here. This delegates off to other photo and layout methods after getting a picture.
+	 */
 	@Override
 	public void onActivityResult( final int requestCode, final int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -453,6 +464,9 @@ public class ViewPageActivity extends Activity {
 		}}
 	}
 	
+	/**
+	 * The following 4 methods all call the camera with different intents.
+	 */
 	protected void takePhoto() {
         camera.newPhoto(TAKE_PHOTO);
 	}
@@ -501,11 +515,18 @@ public class ViewPageActivity extends Activity {
 
 		this.isFighting = isFighting;
 	}
-	
+	/**
+	 * 
+	 * @return if the player is entering a page from elsewhere
+	 */
 	public boolean isOnEntry() {
 		return onEntry;
 	}
 
+	/**
+	 * Sets if the page is a new entry.
+	 * @param onEntry
+	 */
 	public void setOnEntry(boolean onEntry) {
 		this.onEntry = onEntry;
 	}

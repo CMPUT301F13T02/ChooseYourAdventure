@@ -241,24 +241,33 @@ public class Story {
 		return true;
 	}
 
+	/**
+	 * 
+	 * @return if the page is a fighting fragment
+	 */
 	public boolean isUsesCombat() {
 		return usesCombat;
 	}
-
+/**
+ * Sets if the page is a fighting fragment
+ * @param usesCombat
+ */
 	public void setUsesCombat(boolean usesCombat) {
 		this.usesCombat = usesCombat;
 	}
-
+/**
+ * get the players current counter state
+ * @return
+ */
 	public Counters getPlayerStats() {
 		return playerStats;
 	}
-
+/**
+ * Sets the players counter state
+ * @param playerStats
+ */
+		
 	public void setPlayerStats(Counters playerStats) {
 		this.playerStats = playerStats;
 	}
-	
-	
-	
-	 
-	
 }

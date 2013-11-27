@@ -37,6 +37,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+/**
+ * This class displays the data pertaining to tiles in the form of a GUI. 
+ *
+ */
 public class TileView {
 	private ViewPageActivity pageActivity;
 	private PageController pageController; 
@@ -52,6 +56,10 @@ public class TileView {
 
 	}
 	
+	/**
+	 * This menu lets you choose the type of tile youd like
+	 * @param tilesLayout
+	 */
 	public void addTileMenuGUI(final LinearLayout tilesLayout){
 		AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
 		final AlertDialog.Builder photoSelector = 
@@ -99,6 +107,11 @@ public class TileView {
         builder.show();
 	}
 	
+	/**
+	 * The menu where you edit the text in a tile
+	 * @param view
+	 * @param tilesLayout
+	 */
 	protected void onEditTileGUI(View view, final LinearLayout tilesLayout){
 		final TextView textView = (TextView) view;
     	AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
@@ -115,6 +128,11 @@ public class TileView {
     	builder.show();
 	}
 	
+	/**
+	 * What appears when you click on a textTile
+	 * @param view
+	 * @param tilesLayout
+	 */
 	protected void editTileMenuGUI(final View view, final LinearLayout tilesLayout){
 		final String[] titles = { pageActivity.getString(R.string.edit), pageActivity.getString(R.string.delete) };
 		
@@ -138,6 +156,10 @@ public class TileView {
         builder.show();
 	}
 	
+	/**
+	 * Edits the ending caption of a page.
+	 * @param view
+	 */
 	protected void onEditPageEndingGUI(View view){
 		TextView textView = (TextView) view;
 		AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);

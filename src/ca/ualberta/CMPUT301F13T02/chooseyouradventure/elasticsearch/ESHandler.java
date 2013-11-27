@@ -238,12 +238,10 @@ public class ESHandler implements Handler{
 	 */
 	public ArrayList<Story> search(String searchKey) throws HandlerException, UnsupportedEncodingException {
 		/*
-		 * Will want a query involving the searchKey.
-		 * Pass query to elastic search.
 		 * See https://github.com/rayzhangcl/ESDemo/blob/master/ESDemo/src/ca/ualberta/cs/CMPUT301/chenlei/ESClient.java
-		 */
+		 */ 
 		
-		int numHits = 1000;
+		int numHits = 50;
 		
 		ESHttpGet get = new ESHttpGet(getStoryPath() + "_search" + "?size=" + String.valueOf(numHits));
 		String query = "{\"query\" : {\"query_string\" : {\"default_field\" : \"title\",\"query\" : \"" + searchKey + "\"}}}";
@@ -273,6 +271,10 @@ public class ESHandler implements Handler{
 		
 	}
 	
+	/**
+	 * @return A random chosen story from among the stories on the server
+	 * @throws HandlerException
+	 */
 	public Story getRandomStory() throws HandlerException {
 		
 		ESHttpGet get = new ESHttpGet(getStoryPath() + "_count");
@@ -309,26 +311,5 @@ public class ESHandler implements Handler{
 		Story story = esResponse.getHits().iterator().next().getSource();
 		return story;
 		
-		
-		/*int numHits = 1000;
-		
-		ESHttpGet get = new ESHttpGet(getStoryPath() + "_search" + "?size=" + String.valueOf(numHits));
-		
-		String response = null;
-		try {
-			response = get.execute();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		Type esSearchResponseType = new TypeToken<ESSearchResponse<Story>>(){}.getType();
-		ESSearchResponse<Story> esResponse = gson.fromJson(response, esSearchResponseType);
-		
-		Story[] stories = new Story[numHits];
-		stories = esResponse.getHits().toArray(stories);
-		int location = 0 + (int)(Math.random()*((stories.length-0)+1));
-		return stories[location];
-		*/
 	}
 }

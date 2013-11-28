@@ -36,12 +36,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.SearchManager;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings.Secure;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,11 +46,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
 /**
@@ -72,8 +65,6 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
  * </ol>
  * 
  * The ViewStoriesActivity is a view of the application.
- * 
- * TODO Search needs to be implemented
  */
 
 public class ViewStoriesActivity extends Activity {
@@ -82,8 +73,10 @@ public class ViewStoriesActivity extends Activity {
 	private Button createNew;
 	ArrayList<String> storyText = new ArrayList<String>();
 	ArrayList<Story> storyList = new ArrayList<Story>();
-	private ControllerApp app; 
-	private SampleGenerator sampleGen = new SampleGenerator();
+	private ApplicationController app; 
+	private StoryView gui;
+	
+	
 	private Handler eshandler = new ESHandler();
 	private Handler dbhandler = new DBHandler(this);
 
@@ -96,17 +89,16 @@ public class ViewStoriesActivity extends Activity {
         createNew = (Button) findViewById(R.id.createButton);
         createNew.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                createStory();
+            	gui.createStoryGUI();
             }
         });
         
-        app = (ControllerApp) getApplication();
+        app = (ApplicationController) getApplication();
+        gui = new StoryView(app, this);
         
         
 		try {
 			storyList =  eshandler.getAllStories();
-			Story sampleStory = sampleGen.getStory();
-			storyList.add(sampleStory);
 			storyText = app.updateView(storyList, storyText);
 		} catch (HandlerException e1) {
 			e1.printStackTrace();
@@ -137,8 +129,11 @@ public class ViewStoriesActivity extends Activity {
 		    }
 		});
     }
-    
-    public void onRandomStory() {
+
+    /**
+     * Picks a random story
+     */
+    protected void onRandomStory() {
 		try {
 			Story random = eshandler.getRandomStory();
 			app.jump(ViewPageActivity.class, random, random.getFirstpage());
@@ -151,15 +146,15 @@ public class ViewStoriesActivity extends Activity {
 	public void onResume() {
         super.onResume();
         refresh();
-    	try {
+    	/*try {
 			handleIntent(getIntent());
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (HandlerException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
-		}
+		}*/
     }
 	
 	protected void onNewIntent(Intent intent) {
@@ -248,156 +243,29 @@ public class ViewStoriesActivity extends Activity {
 		return true;
     }
     
+    /**
+     * Goes the page selected on a click
+     * @param v
+     * @param pos
+     * @param id
+     * @throws HandlerException
+     */
 	protected void onListItemClick(View v, int pos, long id) throws HandlerException {	
-		app.setEditing(false);
+		
 	    app.jump(ViewPageActivity.class, storyList.get(pos), storyList.get(pos).getFirstpage());
 	    
 	}
-	
-	public boolean onLongListItemClick(View v, int pos, long id) { 
-    	storyMenu(pos);
-        return true;
-	}
-    /**
+
+	  /**
      * The options menu displayed when the user longClicks a story
      * @param v The view of the longClicked story
      */
-	public void storyMenu(int pos){
-			final Story story = storyList.get(pos);
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			final String[] titles;
-			final String[] titlesA;
-			final String[] titlesB;
-			if(story.getHandler() instanceof DBHandler) {
-				titlesA = new String[]{getString(R.string.upload), getString(R.string.edit), 
-						   			   getString(R.string.delete), getString(R.string.cancel) };
-				titlesB = new String[]{ getString(R.string.uploadCopy), getString(R.string.cancel) };
-			} else{
-				titlesA = new String[]{ getString(R.string.cache), getString(R.string.edit), 
-									   getString(R.string.delete), getString(R.string.cancel) };
-				titlesB = new String[]{ getString(R.string.cache), getString(R.string.cancel) };
-			}
-			
-			final String myId = Secure.getString(
-					getBaseContext().getContentResolver(), Secure.ANDROID_ID);
-			final String storyID = story.getAuthor();
-			if(myId.equals(storyID)){
-				titles = titlesA;
-				builder.setTitle(R.string.story_options_author);
-			}
-			else {
-				titles = titlesB;
-				builder.setTitle(R.string.story_options_user);
-			}
-            builder.setItems(titles, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int item) {
-                	switch(item){
-                	case(0): //cache or upload
-                		if (story.getHandler() instanceof DBHandler) {
-                			story.setHandler(eshandler);
-                			//create a new story because you have to change author ID
-                			story.setAuthor(myId);
-                			//set it to be online initially
-    						try {
-    							eshandler.addStory(story);
-    						} catch (HandlerException e) {
-    							e.printStackTrace();
-    						}
-    						refresh();
-                    		break;
-                		} else { //upload
-	                		story.setHandler(dbhandler);
-		                	story.setAuthor(myId);
-	                		try {
-	                			story.getHandler().addStory(story);
-	                		} catch (HandlerException e) {
-	                			e.printStackTrace();
-	                		}
-	                		refresh();
-	                		break;
-                		}
-                	/*
-                	case(1): //upload
-                		story.setHandler(eshandler);
-            			//create a new story because you have to change author ID
-            			story.setAuthor(myId);
-            			//set it to be online initially
-						try {
-							eshandler.addStory(story);
-						} catch (HandlerException e) {
-							e.printStackTrace();
-						}
-						refresh();
-                		break;*/
-                	case(1): //edit story
-                		if(myId.equals(storyID)){          			
-                    		app.jump(EditStoryActivity.class, story, null);
-                		}
-                		else{}
-                		break;
-                	case(2): //delete
-                		try {
-							story.getHandler().deleteStory(story);
-						} catch (HandlerException e) {
-							e.printStackTrace();
-						}
-                		refresh();
-                		break;
-                	}
-                    }});
-            builder.show();
-        }
-
-
-    
-    /**
-     * A pop up menu for creating a new story. it Simply asks for a title and then builds some framework before passing off to the Edit Story mode.
-     */
-    private void createStory(){
-
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle(getString(R.string.createNew));
-    	
-    	final LinearLayout layout = new LinearLayout(this);
-    	layout.setOrientation(LinearLayout.VERTICAL);
-    	
-    	final EditText alertEdit = new EditText(this);
-    	alertEdit.setSingleLine(true);
-    	layout.addView(alertEdit);
-    	
-    	final TextView alertText = new TextView(this);
-    	alertText.setText(getString(R.string.useCountersAndCombat));
-    	layout.addView(alertText);
-    	
-    	final CheckBox check = new CheckBox(this);
-    	layout.addView(check);
-        
-    	builder.setView(layout);
-    	builder.setMessage(getString(R.string.enterStoryTitle))
-    	.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-            	
-					try {
-						if(check.isChecked() == true){
-							Counters baseCount = new Counters();
-							baseCount.setBasic("0", "100");
-							app.initializeNewStory(alertEdit.getText().toString(), baseCount);
-						}
-						else{
-						app.initializeNewStory(alertEdit.getText().toString());}
-						
-						
-						refresh();
-					} catch (HandlerException e) {
-						e.printStackTrace();
-					}
-
-            }
-        })
-        .setNegativeButton(getString(R.string.cancel), null);
-        builder.show();
+	
+	public boolean onLongListItemClick(View v, int pos, long id) { 
+		gui.storyMenuGUI(storyList.get(pos), eshandler, dbhandler);
+        return true;
     }
-    
+  
     /**
      * Refreshes the list of stories by getting a new list from elastic search
      * and displaying it.

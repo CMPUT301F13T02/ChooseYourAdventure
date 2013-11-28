@@ -61,16 +61,23 @@ public class Page {
 		decisions = new ArrayList<Decision>();
 		comments = new ArrayList<Comment>();
 		title = new String();
-		pageEnding = ControllerApp.getInstance().getString(R.string.defaultEnding);
+		pageEnding = ApplicationController.getInstance().getString(R.string.defaultEnding);
 	}
 	
+	/**
+	 * This is a special constructor that initializes a null page. It only exists within the Page selector 
+	 * of a decision
+	 * This exists as a vessel for random stories. When the Controller encounters this special
+	 * Page, it will redirect the player through a random choice.
+	 * @param enterAnything
+	 */
 	public Page(String enterAnything){
 		id = null;
 		tiles = new ArrayList<Tile>();
 		decisions = new ArrayList<Decision>();
 		comments = new ArrayList<Comment>();
 		title = new String();
-		pageEnding = ControllerApp.getInstance().getString(R.string.defaultEnding);
+		pageEnding = ApplicationController.getInstance().getString(R.string.defaultEnding);
 	}
 
 	/**
@@ -89,14 +96,6 @@ public class Page {
 	public String getTitle()
 	{
 		return title;
-	}
-	
-	/**
-	 * This sets the page ID
-	 * @param UUid
-	 */
-	public void setId(UUID id) {
-		this.id = id;
 	}
 	
 	/**
@@ -196,11 +195,8 @@ public class Page {
 	 * @param page The page to link in the updated decision
 	 * @param decisionNumber The position of the decision to update
 	 */
-	public void updateDecision(String text, Page page, int decisionNumber) {
-		decisions.get(decisionNumber).updateDecision(text, page);
-	}
 	
-	public void updateDecision(String text, Page page, int decisionNumber, Counters counter) {
+	public void updateDecisionFight(String text, Page page, int decisionNumber, Counters counter) {
 		decisions.get(decisionNumber).updateDecision(text, page, counter);
 	}
 
@@ -217,7 +213,7 @@ public class Page {
 	}
 
 	/**
-	 * This adds a comment to the apge
+	 * This adds a comment to the page
 	 * @param comment What comment to add
 	 */
 	public void addComment(Comment comment) {
@@ -225,77 +221,94 @@ public class Page {
 	}
 	
 	/**
-	 * Compares this page for deep equality with another page
-	 * @param page What we are comparing to
+	 * 
+	 * @return if this fragment is a fighting fragment
 	 */
-	public boolean equals(Page page) {
 
-		//Fail if different number of comments of segments
-		if (comments.size() != page.getComments().size() ||
-			tiles.size() != page.getTiles().size() ||
-			decisions.size() != page.getDecisions().size())
-			return false;
-
-		//Check that all comments are the same
-		for (int i = 0; i < comments.size(); i++) {
-			if (!comments.get(i).equals(page.getComments().get(i))) 
-				return false;
-		}
-
-		//Check that all segments are the same
-		for (int i = 0; i < tiles.size(); i++) {
-			if (!tiles.get(i).equals(page.getTiles().get(i))) 
-				return false;
-		}
-		
-		//Check that all decisions are the same
-		for (int i = 0; i < decisions.size(); i++) {
-			if (!decisions.get(i).equals(page.getDecisions().get(i))) 
-				return false;
-		}
-		
-		//Check that the titles are the same
-		if (!title.equals(page.getTitle()))
-				return false;
-		
-		//Check that the id's are the same
-		if (!id.equals(page.id))
-			return false;
-		
-		return true;
-	}
-	
-	/**
-	 * This returns the string representation of the page
-	 * @return String Representation of a page
-	 */
-	public String toString() {
-		return "" + id + comments + tiles;
-	}
-
-	public boolean isFightingFrag() {
+	public boolean getFightingState() {
 		return fightingFrag;
 	}
 
+	/**
+	 * 
+	 * @param if this fragment is a fighting fragment
+	 */
 	public void setFightingFrag(boolean fightingFrag) {
 		this.fightingFrag = fightingFrag;
 	}
 
+	/**
+	 * 
+	 * @return the health of the enemy on this page
+	 */
 	public int getEnemyHealth() {
 		return enemyHealth;
 	}
 
+	/**
+	 * Sets the health of the enemy on this page
+	 * @param enemyHealth
+	 */
 	public void setEnemyHealth(int enemyHealth) {
 		this.enemyHealth = enemyHealth;
 	}
 
+	/**
+	 * 
+	 * @return The name of the enemy on this page
+	 */
 	public String getEnemyName() {
 		return enemyName;
 	}
 
+	/**
+	 * 
+	 * @param enemyName
+	 */
 	public void setEnemyName(String enemyName) {
 		this.enemyName = enemyName;
 	}
+	
+	/**
+     * Compares this page for deep equality with another page
+     * @param page What we are comparing to
+     */
+    public boolean equals(Page page) {
+
+            //Fail if different number of comments of segments
+            if (comments.size() != page.getComments().size() ||
+                    tiles.size() != page.getTiles().size() ||
+                    decisions.size() != page.getDecisions().size())
+                    return false;
+
+            //Check that all comments are the same
+            for (int i = 0; i < comments.size(); i++) {
+                    if (!comments.get(i).equals(page.getComments().get(i)))
+                            return false;
+            }
+
+            //Check that all segments are the same
+            for (int i = 0; i < tiles.size(); i++) {
+                    if (!tiles.get(i).equals(page.getTiles().get(i)))
+                            return false;
+            }
+            
+            //Check that all decisions are the same
+            for (int i = 0; i < decisions.size(); i++) {
+                    if (!decisions.get(i).equals(page.getDecisions().get(i)))
+                            return false;
+            }
+            
+            //Check that the titles are the same
+            if (!title.equals(page.getTitle()))
+                            return false;
+            
+            //Check that the id's are the same
+            if (!id.equals(page.id))
+                    return false;
+            
+            return true;
+    }
 
 	
 	

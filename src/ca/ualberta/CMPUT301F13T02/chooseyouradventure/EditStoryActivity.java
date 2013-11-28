@@ -33,8 +33,6 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,9 +41,6 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 /**
@@ -62,7 +57,9 @@ public class EditStoryActivity extends Activity {
 	private ArrayList<String> pageText = new ArrayList<String>();
 	private ArrayList<Page> pageList = new ArrayList<Page>();
 	private ArrayAdapter<String> adapter;
-	private ControllerApp app;
+	private ApplicationController app;
+	private PageView gui;
+	private StoryController storyController; 
 	private static final int HELP_INDEX = 0;
 
 	/**
@@ -76,23 +73,19 @@ public class EditStoryActivity extends Activity {
         treePage = (ListView) findViewById(R.id.treeView);
         createNew2 = (Button) findViewById(R.id.createButton2);
         deleteStory = (Button) findViewById(R.id.deleteButton);
-        app = (ControllerApp) getApplication();
+        app = (ApplicationController) getApplication();
+        gui = new PageView(app, this);
+        storyController = app.getStoryController();
         createNew2.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-              try
-			{
-				createPage();
-			} catch (HandlerException e)
-			{
-				e.printStackTrace();
-			}
+              gui.createPageGUI();
               adapter.notifyDataSetChanged();
             }
         });
         deleteStory.setOnClickListener(new OnClickListener() {
             
             public void onClick(View v) {
-            	Story story = app.getStory();
+            	Story story = storyController.getStory();
             	try {
 					story.getHandler().deleteStory(story);
 				} catch (HandlerException e) {
@@ -103,7 +96,7 @@ public class EditStoryActivity extends Activity {
         });       
         
         
-		pageList = app.getStory().getPages();
+		pageList = storyController.getStory().getPages();
 		pageText = app.updateView(pageList, pageText);
 		/**
 		 * Activity to restructure Click and longClick listeners to work in a list view
@@ -173,138 +166,16 @@ public class EditStoryActivity extends Activity {
 	 * @param id
 	 */
 	protected void onListItemClick(View v, int pos, long id) {
-		pageOptions(pos);
+		gui.pageOptionsGUI(pos);;
 	}
 	
-	/**
-	 * This creates a page
-	 * @throws HandlerException
-	 */
-	private void createPage() throws HandlerException{
 
-    	final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.create_page_dialog, null);
-    	final EditText titleEdit = (EditText) layout.findViewById(R.id.create_page_dialog_edittext);
-    	final EditText healthEdit = (EditText) layout.findViewById(R.id.create_page_dialog_health_edittext);
-    	final EditText nameEdit = (EditText) layout.findViewById(R.id.create_page_dialog_name_edittext);
-    	final CheckBox check = (CheckBox) layout.findViewById(R.id.create_page_dialog_checkbox);
-    	final LinearLayout fightingLayout = (LinearLayout) layout.findViewById(R.id.create_page_dialog_fighting_options);
-    	
-    	if(!app.getStory().isUsesCombat())
-    		fightingLayout.setVisibility(View.GONE);
-    	nameEdit.setText("Enemy");
-    	healthEdit.setText("0");
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setView(layout);
-    	builder.setTitle(getString(R.string.createNew));
-    	builder.setMessage(getString(R.string.enterPageTitle))
-    	.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-            	app.newTitle(titleEdit.getText().toString(), check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString());         	
-            	refresh();
-            }
-        })
-        .setNegativeButton(getString(R.string.cancel), null);
-        builder.show();
-    }
-
-	/**
-	 * This shows the user a list of options on a story
-	 * @param Input from longclick
-	 */
-	public void pageOptions(final int pos){
-
-        final AlertDialog.Builder titleEditor = new AlertDialog.Builder(this);
-		final Page currentPage = app.getStory().getPages().get(pos);
-		final Page FP = app.getStory().getFirstpage();
-
-		String[] titlesA = { getString(R.string.gotoEdit), getString(R.string.pageProperties), getString(R.string.cancel) };
-		String[] titlesB = { getString(R.string.gotoEdit), getString(R.string.pageProperties), getString(R.string.assignFirst),
-							getString(R.string.delete), getString(R.string.cancel) };
-
-		final String[] titles;
-
-		if(currentPage == FP)
-			titles = titlesA;
-		else
-			titles = titlesB;
-        
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.page_options);
-        builder.setItems(titles, new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int item) {
-            	
-            	switch(item){
-            	case(0):
-            		app.setEditing(true);
-            		app.jump(ViewPageActivity.class,app.getStory(),app.getStory().getPages().get(pos));
-            		
-            	break;
-            	case(1):
-            		
-                	final LinearLayout layout = (LinearLayout) View.inflate(titleEditor.getContext(), R.layout.create_page_dialog, null);
-	            	final LinearLayout fightingLayout = (LinearLayout) layout.findViewById(R.id.create_page_dialog_fighting_options);
-	            	final EditText titleEdit = (EditText) layout.findViewById(R.id.create_page_dialog_edittext);
-	            	final EditText healthEdit = (EditText) layout.findViewById(R.id.create_page_dialog_health_edittext);
-                	final EditText nameEdit = (EditText) layout.findViewById(R.id.create_page_dialog_name_edittext);
-                	final CheckBox check = (CheckBox) layout.findViewById(R.id.create_page_dialog_checkbox);
-	            	
-	            	if(!app.getStory().isUsesCombat()) {
-	            		fightingLayout.setVisibility(View.GONE);
-	            	}
-	            	else {
-	            		
-	                	
-
-	            		check.setChecked(currentPage.isFightingFrag());
-	            		healthEdit.setText("" + currentPage.getEnemyHealth());
-	            		nameEdit.setText(currentPage.getEnemyName());
-	            	}
-            		
-	            	titleEdit.setText(currentPage.getTitle());
-	            	
-            		titleEditor.setTitle(getString(R.string.createNew));
-            		titleEditor.setView(layout);
-            		titleEditor.setMessage(getString(R.string.enterPageTitle))
-            		.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
-
-            			public void onClick(DialogInterface dialog, int id) {
-            				String pageTitle = titleEdit.getText().toString();
-            				if(app.getStory().isUsesCombat() == true){
-            					app.updateTitle(pageTitle, check.isChecked(), healthEdit.getText().toString(), nameEdit.getText().toString(), currentPage); 
-            				}
-            				else{
-            					app.updateTitle(pageTitle, currentPage);    
-            				}
-            				refresh();
-            			}
-            		})
-            		.setNegativeButton(getString(R.string.cancel), null);
-
-            		titleEditor.show();
-            		
-            		break;
-
-            	case(2):
-            		app.updateFP(currentPage);
-            		refresh();
-            		break;
-            	case(3):
-            		app.removePage(currentPage);
-            		refresh();
-            		break;
-            	}
-
-            }	
-                });
-        builder.show();
-    }
 	
 	/**
 	 * This rebuilds the ListView by recollecting data from the controller
 	 */
 	public void refresh(){
-		pageList = app.getStory().getPages();
+		pageList = storyController.getStory().getPages();
 		pageText = app.updateView(pageList, pageText);
 		adapter.notifyDataSetChanged();
 	}	

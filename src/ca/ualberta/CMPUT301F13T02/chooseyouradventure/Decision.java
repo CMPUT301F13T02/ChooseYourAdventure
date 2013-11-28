@@ -46,18 +46,11 @@ public class Decision {
 	private Counters choiceModifiers = new Counters();
 	
 
-	public Decision(Page page) {
-		this.text = "New Decision";
-		this.pageID = page.getId();
-	}
-	
 	
 	/**
 	 * This sets the link for the decision
 	 * @param The text of the decision and it's corresponding page
 	 */
-	
-	
 	public Decision(String text, Page page) {
 		this.text = text;
 		this.pageID = page.getId();
@@ -85,10 +78,7 @@ public class Decision {
 	 * @param text
 	 * @param page
 	 */
-	public void updateDecision(String text, Page page) {
-		this.text = text;
-		this.pageID = page.getId();
-	}
+
 	
 	public void updateDecision(String text, Page page, Counters counter) {
 		this.text = text;
@@ -108,12 +98,18 @@ public class Decision {
 		return true;
 	}
 
-
+/**
+ * This reflects updates to the Stories counters that will occur when following a link
+ * @return choiceModifiers
+ */
 	public Counters getChoiceModifiers() {
 		return choiceModifiers;
 	}
 
-
+/**
+ * This reflects updates to the Stories counters that will occur when following a link
+ * @param choiceModifiers
+ */
 	public void setChoiceModifiers(Counters choiceModifiers) {
 		this.choiceModifiers = choiceModifiers;
 	}

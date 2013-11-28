@@ -184,12 +184,12 @@ public class DBHandler extends SQLiteOpenHelper implements Handler  {
 	}
 	@Override
 	public ArrayList<Story> search(String searchKey) throws HandlerException, UnsupportedEncodingException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 	@Override
 	public Story getRandomStory() throws HandlerException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

@@ -146,7 +146,7 @@ public class ViewStoriesActivity extends Activity {
 	public void onResume() {
         super.onResume();
         refresh();
-    	/*try {
+    	try {
 			handleIntent(getIntent());
 		} catch (UnsupportedEncodingException e) {
 			
@@ -154,7 +154,7 @@ public class ViewStoriesActivity extends Activity {
 		} catch (HandlerException e) {
 			
 			e.printStackTrace();
-		}*/
+		}
     }
 	
 	protected void onNewIntent(Intent intent) {

@@ -42,37 +42,12 @@ import java.util.Calendar;
  */
 public class Comment {
 
-	private String poster;
 	private String text;
 	private String timestamp;
 	private PhotoTile annotation = null;
 
-	/**
-	 * This is a constructor for a comment with no user
-	 * @param text The comment
-	 */
-	public Comment(String text) {
-		this.text = text;
-		
-		Calendar calendar = Calendar.getInstance(); 
-		String dayField = "" + calendar.get(Calendar.DAY_OF_MONTH) + "\\" + calendar.get(Calendar.MONTH) + "\\" + calendar.get(Calendar.YEAR);
-		this.setTimestamp(dayField);
-		
-	}
+	
 
-	/**
-	 * This is a constructor for a comment with a user
-	 * @param text The comment
-	 * @param poster Who left the comment
-	 */
-	public Comment(String text, String poster) {
-		this.text = text;
-		this.poster = poster;
-		
-		Calendar calendar = Calendar.getInstance(); 
-		String dayField = "" + calendar.get(Calendar.DAY_OF_MONTH) + "\\" + calendar.get(Calendar.MONTH) + "\\" + calendar.get(Calendar.YEAR);
-		this.setTimestamp(dayField);
-	}
 	
 	/**
 	 * This is a constructor for a comment with a user and photo
@@ -80,15 +55,14 @@ public class Comment {
 	 * @param poster Who left the comment
 	 * @param photo A photo tile to go with the comment
 	 */
-	public Comment(String text, String poster, PhotoTile photo) {
+	public Comment(String text, PhotoTile photo) {
 		this.text = text;
-		this.poster = poster;
 		this.annotation = photo;
 		
 		
 		Calendar calendar = Calendar.getInstance(); 
 		String dayField = "" + calendar.get(Calendar.DAY_OF_MONTH) + "\\" + calendar.get(Calendar.MONTH) + "\\" + calendar.get(Calendar.YEAR);
-		this.setTimestamp(dayField);
+		this.timestamp = dayField;
 		
 	}
 
@@ -100,21 +74,6 @@ public class Comment {
 		return text;
 	}
 
-	/**
-	 * @return Who posted the comment
-	 */
-	public String getPoster() {
-		return poster;
-	}
-	
-	/**
-	 * @param timestamp the timestamp to set
-	 */
-	public void setTimestamp(String timestamp)
-	{
-	
-		this.timestamp = timestamp;
-	}
 
 	/**
 	 * @return the timestamp
@@ -132,14 +91,20 @@ public class Comment {
 	 * @return Whether or not the two comments are considered equal
 	 */
 	public boolean equals(Comment comment) {
-		return text.equals(comment.getText()) &&
-				poster.equals(comment.getPoster());
+		return text.equals(comment.getText());
 	}
 
+	/**
+	 * Gets the image stored in a comment
+	 * @return Image
+	 */
 	public PhotoTile getAnnotation() {
 		return annotation;
 	}
-
+/**
+ * sets the image in a comment
+ * @param annotation
+ */
 	public void setAnnotation(PhotoTile annotation) {
 		this.annotation = annotation;
 	}

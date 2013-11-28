@@ -187,8 +187,9 @@ public class Story {
      * This deletes a page from a story
      * @param aPage What to delete
      */
-    public void deletePage(Page aPage) {
-    	
+    public void deletePage(int index) {
+    	pages.remove(index);
+    	updateStory();
     }
     /**
 	 * This function updates the stories data in the database
@@ -240,24 +241,33 @@ public class Story {
 		return true;
 	}
 
+	/**
+	 * 
+	 * @return if the page is a fighting fragment
+	 */
 	public boolean isUsesCombat() {
 		return usesCombat;
 	}
-
+/**
+ * Sets if the page is a fighting fragment
+ * @param usesCombat
+ */
 	public void setUsesCombat(boolean usesCombat) {
 		this.usesCombat = usesCombat;
 	}
-
+/**
+ * get the players current counter state
+ * @return
+ */
 	public Counters getPlayerStats() {
 		return playerStats;
 	}
-
+/**
+ * Sets the players counter state
+ * @param playerStats
+ */
+		
 	public void setPlayerStats(Counters playerStats) {
 		this.playerStats = playerStats;
 	}
-	
-	
-	
-	 
-	
 }

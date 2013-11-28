@@ -32,6 +32,11 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.Random;
 
+/**
+ * This class is a part of the model in MVC, and acts as the model for the fighting addition
+ * of our application.
+ */
+
 public class Counters {
 	
 	private int treasureStat = 0;
@@ -79,10 +84,14 @@ public class Counters {
 		return hitMessage;
 	}
 
-	
-	
-	
-	
+	/**
+	 * This set method updates all traits changed in the edit menu
+	 * @param treasureStat
+	 * @param playerHpStat
+	 * @param enemyHpStat
+	 * @param enemyHitPercentage
+	 * @param playerHitPercentage
+	 */
 	public void setStats(String treasureStat, String playerHpStat, String enemyHpStat, String enemyHitPercentage, String playerHitPercentage
 			) {
 		try{
@@ -103,6 +112,13 @@ public class Counters {
 		
 		
 	}
+	
+	/**
+	 * This setter updates all changes made in the Conditionals menu
+	 * @param thresholdSign
+	 * @param thresholdType
+	 * @param thresholdValue
+	 */
 	public void setThresholds(int thresholdSign, int thresholdType, String thresholdValue){
 		
 		try{
@@ -116,6 +132,11 @@ public class Counters {
 		
 	}
 	
+	/**
+	 * This method is for refreshing theplayers health and gold at the start of a story
+	 * @param treasureStat
+	 * @param playerHpStat
+	 */
 	public void setBasic(String treasureStat, String playerHpStat) {
 		try{
 			this.treasureStat = Integer.parseInt(treasureStat);
@@ -126,10 +147,13 @@ public class Counters {
 		
 	}
 	
-	public Counters() {
-		
-	}
+	public Counters() {}
 	
+	
+	/**
+	 * This method updates all stats in a stats-based fighting fragment
+	 * @param choiceModifiers
+	 */
 	public void invokeUpdateComplex(Counters choiceModifiers){
 		Random rn = new Random();
 		int randomFlagP = rn.nextInt(100) + 1;
@@ -166,15 +190,12 @@ public class Counters {
 				}
 			}
 		}
-		
-		
-		
-		
-		
-		
-		
+
 	}
-	
+	/**
+	 * Similar to the above method, this updates the model, but only the basic counters not used in fighting
+	 * @param choiceModifiers
+	 */
 	public void invokeUpdateSimple(Counters choiceModifiers){
 		this.treasureStat = treasureStat + choiceModifiers.treasureStat ;
 		this.treasureChange = choiceModifiers.treasureStat;
@@ -311,39 +332,48 @@ public class Counters {
 	public void setThresholdValue(int thresholdValue) {
 		this.thresholdValue = thresholdValue;
 	}
-
-
-
-
-
-
-
+/**
+ * 
+ * @return the trait (Health, Enemy, Treasure) being checked
+ */
 	public int getThresholdType() {
 		return thresholdType;
 	}
 
-
-
-
-
-
-
+/**
+ * 
+ * @param the trait (Health, Enemy, Treasure) being checked
+ */
 	public void setThresholdType(int thresholdType) {
 		this.thresholdType = thresholdType;
 	}
 
+	/**
+	 * 
+	 * @return The percent chance the enemy will damage you in a fighting fragment
+	 */
 	public int getEnemyHitPercent() {
 		return enemyHitPercent;
 	}
 
+	/**
+	 * 
+	 * @param enemyHitPercent, The percent chance the enemy will damage you in a fighting fragment
+	 */
 	public void setEnemyHitPercent(int enemyHitPercent) {
 		this.enemyHitPercent = enemyHitPercent;
 	}
-
+/**
+ * 
+ * @return The percent chance the player will damage the opponent in a fighting fragment
+ */
 	public int getPlayerHitPercent() {
 		return playerHitPercent;
 	}
-
+/**
+ * 
+ * @param playerHitPercent, The percent chance the player will damage the opponent in a fighting fragment
+ */
 	public void setPlayerHitPercent(int playerHitPercent) {
 		this.playerHitPercent = playerHitPercent;
 	}

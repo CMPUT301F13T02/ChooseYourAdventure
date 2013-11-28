@@ -32,8 +32,9 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.AudioTile;
 import com.jayway.android.robotium.solo.Solo;
+
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ApplicationController;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ControllerApp;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Decision;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.PhotoTile;
@@ -58,7 +59,7 @@ public class TestViewPageActivity extends ActivityInstrumentationTestCase2<ViewP
 	private TextView addComment;
 	private TextView commentsTitle;
 	
-	private static final ControllerApp app = ControllerApp.getInstance();
+	private static final ApplicationController app = ApplicationController.getInstance();
 	
 	private Page page;
 	private Story story;

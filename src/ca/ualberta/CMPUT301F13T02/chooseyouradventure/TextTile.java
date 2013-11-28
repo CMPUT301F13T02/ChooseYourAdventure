@@ -75,16 +75,7 @@ public class TextTile extends Tile{
 		this.text = text;
 	}
 
-	/**
-     * Tests the equality of this tile and the passed tile
-     * 
-     * @param tile The tile to compare against
-     * @return Whether or not the two tiles are considered equal
-     */
-    public boolean equals(Tile tile) {
-    	if (tile instanceof TextTile)
-	    	return text.equals(((TextTile)tile).getText());
-    	else
-    		return false;
-    }
+	
+
+    
 }

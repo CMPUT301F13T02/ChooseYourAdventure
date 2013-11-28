@@ -30,10 +30,12 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Handler;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.HandlerException;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
 
@@ -127,5 +129,18 @@ public class MockHandler implements Handler {
 	 */
 	public void deleteAllStories() {
 		stories.clear();
+	}
+
+	@Override
+	public ArrayList<Story> search(String searchKey) throws HandlerException,
+			UnsupportedEncodingException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Story getRandomStory() throws HandlerException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

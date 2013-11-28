@@ -29,18 +29,17 @@ public final class R {
     }
     public static final class id {
         public static final int TextTiletextView=0x7f0b0028;
-        public static final int action_help=0x7f0b002e;
-        public static final int action_randomStory=0x7f0b002d;
-        public static final int action_refresh=0x7f0b002f;
-        public static final int action_search=0x7f0b0030;
-        public static final int action_settings=0x7f0b002c;
+        public static final int action_help=0x7f0b002d;
+        public static final int action_randomStory=0x7f0b002c;
+        public static final int action_refresh=0x7f0b002e;
+        public static final int action_search=0x7f0b002f;
+        public static final int action_settings=0x7f0b002b;
         public static final int addComment=0x7f0b0027;
         public static final int addDecision=0x7f0b0024;
         public static final int addTile=0x7f0b0021;
-        public static final int button1=0x7f0b0029;
         public static final int commentTitle=0x7f0b0025;
         public static final int commentsLayout=0x7f0b0026;
-        public static final int createButton=0x7f0b002a;
+        public static final int createButton=0x7f0b0029;
         public static final int createButton2=0x7f0b001b;
         public static final int create_page_dialog_checkbox=0x7f0b0003;
         public static final int create_page_dialog_edittext=0x7f0b0001;
@@ -72,7 +71,7 @@ public final class R {
         public static final int fightingLayout=0x7f0b001f;
         public static final int help_scrollview=0x7f0b001d;
         public static final int help_webview=0x7f0b001e;
-        public static final int mainView=0x7f0b002b;
+        public static final int mainView=0x7f0b002a;
         public static final int pageEnding=0x7f0b0022;
         public static final int textView1=0x7f0b0000;
         public static final int tilesLayout=0x7f0b0020;
@@ -114,7 +113,8 @@ public final class R {
         public static final int assignFirst=0x7f07001f;
         public static final int audioTile=0x7f070023;
         public static final int cache=0x7f07000e;
-        public static final int cahcedDesignator=0x7f070051;
+        public static final int cachedDesignator=0x7f070051;
+        public static final int cahcedDesignator=0x7f070056;
         public static final int cancel=0x7f070010;
         public static final int coinChange=0x7f070039;
         public static final int coinMessage=0x7f070037;
@@ -149,6 +149,7 @@ public final class R {
         public static final int help=0x7f070018;
         public static final int hitpoints=0x7f070044;
         public static final int lost=0x7f070043;
+        public static final int newDecision=0x7f070055;
         public static final int noImage=0x7f070025;
         public static final int ok=0x7f070019;
         public static final int pageProperties=0x7f07001e;

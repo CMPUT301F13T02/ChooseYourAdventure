@@ -30,45 +30,53 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.PhotoTile;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
+
+import java.util.ArrayList;
+
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.StoryController;
 import android.test.InstrumentationTestCase;
 
-public class TestTextTile extends InstrumentationTestCase {
+public class TestStoryController extends InstrumentationTestCase {
 	
-	public void testEquals(){
-		TextTile tile1 = new TextTile("New1");
-		TextTile tile2 = new TextTile("New2");
+	private StoryController storyController;
+	private MockHandler handler = new MockHandler();
+	private Story story;
+
+	
+	protected void setUp() {
+		storyController = new StoryController();
+		story = new Story();
+	
+		story.setHandler(handler);
+		storyController.setStory(story);
 		
-		assertFalse(tile1.equals(tile2));
-		
-		tile2 = new TextTile("New1");
-		
-		assertTrue(tile1.equals(tile2));
-		//These next tests make sure text inequals to picture or video
-		assertFalse(tile1.equals(new PhotoTile()));
-		
-		//assertFalse(tile1.equals(new VideoTile()));
 	}
 	
-	public void testSetContent() {
-		TextTile tile = new TextTile();
-		String content = "A text tile";
-		tile.setContent(content);
-		String tileContent = tile.getText();
-		assertEquals(content, tileContent);
+	public void testSetStory() {
+		storyController.setStory(story);
+		assertEquals(story, storyController.getStory());
+	}
+	
+	public void testGetStory() {
+		storyController.setStory(story);
+		Story s = storyController.getStory();
+		assertEquals(s, story);
+	}
+	
+	public void testNewPage() {
+		story.getPages().clear();
+		storyController.newPage("First Page", false, null, "New Page");
+		int l = story.getPages().size();
+		assertEquals(l, 1);
 		
-		TextTile tile2 = new TextTile("Another text tile");
-		content = "Another text tile";
-		tileContent = tile2.getText();
-		assertEquals(content, tileContent);
 	}
 	
-	public void testGetType() {
-		TextTile tile = new TextTile();
-		assertEquals("text", tile.getType());
+	public void testGetPages() {
+		ArrayList<Page> storyPages = story.getPages();
+		ArrayList<Page> controllerPages = storyController.getPages();
+		assertEquals(storyPages, controllerPages);
 	}
-	
 
 }
-

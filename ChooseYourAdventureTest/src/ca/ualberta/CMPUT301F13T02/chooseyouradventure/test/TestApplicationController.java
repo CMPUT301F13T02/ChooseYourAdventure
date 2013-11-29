@@ -30,45 +30,42 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.PhotoTile;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
+import java.util.ArrayList;
+
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ApplicationController;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.PageController;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.StoryController;
 import android.test.InstrumentationTestCase;
 
-public class TestTextTile extends InstrumentationTestCase {
+public class TestApplicationController extends InstrumentationTestCase {
 	
-	public void testEquals(){
-		TextTile tile1 = new TextTile("New1");
-		TextTile tile2 = new TextTile("New2");
-		
-		assertFalse(tile1.equals(tile2));
-		
-		tile2 = new TextTile("New1");
-		
-		assertTrue(tile1.equals(tile2));
-		//These next tests make sure text inequals to picture or video
-		assertFalse(tile1.equals(new PhotoTile()));
-		
-		//assertFalse(tile1.equals(new VideoTile()));
+	private ApplicationController app = ApplicationController.getInstance();
+	private ArrayList<Story> stories;
+	
+	protected void setUp() {
+		stories = new ArrayList<Story>();
 	}
 	
-	public void testSetContent() {
-		TextTile tile = new TextTile();
-		String content = "A text tile";
-		tile.setContent(content);
-		String tileContent = tile.getText();
-		assertEquals(content, tileContent);
-		
-		TextTile tile2 = new TextTile("Another text tile");
-		content = "Another text tile";
-		tileContent = tile2.getText();
-		assertEquals(content, tileContent);
+	public void testSetStories() {
+		app.setStories(stories);
+		assertEquals(stories, app.getStories());
 	}
 	
-	public void testGetType() {
-		TextTile tile = new TextTile();
-		assertEquals("text", tile.getType());
+	public void testGetStories() {
+		app.setStories(stories);
+		ArrayList<Story> appStories = app.getStories();
+		assertEquals(stories, appStories);
 	}
 	
+	public void testGetPageController() {
+		PageController p = app.getPageController();
+		assertTrue(p instanceof PageController);
+	}
+	
+	public void testStoryController() {
+		StoryController s = app.getStoryController();
+		assertTrue(s instanceof StoryController);
+	}
 
 }
-

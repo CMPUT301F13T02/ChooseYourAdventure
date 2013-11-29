@@ -1,21 +1,21 @@
 /*
 * Copyright (c) 2013, TeamCMPUT301F13T02
 * All rights reserved.
-* 
+*
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
-* 
+*
 * Redistributions of source code must retain the above copyright notice, this
 * list of conditions and the following disclaimer.
-* 
+*
 * Redistributions in binary form must reproduce the above copyright notice, this
 * list of conditions and the following disclaimer in the documentation and/or
 * other materials provided with the distribution.
-* 
+*
 * Neither the name of the {organization} nor the names of its
 * contributors may be used to endorse or promote products derived from
 * this software without specific prior written permission.
-* 
+*
 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -33,7 +33,6 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 import android.test.ActivityInstrumentationTestCase2;
 import com.jayway.android.robotium.solo.Solo;
 import android.widget.Button;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ControllerApp;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.EditStoryActivity;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
@@ -48,7 +47,7 @@ public class TestEditStoryActivity extends ActivityInstrumentationTestCase2<Edit
 	
 	private Story story;
 	
-	private static final ControllerApp app = ControllerApp.getInstance();
+	//private static final ControllerApp app = ControllerApp.getInstance();
 	
 	private static int numPages = 1;
 	
@@ -64,7 +63,7 @@ public class TestEditStoryActivity extends ActivityInstrumentationTestCase2<Edit
 		story.setId("255");
 		story.setTitle("Unit Test Generated");
 		
-		app.setStory(story);
+		//app.setStory(story);
 		
 		activity = getActivity();
 		
@@ -76,7 +75,7 @@ public class TestEditStoryActivity extends ActivityInstrumentationTestCase2<Edit
 	}
 	
 	public void testStateDestroy() {
-		story = app.getStory();
+		//story = app.getStory();
 		story.getPages().clear();
 		story.addPage(new Page());
 		
@@ -109,7 +108,7 @@ public class TestEditStoryActivity extends ActivityInstrumentationTestCase2<Edit
 	}
 	
 	public void testDeletePage() {
-		story = app.getStory();
+		//story = app.getStory();
 		story.getPages().clear();
 		
 		story.addPage(new Page());
@@ -125,4 +124,6 @@ public class TestEditStoryActivity extends ActivityInstrumentationTestCase2<Edit
 		assertNotNull(addPageButton);
 		assertNotNull(deleteStoryButton);
 	}
+
+}
 

@@ -37,7 +37,7 @@ import java.util.UUID;
  * This class represents a story -- it is part of the model of the application.
  * 
  * A Story is serialized and stored via a Handler implementation which interact
- * solely with Storys.  
+ * solely with Stories.  
  * 
  */
 public class Story {
@@ -97,7 +97,7 @@ public class Story {
 	 */
 	public Page getFirstpage()
 	{
-		Page fp = new Page();
+		Page fp = null;
 		for(int i = 0; i < pages.size(); i++){
 			if (firstpage.equals(pages.get(i).getId()))
 			{

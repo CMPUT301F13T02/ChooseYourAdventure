@@ -148,7 +148,7 @@ public class StoryView {
 					} catch (HandlerException e) {
 						e.printStackTrace();
 					}
-            		storyActivity.refresh();
+            		storyActivity.deleteStory(story);
             		break;
             	}
             }

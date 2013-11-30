@@ -294,4 +294,16 @@ public class ViewStoriesActivity extends Activity {
     public void setHandler(Handler handler) {
     	eshandler = handler;
     }
+
+    /**
+     * Delete the passed story from the displayed list
+     * 
+     * @param story The story to delete
+     * @author Konrad Lindenbach
+     */
+	public void deleteStory(Story story) {
+		storyList.remove(story);
+		storyText = app.updateView(storyList, storyText);
+	    adapter.notifyDataSetChanged();
+	}
 }

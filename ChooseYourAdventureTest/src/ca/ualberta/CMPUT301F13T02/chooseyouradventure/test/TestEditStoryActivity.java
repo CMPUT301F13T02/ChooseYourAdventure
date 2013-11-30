@@ -31,11 +31,12 @@
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
 import android.test.ActivityInstrumentationTestCase2;
-import com.jayway.android.robotium.solo.Solo;
 import android.widget.Button;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ApplicationController;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.EditStoryActivity;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.StoryController;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
 
 public class TestEditStoryActivity extends ActivityInstrumentationTestCase2<EditStoryActivity> {
@@ -47,7 +48,8 @@ public class TestEditStoryActivity extends ActivityInstrumentationTestCase2<Edit
 	
 	private Story story;
 	
-	//private static final ControllerApp app = ControllerApp.getInstance();
+	private static final ApplicationController app = ApplicationController.getInstance();
+	private StoryController storyController;
 	
 	private static int numPages = 1;
 	
@@ -63,7 +65,8 @@ public class TestEditStoryActivity extends ActivityInstrumentationTestCase2<Edit
 		story.setId("255");
 		story.setTitle("Unit Test Generated");
 		
-		//app.setStory(story);
+		storyController = app.getStoryController();
+		storyController.setStory(story);
 		
 		activity = getActivity();
 		
@@ -85,39 +88,6 @@ public class TestEditStoryActivity extends ActivityInstrumentationTestCase2<Edit
 		int np = story.getPages().size();
 		assertEquals(numPages, np);
 		//assertFalse(numPages == np);
-	}
-	
-	public void testAddPage() {
-		
-	    Solo solo = new Solo(getInstrumentation(), getActivity());
-	    getInstrumentation().waitForIdleSync();
-	    
-		activity.runOnUiThread(
-				new Runnable() {
-					public void run() {
-						addPageButton.requestFocus();
-						addPageButton.performClick();
-					}
-				});
-		
-	    solo.enterText(0, "New Page");
-	    solo.clickOnButton("Save");
-		int np = story.getPages().size();
-		assertEquals(np, 1);
-		//assertFalse(np == 1);
-	}
-	
-	public void testDeletePage() {
-		//story = app.getStory();
-		story.getPages().clear();
-		
-		story.addPage(new Page());
-		int np = story.getPages().size();
-		
-		story.getPages().remove(0);
-		assertFalse(np == story.getPages().size());
-		//assertTrue(np == story.getPages().size());
-		
 	}
 	
 	public void testLayout() {

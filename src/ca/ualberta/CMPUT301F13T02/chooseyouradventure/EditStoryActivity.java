@@ -61,6 +61,7 @@ public class EditStoryActivity extends Activity {
 	private PageView gui;
 	private StoryController storyController; 
 	private static final int HELP_INDEX = 0;
+	private static final int CHANGE_INDEX = 1;
 
 	/**
 	 * This binds the buttons the the views to this activity
@@ -76,6 +77,8 @@ public class EditStoryActivity extends Activity {
         app = (ApplicationController) getApplication();
         gui = new PageView(app, this);
         storyController = app.getStoryController();
+        Story thisStory = storyController.getStory();
+        setTitle(thisStory.getTitle());
         createNew2.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
               gui.createPageGUI();
@@ -131,6 +134,9 @@ public class EditStoryActivity extends Activity {
 	
 		MenuItem help = menu.add(0, HELP_INDEX, HELP_INDEX, getString(R.string.help));
 		help.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		MenuItem changeTitle = menu.add(0, CHANGE_INDEX, CHANGE_INDEX,
+										getString(R.string.changeTitle));
+		changeTitle.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		
 		help.setEnabled(!HelpPlayer.getInstance().isPlaying());
 		
@@ -154,6 +160,8 @@ public class EditStoryActivity extends Activity {
 			HelpPlayer.getInstance().play(this, R.raw.storyhelp);
 	        
 			break;
+		case CHANGE_INDEX:
+			gui.changeTitle(storyController.getStory());
 		}
 		return true;
 	}

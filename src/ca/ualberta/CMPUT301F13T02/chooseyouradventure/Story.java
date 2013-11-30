@@ -68,6 +68,7 @@ public class Story {
 	public Story() {
 		this.firstpage = new Page().getId();
 		this.timeStamp = System.currentTimeMillis() / 1000L;
+		this.author = "";
 	}
 	
 	// For testing purposes

@@ -269,8 +269,8 @@ public class PageController {
 	 * @param text
 	 * @param whichTile
 	 */
-	public void updateTile(String text, int whichTile) {
-		currentPage.updateTile(text, whichTile);
+	public void updateTile(Object content, int whichTile) {
+		currentPage.updateTile(content, whichTile);
 		setTilesChanged();
 	}
 

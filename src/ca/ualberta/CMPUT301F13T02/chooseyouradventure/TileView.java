@@ -63,7 +63,8 @@ public class TileView {
 	 */
 	public void addTileMenuGUI(final LinearLayout tilesLayout){
 		AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
-		final String[] titles = { pageActivity.getString(R.string.textTile), pageActivity.getString(R.string.photoTile),
+		final String[] titles = { pageActivity.getString(R.string.textTile), 
+								   pageActivity.getString(R.string.photoTile),
 				                   pageActivity.getString(R.string.cancel) };   
         builder.setItems(titles, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
@@ -126,7 +127,9 @@ public class TileView {
 	protected void photoSelectorGUI(View view, final LinearLayout tilesLayout) {
 		final AlertDialog.Builder photoSelector = 
 				new AlertDialog.Builder(pageActivity);
-		final String[] titlesPhoto = { pageActivity.getString(R.string.fromFile), pageActivity.getString(R.string.takePhoto), pageActivity.getString(R.string.cancel) };
+		final String[] titlesPhoto = { pageActivity.getString(R.string.fromFile),
+										pageActivity.getString(R.string.takePhoto), 
+										pageActivity.getString(R.string.cancel) };
 		final int whichTile = tilesLayout.indexOfChild(view);
 		photoSelector.setItems(titlesPhoto,
 				new DialogInterface.OnClickListener() {
@@ -150,10 +153,10 @@ public class TileView {
 	 * @param tilesLayout
 	 */
 	protected void editTileMenuGUI(final View view, final LinearLayout tilesLayout){
-		final String[] titles = { pageActivity.getString(R.string.edit), pageActivity.getString(R.string.delete) };
+		final String[] titles = { pageActivity.getString(R.string.edit), 
+								  pageActivity.getString(R.string.delete) };
 		
         AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
-        builder.setTitle(R.string.story_options);
         builder.setItems(titles, new DialogInterface.OnClickListener() {
         	
             public void onClick(DialogInterface dialog, int item) {

@@ -129,5 +129,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="textView">TextView</string>
     <string name="defaultEnding">Choices: </string>
     <string name="newDecision">New Decision </string>
+    <string name="changeTitle">Rename Story</string>
+    <string name="changeTitleHeader">Enter The New Name</string>
 
 </resources>

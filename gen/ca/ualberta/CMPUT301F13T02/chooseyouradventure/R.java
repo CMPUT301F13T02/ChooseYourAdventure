@@ -114,8 +114,10 @@ public final class R {
         public static final int audioTile=0x7f070023;
         public static final int cache=0x7f07000e;
         public static final int cachedDesignator=0x7f070051;
-        public static final int cahcedDesignator=0x7f070056;
+        public static final int cahcedDesignator=0x7f070058;
         public static final int cancel=0x7f070010;
+        public static final int changeTitle=0x7f070056;
+        public static final int changeTitleHeader=0x7f070057;
         public static final int coinChange=0x7f070039;
         public static final int coinMessage=0x7f070037;
         public static final int coinsWorth=0x7f070046;

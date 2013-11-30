@@ -227,6 +227,9 @@ public class ViewStoriesActivity extends Activity {
     {
 		switch (item.getItemId()) {
 		
+		case R.id.action_help:
+			HelpPlayer.getInstance().play(this, R.raw.mainhelp);
+			break;
 
 		case R.id.action_refresh:
             refresh();

@@ -275,6 +275,7 @@ public class Page {
      */
     public boolean equals(Page page) {
 
+    	/*
             //Fail if different number of comments of segments
             if (comments.size() != page.getComments().size() ||
                     tiles.size() != page.getTiles().size() ||
@@ -302,6 +303,8 @@ public class Page {
             //Check that the titles are the same
             if (!title.equals(page.getTitle()))
                             return false;
+                            
+        */
             
             //Check that the id's are the same
             if (!id.equals(page.id))

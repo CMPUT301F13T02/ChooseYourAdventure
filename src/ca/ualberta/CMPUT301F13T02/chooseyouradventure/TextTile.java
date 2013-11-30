@@ -74,6 +74,10 @@ public class TextTile extends Tile{
 		String text = (String) content;
 		this.text = text;
 	}
+	
+	public boolean equals(TextTile otherTile) {
+		return this.text.equals(otherTile.getText());
+	}
 
 	
 

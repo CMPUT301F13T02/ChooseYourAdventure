@@ -57,7 +57,7 @@ public class TestEditStoryActivity extends ActivityInstrumentationTestCase2<Edit
 
 	public TestEditStoryActivity() {
 		super(EditStoryActivity.class);
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	protected void setUp() throws Exception {

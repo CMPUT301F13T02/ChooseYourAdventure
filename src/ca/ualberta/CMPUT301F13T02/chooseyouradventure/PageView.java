@@ -39,8 +39,6 @@ import android.widget.LinearLayout;
 
 /**
  * This generates all the GUI elements for EditStoryActivity.
- * 
- *
  */
 public class PageView {
 	private ApplicationController app;
@@ -148,6 +146,27 @@ public class PageView {
                 });
         builder.show();
 	}
+	
+	protected void changeTitle(final Story story) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(storyActivity);
+		builder.setTitle(storyActivity.getString(R.string.changeTitleHeader));
+    	final EditText alertEdit = new EditText(storyActivity);
+    	alertEdit.setText(story.getTitle());
+    	builder.setView(alertEdit);
+    	
+    	builder.setPositiveButton(storyActivity.getString(R.string.done),
+    							  new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            	String title = alertEdit.getText().toString();
+            	story.setTitle(title);
+            	story.updateStory();
+            	storyActivity.setTitle(title);
+            }
+        })
+        .setNegativeButton(storyActivity.getString(R.string.cancel), null);
+    	builder.show();
+	}
+	
 	/**
 	 * This is teh menu for creating a new page
 	 */

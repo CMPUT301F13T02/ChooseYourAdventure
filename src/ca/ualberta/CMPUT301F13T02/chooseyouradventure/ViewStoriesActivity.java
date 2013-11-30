@@ -227,6 +227,9 @@ public class ViewStoriesActivity extends Activity {
     {
 		switch (item.getItemId()) {
 		
+		case R.id.action_help:
+			HelpPlayer.getInstance().play(this, R.raw.mainhelp);
+			break;
 
 		case R.id.action_refresh:
             refresh();
@@ -274,13 +277,19 @@ public class ViewStoriesActivity extends Activity {
     
     	try {
         	storyList = eshandler.getAllStories();
-        	storyList.addAll(dbhandler.getAllStories());
-			storyText = app.updateView(storyList, storyText);
+
 		} catch (HandlerException e1) {
 			e1.printStackTrace();
+			storyList = new ArrayList<Story>();
 		}
+    	try {
+			storyList.addAll(dbhandler.getAllStories());
+		}
+		catch (HandlerException e) {
+			e.printStackTrace();
+		}
+		storyText = app.updateView(storyList, storyText);
         adapter.notifyDataSetChanged();
-		
     }
     
     /**
@@ -291,4 +300,16 @@ public class ViewStoriesActivity extends Activity {
     public void setHandler(Handler handler) {
     	eshandler = handler;
     }
+
+    /**
+     * Delete the passed story from the displayed list
+     * 
+     * @param story The story to delete
+     * @author Konrad Lindenbach
+     */
+	public void deleteStory(Story story) {
+		storyList.remove(story);
+		storyText = app.updateView(storyList, storyText);
+	    adapter.notifyDataSetChanged();
+	}
 }

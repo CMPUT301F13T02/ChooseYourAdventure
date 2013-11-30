@@ -67,13 +67,23 @@ public class StoryView {
 		final String[] titlesA;
 		final String[] titlesB;
 		if(story.getHandler() instanceof DBHandler) {
-			titlesA = new String[]{storyActivity.getString(R.string.upload), storyActivity.getString(R.string.edit), 
-					storyActivity.getString(R.string.delete), storyActivity.getString(R.string.cancel) };
-			titlesB = new String[]{ storyActivity.getString(R.string.uploadCopy), storyActivity.getString(R.string.cancel) };
+			titlesA = new String[]{storyActivity.getString(R.string.upload),
+									//storyActivity.getString(R.string.changeTitle),
+									storyActivity.getString(R.string.edit), 
+									storyActivity.getString(R.string.delete), 
+									storyActivity.getString(R.string.cancel) };
+			
+			titlesB = new String[]{ storyActivity.getString(R.string.uploadCopy), 
+									storyActivity.getString(R.string.cancel) };
 		} else{
-			titlesA = new String[]{ storyActivity.getString(R.string.cache), storyActivity.getString(R.string.edit), 
-					storyActivity.getString(R.string.delete), storyActivity.getString(R.string.cancel) };
-			titlesB = new String[]{ storyActivity.getString(R.string.cache), storyActivity.getString(R.string.cancel) };
+			titlesA = new String[]{ storyActivity.getString(R.string.cache),
+									//storyActivity.getString(R.string.changeTitle),
+									storyActivity.getString(R.string.edit), 
+									storyActivity.getString(R.string.delete), 
+									storyActivity.getString(R.string.cancel) };
+			
+			titlesB = new String[]{ storyActivity.getString(R.string.cache), 
+									storyActivity.getString(R.string.cancel) };
 		}
 		final String myId = app.getAndroidID();
 		final String storyID = story.getAuthor();
@@ -89,20 +99,30 @@ public class StoryView {
         	public void onClick(DialogInterface dialog, int item) {
             	switch(item){
 
-            	case(0): //cache
-            		if (story.getHandler() instanceof DBHandler) {
+            	case(0): 
+            		if (story.getHandler() instanceof DBHandler) { //upload
             			story.setHandler(eshandler);
-            			//create a new story because you have to change author ID
             			story.setAuthor(myId);
-            			//set it to be online initially
-						try {
-							eshandler.addStory(story);
-						} catch (HandlerException e) {
-							e.printStackTrace();
+            			Story oldStory = new Story();
+            			try {
+							oldStory = story.getHandler().getStory(story.getId());
+						} catch (HandlerException e1) {
+							e1.printStackTrace();
 						}
+            			if (oldStory.getAuthor().equals(story.getAuthor())) {
+            				story.updateStory();
+            			} else {
+                			//create a new story because you have to change author ID
+                			//set it to be online initially
+    						try {
+    							eshandler.addStory(story);
+    						} catch (HandlerException e) {
+    							e.printStackTrace();
+    						}	
+            			}
 						storyActivity.refresh();
                 		break;
-            		} else { //upload
+            		} else { //cache
                 		story.setHandler(dbhandler);
 	                	story.setAuthor(myId);
                 		try {
@@ -113,21 +133,9 @@ public class StoryView {
                 		storyActivity.refresh();
                 		break;
             		}
-            	/*
-            	case(1): //upload
-            		// the 0 passed means it isn't local
-            		story.setHandler(eshandler);
-        			//create a new story because you have to change author ID
-        			story.setAuthor(myId);
-        			//set it to be online initially
-					try {
-						eshandler.addStory(story);
-					} catch (HandlerException e) {
-						e.printStackTrace();
-					}
-					storyActivity.refresh();
-            		break;
-            		*/
+            	/*case(1):
+            		changeTitleGUI();
+            		break;*/
             	case(1): //edit story
             		if(myId.equals(storyID)){          			
                 		app.jump(EditStoryActivity.class, story, null);
@@ -140,7 +148,7 @@ public class StoryView {
 					} catch (HandlerException e) {
 						e.printStackTrace();
 					}
-            		storyActivity.refresh();
+            		storyActivity.deleteStory(story);
             		break;
             	}
             }
@@ -150,10 +158,14 @@ public class StoryView {
         });
         builder.show();
 	}
+	/*
+	protected void changeTitleGUI() {
+		
+	}*/
+	
 	/**
 	 * The menu for making a new story
 	 */
-	
 	protected void createStoryGUI(){
 		AlertDialog.Builder builder = new AlertDialog.Builder(storyActivity);
     	builder.setTitle(storyActivity.getString(R.string.createNew));
@@ -178,12 +190,9 @@ public class StoryView {
             public void onClick(DialogInterface dialog, int id) {
             	
 					try {
-						
 						Counters baseCount = new Counters();
 						baseCount.setBasic("0", "100");
 						app.initializeNewStory(alertEdit.getText().toString(), baseCount, check.isChecked());
-						
-						
 						
 						storyActivity.refresh();
 					} catch (HandlerException e) {

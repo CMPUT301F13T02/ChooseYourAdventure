@@ -95,15 +95,6 @@ public class TileLayoutBuilder {
 						pageActivity.editTileMenu(v);
 					}
 				});
-				view.setOnLongClickListener(new OnLongClickListener() {
-					@Override
-					public boolean onLongClick(View v) {
-						ClipData data = ClipData.newPlainText("", "");
-						DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
-						v.startDrag(data, shadowBuilder, v, 0);
-						return true;
-					}
-				});
 
 			}
 			
@@ -115,6 +106,16 @@ public class TileLayoutBuilder {
 			imageView.setImageBitmap(photoTile.getImage());
 			
 			tilesLayout.addView(imageView, i);
+			
+			if (pageActivity.getEditing()) {
+				view.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						pageActivity.editTileMenu(v);
+					}
+				});
+
+			}
 
 		} else if (tile.getType() == "video") {
 			// This will be implemented as part of part 5

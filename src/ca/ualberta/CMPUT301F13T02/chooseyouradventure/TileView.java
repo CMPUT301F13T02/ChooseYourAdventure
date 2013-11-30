@@ -34,6 +34,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -57,41 +58,25 @@ public class TileView {
 	}
 	
 	/**
-	 * This menu lets you choose the type of tile youd like
+	 * This menu lets you choose the type of tile you'd like
 	 * @param tilesLayout
 	 */
 	public void addTileMenuGUI(final LinearLayout tilesLayout){
 		AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
-		final AlertDialog.Builder photoSelector = 
-				new AlertDialog.Builder(pageActivity);
-		final String[] titles = { pageActivity.getString(R.string.textTile), pageActivity.getString(R.string.photoTile),
+		final String[] titles = { pageActivity.getString(R.string.textTile), 
+								   pageActivity.getString(R.string.photoTile),
 				                   pageActivity.getString(R.string.cancel) };   
-		final String[] titlesPhoto = { pageActivity.getString(R.string.fromFile), pageActivity.getString(R.string.takePhoto), pageActivity.getString(R.string.cancel) };
         builder.setItems(titles, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
             	switch(item){
             	case(0):
-            		TextTile tile = new TextTile();
-					pageController.getPage().addTile(tile);
-					tileBuilder.addTile(pageController.getPage().getTiles().size() - 1, tile, tilesLayout);   				
+            		TextView textView = new TextView(pageActivity);
+            		textView.setText("New Text Block");
+            		onEditTextTileGUI(textView, tilesLayout);
             		break;
             	case(1):
-            		photoSelector.setItems(titlesPhoto, 
-            				new DialogInterface.OnClickListener() {
-            			 public void onClick(DialogInterface dialog, 
-            					              int item) {
-            	            	switch(item){
-	            	            	case(0):
-	            	            		pageActivity.getPhoto();
-	            	            		
-	            	            		
-	            	            		break;
-	            	            	case(1):
-	            	            		pageActivity.takePhoto();
-	            	            		break;
-            	            	}
-            	                }});
-            	       	photoSelector.show();
+            		ImageView imageView = new ImageView(pageActivity);
+            		photoSelectorGUI(imageView, tilesLayout);
             		
             		break;
             		
@@ -117,7 +102,7 @@ public class TileView {
 	 * @param view
 	 * @param tilesLayout
 	 */
-	protected void onEditTileGUI(View view, final LinearLayout tilesLayout){
+	protected void onEditTextTileGUI(View view, final LinearLayout tilesLayout){
 		final TextView textView = (TextView) view;
     	AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
     	final EditText alertEdit = new EditText(pageActivity);
@@ -126,11 +111,40 @@ public class TileView {
     	builder.setPositiveButton(pageActivity.getString(R.string.done), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             	int whichTile = tilesLayout.indexOfChild(textView);
-            	pageController.updateTile(alertEdit.getText().toString(), whichTile);
+            	String text = alertEdit.getText().toString();
+            	if (whichTile == -1) {
+            		TextTile tile = new TextTile(text);
+            		pageController.addTile(tile);
+            	} else {
+            		pageController.updateTile(text, whichTile);
+            	}
             }
         })
-        .setNegativeButton(pageActivity.getString(R.string.done), null);
+        .setNegativeButton(pageActivity.getString(R.string.cancel), null);
     	builder.show();
+	}
+	
+	protected void photoSelectorGUI(View view, final LinearLayout tilesLayout) {
+		final AlertDialog.Builder photoSelector = 
+				new AlertDialog.Builder(pageActivity);
+		final String[] titlesPhoto = { pageActivity.getString(R.string.fromFile),
+										pageActivity.getString(R.string.takePhoto), 
+										pageActivity.getString(R.string.cancel) };
+		final int whichTile = tilesLayout.indexOfChild(view);
+		photoSelector.setItems(titlesPhoto,
+				new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,
+					int item) {
+				switch(item){
+				case(0):
+					pageActivity.getPhoto(whichTile);
+				break;
+				case(1):
+					pageActivity.takePhoto(whichTile);
+				break;
+				}
+			}});
+		photoSelector.show();
 	}
 	
 	/**
@@ -139,17 +153,21 @@ public class TileView {
 	 * @param tilesLayout
 	 */
 	protected void editTileMenuGUI(final View view, final LinearLayout tilesLayout){
-		final String[] titles = { pageActivity.getString(R.string.edit), pageActivity.getString(R.string.delete) };
+		final String[] titles = { pageActivity.getString(R.string.edit), 
+								  pageActivity.getString(R.string.delete) };
 		
         AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
-        builder.setTitle(R.string.story_options);
         builder.setItems(titles, new DialogInterface.OnClickListener() {
         	
             public void onClick(DialogInterface dialog, int item) {
             	int whichTile = tilesLayout.indexOfChild(view);
             	switch(item){
             	case(0):
-            		onEditTileGUI(view, tilesLayout);
+            		if (view instanceof TextView) {
+            			onEditTextTileGUI(view, tilesLayout);
+            		} else if (view instanceof ImageView) {
+            			photoSelectorGUI(view, tilesLayout);
+            		}
             		break;
             	case(1):
             		pageController.deleteTile(whichTile);

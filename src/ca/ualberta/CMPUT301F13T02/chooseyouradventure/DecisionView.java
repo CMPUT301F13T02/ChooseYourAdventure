@@ -31,7 +31,6 @@ public class DecisionView {
         this.pageController = pageController;
 	}
 	
-	
 	/**
 	 * The most fundamental page of a decision.
 	 * This lets the user name the decision and select the target page
@@ -244,7 +243,6 @@ public class DecisionView {
 			titles = titlesBasic;
 		}
         AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
-        builder.setTitle(R.string.story_options);
         builder.setItems(titles, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
             	int whichDecision = decisionsLayout.indexOfChild(view);

@@ -425,48 +425,62 @@ public class ViewPageActivity extends Activity {
 		super.onActivityResult(requestCode, resultCode, data);
 		AlertDialog.Builder successChecker = new AlertDialog.Builder(this);
 		if (resultCode == RESULT_OK && null != data) {
+			final int whichTile = (Integer) camera.getTempSpace();
 			switch(requestCode) {
-			case (RESULT_LOAD_IMAGE):
-				pageController.addTile(camera.loadImage(data));
-				break;
-			case (GRAB_PHOTO):
-				camera.setTempSpace(camera.loadImage(data));
-				onEditComment();
-				break;
-			case(TAKE_PHOTO):
-			case(ADD_PHOTO):
-				final Bitmap image = camera.retrievePhoto(data);
-				successChecker.setView(camera.makeViewByPhoto(image));
-				successChecker.setTitle(getString(R.string.retakeQuestion));
-				successChecker.setPositiveButton(getString(R.string.save),
-						new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						PhotoTile tile = new PhotoTile();
-						tile.setContent(image);
-						if(requestCode == TAKE_PHOTO){
-							pageController.addTile(tile);}
-						else{
-							camera.setTempSpace(tile);
-							onEditComment();
-							
+				case (RESULT_LOAD_IMAGE):
+					Bitmap fileImage = camera.loadImage(data);
+					PhotoTile tile = new PhotoTile();
+					tile.setContent(fileImage);
+					if (whichTile == -1) {
+						pageController.addTile(tile);
+					} else if (whichTile >= 0) {
+						pageController.updateTile(fileImage, whichTile);
+					}
+					break;
+				case (GRAB_PHOTO):
+					PhotoTile newTile = new PhotoTile();
+					newTile.setContent(camera.loadImage(data));
+					camera.setTempSpace(newTile);
+					onEditComment();
+					break;
+				case(TAKE_PHOTO):
+				case(ADD_PHOTO):
+					final Bitmap cameraImage = camera.retrievePhoto(data);
+					successChecker.setView(camera.makeViewByPhoto(cameraImage));
+					successChecker.setTitle(getString(R.string.retakeQuestion));
+					successChecker.setPositiveButton(getString(R.string.save),
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									PhotoTile tile = new PhotoTile();
+									tile.setContent(cameraImage);
+									if(requestCode == TAKE_PHOTO){
+										if (whichTile == -1) {
+											pageController.addTile(tile);
+										} else if (whichTile >= 0) {
+											pageController.updateTile(cameraImage, whichTile);
+										}
+									} else {
+										camera.setTempSpace(tile);
+										onEditComment();							
+									}
+								}
+					})
+					.setNegativeButton(getString(R.string.retake), new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							takePhoto(whichTile);
 						}
-					}
-				})
-				.setNegativeButton(getString(R.string.retake), new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						takePhoto();
-					}
-				});
-				successChecker.show();
-				break;
-		}}
+					});
+					successChecker.show();
+					break;
+			}}
 	}
 	
 	/**
 	 * The following 4 methods all call the camera with different intents.
 	 */
-	protected void takePhoto() {
-        camera.newPhoto(TAKE_PHOTO);
+	protected void takePhoto(int whichTile) {
+		camera.setTempSpace(whichTile);
+		camera.newPhoto(TAKE_PHOTO);
 	}
 
 	protected void addPhoto() {
@@ -476,7 +490,8 @@ public class ViewPageActivity extends Activity {
 		camera.getPhoto(GRAB_PHOTO); 
 	}
 
-	public void getPhoto(){
+	public void getPhoto(int whichTile){
+		camera.setTempSpace(whichTile);
 		camera.getPhoto(RESULT_LOAD_IMAGE);
 	}	
 	

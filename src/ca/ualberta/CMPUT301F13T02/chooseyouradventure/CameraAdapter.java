@@ -92,7 +92,7 @@ public class CameraAdapter {
 	 * @return
 	 */
 	
-	public PhotoTile loadImage(Intent data){
+	public Bitmap loadImage(Intent data){
 		Uri selectedImage = data.getData();
 		String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
@@ -104,9 +104,7 @@ public class CameraAdapter {
 		String picturePath = cursor.getString(columnIndex);
 		cursor.close();       	
 		Bitmap pickedPhoto = BitmapFactory.decodeFile(picturePath);
-		PhotoTile newPhoto = new PhotoTile();
-		newPhoto.setContent(pickedPhoto);	
-		return newPhoto;
+		return pickedPhoto;
 	}
 	
 	/**

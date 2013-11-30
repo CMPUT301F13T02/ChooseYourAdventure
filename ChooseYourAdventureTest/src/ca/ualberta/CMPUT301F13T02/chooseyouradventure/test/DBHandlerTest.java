@@ -90,8 +90,7 @@ public class DBHandlerTest extends AndroidTestCase {
 	 * Tests adding a comment to a page
 	 */
 	public void testAddComment() {
-		//TODO: Implement if a local copy of a comment is not made before
-		//this should get called
+
 	}
 
 	/**

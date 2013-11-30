@@ -277,13 +277,19 @@ public class ViewStoriesActivity extends Activity {
     
     	try {
         	storyList = eshandler.getAllStories();
-        	storyList.addAll(dbhandler.getAllStories());
-			storyText = app.updateView(storyList, storyText);
+
 		} catch (HandlerException e1) {
 			e1.printStackTrace();
+			storyList = new ArrayList<Story>();
 		}
+    	try {
+			storyList.addAll(dbhandler.getAllStories());
+		}
+		catch (HandlerException e) {
+			e.printStackTrace();
+		}
+		storyText = app.updateView(storyList, storyText);
         adapter.notifyDataSetChanged();
-		
     }
     
     /**

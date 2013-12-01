@@ -45,7 +45,7 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
 /**
  * Tests various functions of the ESHandler class
  */ 
-public class ESHandlerTest extends InstrumentationTestCase {
+public class TestESHandler extends InstrumentationTestCase {
 	private ESTestHandler esHandler = new ESTestHandler();
 	
 	/**
@@ -58,7 +58,7 @@ public class ESHandlerTest extends InstrumentationTestCase {
 			Page page1 = new Page();
 			page1.addTile(new TextTile("test1"));
 			page1.addTile(new TextTile("test2"));
-			page1.addComment(new Comment("LOLz I CN HAZ CHEEZBUERGR?", "Geoff"));
+			page1.addComment(new Comment("LOLz I CN HAZ CHEEZBUERGR?", null));
 			
 			Page page2 = new Page();
 			page2.addTile(new TextTile("test3"));
@@ -97,7 +97,7 @@ public class ESHandlerTest extends InstrumentationTestCase {
 		
 			System.out.println("hello");
 			//Add a comment to a page
-			Comment comment = new Comment("TEST COMMENT", "Geoff");
+			Comment comment = new Comment("TEST COMMENT", null);
 			esHandler.addComment(story1, story1.getPages().get(0), comment);
 			
 			//Retrieve the story, get newest comment and compare for equality

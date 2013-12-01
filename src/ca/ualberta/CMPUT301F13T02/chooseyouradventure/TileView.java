@@ -45,7 +45,6 @@ import android.widget.TextView;
 public class TileView {
 	private ViewPageActivity pageActivity;
 	private PageController pageController; 
-	private TileLayoutBuilder tileBuilder;
 	
 	
 	public TileView(PageController pageController, ViewPageActivity pageActivity) {
@@ -53,7 +52,6 @@ public class TileView {
 		
 		this.pageActivity = pageActivity;
         this.pageController = pageController;
-        tileBuilder = new TileLayoutBuilder(pageActivity);
 
 	}
 	

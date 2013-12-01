@@ -32,12 +32,9 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.util.ArrayList;
 
-import android.content.ClipData;
 import android.util.Log;
 import android.view.View;
-import android.view.View.DragShadowBuilder;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;

@@ -66,7 +66,7 @@ import android.widget.TextView;
 public class ViewPageActivity extends Activity {
 	
 	private boolean isEditing = false;
-	private boolean isFighting = false;
+	private boolean isFighting = false; 
 	private boolean onEntry = true;
 	
 	private static final int RESULT_LOAD_IMAGE = 1;

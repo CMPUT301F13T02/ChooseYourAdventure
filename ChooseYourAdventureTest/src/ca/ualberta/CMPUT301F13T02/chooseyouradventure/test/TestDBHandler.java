@@ -104,6 +104,7 @@ public class TestDBHandler extends AndroidTestCase {
 		story.addPage(p);
 		handler.addStory(story);
 		Comment c = new Comment("The comment", null);
+		story.getPages().get(0).addComment(c);
 		
 		handler.addComment(story, p, c);
 		Story s = handler.getStory("bbbb");
@@ -115,8 +116,8 @@ public class TestDBHandler extends AndroidTestCase {
 		l = s.getPages().get(0).getComments().size();
 		assertTrue(l>0);
 		
-		//Comment d = s.getPages().get(0).getComments().get(0);
-		//assertTrue(c.equals(d));
+		Comment d = s.getPages().get(0).getComments().get(0);
+		assertTrue(c.equals(d));
 		
 	}
 

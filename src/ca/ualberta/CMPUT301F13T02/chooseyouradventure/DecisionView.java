@@ -68,9 +68,11 @@ public class DecisionView {
     	ArrayList<String> pageStrings = getPageStrings(pages);
     	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(pageActivity, R.layout.list_item_base, pageStrings);
 
+    	/*
     	if(page.getDecisions().size() > 2){
-    		pageStrings.add(pageActivity.getString(R.string.randomChoice));
+    		pageStrings.add(pageActivity.getString("RANDOM CHOICE"));
     	}
+    	*/
 
     	pageSpinner.setAdapter(pagesAdapter);
     	pageSpinner.setSelection(toPagePosition);

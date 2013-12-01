@@ -274,6 +274,18 @@ public class ApplicationController extends Application {
 		followDecision(whichDecision);
 	}
 	
+	 /**
+     * Picks a random story
+     */
+    protected void onRandomStory() {
+		try {
+			ESHandler eshandler = new ESHandler();
+			Story random = eshandler.getRandomStory();
+			jump(ViewPageActivity.class, random, random.getFirstpage());
+		} catch (HandlerException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	
 }

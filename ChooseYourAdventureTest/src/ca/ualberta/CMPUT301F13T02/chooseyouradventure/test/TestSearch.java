@@ -43,12 +43,12 @@ public class TestSearch extends InstrumentationTestCase {
 	private ESHandler esHandler = new ESHandler();
 	
 	public void testSearch() throws HandlerException, UnsupportedEncodingException {
-		String title = "Search Story";
+		String title = "Unit Test - Search Story";
 		Story story = new Story();
 		story.setTitle(title);
 		
 		esHandler.addStory(story);
-		String searchKey = "Search Story";
+		String searchKey = "Unit Tes - Search Story";
 		ArrayList<Story> stories = esHandler.search(searchKey);
 		assertNotNull(stories);
 		int size = stories.size();

@@ -122,13 +122,27 @@ public class ApplicationController extends Application {
 					outList = getString(R.string.startDesignator);
 				}
 
-
 				if(((Page) itemList.get(i)).getFightingState() == true){
 					outList = outList + getString(R.string.fightDesignator);
 				}
 
-
+				boolean endDes = false;
 				if(((Page) itemList.get(i)).getDecisions().size() == 0){				
+					endDes = true;
+				}
+				else{
+					endDes = true;
+					ArrayList<Decision> pageIndex = ((Page) itemList.get(i)).getDecisions();
+					UUID pageID = ((Page) itemList.get(i)).getId();
+					
+					for(int j = 0; j < pageIndex.size(); j++){
+						if(!pageIndex.get(j).getPageID().equals(pageID)){
+							endDes = false;
+						}
+						
+					}
+				}
+				if(endDes == true){
 					outList = outList + getString(R.string.endDesignator);
 				}
 				outList = outList + "(" + 

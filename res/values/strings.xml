@@ -79,7 +79,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="counterMessage">Set the messages that occur after a change in a counter</string>
     <string name="setDecisionConditions">Set the conditions in which this decision appears</string>
     <string name="setTextandPage">Set text and next page</string>
-    <string name="randomChoice">RANDOM CHOICE</string>
     <string name="enterPageTitle">Enter the title of your new page</string>
     <string name="createNew">Create New</string>
     <string name="fightingPage">Fighting Page</string>

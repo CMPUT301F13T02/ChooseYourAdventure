@@ -44,6 +44,8 @@ import android.database.sqlite.SQLiteOpenHelper;
  * store and retrieve Story objects from some sort of storage.
  * 
  * The DBHandler will use SQLite to store stories so that users may store stories locally (cache stories).
+ *
+ * @author Ben Dubois
  */
 public class DBHandler extends SQLiteOpenHelper implements Handler  {
 
@@ -54,14 +56,20 @@ public class DBHandler extends SQLiteOpenHelper implements Handler  {
 	static final String colContents = "contents";
 
 	private Gson gson = new GsonBuilder().registerTypeAdapter(Tile.class, new TileGsonMarshal()).create();
+
 	/**
 	 * This is the default constructor for a SQLite Database class
+	 * 
+	 * @param context
 	 */
 	public DBHandler(Context context) {
 		super(context, dbName, null, dbVersion);
 	}
+
 	/**
 	 * onCreate initializes the database for use. 
+	 *
+	 * @param db
 	 */
 	@Override
 	public void onCreate(SQLiteDatabase db) {
@@ -69,17 +77,24 @@ public class DBHandler extends SQLiteOpenHelper implements Handler  {
 				colID + " TEXT PRIMARY KEY, " + 
 				colContents + " TEXT)");	
 	}
+
 	/**
 	 * onUpgrade defines the functionality if we update the Database
+	 *
+	 * @param db
+	 * @param oldVersion
+	 * @param newVersion
 	 */
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL("DROP TABLE IF EXISTS "+ storyTable);
 		onCreate(db);
 	}
+
 	/**
 	 * This updates a local copy of a story.
 	 * @param aStory the story to update
+	 * @throws HandlerException
 	 */
 	@Override
 	public void updateStory(Story aStory) throws HandlerException{
@@ -94,6 +109,7 @@ public class DBHandler extends SQLiteOpenHelper implements Handler  {
 		//db.insert(storyTable, null, values);
 		db.update(storyTable, values, "id = \"" + id + "\"", null);
 	}
+
 	/**
 	 * This deletes a local copy of a story.
 	 *  @param aStory the story to delete
@@ -104,9 +120,11 @@ public class DBHandler extends SQLiteOpenHelper implements Handler  {
         db.delete(storyTable, colID + " = ?",
         		new String[] { aStory.getId() });
 	}
+
 	/**
 	 * This adds a local copy of a story.
 	 *  @param aStory the story to add
+	 * @throws HandlerException
 	 */
 	@Override
 	public void addStory(Story newStory) throws HandlerException{
@@ -121,9 +139,11 @@ public class DBHandler extends SQLiteOpenHelper implements Handler  {
 			throw new HandlerException("Failed to insert story");
 
 	}
+
 	/**
 	 * This returns a local copy of a story from the database
 	 *  @param id The ID of the story to retrieve
+	 *  @throws HandlerException
 	 *  @return The Story requested
 	 */
 	@Override
@@ -145,11 +165,13 @@ public class DBHandler extends SQLiteOpenHelper implements Handler  {
         
 		return story;
 	}
+
 	/** 
 	 * This updates a story after a user adds a comment. 
 	 * @param story The story where the comment was added
 	 * @param page The page with the comment
 	 * @param comment The comment
+	 * @throws HandlerException
 	 * @see updateStory
 	 * For a local copy, updating a story is fine.
 	 */
@@ -161,6 +183,7 @@ public class DBHandler extends SQLiteOpenHelper implements Handler  {
 	}
 	/**
 	 * This returns a list of all the stories stored locally
+	 *  @throws HandlerException
 	 *  @return The list of all local stories.
 	 */
 	@Override
@@ -182,11 +205,19 @@ public class DBHandler extends SQLiteOpenHelper implements Handler  {
         }
         return storyList;
 	}
+
+	/**
+	 * Not applicable to DBHandler, so they do nothing.
+	 */
 	@Override
 	public ArrayList<Story> search(String searchKey) throws HandlerException, UnsupportedEncodingException {
 		
 		return null;
 	}
+
+	/**
+	 * Not applicable to DBHandler, so it does nothing.
+	 */
 	@Override
 	public Story getRandomStory() throws HandlerException {
 		

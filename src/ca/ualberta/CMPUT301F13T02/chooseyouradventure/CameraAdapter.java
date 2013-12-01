@@ -42,14 +42,10 @@ import android.widget.ImageView;
 
 /**
  * This function deals with calling the camera intent and dealing with its output
- * in a fashion similar to an adapter
+ * in a fashion similar to an adapter.
  * 
- *
+ * @author James Cadek
  */
-
-
-
-
 public class CameraAdapter {
 	
 	
@@ -57,7 +53,11 @@ public class CameraAdapter {
 	private Object tempSpace;
 	
 
-	
+	/**
+	 * A constructor for CameraAdapter.
+	 * 
+	 * @param pageActivity
+	 */
 	public CameraAdapter(ViewPageActivity pageActivity) {
 		super();
 		this.pageActivity = pageActivity;        
@@ -89,9 +89,9 @@ public class CameraAdapter {
 	 * This functions grabs the photo from the gallery based on the index you choose,
 	 * IDea from http://viralpatel.net/blogs/pick-image-from-galary-android-app/
 	 * @param data
-	 * @return
+	 * @return The image stored at the url in the intent. It is returned
+	 *         as a Bitmap.
 	 */
-	
 	public Bitmap loadImage(Intent data){
 		Uri selectedImage = data.getData();
 		String[] filePathColumn = { MediaStore.Images.Media.DATA };
@@ -110,7 +110,7 @@ public class CameraAdapter {
 	/**
 	 * Retrieves a photo from the intent
 	 * @param data
-	 * @return
+	 * @return The Bitmap from the intent.
 	 */
 	public Bitmap retrievePhoto(Intent data){
 		Bundle bundle = data.getExtras();
@@ -120,16 +120,17 @@ public class CameraAdapter {
 	/**
 	 * Returns an imageView made from a bitmap
 	 * @param image
-	 * @return
+	 * @return An android ImageView populated with the passed Bitmap.
 	 */
 	public ImageView makeViewByPhoto(Bitmap image){
 		ImageView pictureTaken = new ImageView(pageActivity);
 		pictureTaken.setImageBitmap(image);
 		return pictureTaken;
 	}
+	
 	/**
 	 * gets an object in the cameras tempspace: needed to get data out of the activity
-	 * @return
+	 * @return tempSpace
 	 */
 	public Object getTempSpace() {
 		return tempSpace;

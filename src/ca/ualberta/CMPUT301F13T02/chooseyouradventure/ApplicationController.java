@@ -49,6 +49,10 @@ import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
  * 
  * This class is a controller and in typical MVC style is responsible for coordinating 
  * saving of the model and maintaining coherence between the model and the view.
+ * 
+ * @author James Cadek
+ * @author James Moore
+ * @author Karl Parkins
  */
 
 public class ApplicationController extends Application {
@@ -241,10 +245,13 @@ public class ApplicationController extends Application {
 	}
 	
 	
-/**
- * 
- * @return The UUID of your android device
- */
+	/**
+	 * Returns the ID of the current device in a string. This ID should
+	 * be unique accross all android devices and so can be used as an
+	 * identifier for the device.
+	 *
+	 * @return The UUID of your android device
+	 */
 	protected String getAndroidID(){
 		return Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 	}

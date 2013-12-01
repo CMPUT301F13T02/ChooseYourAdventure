@@ -39,6 +39,7 @@ import android.widget.LinearLayout;
 /**
  * This class displays the data pertaining to comments in the form of a GUI. 
  *
+ * @author James Cadek
  */
 public class CommentView {
 	private PageController pageController;
@@ -54,7 +55,8 @@ public class CommentView {
 	}
 	
 	/**
-	 * The first dialog that appears after clicked a comment, which dictates the image component of a comment
+	 * The first dialog that appears after clicked a comment,
+	 * which dictates the image component of a comment
 	 */
 	protected void onCallCommentGUI(){
 		final String[] titlesPhoto = { pageActivity.getString(R.string.noImage), pageActivity.getString(R.string.fromFile),
@@ -118,7 +120,4 @@ public class CommentView {
     	builder.show();
 	}
 	
-	
-
-
 }

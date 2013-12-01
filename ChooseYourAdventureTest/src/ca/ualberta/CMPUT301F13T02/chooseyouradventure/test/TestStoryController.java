@@ -1,21 +1,21 @@
 /*
 * Copyright (c) 2013, TeamCMPUT301F13T02
 * All rights reserved.
-* 
+*
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
-* 
+*
 * Redistributions of source code must retain the above copyright notice, this
 * list of conditions and the following disclaimer.
-* 
+*
 * Redistributions in binary form must reproduce the above copyright notice, this
 * list of conditions and the following disclaimer in the documentation and/or
 * other materials provided with the distribution.
-* 
+*
 * Neither the name of the {organization} nor the names of its
 * contributors may be used to endorse or promote products derived from
 * this software without specific prior written permission.
-* 
+*
 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -27,35 +27,56 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
-import java.lang.reflect.Type;
 
+import java.util.ArrayList;
+
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.StoryController;
 import android.test.InstrumentationTestCase;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Tile;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TileGsonMarshal;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
-public class TileGsonMarshalTest extends InstrumentationTestCase {
-
-	private Gson gson = new GsonBuilder().registerTypeAdapter(Tile.class, new TileGsonMarshal()).create();
+public class TestStoryController extends InstrumentationTestCase {
 	
-	/**
-	 * Tests the serialization of tiles, which TileGsonMarshal is responsible for
-	 */
-	public void testSerialize() {
+	private StoryController storyController;
+	private MockHandler handler = new MockHandler();
+	private Story story;
+
+	
+	protected void setUp() {
+		storyController = new StoryController();
+		story = new Story();
+	
+		story.setHandler(handler);
+		storyController.setStory(story);
 		
-		TextTile textTile = new TextTile("hello");
-		Type type = new TypeToken<Tile>(){}.getType();
+	}
+	
+	public void testSetStory() {
+		storyController.setStory(story);
+		assertEquals(story, storyController.getStory());
+	}
+	
+	public void testGetStory() {
+		storyController.setStory(story);
+		Story s = storyController.getStory();
+		assertEquals(s, story);
+	}
+	
+	public void testNewPage() {
+		story.getPages().clear();
+		storyController.newPage("First Page", false, null, "New Page");
+		int l = story.getPages().size();
+		assertEquals(l, 1);
 		
-		Tile tile = gson.fromJson(gson.toJson(textTile), type);
-		
-		assertTrue(tile instanceof TextTile);
-		assertTrue(textTile.equals(tile));
+	}
+	
+	public void testGetPages() {
+		ArrayList<Page> storyPages = story.getPages();
+		ArrayList<Page> controllerPages = storyController.getPages();
+		assertEquals(storyPages, controllerPages);
 	}
 
 }

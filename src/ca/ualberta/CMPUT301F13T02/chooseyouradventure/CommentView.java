@@ -43,7 +43,7 @@ import android.widget.LinearLayout;
 public class CommentView {
 	private PageController pageController;
 	private ViewPageActivity pageActivity;
-	 private CameraAdapter camera;
+	private CameraAdapter camera;
 	
 	
 	public CommentView(PageController pageController, ViewPageActivity pageActivity, CameraAdapter camera) {

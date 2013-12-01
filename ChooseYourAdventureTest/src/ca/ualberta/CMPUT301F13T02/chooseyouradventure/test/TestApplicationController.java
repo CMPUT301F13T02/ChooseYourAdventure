@@ -1,21 +1,21 @@
 /*
 * Copyright (c) 2013, TeamCMPUT301F13T02
 * All rights reserved.
-* 
+*
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
-* 
+*
 * Redistributions of source code must retain the above copyright notice, this
 * list of conditions and the following disclaimer.
-* 
+*
 * Redistributions in binary form must reproduce the above copyright notice, this
 * list of conditions and the following disclaimer in the documentation and/or
 * other materials provided with the distribution.
-* 
+*
 * Neither the name of the {organization} nor the names of its
 * contributors may be used to endorse or promote products derived from
 * this software without specific prior written permission.
-* 
+*
 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -30,31 +30,42 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
+import java.util.ArrayList;
 
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ApplicationController;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.PageController;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.StoryController;
 import android.test.InstrumentationTestCase;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Comment;
 
-public class CommentTest  extends InstrumentationTestCase {
-
-	/**
-	 *  tests equals method from comment 
-	 **/
-	public void testEquals() {
-		Comment comment1 = new Comment("Ben commented", "Ben");
-		Comment comment2 = new Comment("Conrad critiqued", "Konrad");
-		assertFalse(comment1.equals(comment2));
-		
-		comment1 = new Comment("Ben commented", "Ben");
-		comment2 = new Comment("Ben commented", "Konrad");
-		assertFalse(comment1.equals(comment2));
-		
-		comment1 = new Comment("Ben commented", "Ben");
-		comment2 = new Comment("Konrad commented", "Ben");
-		assertFalse(comment1.equals(comment2));
-		
-		comment1 = new Comment("Ben commented", "Ben");
-		comment2 = new Comment("Ben commented", "Ben");
-		assertTrue(comment1.equals(comment2));
+public class TestApplicationController extends InstrumentationTestCase {
+	
+	private ApplicationController app = ApplicationController.getInstance();
+	private ArrayList<Story> stories;
+	
+	protected void setUp() {
+		stories = new ArrayList<Story>();
+	}
+	
+	public void testSetStories() {
+		app.setStories(stories);
+		assertEquals(stories, app.getStories());
+	}
+	
+	public void testGetStories() {
+		app.setStories(stories);
+		ArrayList<Story> appStories = app.getStories();
+		assertEquals(stories, appStories);
+	}
+	
+	public void testGetPageController() {
+		PageController p = app.getPageController();
+		assertTrue(p instanceof PageController);
+	}
+	
+	public void testStoryController() {
+		StoryController s = app.getStoryController();
+		assertTrue(s instanceof StoryController);
 	}
 
 }

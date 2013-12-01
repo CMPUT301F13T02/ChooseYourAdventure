@@ -30,70 +30,96 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure.test;
 
-import android.test.ActivityInstrumentationTestCase2;
-import android.widget.Button;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.ApplicationController;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.EditStoryActivity;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Decision;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Page;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.PageController;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.Story;
 import ca.ualberta.CMPUT301F13T02.chooseyouradventure.StoryController;
-import ca.ualberta.CMPUT301F13T02.chooseyouradventure.elasticsearch.ESHandler;
+import ca.ualberta.CMPUT301F13T02.chooseyouradventure.TextTile;
+import android.test.InstrumentationTestCase;
 
-public class TestEditStoryActivity extends ActivityInstrumentationTestCase2<EditStoryActivity> {
-	
-	private EditStoryActivity activity;
-	
-	private Button addPageButton;
-	private Button deleteStoryButton;
-	
-	private Story story;
+public class TestPageController extends InstrumentationTestCase {
 	
 	private static final ApplicationController app = ApplicationController.getInstance();
+	
+	private PageController pageController;
 	private StoryController storyController;
+	private Page page;
+	private Story story;
 	
-	private static int numPages = 1;
-	
-	private ESHandler handler;
 
-	public TestEditStoryActivity() {
-		super(EditStoryActivity.class);
-		
-	}
 	
-	protected void setUp() throws Exception {
-		story = new Story();
-		story.setId("255");
-		story.setTitle("Unit Test Generated");
-		
+	private MockHandler handler = new MockHandler();
+
+
+	protected void setUp() {
+		pageController = app.getPageController();
 		storyController = app.getStoryController();
+		page = new Page();
+		story = new Story();
+		
+		pageController.setPage(page);
 		storyController.setStory(story);
-		
-		activity = getActivity();
-		
-		addPageButton = (Button) activity.findViewById(ca.ualberta.CMPUT301F13T02.chooseyouradventure.R.id.createButton2);
-		deleteStoryButton = (Button) activity.findViewById(ca.ualberta.CMPUT301F13T02.chooseyouradventure.R.id.deleteButton);
-		handler = new ESHandler();
 		story.setHandler(handler);
 		
 	}
 	
-	public void testStateDestroy() {
-		//story = app.getStory();
-		story.getPages().clear();
-		story.addPage(new Page());
-		
-		activity.finish();
-		activity = getActivity();
-		
-		int np = story.getPages().size();
-		assertEquals(numPages, np);
-		//assertFalse(numPages == np);
+	public void testSetPage() {
+		pageController.setPage(page);
+		assertEquals(page, pageController.getPage());
 	}
 	
-	public void testLayout() {
-		assertNotNull(addPageButton);
-		assertNotNull(deleteStoryButton);
+	public void testGetPage() {
+		pageController.setPage(page);
+		Page p = pageController.getPage();
+		assertEquals(p, page);
+	}
+	
+	public void testAddComment() {
+		page.getComments().clear();
+		pageController.addComment("Test Comment", null, story);
+		int l = page.getComments().size();
+		assertEquals(l, 1);
+		
+	}
+	
+	public void testAddTile() {
+		page.getTiles().clear();
+		pageController.addTile(new TextTile());
+		int l = page.getTiles().size();
+		assertEquals(l, 1);
+		
+	}
+	
+	public void testDeleteTile() {
+		page.getTiles().clear();
+		page.addTile(new TextTile());
+		pageController.deleteTile(0);
+		int l = page.getTiles().size();
+		assertEquals(l, 0);
+	}
+	
+	public void testSetEnding() {
+		String ending = new String("The End");
+		pageController.setEnding(ending);
+		String pageEnding = page.getPageEnding();
+		assertTrue(pageEnding.equals(ending));
+	}
+	
+	public void testDeleteDecision() {
+		page.getDecisions().clear();
+		page.addDecision(new Decision("A decision", page));
+		pageController.deleteDecision(0);
+		int l = page.getDecisions().size();
+		assertEquals(l, 0);
+	}
+	
+	public void testAddDecision() {
+		page.getDecisions().clear();
+		page.addDecision(new Decision("A decision", page));
+		int l = page.getDecisions().size();
+		assertEquals(l, 1);
 	}
 
 }
-

@@ -89,7 +89,7 @@ public class StoryController {
 	 * @param health
 	 * @param name
 	 */
-	protected void newPage(String pageTitle, boolean fight, String health, String name){
+	public void newPage(String pageTitle, boolean fight, String health, String name){
 		Page page = initializeNewPage(pageTitle);
 		page.setFightingFrag(fight);
 		page.setEnemyName(name);
@@ -124,7 +124,7 @@ public class StoryController {
 	 * @param pageTitle
 	 * @return
 	 */
-	public Page initializeNewPage(String pageTitle){
+	protected Page initializeNewPage(String pageTitle){
 		final Page newPage = new Page();
 		newPage.setTitle(pageTitle);
 		return newPage;

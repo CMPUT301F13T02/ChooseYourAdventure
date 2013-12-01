@@ -77,6 +77,10 @@ public class PhotoTile extends Tile{
 		this.imageData = imageData;
 		
 	}
+	
+	public byte[] getImageData() {
+		return imageData;
+	}
 
 	/**
 	 * Sets the content to the passed content

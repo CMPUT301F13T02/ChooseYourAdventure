@@ -70,7 +70,7 @@ public class DecisionView {
 
     	/*
     	if(page.getDecisions().size() > 2){
-    		pageStrings.add(pageActivity.getString(R.string.randomChoice));
+    		pageStrings.add(pageActivity.getString("RANDOM CHOICE"));
     	}
     	*/
 

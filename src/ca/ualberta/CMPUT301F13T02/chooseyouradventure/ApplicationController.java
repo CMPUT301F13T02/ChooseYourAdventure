@@ -122,7 +122,6 @@ public class ApplicationController extends Application {
 					outList = getString(R.string.startDesignator);
 				}
 
-
 				if(((Page) itemList.get(i)).getFightingState() == true){
 					outList = outList + getString(R.string.fightDesignator);
 				}

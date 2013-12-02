@@ -456,7 +456,7 @@ public class ViewPageActivity extends Activity {
 									PhotoTile tile = new PhotoTile();
 									tile.setContent(cameraImage);
 									if(requestCode == TAKE_PHOTO){
-										int whichTile = (Integer) tileNum; 
+										int whichTile = (Integer) tileNum;
 										if (whichTile == -1) {
 											pageController.addTile(tile);
 										} else if (whichTile >= 0) {
@@ -464,14 +464,19 @@ public class ViewPageActivity extends Activity {
 										}
 									} else {
 										camera.setTempSpace(tile);
-										onEditComment();							
+										onEditComment();
 									}
 								}
 					})
 					.setNegativeButton(getString(R.string.retake), new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
-							int whichTile = (Integer) tileNum;
-							takePhoto(whichTile);
+							
+							if(requestCode == TAKE_PHOTO) {
+								int whichTile = (Integer) tileNum;
+								takePhoto(whichTile);
+							} else {
+								addPhoto();
+							}
 						}
 					});
 					successChecker.show();

@@ -458,20 +458,26 @@ public class ViewPageActivity extends Activity {
 									if(requestCode == TAKE_PHOTO){
 										int whichTileAdd = (Integer) tileNum; 
 										if (whichTileAdd == -1) {
+
 											pageController.addTile(tile);
 										} else if (whichTileAdd >= 0) {
 											pageController.updateTile(cameraImage, whichTileAdd);
 										}
 									} else {
 										camera.setTempSpace(tile);
-										onEditComment();							
+										onEditComment();
 									}
 								}
 					})
 					.setNegativeButton(getString(R.string.retake), new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
-							int whichTile = (Integer) tileNum;
-							takePhoto(whichTile);
+							
+							if(requestCode == TAKE_PHOTO) {
+								int whichTile = (Integer) tileNum;
+								takePhoto(whichTile);
+							} else {
+								addPhoto();
+							}
 						}
 					});
 					successChecker.show();

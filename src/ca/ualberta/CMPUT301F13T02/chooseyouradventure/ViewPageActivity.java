@@ -428,14 +428,14 @@ public class ViewPageActivity extends Activity {
 			
 			switch(requestCode) {
 				case (RESULT_LOAD_IMAGE):
-					final int whicTile = (Integer) camera.getTempSpace();
+					final int whichTileLoad = (Integer) camera.getTempSpace();
 					Bitmap fileImage = camera.loadImage(data);
 					PhotoTile tile = new PhotoTile();
 					tile.setContent(fileImage);
-					if (whicTile == -1) {
+					if (whichTileLoad == -1) {
 						pageController.addTile(tile);
-					} else if (whicTile >= 0) {
-						pageController.updateTile(fileImage, whicTile);
+					} else if (whichTileLoad >= 0) {
+						pageController.updateTile(fileImage, whichTileLoad);
 					}
 					break;
 				case (GRAB_PHOTO):
@@ -456,11 +456,11 @@ public class ViewPageActivity extends Activity {
 									PhotoTile tile = new PhotoTile();
 									tile.setContent(cameraImage);
 									if(requestCode == TAKE_PHOTO){
-										int whichTile = (Integer) tileNum; 
-										if (whichTile == -1) {
+										int whichTileAdd = (Integer) tileNum; 
+										if (whichTileAdd == -1) {
 											pageController.addTile(tile);
-										} else if (whichTile >= 0) {
-											pageController.updateTile(cameraImage, whichTile);
+										} else if (whichTileAdd >= 0) {
+											pageController.updateTile(cameraImage, whichTileAdd);
 										}
 									} else {
 										camera.setTempSpace(tile);

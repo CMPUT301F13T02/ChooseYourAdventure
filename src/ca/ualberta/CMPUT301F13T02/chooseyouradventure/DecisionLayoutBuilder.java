@@ -77,10 +77,7 @@ public class DecisionLayoutBuilder {
 		view.setLayoutParams(lp);
 		view.setText(decision.getText());
 		decisionsLayout.addView(view, i);
-		if(!pageActivity.isFighting()){
-			view.setVisibility(View.VISIBLE);
-		}
-		else if(pageActivity.getEditing() == true){
+		if(pageActivity.getEditing() == true){
 			view.setVisibility(View.VISIBLE);
 		}
 		else{			

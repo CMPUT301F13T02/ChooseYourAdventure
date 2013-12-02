@@ -170,6 +170,7 @@ public class DecisionView {
 	protected void onEditConditionsGUI(View view, LinearLayout decisionsLayout){
 		final int whichDecision = decisionsLayout.indexOfChild(view);
 		final Decision decision = pageController.findDecisionByIndex(whichDecision);
+		final Page page = pageController.getPage();
 		ArrayList<Page> pages = storyController.getPages();
 		int toPagePosition = pageController.findArrayPosition(decision, pages);
     	AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
@@ -186,6 +187,9 @@ public class DecisionView {
     	decisionText.setText(decision.getText());
     	
     	ArrayList<String> pageStrings = getPageStrings(pages);
+    	if(page.getFightingState() == true){
+    		pageStrings.set(toPagePosition, pageActivity.getString(R.string.fight));
+    	}
     	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(pageActivity, R.layout.list_item_base, pageStrings);
     	pageSpinner.setAdapter(pagesAdapter);
     	pageSpinner.setSelection(toPagePosition);
@@ -220,7 +224,7 @@ public class DecisionView {
 		final Decision decision = pageController.findDecisionByIndex(whichDecision);
 		ArrayList<Page> pages = storyController.getPages();
 		int toPagePosition = pageController.findArrayPosition(decision, pages);
-		
+		final Page page = pageController.getPage();
     	AlertDialog.Builder builder = new AlertDialog.Builder(pageActivity);
     	builder.setTitle(pageActivity.getString(R.string.counterMessage));
     	
@@ -232,6 +236,9 @@ public class DecisionView {
     	final Spinner pageSpinner = (Spinner) layout.findViewById(R.id.edit_messages_dialog_page_spinner);
 
     	ArrayList<String> pageStrings = getPageStrings(pages);
+    	if(page.getFightingState() == true){
+    		pageStrings.set(toPagePosition, pageActivity.getString(R.string.fight));
+    	}
     	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(pageActivity, R.layout.list_item_base, pageStrings);
     	pageSpinner.setAdapter(pagesAdapter);
     	pageSpinner.setSelection(toPagePosition);
@@ -263,8 +270,6 @@ public class DecisionView {
 	protected void decisionMenuGUI(final View view, final LinearLayout decisionsLayout){
 		final String[] titles;
 		final String[] titlesBasic = { pageActivity.getString(R.string.editProperties), pageActivity.getString(R.string.delete), pageActivity.getString(R.string.cancel) };
-		final String[] titlesCounter = { pageActivity.getString(R.string.editProperties), pageActivity.getString(R.string.delete),
-				                          pageActivity.getString(R.string.transitionMessages), pageActivity.getString(R.string.cancel) };
 		final String[] titlesFight = { pageActivity.getString(R.string.editProperties), pageActivity.getString(R.string.delete), pageActivity.getString(R.string.transitionMessages),
 				                        pageActivity.getString(R.string.setConditionals), pageActivity.getString(R.string.cancel) };
 		final boolean fighting = pageActivity.isFighting();
@@ -273,7 +278,7 @@ public class DecisionView {
 			titles = titlesFight;
 		}
 		else if(combat == true){
-			titles = titlesCounter;
+			titles = titlesFight;
 		}
 		else{
 			titles = titlesBasic;
@@ -295,7 +300,7 @@ public class DecisionView {
             		}
             		break;
             	case(3):
-            		if(fighting == true){
+            		if(combat == true){
             			onEditConditionsGUI(view, decisionsLayout);
             		}
             		break;

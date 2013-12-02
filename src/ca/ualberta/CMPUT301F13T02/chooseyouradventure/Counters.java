@@ -211,13 +211,10 @@ public class Counters {
 		
 		this.playerHpChange = choiceModifiers.playerHpStat;
 		this.playerHpStat = playerHpStat - choiceModifiers.playerHpStat;
-			
-		
-		
-		
 	}
 
 	/**
+	 * Get if the enemies damage is a range of values or not.
 	 * @return the isEnemyRange
 	 */
 	public boolean isEnemyRange() {
@@ -225,6 +222,7 @@ public class Counters {
 	}
 
 	/**
+	 * Set if enemies damage is a range of values or not.
 	 * @param isEnemyRange the isEnemyRange to set
 	 */
 	public void setEnemyRange(boolean isEnemyRange) {
@@ -232,6 +230,7 @@ public class Counters {
 	}
 
 	/**
+	 * Get the amount to change the treasure by.
 	 * @return the treasureChange
 	 */
 	public int getTreasureChange() {
@@ -239,6 +238,7 @@ public class Counters {
 	}
 
 	/**
+	 * Set the amount to change the treasure by.
 	 * @param treasureChange the treasureChange to set
 	 */
 	public void setTreasureChange(int treasureChange) {
@@ -246,6 +246,7 @@ public class Counters {
 	}
 
 	/**
+	 * Get the amount to change the player's hp by.
 	 * @return the playerHpChange
 	 */
 	public int getPlayerHpChange() {
@@ -253,6 +254,7 @@ public class Counters {
 	}
 
 	/**
+	 * Set the amount to change the player's hp by.
 	 * @param playerHpChange the playerHpChange to set
 	 */
 	public void setPlayerHpChange(int playerHpChange) {
@@ -260,6 +262,7 @@ public class Counters {
 	}
 
 	/**
+	 * Get the amount to change the enemies hp by.
 	 * @return the enemyHpChange
 	 */
 	public int getEnemyHpChange() {
@@ -267,6 +270,7 @@ public class Counters {
 	}
 
 	/**
+	 * Set the amount to change the enemies hp by.
 	 * @param enemyHpChange the enemyHpChange to set
 	 */
 	public void setEnemyHpChange(int enemyHpChange) {
@@ -274,6 +278,7 @@ public class Counters {
 	}
 
 	/**
+	 * Get the amount of treasure the person has
 	 * @return the treasureStat
 	 */
 	public int getTreasureStat() {
@@ -281,6 +286,7 @@ public class Counters {
 	}
 
 	/**
+	 * Set the amount of treasure a person has.
 	 * @param treasureStat the treasureStat to set
 	 */
 	public void setTreasureStat(int treasureStat) {
@@ -288,6 +294,7 @@ public class Counters {
 	}
 
 	/**
+	 * Get the amount of hp a player has
 	 * @return the playerHpStat
 	 */
 	public int getPlayerHpStat() {
@@ -295,6 +302,7 @@ public class Counters {
 	}
 
 	/**
+	 * Set the amount of hp a player has
 	 * @param playerHpStat the playerHpStat to set
 	 */
 	public void setPlayerHpStat(int playerHpStat) {
@@ -302,6 +310,7 @@ public class Counters {
 	}
 
 	/**
+	 * Get the amount of hp an enemy has
 	 * @return the enemyHpStat
 	 */
 	public int getEnemyHpStat() {
@@ -309,6 +318,7 @@ public class Counters {
 	}
 
 	/**
+	 * Set the amount of hp an enemy has.
 	 * @param enemyHpStat the enemyHpStat to set
 	 */
 	public void setEnemyHpStat(int enemyHpStat) {
@@ -316,6 +326,7 @@ public class Counters {
 	}
 
 	/**
+	 * Get the sign of the threshold
 	 * @return the thresholdSign
 	 */
 	public int getThresholdSign() {
@@ -323,6 +334,7 @@ public class Counters {
 	}
 
 	/**
+	 * Set the sign of the threshold
 	 * @param thresholdSign the thresholdSign to set
 	 */
 	public void setThresholdSign(int thresholdSign) {
@@ -330,6 +342,7 @@ public class Counters {
 	}
 
 	/**
+	 * Get the value of the threshold
 	 * @return the thresholdValue
 	 */
 	public int getThresholdValue() {
@@ -337,6 +350,7 @@ public class Counters {
 	}
 
 	/**
+	 * Set the value of the threshold
 	 * @param thresholdValue the thresholdValue to set
 	 */
 	public void setThresholdValue(int thresholdValue) {
@@ -344,6 +358,7 @@ public class Counters {
 	}
 
 	/** 
+	 * Get the type of the threshold
 	 * @return the trait (Health, Enemy, Treasure) being checked
 	 */
 	public int getThresholdType() {
@@ -351,6 +366,7 @@ public class Counters {
 	}
 
 	/**
+	 * Set the type of the threshold
 	 * @param the trait (Health, Enemy, Treasure) being checked
 	 */
 	public void setThresholdType(int thresholdType) {
@@ -358,6 +374,7 @@ public class Counters {
 	}
 
 	/** 
+	 * Get what percent of their max health an enemy has.
 	 * @return The percent chance the enemy will damage you in a fighting fragment
 	 */
 	public int getEnemyHitPercent() {
@@ -365,6 +382,7 @@ public class Counters {
 	}
 
 	/**
+	 * Set the percent of the the enemy's max hp they have.
 	 * @param enemyHitPercent, The percent chance the enemy will damage you in a fighting fragment
 	 */
 	public void setEnemyHitPercent(int enemyHitPercent) {
@@ -372,6 +390,7 @@ public class Counters {
 	}
 
 	/**
+	 * Get the percent of their max health a player has.
 	 * @return The percent chance the player will damage the opponent in a fighting fragment
 	 */
 	public int getPlayerHitPercent() {
@@ -379,6 +398,7 @@ public class Counters {
 	}
 
 	/** 
+	 * Set the percent of their max hp the player has.
 	 * @param playerHitPercent, The percent chance the player will damage the opponent in a fighting fragment
 	 */
 	public void setPlayerHitPercent(int playerHitPercent) {

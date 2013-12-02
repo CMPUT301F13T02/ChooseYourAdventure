@@ -425,16 +425,17 @@ public class ViewPageActivity extends Activity {
 		super.onActivityResult(requestCode, resultCode, data);
 		AlertDialog.Builder successChecker = new AlertDialog.Builder(this);
 		if (resultCode == RESULT_OK && null != data) {
-			final int whichTile = (Integer) camera.getTempSpace();
+			
 			switch(requestCode) {
 				case (RESULT_LOAD_IMAGE):
+					final int whicTile = (Integer) camera.getTempSpace();
 					Bitmap fileImage = camera.loadImage(data);
 					PhotoTile tile = new PhotoTile();
 					tile.setContent(fileImage);
-					if (whichTile == -1) {
+					if (whicTile == -1) {
 						pageController.addTile(tile);
-					} else if (whichTile >= 0) {
-						pageController.updateTile(fileImage, whichTile);
+					} else if (whicTile >= 0) {
+						pageController.updateTile(fileImage, whicTile);
 					}
 					break;
 				case (GRAB_PHOTO):
@@ -445,6 +446,7 @@ public class ViewPageActivity extends Activity {
 					break;
 				case(TAKE_PHOTO):
 				case(ADD_PHOTO):
+					final Object tileNum = (Integer) camera.getTempSpace();	
 					final Bitmap cameraImage = camera.retrievePhoto(data);
 					successChecker.setView(camera.makeViewByPhoto(cameraImage));
 					successChecker.setTitle(getString(R.string.retakeQuestion));
@@ -454,6 +456,7 @@ public class ViewPageActivity extends Activity {
 									PhotoTile tile = new PhotoTile();
 									tile.setContent(cameraImage);
 									if(requestCode == TAKE_PHOTO){
+										int whichTile = (Integer) tileNum; 
 										if (whichTile == -1) {
 											pageController.addTile(tile);
 										} else if (whichTile >= 0) {
@@ -467,6 +470,7 @@ public class ViewPageActivity extends Activity {
 					})
 					.setNegativeButton(getString(R.string.retake), new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
+							int whichTile = (Integer) tileNum;
 							takePhoto(whichTile);
 						}
 					});

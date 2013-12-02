@@ -167,7 +167,6 @@ public class ApplicationController extends Application {
 		return infoText;
 	}
 
-
 	/**
 	 * First sets the currentStory and currentPage to story and page 
 	 * respectively, and then moves to the activity in classItem.
@@ -183,7 +182,6 @@ public class ApplicationController extends Application {
 		startActivity(intent);
 	}
 
-	
 	/**
 	 * Sets the currentPage to the page pointed to by the decision selected
 	 * and then the page is refreshed. If the destinationID of a page is null, 
@@ -219,7 +217,6 @@ public class ApplicationController extends Application {
 	 * @param storyTitle
 	 * @throws HandlerException
 	 */
-	
 	public void initializeNewStory(String storyTitle, Counters playerStats, boolean state) throws HandlerException{
     	
     	final Story newStory = new Story(); 
@@ -250,14 +247,12 @@ public class ApplicationController extends Application {
 		return storyController;
 	}
 
-
 	/**
 	 * @return the pageController
 	 */
 	public PageController getPageController() {
 		return pageController;
 	}
-	
 	
 	/**
 	 * Returns the ID of the current device in a string. This ID should
@@ -269,7 +264,6 @@ public class ApplicationController extends Application {
 	protected String getAndroidID(){
 		return Secure.getString(getBaseContext().getContentResolver(), Secure.ANDROID_ID);
 	}
-	
 	
 	/**
 	 * This function deals with what happens when a decision is clicked.
@@ -295,7 +289,7 @@ public class ApplicationController extends Application {
 		followDecision(whichDecision);
 	}
 	
-	 /**
+	/**
      * Picks a random story
      */
     protected void onRandomStory() {
@@ -307,6 +301,5 @@ public class ApplicationController extends Application {
 			e.printStackTrace();
 		}
 	}
-	
 	
 }

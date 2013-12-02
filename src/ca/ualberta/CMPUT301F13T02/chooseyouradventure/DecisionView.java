@@ -66,14 +66,17 @@ public class DecisionView {
     	decisionText.setText(decision.getText());
     	
     	ArrayList<String> pageStrings = getPageStrings(pages);
-    	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(pageActivity, R.layout.list_item_base, pageStrings);
+    	
 
     	/*
     	if(page.getDecisions().size() > 2){
     		pageStrings.add(pageActivity.getString("RANDOM CHOICE"));
     	}
     	*/
-
+    	if(page.getFightingState() == true){
+    		pageStrings.set(toPagePosition, pageActivity.getString(R.string.fight));
+    	}
+    	ArrayAdapter<String> pagesAdapter = new ArrayAdapter<String>(pageActivity, R.layout.list_item_base, pageStrings);
     	pageSpinner.setAdapter(pagesAdapter);
     	pageSpinner.setSelection(toPagePosition);
     	

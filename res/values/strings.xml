@@ -130,5 +130,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="newDecision">New Decision </string>
     <string name="changeTitle">Rename Story</string>
     <string name="changeTitleHeader">Enter The New Name</string>
+    <string name="fight">FIGHT THE ENEMY</string>
 
 </resources>

@@ -39,14 +39,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
- * This generates the GUIs for ViewStoriesActivity
+ * This generates and displays the GUIs for ViewStoriesActivity.
+ * 
+ * This is a view in the MVC style.
  *
+ * @author James Cadek
  */
 public class StoryView {
 	private ApplicationController app;
 	private ViewStoriesActivity storyActivity;
-	
-
 	
 	public StoryView(ApplicationController app, ViewStoriesActivity storyActivity) {
 		super();
@@ -158,10 +159,6 @@ public class StoryView {
         });
         builder.show();
 	}
-	/*
-	protected void changeTitleGUI() {
-		
-	}*/
 	
 	/**
 	 * The menu for making a new story
@@ -205,8 +202,3 @@ public class StoryView {
     	builder.show();
 	}
 }
-
-			
-	
-     
-

@@ -37,6 +37,8 @@ import java.util.UUID;
  * This class represents a physical page of a story -- it is part of the model of the application.
  * 
  * Page objects are aggregated by Storys and are serialized and stored through a Handler implementation.
+ *
+ * @author all group members
  */
 
 public class Page {
@@ -199,7 +201,12 @@ public class Page {
 	public void updateDecisionFight(String text, Page page, int decisionNumber, Counters counter) {
 		decisions.get(decisionNumber).updateDecision(text, page, counter);
 	}
-
+	
+	/**
+	 * deletes the decision at whichDecision
+	 *
+	 * @param whichDecision
+	 */
 	public void deleteDecision(int whichDecision) {
 		decisions.remove(whichDecision);
 	}
@@ -221,7 +228,7 @@ public class Page {
 	}
 	
 	/**
-	 * 
+	 * Return whether this page includes combat or not.
 	 * @return if this fragment is a fighting fragment
 	 */
 
@@ -230,7 +237,7 @@ public class Page {
 	}
 
 	/**
-	 * 
+	 * Set whether this page includes combat or not.
 	 * @param if this fragment is a fighting fragment
 	 */
 	public void setFightingFrag(boolean fightingFrag) {
@@ -238,7 +245,6 @@ public class Page {
 	}
 
 	/**
-	 * 
 	 * @return the health of the enemy on this page
 	 */
 	public int getEnemyHealth() {
@@ -254,7 +260,6 @@ public class Page {
 	}
 
 	/**
-	 * 
 	 * @return The name of the enemy on this page
 	 */
 	public String getEnemyName() {
@@ -262,7 +267,7 @@ public class Page {
 	}
 
 	/**
-	 * 
+	 * Sets the name of the enemy for this page
 	 * @param enemyName
 	 */
 	public void setEnemyName(String enemyName) {
@@ -274,38 +279,6 @@ public class Page {
      * @param page What we are comparing to
      */
     public boolean equals(Page page) {
-
-    	/*
-            //Fail if different number of comments of segments
-            if (comments.size() != page.getComments().size() ||
-                    tiles.size() != page.getTiles().size() ||
-                    decisions.size() != page.getDecisions().size())
-                    return false;
-
-            //Check that all comments are the same
-            for (int i = 0; i < comments.size(); i++) {
-                    if (!comments.get(i).equals(page.getComments().get(i)))
-                            return false;
-            }
-
-            //Check that all segments are the same
-            for (int i = 0; i < tiles.size(); i++) {
-                    if (!tiles.get(i).equals(page.getTiles().get(i)))
-                            return false;
-            }
-            
-            //Check that all decisions are the same
-            for (int i = 0; i < decisions.size(); i++) {
-                    if (!decisions.get(i).equals(page.getDecisions().get(i)))
-                            return false;
-            }
-            
-            //Check that the titles are the same
-            if (!title.equals(page.getTitle()))
-                            return false;
-                            
-        */
-            
             //Check that the id's are the same
             if (!id.equals(page.id))
                     return false;
@@ -313,6 +286,4 @@ public class Page {
             return true;
     }
 
-	
-	
 }

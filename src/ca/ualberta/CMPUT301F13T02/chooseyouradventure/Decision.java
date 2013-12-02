@@ -33,19 +33,20 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 import java.util.UUID;
 
 /**
- * This class will encapsulate the data of a page's decisions which link two pages of a 
+ * This class encapsulates the data of a page's decisions which link two pages of a 
  * story together with a prompt.
  * 
  * This class is part of the model of the application; as such it is serialized with the
  * rest of the story to be stored using a Handler implementation.
+ *
+ * @author James Cadek
+ * @author James Moore
  */
 
 public class Decision {
 	private String text;
 	private UUID pageID;
 	private Counters choiceModifiers = new Counters();
-	
-
 	
 	/**
 	 * This sets the link for the decision
@@ -78,8 +79,6 @@ public class Decision {
 	 * @param text
 	 * @param page
 	 */
-
-	
 	public void updateDecision(String text, Page page, Counters counter) {
 		this.text = text;
 		this.pageID = page.getId();
@@ -98,18 +97,18 @@ public class Decision {
 		return true;
 	}
 
-/**
- * This reflects updates to the Stories counters that will occur when following a link
- * @return choiceModifiers
- */
+	/**
+	 * This reflects updates to the Stories counters that will occur when following a link
+	 * @return choiceModifiers
+	 */
 	public Counters getChoiceModifiers() {
 		return choiceModifiers;
 	}
 
-/**
- * This reflects updates to the Stories counters that will occur when following a link
- * @param choiceModifiers
- */
+	/**
+	 * This reflects updates to the Stories counters that will occur when following a link
+	 * @param choiceModifiers
+	 */
 	public void setChoiceModifiers(Counters choiceModifiers) {
 		this.choiceModifiers = choiceModifiers;
 	}

@@ -34,11 +34,13 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * This class represents a story -- it is part of the model of the application.
+ * This class represents a story -- it is part of the model of the application
+ * in MVC style.
  * 
  * A Story is serialized and stored via a Handler implementation which interact
  * solely with Stories.  
  * 
+ * @author The whole group
  */
 public class Story {
 	
@@ -51,19 +53,13 @@ public class Story {
 	@SuppressWarnings("unused")
 	private long timeStamp;
 	
-	
 	private boolean usesCombat = false;
 	private Counters playerStats;
 	
 	private transient Handler handler;
 
-
 	/**
-	 * @return the hpCount
-	 */
-	
-	/**
-	 * This is the main constructor for Story
+	 * This is the main constructor for Story that initializes a new story.
 	 */
 	public Story() {
 		this.firstpage = new Page().getId();
@@ -78,15 +74,15 @@ public class Story {
 
 	/**
 	 * This is a copy constructor to copy a story 
+	 * @param story
 	 */
 	public Story(Story story) {
 		this.firstpage = new Page().getId();
-		
 	}
 
-
 	/**
-	 * @param firstpage the firstpage to set
+	 * Marks a page with the given UUID as the first page of the story.
+	 * @param firstpage
 	 */
 	public void setFirstpage(UUID firstpage)
 	{
@@ -94,6 +90,7 @@ public class Story {
 	}
 
 	/**
+	 * Finds the first page in the list of pages and returns it.
 	 * @return the firstpage
 	 */
 	public Page getFirstpage()
@@ -132,9 +129,10 @@ public class Story {
 	public void setId(String id) {
 		this.id = id;
 	}
+
 	/**
 	 * This gets the ID of the story
-	 * @return
+	 * @return the story id
 	 */
 	public String getId() {
 		return id;
@@ -152,7 +150,7 @@ public class Story {
 	
 	/**
 	 * This gets the author of the story
-	 * @return
+	 * @return the author
 	 */
 	public String getAuthor() {
 		return author;
@@ -160,7 +158,7 @@ public class Story {
 	
 	/**
 	 * This gets the currRefNum
-	 * @return
+	 * @return currRefNum
 	 */
 	public int getCurrRefNum() {
 		return currRefNum;
@@ -192,6 +190,7 @@ public class Story {
     	pages.remove(index);
     	updateStory();
     }
+
     /**
 	 * This function updates the stories data in the database
 	 */
@@ -210,6 +209,7 @@ public class Story {
 	public void setHandler(Handler state) {
 		handler = state;
 	}
+
 	/**
 	 * This gets the scope of the storage of a story
 	 * @return state The type of Handler we are using
@@ -243,31 +243,33 @@ public class Story {
 	}
 
 	/**
-	 * 
+	 * Returns if the current page is a fighting page
 	 * @return if the page is a fighting fragment
 	 */
 	public boolean isUsesCombat() {
 		return usesCombat;
 	}
-/**
- * Sets if the page is a fighting fragment
- * @param usesCombat
- */
+
+	/**
+	 * Sets if the page is a fighting fragment
+	 * @param usesCombat
+	 */
 	public void setUsesCombat(boolean usesCombat) {
 		this.usesCombat = usesCombat;
 	}
-/**
- * get the players current counter state
- * @return
- */
+
+	/**
+	 * get the players current counter state
+	 * @return the counter recording the current stats of the player
+	 */
 	public Counters getPlayerStats() {
 		return playerStats;
 	}
-/**
- * Sets the players counter state
- * @param playerStats
- */
-		
+
+	/**
+	 * Sets the players counter state
+	 * @param playerStats
+	 */		
 	public void setPlayerStats(Counters playerStats) {
 		this.playerStats = playerStats;
 	}

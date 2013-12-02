@@ -37,8 +37,9 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
  * TextTile is a member of this application's model, it is included in the JSON when the story
  * is serialized and stored via the use of the handlers. A TextTile will contain an image to be displayed
  * in the story.
+ *
+ * @author the whole group
  */
-
 public class TextTile extends Tile{
     private String text;
     private final String type = "text";
@@ -52,6 +53,9 @@ public class TextTile extends Tile{
     	this.text = text;
     }
     
+    /**
+     * Constructor for generating a tile with generic text.
+     */
     public TextTile() {
     	this.text = "New Text Block";
     }
@@ -65,21 +69,31 @@ public class TextTile extends Tile{
     	return text;
     }
     
+    /**
+     * Gets the type of this tile.
+     * @return the type
+     */
     public String getType() {
 		return type;
 	}
 
+	/**
+	 * Sets the text of the textTile. The param is of type Object though
+	 * so it must be cast as a String. So this function expects a String
+	 * as input.
+	 * @param content
+	 */
 	@Override
 	public void setContent(Object content) {
 		String text = (String) content;
 		this.text = text;
 	}
 	
+	/**
+	 * Compares this tile to another for deep equality.
+	 */
 	public boolean equals(TextTile otherTile) {
 		return this.text.equals(otherTile.getText());
 	}
-
-	
-
     
 }

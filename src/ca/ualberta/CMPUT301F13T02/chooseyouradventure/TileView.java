@@ -39,8 +39,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
- * This class displays the data pertaining to tiles in the form of a GUI. 
+ * This class displays GUIs for managing tiles. For instance the dialog for 
+ * editing a photoTile.
  *
+ * @author James Cadek
  */
 public class TileView {
 	private ViewPageActivity pageActivity;
@@ -122,6 +124,11 @@ public class TileView {
     	builder.show();
 	}
 	
+	/**
+	 * The menu where you choose where to get the photo for the tile from.
+	 * @param view
+	 * @param tilesLayout
+	 */
 	protected void photoSelectorGUI(View view, final LinearLayout tilesLayout) {
 		final AlertDialog.Builder photoSelector = 
 				new AlertDialog.Builder(pageActivity);
@@ -146,7 +153,7 @@ public class TileView {
 	}
 	
 	/**
-	 * What appears when you click on a textTile
+	 * What appears when you click on a tile.
 	 * @param view
 	 * @param tilesLayout
 	 */

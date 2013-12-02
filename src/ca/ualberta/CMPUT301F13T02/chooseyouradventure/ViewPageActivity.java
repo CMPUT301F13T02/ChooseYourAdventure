@@ -61,6 +61,10 @@ import android.widget.TextView;
  * </ol>
  * 
  * The ViewPageActivity is a view of the application.
+ * 
+ * @author James Cadek
+ * @author James Moore
+ * @author Karl Parkins
  */
 
 public class ViewPageActivity extends Activity {
@@ -103,7 +107,7 @@ public class ViewPageActivity extends Activity {
     }
 
 	/**
-	 * Called when the Activity resumes
+	 * Called when the Activity resumes. Handles setting up the entire activity
 	 */
 	@Override
 	public void onResume() {
@@ -136,8 +140,6 @@ public class ViewPageActivity extends Activity {
 	    /* Set up onClick listeners for buttons on screen, even if some aren't
 	     * shown at the time.
 	     */
-	    
-	    
 		Button addTileButton = (Button) findViewById(R.id.addTile);
 		addTileButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -174,6 +176,9 @@ public class ViewPageActivity extends Activity {
 	    });
 	}
 
+	/**
+	 * Remove the activity from the pageController when we leave the activity.
+	 */
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -196,6 +201,7 @@ public class ViewPageActivity extends Activity {
 	
 	/**
 	 * Sets the action bar up.
+	 * @param menu
 	 */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
@@ -308,9 +314,9 @@ public class ViewPageActivity extends Activity {
 		}
 	}
 	
-	
 	/**
-	 * Tells the View to get the most recent data from the model, and refresh its view.
+	 * Tells the View to get the most recent data from the model, and refresh
+	 * everything that needs to be refreshed.
 	 * @param page
 	 */
 	public void update(Page page) {
@@ -365,9 +371,7 @@ public class ViewPageActivity extends Activity {
 			addTileButton.setVisibility(View.GONE);
 			addDecisionButton.setVisibility(View.GONE);
 		}
-	}
-	
-	
+	}	
 	
 	/**
 	 * Updates the pageEnding from the passed page object.
@@ -377,7 +381,6 @@ public class ViewPageActivity extends Activity {
 		TextView pageEnding = (TextView) findViewById(R.id.pageEnding);
 		pageEnding.setText(page.getPageEnding());
 	}
-		
 
 	/**
 	 * Brings up a menu with options of what to do to the decision.
@@ -404,8 +407,6 @@ public class ViewPageActivity extends Activity {
 		app.onDecisionClick(view, decisionsLayout);
 	}
 	
-	
-	
 	/**
 	 * Brings up a menu to make a new comment.
 	 */
@@ -414,7 +415,6 @@ public class ViewPageActivity extends Activity {
     	guiComment.onEditCommentGUI(story);
        
 	}
-	
 	
 	/**
 	 * The main interface for retrieving photos. Due to the nature of this code, it cannot be easily moved outside the activity
@@ -478,18 +478,35 @@ public class ViewPageActivity extends Activity {
 	/**
 	 * The following 4 methods all call the camera with different intents.
 	 */
+	
+	/**
+	 * For taking a new photo for a the tile at whichTile
+	 * @param whichTile
+	 */
 	protected void takePhoto(int whichTile) {
 		camera.setTempSpace(whichTile);
 		camera.newPhoto(TAKE_PHOTO);
 	}
 
+	/**
+	 * For taking a new photo for a comment
+	 */
 	protected void addPhoto() {
         camera.newPhoto(ADD_PHOTO);
 	}
+	
+	/**
+	 * For getting a photo for a comment from the gallery
+	 */
 	public void grabPhoto(){
 		camera.getPhoto(GRAB_PHOTO); 
 	}
 
+	/**
+	 * For getting a photo for a the tile at position whichTile from the
+	 * gallery.
+	 * @param whichTile
+	 */
 	public void getPhoto(int whichTile){
 		camera.setTempSpace(whichTile);
 		camera.getPhoto(RESULT_LOAD_IMAGE);
@@ -502,11 +519,6 @@ public class ViewPageActivity extends Activity {
 	public void setEditing(boolean editing) {
 		isEditing = editing;
 	}
-	
-/*	public ImageView makeViewByPhoto(Bitmap image){
-		ImageView pictureTaken = new ImageView(this);
-		pictureTaken.setImageBitmap(image);
-		return pictureTaken;*/
 
 	/**
 	 * Get whether the page being viewed by the user is in editing mode or not.
@@ -517,6 +529,7 @@ public class ViewPageActivity extends Activity {
 	}
 
 	/**
+	 * Gets if the current page is a fighting page or not. 
 	 * @return the isFighting
 	 */
 	public boolean isFighting()
@@ -526,15 +539,17 @@ public class ViewPageActivity extends Activity {
 	}
 
 	/**
+	 * Sets if the current page is a fighting page or not.
 	 * @param isFighting the isFighting to set
 	 */
 	public void setFighting(boolean isFighting)
 	{
-
 		this.isFighting = isFighting;
 	}
+	
 	/**
-	 * 
+	 * Used to check if the player is entering a page from somewhere else of
+	 * from a decision on the page that leads back to itself.
 	 * @return if the player is entering a page from elsewhere
 	 */
 	public boolean isOnEntry() {

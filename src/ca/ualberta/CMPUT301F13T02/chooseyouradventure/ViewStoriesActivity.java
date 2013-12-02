@@ -30,8 +30,6 @@
 
 package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
-
-
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
@@ -81,6 +79,12 @@ public class ViewStoriesActivity extends Activity {
 	private Handler dbhandler = new DBHandler(this);
 
 	ArrayAdapter<String> adapter;
+	
+	/**
+	 * Called when an the activity is created. It handles setting up the
+	 * whole activity.
+	 * @param savedInstanceState
+	 */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,6 +146,11 @@ public class ViewStoriesActivity extends Activity {
 		}
 	}
 
+    /**
+     * Called when entring an activity. Handles things that need to be done
+     * each time we arrive at the activity, such as refreshing the list of
+     * stories.
+     */
 	@Override
 	public void onResume() {
         super.onResume();
@@ -157,6 +166,10 @@ public class ViewStoriesActivity extends Activity {
 		}
     }
 	
+	/**
+	 * Called when setting up a new intent.
+	 * @param intent
+	 */
 	protected void onNewIntent(Intent intent) {
 		setIntent(intent);
 		try {
@@ -167,7 +180,6 @@ public class ViewStoriesActivity extends Activity {
 			e.printStackTrace();
 		}
 	}
-        
 
 	/**
 	 * Handles the case when activity called for a search
@@ -182,7 +194,6 @@ public class ViewStoriesActivity extends Activity {
     	}
 		
 	}
-
 
     /**
      * Calls the ESHandler search method to search for stories with title matching the query
@@ -259,11 +270,10 @@ public class ViewStoriesActivity extends Activity {
 	    
 	}
 
-	  /**
+	/**
      * The options menu displayed when the user longClicks a story
      * @param v The view of the longClicked story
      */
-	
 	public boolean onLongListItemClick(View v, int pos, long id) { 
 		gui.storyMenuGUI(storyList.get(pos), eshandler, dbhandler);
         return true;

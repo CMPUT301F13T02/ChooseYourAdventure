@@ -45,9 +45,20 @@ import android.widget.TextView;
  * Recent change in Treasure
  * Recent Change in Enemy Health
  * 
+ * This class is part of the view in the MVC style.
  *
+ * @author James Cadek
  */
 public class FightingLayoutBuilder {
+
+	/**
+	 * This displays all the stats the user needs to watch in fighting
+	 * fragments.
+	 * @param fightingLayout
+	 * @param pageActivity
+	 * @param story
+	 * @param page
+	 */
 	protected void updateFightView(LinearLayout fightingLayout,ViewPageActivity pageActivity, Story story, Page page) {
 		fightingLayout.removeAllViews();
 		if(pageActivity.isOnEntry() == true){

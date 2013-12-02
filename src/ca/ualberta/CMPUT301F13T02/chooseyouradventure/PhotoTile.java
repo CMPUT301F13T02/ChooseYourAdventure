@@ -44,12 +44,15 @@ import android.graphics.BitmapFactory;
  * is serialized and stored via the use of the handlers. A PhotoTile will contain an image to be displayed
  * in the story.
  * 
+ * This is part of the model in MVC style.
+ *
+ * @author James Cadek
+ * @author James Moore
  */
 
 public class PhotoTile extends Tile{
 	private final String type = "photo";
 	private byte[] imageData;
-	
 	
 	/**
 	 * Get the type
@@ -59,10 +62,8 @@ public class PhotoTile extends Tile{
 		return type;
 	}
 
-
-	
-
 	/**
+	 * Turns the byte array in imageData into a Bitmap and returns that.
 	 * @return the image
 	 */
 	public Bitmap getImage() {
@@ -70,7 +71,7 @@ public class PhotoTile extends Tile{
 	}
 
 	/**
-	 * Sets both the image and imageData parameter via. conversion
+	 * Sets both the imageData parameter.
 	 * @param imageData the imageData to set
 	 */
 	public void setImageData(byte[] imageData) {
@@ -78,12 +79,17 @@ public class PhotoTile extends Tile{
 		
 	}
 	
+	/**
+	 * @return imageData
+	 */
 	public byte[] getImageData() {
 		return imageData;
 	}
 
 	/**
-	 * Sets the content to the passed content
+	 * Sets imageData to the passed content. The content is passed as an 
+	 * Object, but this expects the parameter to be a Bitmap. It then
+	 * conpresses that Bitmap into a byte array for better storing.
 	 * 
 	 * @param content The content to update this tile to
 	 */

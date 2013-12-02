@@ -32,7 +32,6 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
 
 import java.lang.reflect.Type;
 
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -43,9 +42,10 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 /**
- * Responsible for serializing and deserializing the abstract Tile class  
+ * Responsible for serializing and deserializing the abstract Tile class.
+ * @author Konrad LindenBach
+ * @author James Cadek
  */
-
 public class TileGsonMarshal implements JsonSerializer<Tile>, JsonDeserializer<Tile>{
 
 	/**

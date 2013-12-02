@@ -39,6 +39,10 @@ import android.widget.LinearLayout;
 
 /**
  * This generates all the GUI elements for EditStoryActivity.
+ *
+ * This is part of the view in MVC style.
+ *
+ * @author James Cadek
  */
 public class PageView {
 	private ApplicationController app;
@@ -46,14 +50,13 @@ public class PageView {
 	private StoryController storyController; 
 	
 
-	
 	public PageView(ApplicationController app, EditStoryActivity storyActivity) {
 		super();
 		this.app = app;
 		this.storyActivity = storyActivity;
 		storyController = app.getStoryController();
-        
 	}
+	
 	/**
 	 * This is the main options menu when you click on a page in a story in the story tree.
 	 * @param pos
@@ -168,7 +171,7 @@ public class PageView {
 	}
 	
 	/**
-	 * This is teh menu for creating a new page
+	 * This is the menu for creating a new page
 	 */
 	protected	void createPageGUI(){
 		final LinearLayout layout = (LinearLayout) View.inflate(storyActivity, R.layout.create_page_dialog, null);

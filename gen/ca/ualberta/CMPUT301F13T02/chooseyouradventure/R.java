@@ -114,7 +114,7 @@ public final class R {
         public static final int audioTile=0x7f070023;
         public static final int cache=0x7f07000e;
         public static final int cachedDesignator=0x7f070050;
-        public static final int cahcedDesignator=0x7f070058;
+        public static final int cahcedDesignator=0x7f070059;
         public static final int cancel=0x7f070010;
         public static final int changeTitle=0x7f070055;
         public static final int changeTitleHeader=0x7f070056;
@@ -142,6 +142,7 @@ public final class R {
         public static final int enterEditMode=0x7f07000d;
         public static final int enterPageTitle=0x7f07002e;
         public static final int enterStoryTitle=0x7f07004c;
+        public static final int fight=0x7f070057;
         public static final int fightDesignator=0x7f07004e;
         public static final int fightingPage=0x7f070030;
         public static final int fromFile=0x7f070026;
@@ -160,7 +161,7 @@ public final class R {
         public static final int playerDamage=0x7f070039;
         public static final int playerHitRate=0x7f07003c;
         public static final int random=0x7f070001;
-        public static final int randomChoice=0x7f070057;
+        public static final int randomChoice=0x7f070058;
         public static final int refresh=0x7f07001c;
         public static final int retake=0x7f070049;
         public static final int retakeQuestion=0x7f070048;

@@ -36,6 +36,8 @@ package ca.ualberta.CMPUT301F13T02.chooseyouradventure;
  * Catching a Handler exception indicates that the Handler was unable to complete your
  * storage request. Having a single exception classed shared across implementations
  * of Handler helps to create a uniform interaction with Handlers.
+ *
+ * @author Konrad Lindenbach
  */
 
 public class HandlerException extends Exception {

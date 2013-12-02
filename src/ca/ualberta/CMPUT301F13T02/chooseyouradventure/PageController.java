@@ -34,20 +34,18 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * 
  * The controller for methods only affecting the page part of a model.
+ * This generally takes care of any interaction of the user with the program
+ * that affect a single page in the model.
  *
+ * @author James Cadek
+ * @author James Moore
  */
 public class PageController {
 	private Page currentPage;
 	
 	// These variables shouldn't be saved.
 	private ViewPageActivity pageActivity;
-	
-	/**
-	 * @return the pageActivity
-	 */
-	
 
 	private boolean tilesChanged;
 	private boolean decisionsChanged;
@@ -57,7 +55,7 @@ public class PageController {
 	
 	/**
 	 * This sets the current Page
-	 * @param A Page
+	 * @param page
 	 */
 	public void setPage(Page page) {
 		this.currentPage = page;
@@ -162,6 +160,7 @@ public class PageController {
 	/**
 	 * Calls the update method of the current ViewPageActivity associated with
 	 * this page.
+	 * 
 	 */
 	private void updateActivity() {
 		if (pageActivity != null) {
@@ -189,7 +188,6 @@ public class PageController {
 	
 	/**
 	 * Adds a decision to the currentPage.
-	 * @param decision
 	 */
 	public void addDecision() {
 		Decision decision = new Decision(pageActivity.getString(R.string.newDecision), currentPage);
@@ -238,7 +236,7 @@ public class PageController {
 	 * Finds the position of a certain page from a list.
 	 * @param decision
 	 * @param pages
-	 * @return
+	 * @return The position of that page in the story
 	 */
 	public int findArrayPosition(Decision decision, ArrayList<Page> pages){		
 		UUID toPageId = decision.getPageID();
@@ -283,9 +281,6 @@ public class PageController {
 		setTilesChanged();
 	}
 	
-	
-	
-	
 	/**
 	 * Determines if the player is reaching a page from a different page or a cycle.
 	 * @param toPage
@@ -314,7 +309,9 @@ public class PageController {
 	
 	/**
 	 * This adds a comment to the current page
-	 * @param A comment to add
+	 * @param text
+	 * @param photo
+	 * @param story
 	 */
 	public void addComment(String text, PhotoTile photo, Story story) {
 
@@ -330,6 +327,5 @@ public class PageController {
 		}
 		
 	}
-	
 
 }

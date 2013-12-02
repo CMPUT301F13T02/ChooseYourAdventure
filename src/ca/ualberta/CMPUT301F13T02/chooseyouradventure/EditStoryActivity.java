@@ -45,9 +45,12 @@ import android.widget.ListView;
 
 /**
  * This Activity allows a story's author to edit a story by adding adding pages,
- * deleting pages, setting the first page, or deleting the story.
+ * deleting pages, setting the first page, or deleting or renaming the story.
  * 
  * This class is part of the view of the application.
+ *
+ * @author James Cadek
+ * @author James Moore
  */
 
 public class EditStoryActivity extends Activity {

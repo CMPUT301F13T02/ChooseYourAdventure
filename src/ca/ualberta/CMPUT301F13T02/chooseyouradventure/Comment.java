@@ -38,16 +38,16 @@ import java.util.Calendar;
  * 
  * Comments are left by users on pages and are therefore aggregated by the Page
  * class. Comments are serialized with the rest of the story into JSON to be 
- * stored by a handler. 
+ * stored by a handler.
+ *
+ * @author James Moore
+ * @author James Cadek
  */
 public class Comment {
 
 	private String text;
 	private String timestamp;
 	private PhotoTile annotation = null;
-
-	
-
 	
 	/**
 	 * This is a constructor for a comment with a user and photo
@@ -101,10 +101,11 @@ public class Comment {
 	public PhotoTile getAnnotation() {
 		return annotation;
 	}
-/**
- * sets the image in a comment
- * @param annotation
- */
+
+	/**
+	 * sets the image in a comment
+	 * @param annotation
+	 */
 	public void setAnnotation(PhotoTile annotation) {
 		this.annotation = annotation;
 	}

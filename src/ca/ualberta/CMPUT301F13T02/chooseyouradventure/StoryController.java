@@ -36,9 +36,12 @@ import java.util.UUID;
 import android.widget.Spinner;
 
 /**
- * 
- * The controller that affects the stories in a model.
+ * This class handles all of the interactions with the user that cause a change
+ * in the current story in the model.
  *
+ * This is a controller in the MVC style.
+ *
+ * @author James Cadek
  */
 
 public class StoryController {
@@ -60,16 +63,23 @@ public class StoryController {
 		return currentStory;
 	}
 	
+	/**
+	 * Gets all the pages in the current story
+	 * @return the pages of the story
+	 */
 	public ArrayList<Page> getPages(){
 		return currentStory.getPages();
 	}
 	
 	/**
-	 * Updates a Pages title and pushes to the handler
+	 * Updates a Page's title and the players stats and pushes them 
+	 * to the handler
 	 * @param pageTitle
-	 * @param currentPage
+	 * @param fight
+	 * @param health
+	 * @param name
+	 * @param page
 	 */
-	
 	protected void updatePageData(String pageTitle, boolean fight, String health, String name, Page page){
 		page.setTitle(pageTitle);
 		page.setFightingFrag(fight);
@@ -111,8 +121,8 @@ public class StoryController {
 	}
 
 	/**
-	 * Deletes a page.
-	 * @param currentPage
+	 * Deletes a page at position item.
+	 * @param item
 	 */
 	protected void removePage(int item){
 		currentStory.deletePage(item);
@@ -120,9 +130,10 @@ public class StoryController {
 	}
 	
 	/**
-	 * Similar to the above function, this method creates a new page object
+	 * This method creates a new page object, but a simpler one without 
+	 * player statistics (for non-fighting pages)
 	 * @param pageTitle
-	 * @return
+	 * @return the new page
 	 */
 	protected Page initializeNewPage(String pageTitle){
 		final Page newPage = new Page();
@@ -137,9 +148,8 @@ public class StoryController {
 		currentStory.updateStory();
 	}
 	
-	
 	/**
-	 * 
+	 * Gets the first page of the current story. 
 	 * @return The firstpage
 	 */
 	public Page grabFirstPage(){

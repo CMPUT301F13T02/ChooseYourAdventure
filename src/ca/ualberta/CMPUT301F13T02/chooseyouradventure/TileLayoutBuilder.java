@@ -44,6 +44,8 @@ import android.widget.TextView;
  * This class stores all of the layout builders needed for interacting with tiles. 
  * This prepares data and the view, but does not display anything. Its sister class TileView creates the GUI 
  * From data set in this class
+ *
+ * @author James Cadek
  */
 public class TileLayoutBuilder {
 	private ViewPageActivity pageActivity;
@@ -73,6 +75,7 @@ public class TileLayoutBuilder {
 	 * add a click listener to allow user to edit the tile
 	 * @param i
 	 * @param tile
+	 * @param tilesLayout
 	 */
 	public void addTile(int i, Tile tile, LinearLayout tilesLayout) {
 		
@@ -127,7 +130,8 @@ public class TileLayoutBuilder {
 	 * Create a view that has the proper padding, and if we are in editing
 	 * mode, adds a small margin to the bottom so we can see a little of 
 	 * the layout background which makes a line separating the tile views.
-	 * @return
+	 * @param type
+	 * @return The view needed for a given tile type
 	 */
 	private View makeTileView(String type) {
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,

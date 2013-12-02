@@ -75,11 +75,12 @@ public class FightingLayoutBuilder {
 		fightingLayout.addView(treasureView);
 		
 		if(page.getFightingState() == true){
-
-			enemyView.setTextColor(Color.RED);
-			enemyView.setText(pageActivity.getString(R.string.enemyHealthColon) + " " + stat.getEnemyHpStat());
-			fightingLayout.addView(enemyView);
-			story.getPlayerStats().setEnemyRange(true);
+			if(stat.getEnemyHpStat() > 0){
+				enemyView.setTextColor(Color.RED);
+				enemyView.setText(pageActivity.getString(R.string.enemyHealthColon) + " " + stat.getEnemyHpStat());
+				fightingLayout.addView(enemyView);
+				story.getPlayerStats().setEnemyRange(true);
+			}
 		}
 		else {
 			story.getPlayerStats().setEnemyRange(false);

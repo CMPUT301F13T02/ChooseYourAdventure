@@ -134,17 +134,7 @@ public class ViewStoriesActivity extends Activity {
 		});
     }
 
-    /**
-     * Picks a random story
-     */
-    protected void onRandomStory() {
-		try {
-			Story random = eshandler.getRandomStory();
-			app.jump(ViewPageActivity.class, random, random.getFirstpage());
-		} catch (HandlerException e) {
-			e.printStackTrace();
-		}
-	}
+   
 
     /**
      * Called when entring an activity. Handles things that need to be done
@@ -251,7 +241,7 @@ public class ViewStoriesActivity extends Activity {
 		    break;	
 		        
 		case R.id.action_randomStory:
-			onRandomStory();
+			app.onRandomStory();
 			break;
 		}
 		return true;

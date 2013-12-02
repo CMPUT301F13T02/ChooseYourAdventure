@@ -179,7 +179,7 @@ public class Counters {
 		
 		this.enemyHpChange = 0;
 		this.playerHpChange = 0;
-		if(choiceModifiers.playerHpStat > 0){
+		if(choiceModifiers.enemyHpStat > 0){
 			if(randomFlagP <= choiceModifiers.getPlayerHitPercent()){
 				
 				int eChange = rn.nextInt(choiceModifiers.enemyHpStat) + 1;
@@ -188,18 +188,14 @@ public class Counters {
 				
 			}
 		}
-		if(choiceModifiers.enemyHpStat > 0){
+		if(choiceModifiers.playerHpStat > 0){
 			if(randomFlagE <= choiceModifiers.getEnemyHitPercent() ){
 				if(isEnemyRange == true){
 					int pChange = rn.nextInt(choiceModifiers.playerHpStat) + 1;
 					this.playerHpChange = pChange;
 					this.playerHpStat = playerHpStat - pChange;			
 				}
-				else{
-					this.playerHpChange = choiceModifiers.playerHpStat;
-					this.playerHpStat = playerHpStat - choiceModifiers.playerHpStat;
-					
-				}
+				
 			}
 		}
 
@@ -212,17 +208,11 @@ public class Counters {
 	public void invokeUpdateSimple(Counters choiceModifiers){
 		this.treasureStat = treasureStat + choiceModifiers.treasureStat ;
 		this.treasureChange = choiceModifiers.treasureStat;
-		if(choiceModifiers.isEnemyRange() == true){
-			Random rn = new Random();
-			int pChange = rn.nextInt(choiceModifiers.playerHpStat) + 1;
-			this.playerHpChange = pChange;
-			this.playerHpStat = playerHpStat - pChange;			
-		}
-		else{
-			this.playerHpChange = choiceModifiers.playerHpStat;
-			this.playerHpStat = playerHpStat - choiceModifiers.playerHpStat;
+		
+		this.playerHpChange = choiceModifiers.playerHpStat;
+		this.playerHpStat = playerHpStat - choiceModifiers.playerHpStat;
 			
-		}
+		
 		
 		
 	}

@@ -62,7 +62,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@+string/coinChange"
-            android:inputType="number" />
+            android:inputType="numberSigned" />
 
         <TextView
             android:layout_width="match_parent"
@@ -74,7 +74,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@+string/playerDamage"
-            android:inputType="number" />
+            android:inputType="numberSigned" />
 
         <LinearLayout
             android:id="@+id/edit_decision_dialog_page_fightoptions"
@@ -104,7 +104,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@+string/enemyDamage"
-                android:inputType="number" />
+                android:inputType="numberSigned" />
             
 
             <TextView

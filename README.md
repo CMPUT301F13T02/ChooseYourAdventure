@@ -16,6 +16,11 @@ This project attempts to reinvent that experience with a system where users can:
 - add-on to existing stories.
 - cache some of the stories to read offline.
 
+
+Build Instructions
+==================
+If using Eclipse, first open launch configurations and ensure that ViewStoriesActivity is chosen to be launched. Otherwise, the app will install on the Emulator but will not start automatically and you will have to click on the icon to launch it.
+
 3rd Party Libraries
 ===================
 

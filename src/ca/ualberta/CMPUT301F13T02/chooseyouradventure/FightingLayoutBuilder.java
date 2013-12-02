@@ -86,11 +86,12 @@ public class FightingLayoutBuilder {
 		fightingLayout.addView(treasureView);
 		
 		if(page.getFightingState() == true){
-
-			enemyView.setTextColor(Color.RED);
-			enemyView.setText(pageActivity.getString(R.string.enemyHealthColon) + " " + stat.getEnemyHpStat());
-			fightingLayout.addView(enemyView);
-			story.getPlayerStats().setEnemyRange(true);
+			if(stat.getEnemyHpStat() > 0){
+				enemyView.setTextColor(Color.RED);
+				enemyView.setText(pageActivity.getString(R.string.enemyHealthColon) + " " + stat.getEnemyHpStat());
+				fightingLayout.addView(enemyView);
+				story.getPlayerStats().setEnemyRange(true);
+			}
 		}
 		else {
 			story.getPlayerStats().setEnemyRange(false);
@@ -107,7 +108,7 @@ public class FightingLayoutBuilder {
 			else 
 				displayChanges += " " + pageActivity.getString(R.string.lost) + " ";
 
-			displayChanges += stat.getEnemyHpChange() + " " + pageActivity.getString(R.string.hitpoints) + "\n";
+			displayChanges += "" + Math.abs(stat.getEnemyHpChange()) + " " + pageActivity.getString(R.string.hitpoints) + "\n";
 		}
 		if(stat.getPlayerHpChange() != 0){
 			displayChanges += stat.getDamageMessage() + "\n";
@@ -118,7 +119,7 @@ public class FightingLayoutBuilder {
 			else
 				displayChanges += " " + pageActivity.getString(R.string.lost) + " ";
 
-			displayChanges += stat.getPlayerHpChange() +" " +  pageActivity.getString(R.string.hitpoints) + "\n";
+			displayChanges += "" + Math.abs(stat.getPlayerHpChange()) +" " +  pageActivity.getString(R.string.hitpoints) + "\n";
 		}
 		if(stat.getTreasureChange() != 0) {
 			displayChanges += stat.getTreasureMessage() + "\n";
@@ -129,7 +130,7 @@ public class FightingLayoutBuilder {
 			else 
 				displayChanges += " " + pageActivity.getString(R.string.gained) + " ";
 
-			displayChanges += stat.getTreasureChange() + " " +  pageActivity.getString(R.string.coinsWorth);
+			displayChanges += "" + Math.abs(stat.getTreasureChange()) + " " +  pageActivity.getString(R.string.coinsWorth);
 		}
 		
 		fightingUpdate.setTextColor(Color.GREEN);
